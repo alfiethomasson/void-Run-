@@ -31,7 +31,7 @@ target_include_directories(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths" S
 file(GLOB_RECURSE SOURCES void_run/*.cpp void_run/*.h)
 add_executable(void_run ${SOURCES} )
 target_include_directories(void_run SYSTEM PRIVATE ${SFML_INCS})
-target_link_libraries(VOID_RUN lib_ecm lib_tile_level_loader sfml-graphics)
+target_link_libraries(void_run lib_ecm lib_tile_level_loader sfml-graphics)
 
 ## Ecm
 file(GLOB_RECURSE SOURCE_FILES lib_ecm/*.cpp lib_ecm/*.h)
