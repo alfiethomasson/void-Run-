@@ -1,5 +1,5 @@
 #include "cmp_sprite.h"
-#include "system_renderer.h"
+#include "system_renderer.h"	
 
 void ShapeComponent::update(double dt) {
 	_shape->setPosition(_parent->getPosition());

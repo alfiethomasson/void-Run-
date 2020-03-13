@@ -8,6 +8,7 @@
 #include "LevelSystem.h"
 #include "cmp_sprite.h"
 #include "cmp_actor_movement.h"
+#include "cmp_entityinfo.h"
 
 using namespace sf;
 using namespace std;
@@ -42,10 +43,10 @@ void MenuScene::Load() {
 }
 
 void GameScene::Load() {
-	auto pl = make_shared<Entity>();
-
+	auto pl = make_shared<Entity>(); 
 	auto s = pl->addComponent<ShapeComponent>();
 	pl->addComponent<PlayerMovementComponent>();
+	pl->addComponent<PlayerInfo>();
 	s->setShape<sf::CircleShape>(12.f);
 	s->getShape().setFillColor(Color::Yellow);
 	s->getShape().setOrigin(Vector2f(12.f, 12.f));
