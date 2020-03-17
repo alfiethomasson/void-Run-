@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Pacman.h"
+#include "VoidRun.h"
 #include "ecm.h"
 //#include "Entity.h"
 //#include "Ghost.h"
@@ -17,7 +17,7 @@ std::shared_ptr<Scene> gameScene;
 std::shared_ptr<Scene> menuScene;
 std::shared_ptr<Scene> activeScene;
 
-#define GHOSTS_COUNT 4
+//#define GHOSTS_COUNT 4
 
 void MenuScene::Update(double dt) {
 	if (Keyboard::isKeyPressed(Keyboard::Space)) {
@@ -45,15 +45,32 @@ void MenuScene::Load() {
 void GameScene::Load() {
 	auto pl = make_shared<Entity>(); 
 	auto s = pl->addComponent<ShapeComponent>();
-	pl->addComponent<PlayerMovementComponent>();
-	pl->addComponent<PlayerInfo>();
-	s->setShape<sf::CircleShape>(12.f);
+	//pl->addComponent<PlayerMovementComponent>();
+	auto i = pl->addComponent<EntityInfo>();
+	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Yellow);
-	s->getShape().setOrigin(Vector2f(12.f, 12.f));
+	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
+	i->setStrength(10);
+	i->setHealth(50);
+	i->setDexterity(10);
 
 	_ents.list.push_back(pl);
 
+	auto enemy1 = make_shared<Entity>();
+	s = enemy1->addComponent<ShapeComponent>();
+	i = enemy1->addComponent<EntityInfo>();
+	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
+	s->getShape().setFillColor(Color::Blue);
+	s->getShape().setOrigin(Vector2f(-500.0f, -200.0f));
+	i->setStrength(10);
+	i->setHealth(50);
+	i->setDexterity(10);
 
+	_ents.list.push_back(enemy1);
+
+
+
+/*
 	const sf::Color ghost_cols[]{ {208, 62, 25},    // red Blinky
 								 {219, 133, 28},   // orange Clyde
 								 {70, 191, 238},   // cyan Inky
@@ -67,8 +84,7 @@ void GameScene::Load() {
 		s->getShape().setFillColor(ghost_cols[i % 4]);
 		s->getShape().setOrigin(Vector2f(12.f, 12.f));
 
-		_ents.list.push_back(ghost);
-	}
+		_ents.list.push_back(ghost);*/
 }
 
 void GameScene::Update(double dt) {

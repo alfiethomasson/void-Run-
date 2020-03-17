@@ -1,28 +1,28 @@
 #include "cmp_entityinfo.h"
 
-int PlayerInfo::getStrength() {
+int EntityInfo::getStrength() {
 	return _strength;
 }
 
-int PlayerInfo::getHealth() {
+int EntityInfo::getHealth() {
 	return _health;
 }
 
-int PlayerInfo::getDexterity() {
+int EntityInfo::getDexterity() {
 	return _dexterity;
 }
 
-void PlayerInfo::setStrength(int strength) {
+void EntityInfo::setStrength(int strength) {
 	_strength = strength;
 }
 
-void PlayerInfo::setHealth(int health) {
+void EntityInfo::setHealth(int health) {
 	_health = health;
 }
 
-void PlayerInfo::setDexterity(int dexterity)
+void EntityInfo::setDexterity(int dexterity)
 {
 	_dexterity = dexterity;
 }
 
-PlayerInfo::PlayerInfo(Entity* e) : Component(e) {};
+EntityInfo::EntityInfo(Entity* e) : Component(e) {};
