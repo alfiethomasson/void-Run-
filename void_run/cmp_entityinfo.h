@@ -12,7 +12,7 @@ public:
 	explicit EntityInfo(Entity* e);
 
 	void render() override {}
-	void update(double dt) override {};
+	void update(double dt) override;
 
 	int getStrength();
 	int getHealth();
@@ -21,4 +21,6 @@ public:
 	void setStrength(int strength);
 	void setHealth(int health);
 	void setDexterity(int dexterity);
+
+	void takeDamage(int dmgRecieved);
 };
