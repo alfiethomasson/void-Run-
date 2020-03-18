@@ -31,9 +31,8 @@ void EntityInfo::takeDamage(int dmgRecieved)
 }
 
 void EntityInfo::update(double dt) {
-	int curHealth = getHealth();
-	std::cout << curHealth << "\n";
+	//int curHealth = getHealth();
+	//std::cout << curHealth << "\n";
 }
-
 
 EntityInfo::EntityInfo(Entity* e) : Component(e) {};

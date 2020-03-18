@@ -1,9 +1,7 @@
 #include <iostream>
 #include "VoidRun.h"
 #include "ecm.h"
-//#include "Entity.h"
-//#include "Ghost.h"
-//#include "Player.h"	
+#include "Game.h"	
 #include "System_Renderer.h"
 #include "LevelSystem.h"
 #include "cmp_sprite.h"
@@ -23,26 +21,64 @@ std::shared_ptr<BasePlayerComponent> player;
 //#define GHOSTS_COUNT 4
 
 void MenuScene::Update(double dt) {
-	if (Keyboard::isKeyPressed(Keyboard::Space)) {
+	if (Keyboard::isKeyPressed(Keyboard::Num1)) {
 		activeScene = gameScene;
 	}
+	if (Keyboard::isKeyPressed(Keyboard::Num2)) {
+		Renderer::getWindow().close();
+	}
 	Scene::Update(dt);
-	text.setString("Almost Pacman");
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		Vector2i tempPos = sf::Mouse::getPosition(Renderer::getWindow());
+		Vector2f cursPos = sf::Vector2f(tempPos);
+		//std::cout << cursPos.x << " , " << cursPos.y << "\n";
+		if (PlayButtonBox.contains(cursPos))
+		{
+			std::cout << "Should change to game\n";
+			activeScene = gameScene;
+		}
+		if (ExitButtonBox.contains(cursPos))
+		{
+			std::cout << "Should change to exit\n";
+			Renderer::getWindow().close();
+		}
+
+	}
+
 }
 
 void MenuScene::Render() {
-	Renderer::queue(&text);
+	Renderer::queue(&GameName);
+	Renderer::queue(&PlayButton);
+	Renderer::queue(&ExitButton);
 	Scene::Render();
 }
 
 void MenuScene::Load() {
 	//Set up the text element here!
 
-	if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/res/Fonts/mandalore.ttf"))
+if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
-	text.setFont(font);
+	GameName.setString("Void Run()");
+	GameName.setCharacterSize(100);
+	GameName.setPosition(sf::Vector2f(gameWidth / 3.5f, gameHeight / 5.0f));
+	PlayButton.setString("PLAY - 1");
+	PlayButton.setCharacterSize(60);
+	PlayButton.setPosition(sf::Vector2f(gameWidth / 2.35f, gameHeight / 2.25f));
+	PlayButtonBox = PlayButton.getGlobalBounds();
+	std::cout << PlayButtonBox.getPosition().x << " , " << PlayButtonBox.getPosition().y << "\n";
+	std::cout << PlayButtonBox.top << " , " << PlayButtonBox.getPosition().y << "\n";
+	ExitButton.setString("EXIT - 2");
+	ExitButton.setCharacterSize(60);
+	ExitButton.setPosition(sf::Vector2f(gameWidth / 2.35f, gameHeight / 1.65f));
+	ExitButtonBox = ExitButton.getGlobalBounds();
+	GameName.setFont(font);
+	PlayButton.setFont(font);
+	ExitButton.setFont(font);
 }
 
 void GameScene::Load() {

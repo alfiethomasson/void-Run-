@@ -8,8 +8,12 @@ extern std::shared_ptr<Scene> activeScene;
 
 class MenuScene : public Scene {
 private:
-	sf::Text text;
+	sf::Text GameName;
+	sf::Text PlayButton;
+	sf::Text ExitButton;
 	sf::Font font;
+	sf::FloatRect PlayButtonBox;
+	sf::FloatRect ExitButtonBox;
 
 public:
 	MenuScene() = default;
