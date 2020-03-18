@@ -63,6 +63,10 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/r
 	{
 		cout << "failed to load font";
 	}
+	GameName.setFont(font);
+	PlayButton.setFont(font);
+	ExitButton.setFont(font);
+
 	GameName.setString("Void Run()");
 	GameName.setCharacterSize(100);
 	GameName.setPosition(sf::Vector2f(gameWidth / 3.5f, gameHeight / 5.0f));
@@ -70,15 +74,10 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/r
 	PlayButton.setCharacterSize(60);
 	PlayButton.setPosition(sf::Vector2f(gameWidth / 2.35f, gameHeight / 2.25f));
 	PlayButtonBox = PlayButton.getGlobalBounds();
-	std::cout << PlayButtonBox.getPosition().x << " , " << PlayButtonBox.getPosition().y << "\n";
-	std::cout << PlayButtonBox.top << " , " << PlayButtonBox.getPosition().y << "\n";
 	ExitButton.setString("EXIT - 2");
 	ExitButton.setCharacterSize(60);
 	ExitButton.setPosition(sf::Vector2f(gameWidth / 2.35f, gameHeight / 1.65f));
 	ExitButtonBox = ExitButton.getGlobalBounds();
-	GameName.setFont(font);
-	PlayButton.setFont(font);
-	ExitButton.setFont(font);
 }
 
 void GameScene::Load() {
@@ -93,7 +92,6 @@ void GameScene::Load() {
 	i->setStrength(10);
 	i->setHealth(50);
 	i->setDexterity(10);
-
 
 	_ents.list.push_back(pl);
 
@@ -110,22 +108,6 @@ void GameScene::Load() {
 	_ents.list.push_back(enemy1);
 
 	ChangeRoom();
-
-/*
-	const sf::Color ghost_cols[]{ {208, 62, 25},    // red Blinky
-								 {219, 133, 28},   // orange Clyde
-								 {70, 191, 238},   // cyan Inky
-								 {234, 130, 229} }; // pink Pinky
-
-	for (int i = 0; i < GHOSTS_COUNT; ++i) {
-		auto ghost = make_shared<Entity>();
-		auto s = ghost->addComponent<ShapeComponent>();
-		ghost->addComponent<EnemyAIComponent>();
-		s->setShape<sf::CircleShape>(12.f);
-		s->getShape().setFillColor(ghost_cols[i % 4]);
-		s->getShape().setOrigin(Vector2f(12.f, 12.f));
-
-		_ents.list.push_back(ghost);*/
 }
 
 void GameScene::Update(double dt) {
