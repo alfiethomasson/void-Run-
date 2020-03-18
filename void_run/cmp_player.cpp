@@ -15,8 +15,8 @@ BasePlayerComponent::BasePlayerComponent(Entity* p)
 	: playerDamage(1.0f), Component(p) {}
 
 void BasePlayerComponent::update(double dt) {
-	float Time = Clock.GetElapsedTime();
-	Clock.Reset();
+	//float Time = Clock.GetElapsedTime();
+	//Clock.Reset();
 
 	if (Keyboard::isKeyPressed(Keyboard::Q) && hasAttacked == false)
 	{
