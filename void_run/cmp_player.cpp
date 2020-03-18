@@ -3,26 +3,50 @@
 #include "VoidRun.h"
 #include "Scene.h"
 #include "ecm.h"
+#include <string>
 #include <iostream>
 
 using namespace sf;
+using namespace std;
 std::vector<std::shared_ptr<EntityInfo>> enemyInfo;
+std::vector<std::shared_ptr<EntityInfo>> playerInfo;
 
-bool hasAttacked = false;
+bool playerTurn = true;
 //Clock clock;
 
 BasePlayerComponent::BasePlayerComponent(Entity* p)
-	: playerDamage(1.0f), Component(p) {}
+	: playerDamage(5.0f), playerHealQuantity(10.0f), Component(p) {}
+
+int TEMP = 1;
 
 void BasePlayerComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
 	//Clock.Reset();
 
-	if (Keyboard::isKeyPressed(Keyboard::Q) && hasAttacked == false)
-	{
-		//std::cout << "Attacked!" << "\n";
-		attack(playerDamage);
-	}
+	do {
+		if(playerTurn == true){
+			if (Keyboard::isKeyPressed(Keyboard::Q))
+			{
+				cout << "Player Attacks!";
+				//std::cout << "Attacked!" << "\n";
+				attack(playerDamage);
+				playerTurn=false;
+			}
+			if (Keyboard::isKeyPressed(Keyboard::W))
+			{
+				cout << "Player Heals!";
+				//std::cout << "Attacked!" << "\n";
+				heal(playerHealQuantity);
+				playerTurn=false;
+			}
+		}
+		if(playerTurn == false)
+		{
+			cout << "The enemy passes its turn!";
+			playerTurn = true;
+			//Enemy Turn Shiz Goes Here
+		}
+	} while (TEMP == 1);
 }
 
 void BasePlayerComponent::updateEnemy(std::shared_ptr<Entity> e)
@@ -34,5 +58,8 @@ void BasePlayerComponent::updateEnemy(std::shared_ptr<Entity> e)
 void BasePlayerComponent::attack(float damage)
 {
 	enemyInfo[0]->takeDamage(damage);
-	hasAttacked = true;
+}
+void BasePlayerComponent::heal(float healBy)
+{
+	playerInfo[0]->healDamage(healBy);
 }

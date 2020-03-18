@@ -4,6 +4,7 @@
 class BasePlayerComponent : public Component {
 protected:
 	float playerDamage;
+	float playerHealQuantity;
 	std::shared_ptr<Entity> currentEnemy;
 public:
 	explicit BasePlayerComponent(Entity* p);

@@ -30,6 +30,11 @@ void EntityInfo::takeDamage(int dmgRecieved)
 	_health -= dmgRecieved;
 }
 
+void EntityInfo::healDamage(int dmgHealedBy)
+{
+	_health += dmgHealedBy;
+}
+
 void EntityInfo::update(double dt) {
 	int curHealth = getHealth();
 	std::cout << curHealth << "\n";

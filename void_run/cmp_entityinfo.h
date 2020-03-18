@@ -23,4 +23,5 @@ public:
 	void setDexterity(int dexterity);
 
 	void takeDamage(int dmgRecieved);
+	void healDamage(int dmgHealedBy);
 };

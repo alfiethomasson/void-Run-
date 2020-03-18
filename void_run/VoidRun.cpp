@@ -46,6 +46,7 @@ void MenuScene::Load() {
 }
 
 void GameScene::Load() {
+	
 	auto pl = make_shared<Entity>(); 
 	auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
@@ -58,7 +59,6 @@ void GameScene::Load() {
 	i->setHealth(50);
 	i->setDexterity(10);
 
-
 	_ents.list.push_back(pl);
 
 	auto enemy1 = make_shared<Entity>();
@@ -70,7 +70,7 @@ void GameScene::Load() {
 	i->setStrength(10);
 	i->setHealth(50);
 	i->setDexterity(10);
-
+	
 	_ents.list.push_back(enemy1);
 
 	ChangeRoom();
