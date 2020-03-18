@@ -9,7 +9,7 @@ using namespace sf;
 std::vector<std::shared_ptr<EntityInfo>> enemyInfo;
 
 bool hasAttacked = false;
-Clock clock;
+//Clock clock;
 
 BasePlayerComponent::BasePlayerComponent(Entity* p)
 	: playerDamage(1.0f), Component(p) {}
@@ -34,4 +34,5 @@ void BasePlayerComponent::updateEnemy(std::shared_ptr<Entity> e)
 void BasePlayerComponent::attack(float damage)
 {
 	enemyInfo[0]->takeDamage(damage);
+	hasAttacked = true;
 }
