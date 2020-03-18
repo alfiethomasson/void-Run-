@@ -29,4 +29,5 @@ public:
 	void Update(double dt) override;
 	void Render() override;
 	void Load() override;
+	void ChangeRoom();
 };

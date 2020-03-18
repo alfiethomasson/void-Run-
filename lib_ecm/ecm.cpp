@@ -58,7 +58,7 @@ bool Entity::isAlive() const
 
 void Entity::setAlive(bool _value)
 {
-	_alive = true;
+	_alive = _value;
 }
 
 void Entity::setForDelete()

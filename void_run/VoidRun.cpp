@@ -9,6 +9,7 @@
 #include "cmp_sprite.h"
 #include "cmp_actor_movement.h"
 #include "cmp_entityinfo.h"
+#include "cmp_player.h"
 
 using namespace sf;
 using namespace std;
@@ -16,6 +17,8 @@ using namespace std;
 std::shared_ptr<Scene> gameScene;
 std::shared_ptr<Scene> menuScene;
 std::shared_ptr<Scene> activeScene;
+
+std::shared_ptr<BasePlayerComponent> player;
 
 //#define GHOSTS_COUNT 4
 
@@ -47,12 +50,14 @@ void GameScene::Load() {
 	auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
 	auto i = pl->addComponent<EntityInfo>();
+	player = pl->addComponent<BasePlayerComponent>();
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Yellow);
 	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
 	i->setStrength(10);
 	i->setHealth(50);
 	i->setDexterity(10);
+
 
 	_ents.list.push_back(pl);
 
@@ -68,7 +73,7 @@ void GameScene::Load() {
 
 	_ents.list.push_back(enemy1);
 
-
+	ChangeRoom();
 
 /*
 	const sf::Color ghost_cols[]{ {208, 62, 25},    // red Blinky
@@ -101,4 +106,8 @@ void GameScene::Render() {
 
 	//Renderer::queue(&text);
 	Scene::Render();
+}
+
+void GameScene::ChangeRoom() {
+	player->updateEnemy(_ents.list[_ents.list.size() - 1]);
 }

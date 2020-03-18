@@ -1,0 +1,19 @@
+#pragma once
+#include "ecm.h"
+
+class BasePlayerComponent : public Component {
+protected:
+	float playerDamage;
+	std::shared_ptr<Entity> currentEnemy;
+public:
+	explicit BasePlayerComponent(Entity* p);
+	BasePlayerComponent() = delete;
+
+	void render() override {}
+	void update(double dt) override;
+
+	void updateEnemy(std::shared_ptr<Entity> e);
+
+	void attack(float damage);
+	void heal(float heal);
+};
