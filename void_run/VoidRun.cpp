@@ -18,34 +18,65 @@ std::shared_ptr<Scene> activeScene;
 
 std::shared_ptr<BasePlayerComponent> player;
 
+sf::Event event;
+
+sf::Color green(0, 255, 0, 255);
+sf::Color white(255, 255, 255, 255);
+
 //#define GHOSTS_COUNT 4
 
 void MenuScene::Update(double dt) {
-	if (Keyboard::isKeyPressed(Keyboard::Num1)) {
-		activeScene = gameScene;
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Num2)) {
-		Renderer::getWindow().close();
-	}
-	Scene::Update(dt);
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	Vector2i tempPos = sf::Mouse::getPosition(Renderer::getWindow());
+	Vector2f cursPos = sf::Vector2f(tempPos);
+
+	while (Renderer::getWindow().pollEvent(event))
 	{
-		Vector2i tempPos = sf::Mouse::getPosition(Renderer::getWindow());
-		Vector2f cursPos = sf::Vector2f(tempPos);
-		//std::cout << cursPos.x << " , " << cursPos.y << "\n";
-		if (PlayButtonBox.contains(cursPos))
+		if(event.type == sf::Event::Closed)
 		{
-			std::cout << "Should change to game\n";
-			activeScene = gameScene;
-		}
-		if (ExitButtonBox.contains(cursPos))
-		{
-			std::cout << "Should change to exit\n";
 			Renderer::getWindow().close();
 		}
-
+		if (sf::Keyboard::isKeyPressed(Keyboard::Num1))
+		{
+			activeScene = gameScene;
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Num2)) {
+			Renderer::getWindow().close();
+		}
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			if (PlayButtonBox.contains(cursPos))
+			{
+				std::cout << "Should change to game\n";
+				activeScene = gameScene;
+			}
+			if (ExitButtonBox.contains(cursPos))
+			{
+				std::cout << "Should change to exit\n";
+				Renderer::getWindow().close();
+			}
+		}
 	}
+
+	if (PlayButtonBox.contains(cursPos))
+	{
+		PlayButton.setFillColor(green);
+	}
+	else
+	{
+		PlayButton.setFillColor(white);
+	}
+
+	if (ExitButtonBox.contains(cursPos))
+	{
+		ExitButton.setFillColor(green);
+	}
+	else
+	{
+		ExitButton.setFillColor(white);
+	}
+
+	Scene::Update(dt);
 
 }
 
