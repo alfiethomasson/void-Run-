@@ -23,26 +23,31 @@ sf::Event event;
 sf::Color green(0, 255, 0, 255);
 sf::Color white(255, 255, 255, 255);
 
-//#define GHOSTS_COUNT 4
 
 void MenuScene::Update(double dt) {
 
+	//Gets Mouse position in an int format
 	Vector2i tempPos = sf::Mouse::getPosition(Renderer::getWindow());
 	Vector2f cursPos = sf::Vector2f(tempPos);
 
+	//while events are available to poll
 	while (Renderer::getWindow().pollEvent(event))
 	{
+		//If we want to close game
 		if(event.type == sf::Event::Closed)
 		{
 			Renderer::getWindow().close();
 		}
+		//If we want to go to game from menu
 		if (sf::Keyboard::isKeyPressed(Keyboard::Num1))
 		{
 			activeScene = gameScene;
 		}
+		//If we want to close game
 		if (Keyboard::isKeyPressed(Keyboard::Num2)) {
 			Renderer::getWindow().close();
 		}
+		//If we click button
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			if (PlayButtonBox.contains(cursPos))
@@ -58,6 +63,7 @@ void MenuScene::Update(double dt) {
 		}
 	}
 
+	//Checks if button box's contain mouse, and makes text green if so
 	if (PlayButtonBox.contains(cursPos))
 	{
 		PlayButton.setFillColor(green);
@@ -80,7 +86,9 @@ void MenuScene::Update(double dt) {
 
 }
 
+//Renders Text
 void MenuScene::Render() {
+	//Queues text to render in system renderer
 	Renderer::queue(&GameName);
 	Renderer::queue(&PlayButton);
 	Renderer::queue(&ExitButton);
@@ -88,30 +96,32 @@ void MenuScene::Render() {
 }
 
 void MenuScene::Load() {
-	//Set up the text element here!
-
+	//Loads font
 if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
+	//Assigns Font to Text
 	GameName.setFont(font);
 	PlayButton.setFont(font);
 	ExitButton.setFont(font);
 
+	//Sets values for text
 	GameName.setString("Void Run()");
 	GameName.setCharacterSize(100);
 	GameName.setPosition(sf::Vector2f(gameWidth / 3.5f, gameHeight / 5.0f));
 	PlayButton.setString("PLAY - 1");
 	PlayButton.setCharacterSize(60);
 	PlayButton.setPosition(sf::Vector2f(gameWidth / 2.35f, gameHeight / 2.25f));
-	PlayButtonBox = PlayButton.getGlobalBounds();
+	PlayButtonBox = PlayButton.getGlobalBounds(); //Creates the button boundaries
 	ExitButton.setString("EXIT - 2");
 	ExitButton.setCharacterSize(60);
 	ExitButton.setPosition(sf::Vector2f(gameWidth / 2.35f, gameHeight / 1.65f));
-	ExitButtonBox = ExitButton.getGlobalBounds();
+	ExitButtonBox = ExitButton.getGlobalBounds(); //Button Boundaries
 }
 
 void GameScene::Load() {
+	//Creates Player and adds components
 	auto pl = make_shared<Entity>(); 
 	auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
@@ -126,6 +136,7 @@ void GameScene::Load() {
 
 	_ents.list.push_back(pl);
 
+	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
 	s = enemy1->addComponent<ShapeComponent>();
 	i = enemy1->addComponent<EntityInfo>();
@@ -142,21 +153,22 @@ void GameScene::Load() {
 }
 
 void GameScene::Update(double dt) {
+	//Changes scene to Menu ****TO REMOVE****
 	if (Keyboard::isKeyPressed(Keyboard::Tab)) {
 		activeScene = menuScene;
 	}
-	//_ents.Update(dt);
+
+	//Update from base class
 	Scene::Update(dt);
-	//...
 }
 
+//Renders Scene
 void GameScene::Render() {
-	//ls::Render(Renderer::getWindow());
-
-	//Renderer::queue(&text);
 	Scene::Render();
 }
 
+//Does all the things needed when we change rooms
 void GameScene::ChangeRoom() {
+	//Updates the player's current enemy
 	player->updateEnemy(_ents.list[_ents.list.size() - 1]);
 }
