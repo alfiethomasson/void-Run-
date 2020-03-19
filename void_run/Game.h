@@ -5,8 +5,8 @@
 using namespace sf;
 using namespace std;
 
-constexpr uint16_t gameWidth = 800;
-constexpr uint16_t gameHeight = 600;
+constexpr uint16_t gameWidth = 1280;
+constexpr uint16_t gameHeight = 720;
 
 extern MenuScene menuScene;
 extern GameScene gameScene;

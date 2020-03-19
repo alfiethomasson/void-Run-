@@ -113,14 +113,14 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/r
 	//Sets values for text
 	GameName.setString("Void Run()");
 	GameName.setCharacterSize(100);
-	GameName.setPosition(sf::Vector2f(gameWidth / 3.5f, gameHeight / 5.0f));
+	GameName.setPosition(sf::Vector2f(gameWidth / 2.0f - (GameName.getGlobalBounds().width / 2), gameHeight / 5.0f));
 	PlayButton.setString("PLAY - 1");
 	PlayButton.setCharacterSize(60);
-	PlayButton.setPosition(sf::Vector2f(gameWidth / 2.35f, gameHeight / 2.25f));
+	PlayButton.setPosition(sf::Vector2f(gameWidth / 2.0f - (PlayButton.getGlobalBounds().width / 2), (gameHeight / 5.0f) + 150.0f));
 	PlayButtonBox = PlayButton.getGlobalBounds(); //Creates the button boundaries
 	ExitButton.setString("EXIT - 2");
 	ExitButton.setCharacterSize(60);
-	ExitButton.setPosition(sf::Vector2f(gameWidth / 2.35f, gameHeight / 1.65f));
+	ExitButton.setPosition(sf::Vector2f(gameWidth / 2.0f - (ExitButton.getGlobalBounds().width / 2), (gameHeight / 5.0f) + 250.0f));
 	ExitButtonBox = ExitButton.getGlobalBounds(); //Button Boundaries
 }
 
