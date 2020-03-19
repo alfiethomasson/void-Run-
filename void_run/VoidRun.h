@@ -1,10 +1,9 @@
-#include "Scene.h"
-#include "ecm.h"
+#pragma once
+//#include "Scene.h"
+//#include "ecm.h"
 #include <iostream>
-
-extern std::shared_ptr<Scene> gameScene;
-extern std::shared_ptr<Scene> menuScene;
-extern std::shared_ptr<Scene> activeScene;
+#include "engine.h"
+//#include "Game.h"
 
 class MenuScene : public Scene {
 private:
@@ -17,7 +16,8 @@ private:
 
 public:
 	MenuScene() = default;
-	void Update(double dt) override;
+	~MenuScene() override = default;
+	void Update(const double& dt) override;
 	void Render() override;
 	void Load() override;
 };
@@ -30,7 +30,8 @@ private:
 
 public:
 	GameScene() = default;
-	void Update(double dt) override;
+	~GameScene() override = default;
+	void Update(const double& dt) override;
 	void Render() override;
 	void Load() override;
 	void ChangeRoom();

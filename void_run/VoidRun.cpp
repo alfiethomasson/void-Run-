@@ -1,20 +1,20 @@
-#include <iostream>
 #include "VoidRun.h"
-#include "ecm.h"
-#include "Game.h"	
+#include "Game.h"
+#include <iostream>
 #include "System_Renderer.h"
-#include "LevelSystem.h"
+#include "System_resources.h"
 #include "cmp_sprite.h"
 #include "cmp_actor_movement.h"
 #include "cmp_entityinfo.h"
 #include "cmp_player.h"
+#include "engine.h"
 
 using namespace sf;
 using namespace std;
 
-std::shared_ptr<Scene> gameScene;
-std::shared_ptr<Scene> menuScene;
-std::shared_ptr<Scene> activeScene;
+//std::shared_ptr<Scene> gameScene;
+//std::shared_ptr<Scene> menuScene;
+//std::shared_ptr<Scene> activeScene;
 
 std::shared_ptr<BasePlayerComponent> player;
 
@@ -24,28 +24,28 @@ sf::Color green(0, 255, 0, 255);
 sf::Color white(255, 255, 255, 255);
 
 
-void MenuScene::Update(double dt) {
-
+void MenuScene::Update(const double& dt) {
+	
 	//Gets Mouse position in an int format
-	Vector2i tempPos = sf::Mouse::getPosition(Renderer::getWindow());
+	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	Vector2f cursPos = sf::Vector2f(tempPos);
 
 	//while events are available to poll
-	while (Renderer::getWindow().pollEvent(event))
+	while (Engine::GetWindow().pollEvent(event))
 	{
 		//If we want to close game
 		if(event.type == sf::Event::Closed)
 		{
-			Renderer::getWindow().close();
+			Engine::GetWindow().close();
 		}
 		//If we want to go to game from menu
 		if (sf::Keyboard::isKeyPressed(Keyboard::Num1))
 		{
-			activeScene = gameScene;
+			//activeScene = gameScene;
 		}
 		//If we want to close game
 		if (Keyboard::isKeyPressed(Keyboard::Num2)) {
-			Renderer::getWindow().close();
+			Engine::GetWindow().close();
 		}
 		//If we click button
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -53,12 +53,13 @@ void MenuScene::Update(double dt) {
 			if (PlayButtonBox.contains(cursPos))
 			{
 				std::cout << "Should change to game\n";
-				activeScene = gameScene;
+				Engine::ChangeScene(&gameScene);
+			//	activeScene = gameScene;
 			}
 			if (ExitButtonBox.contains(cursPos))
 			{
 				std::cout << "Should change to exit\n";
-				Renderer::getWindow().close();
+				Engine::GetWindow().close();
 			}
 		}
 	}
@@ -83,7 +84,7 @@ void MenuScene::Update(double dt) {
 	}
 
 	Scene::Update(dt);
-
+	
 }
 
 //Renders Text
@@ -101,6 +102,9 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/r
 	{
 		cout << "failed to load font";
 	}
+	//const string& fontName = "Mandalore";
+	//Resources::load(fontName);
+
 	//Assigns Font to Text
 	GameName.setFont(font);
 	PlayButton.setFont(font);
@@ -134,7 +138,7 @@ void GameScene::Load() {
 	i->setHealth(50);
 	i->setDexterity(10);
 
-	_ents.list.push_back(pl);
+	ents.list.push_back(pl);
 
 	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
@@ -147,15 +151,15 @@ void GameScene::Load() {
 	i->setHealth(50);
 	i->setDexterity(10);
 
-	_ents.list.push_back(enemy1);
+	ents.list.push_back(enemy1);
 
 	ChangeRoom();
 }
 
-void GameScene::Update(double dt) {
+void GameScene::Update(const double& dt) {
 	//Changes scene to Menu ****TO REMOVE****
 	if (Keyboard::isKeyPressed(Keyboard::Tab)) {
-		activeScene = menuScene;
+	//	activeScene = menuScene;
 	}
 
 	//Update from base class
@@ -170,5 +174,5 @@ void GameScene::Render() {
 //Does all the things needed when we change rooms
 void GameScene::ChangeRoom() {
 	//Updates the player's current enemy
-	player->updateEnemy(_ents.list[_ents.list.size() - 1]);
+	player->updateEnemy(ents.list[ents.list.size() - 1]);
 }
