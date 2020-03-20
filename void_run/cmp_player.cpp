@@ -28,23 +28,15 @@ void BasePlayerComponent::update(double dt) {
 			if (Keyboard::isKeyPressed(Keyboard::Q))
 			{
 				cout << "Player Attacks!";
-				//std::cout << "Attacked!" << "\n";
 				attack(playerDamage);
 				playerTurn=false;
 			}
 			if (Keyboard::isKeyPressed(Keyboard::W))
 			{
 				cout << "Player Heals!";
-				//std::cout << "Attacked!" << "\n";
 				heal(playerHealQuantity);
 				playerTurn=false;
 			}
-		}
-		if(playerTurn == false)
-		{
-			cout << "The enemy passes its turn!";
-			playerTurn = true;
-			//Enemy Turn Shiz Goes Here
 		}
 	} while (TEMP == 1);
 }
