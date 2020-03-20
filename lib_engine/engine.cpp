@@ -38,7 +38,7 @@ void Loading_render() {
 	octagon.setFillColor(Color(255, 255, 255, min(255.f, 40.f * loadingTime)));
 	static Text t("Loading", *Resources::get<sf::Font>("mandalore.ttf"));
 	t.setFillColor(Color(255, 255, 255, min(255.f, 40.f * loadingTime)));
-	t.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.3f));
+	t.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - (t.getGlobalBounds().width / 2), Engine::getWindowSize().y / 3.5)) ;
 	Renderer::queue(&t);
 	Renderer::queue(&octagon);
 }
