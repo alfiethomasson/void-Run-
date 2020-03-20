@@ -35,16 +35,8 @@ void Update(RenderWindow& window)
 	float dt = clock.restart().asSeconds();
 	activeScene->Update(dt);
 
-	Event event;
-	while (window.pollEvent(event)) {
-		if (event.type == Event::Closed) {
-			window.close();
-			return;
-		}
-	}
-
-	//quit via esc
-	if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+	//quit via esc (TO REMOVE)
+	if (Keyboard::isKeyPressed(Keyboard::Num2)) {
 		window.close();
 	}
 
@@ -58,7 +50,7 @@ void Render(RenderWindow& window)
 }
 
 int main() {
-	RenderWindow window(VideoMode(gameWidth, gameHeight), "PACMAN");
+	RenderWindow window(VideoMode(gameWidth, gameHeight), "VOID RUN()");
 	Renderer::initialise(window);
 	Load();
 	while (window.isOpen()) {
