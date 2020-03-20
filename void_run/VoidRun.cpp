@@ -154,6 +154,9 @@ void GameScene::Load() {
 	ents.list.push_back(enemy1);
 
 	ChangeRoom();
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+	setLoaded(true);
 }
 
 void GameScene::Update(const double& dt) {
