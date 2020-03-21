@@ -90,6 +90,10 @@ void MenuScene::Update(const double& dt) {
 						{
 							Engine::ChangeScene(&gameScene);
 						}
+						if (OptionsButtonBox.contains(cursPos))
+						{
+							inOptions = true;
+						}
 						if (ExitButtonBox.contains(cursPos))
 						{
 							Engine::GetWindow().close();
@@ -132,6 +136,15 @@ void MenuScene::Update(const double& dt) {
 		{
 			ExitButton.setFillColor(white);
 		}
+
+		if (OptionsButtonBox.contains(cursPos))
+		{
+			OptionsButton.setFillColor(green);
+		}
+		else
+		{
+			OptionsButton.setFillColor(white);
+		}
 	}
 	else
 	{
@@ -154,6 +167,10 @@ void MenuScene::Update(const double& dt) {
 						ResChange.setString("720p");
 						ChangeResolution(1280, 720);
 					}
+				}
+				if (BackButtonBox.contains(cursPos))
+				{
+					inOptions = false;
 				}
 			}
 
@@ -185,6 +202,14 @@ void MenuScene::Update(const double& dt) {
 	{
 		ResButton.setFillColor(white);
 	}
+	if (BackButtonBox.contains(cursPos))
+	{
+		BackButton.setFillColor(green);
+	}
+	else
+	{
+		BackButton.setFillColor(white);
+	}
 	 }
 	Scene::Update(dt);
 	
@@ -198,12 +223,14 @@ void MenuScene::Render() {
 		Renderer::queue(&GameName);
 		Renderer::queue(&PlayButton);
 		Renderer::queue(&ExitButton);
+		Renderer::queue(&OptionsButton);
 	}
 	else
 	{
 		Renderer::queue(&ResChange);
 		Renderer::queue(&ResText);
 		Renderer::queue(&ResButton);
+		Renderer::queue(&BackButton);
 	}
 	Scene::Render();
 }
@@ -224,6 +251,8 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/r
 	ResChange.setFont(font);
 	ResButton.setFont(font);
 	ResText.setFont(font);
+	OptionsButton.setFont(font);
+	BackButton.setFont(font);
 
 	//Sets values for text
 	GameName.setString("Void Run()");
@@ -233,12 +262,15 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/r
 	PlayButton.setCharacterSize(60);
 	PlayButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (PlayButton.getGlobalBounds().width / 2), (GAMEY / 5.0f) + 150.0f));
 	PlayButtonBox = PlayButton.getGlobalBounds(); //Creates the button boundaries
-	//std::cout << PlayButtonBox.getPosition().x << " , " << PlayButtonBox.getPosition().y << "\n";
-	ExitButton.setString("EXIT - 2");
+	ExitButton.setString("EXIT - ESC");
 	ExitButton.setCharacterSize(60);
-	ExitButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (ExitButton.getGlobalBounds().width / 2), (GAMEY / 5.0f) + 250.0f));
+	ExitButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (ExitButton.getGlobalBounds().width / 2), (GAMEY / 5.0f) + 350.0f));
 	ExitButtonBox = ExitButton.getGlobalBounds(); //Button Boundaries
-	ResChange.setString("720p");
+	OptionsButton.setString("OPTIONS - 2");
+	OptionsButton.setCharacterSize(60);
+	OptionsButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (OptionsButton.getGlobalBounds().width / 2), (GAMEY / 5.0f) + 250.0f));
+	OptionsButtonBox = OptionsButton.getGlobalBounds(); //Options Boundaries
+	ResChange.setString("720p"); //Starts at 720p
 	ResChange.setCharacterSize(60);
 	ResChange.setPosition(sf::Vector2f(GAMEX / 2.0f - (ResChange.getGlobalBounds().width / 2), GAMEY / 2.0f - (ResChange.getGlobalBounds().height / 2)));
 	ResText.setString("Resolution: ");
@@ -246,10 +278,14 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/r
 	ResText.setPosition(sf::Vector2f(GAMEX / 2.0f - 300.0f, GAMEY / 2.0f - (ResText.getGlobalBounds().height / 2)));
 	ResButton.setString(" > ");
 	ResButton.setCharacterSize(60);
-	ResButton.setPosition(sf::Vector2f(GAMEX / 2.0f + 60.0f, GAMEY / 2.0f - (ResButton.getGlobalBounds().height / 2)));
+	ResButton.setPosition(sf::Vector2f(GAMEX / 2.0f + 80.0f, GAMEY / 2.0f - (ResButton.getGlobalBounds().height / 2)));
 	ResButtonBox = ResButton.getGlobalBounds();
+	BackButton.setString("BACK - 2");
+	BackButton.setCharacterSize(60);
+	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - 300.0f, GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 50.0f));
+	BackButtonBox = BackButton.getGlobalBounds();
 
-	xMultiply = 1.0f;
+	xMultiply = 1.0f; //Initial values for variables
 	yMultiply = 1.0f;
 	inOptions = false;
 }

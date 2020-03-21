@@ -10,13 +10,17 @@ private:
 	sf::Text GameName;
 	sf::Text PlayButton;
 	sf::Text ExitButton;
+	sf::Text OptionsButton;
 	sf::Text ResButton;
 	sf::Text ResChange;
 	sf::Text ResText;
+	sf::Text BackButton;
 	sf::Font font;
 	sf::FloatRect PlayButtonBox;
 	sf::FloatRect ExitButtonBox;
 	sf::FloatRect ResButtonBox;
+	sf::FloatRect OptionsButtonBox;
+	sf::FloatRect BackButtonBox;
 
 	bool inOptions;
 
