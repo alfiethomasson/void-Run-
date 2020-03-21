@@ -32,38 +32,69 @@ void UpdateButton(FloatRect &button);
 float xMultiply;
 float yMultiply;
 
+void MenuScene::ChangeResolution(int x, int y)
+{
+	std::cout << "Should change Res\n";
+
+	// All together now in a reusable solution.
+	const sf::Vector2u screensize(x, y);
+	const sf::Vector2u gamesize(GAMEX, GAMEY);
+	//set View as normal
+	Engine::GetWindow().setSize(screensize);
+	sf::FloatRect visibleArea(0.f, 0.f, gamesize.x, gamesize.y);
+	auto v = sf::View(visibleArea);
+	// figure out how to scale and maintain aspect;
+	auto viewport = CalculateViewport(screensize, gamesize);
+	//Optionally Center it
+	bool centered = true;
+	if (centered) {
+		viewport.left = (1.0 - viewport.width) * 0.5;
+		viewport.top = (1.0 - viewport.height) * 0.5;
+	}
+	//set!
+	v.setViewport(viewport);
+	Engine::GetWindow().setView(v);
+	//ExitButtonBox = ExitButton.getGlobalBounds();
+	//std::cout << PlayButtonBox.getPosition().x << " , " << PlayButtonBox.getPosition().y << "\n";
+	float winX = Engine::getWindowSize().x;
+	float winY = Engine::getWindowSize().y;
+	xMultiply = winX / GAMEX;
+	yMultiply = winY / GAMEY;
+	UpdateButton(PlayButtonBox);
+	UpdateButton(ExitButtonBox);
+	UpdateButton(ResButtonBox);
+}
 
 void MenuScene::Update(const double& dt) {
-	
-
-	std::cout << xMultiply;
 
 	//Gets Mouse position in an int format
 	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	Vector2f cursPos = sf::Vector2f(tempPos);
 
-	//while events are available to poll
-	while (Engine::GetWindow().pollEvent(event))
+	if (!inOptions)
 	{
-		//Switch for all event types
-		switch (event.type)
+		//while events are available to poll
+		while (Engine::GetWindow().pollEvent(event))
 		{
+			//Switch for all event types
+			switch (event.type)
+			{
 			case sf::Event::Closed:
 				Engine::GetWindow().close();
 				break;
 
 			case sf::Event::MouseButtonPressed:
-				if (event.mouseButton.button == sf::Mouse::Left)
-				{
-					if (PlayButtonBox.contains(cursPos))
+					if (event.mouseButton.button == sf::Mouse::Left)
 					{
-						Engine::ChangeScene(&gameScene);
+						if (PlayButtonBox.contains(cursPos))
+						{
+							Engine::ChangeScene(&gameScene);
+						}
+						if (ExitButtonBox.contains(cursPos))
+						{
+							Engine::GetWindow().close();
+						}
 					}
-					if (ExitButtonBox.contains(cursPos))
-					{
-						Engine::GetWindow().close();
-					}
-				}
 
 			case sf::Event::KeyPressed:
 			{
@@ -71,64 +102,90 @@ void MenuScene::Update(const double& dt) {
 				{
 					Engine::ChangeScene(&gameScene);
 				}
-				if (event.key.code == sf::Keyboard::Num2)
+				if (event.key.code == sf::Keyboard::Num3)
 				{
 					Engine::GetWindow().close();
 				}
-				if (event.key.code == sf::Keyboard::Num3)
+				if (event.key.code == sf::Keyboard::Num2)
 				{
-					// All together now in a reusable solution.
-					const sf::Vector2u screensize(1920, 1080);
-					const sf::Vector2u gamesize(GAMEX, GAMEY);
-					//set View as normal
-					Engine::GetWindow().setSize(screensize);
-					sf::FloatRect visibleArea(0.f, 0.f, gamesize.x, gamesize.y);
-					auto v = sf::View(visibleArea);
-					// figure out how to scale and maintain aspect;
-					auto viewport = CalculateViewport(screensize, gamesize);
-					//Optionally Center it
-					bool centered = true;
-					if (centered) {
-						viewport.left = (1.0 - viewport.width) * 0.5;
-						viewport.top = (1.0 - viewport.height) * 0.5;
-					}
-					//set!
-					v.setViewport(viewport);
-					Engine::GetWindow().setView(v);
-					//ExitButtonBox = ExitButton.getGlobalBounds();
-					//std::cout << PlayButtonBox.getPosition().x << " , " << PlayButtonBox.getPosition().y << "\n";
-					float winX = Engine::getWindowSize().x;
-					float winY = Engine::getWindowSize().y;
-					xMultiply = winX / GAMEX;
-					yMultiply = winY / GAMEY;
-					UpdateButton(PlayButtonBox);
-					UpdateButton(ExitButtonBox);
-					//std::cout << xMultiply << " , " << yMultiply << "\n";
-					std::cout << PlayButtonBox.getPosition().x << " , " << PlayButtonBox.getPosition().y << "\n";
+					inOptions = true;
 				}
+			}
+			}
+		}
+
+		//Checks if button box's contain mouse, and makes text green if so
+		if (PlayButtonBox.contains(cursPos))
+		{
+			PlayButton.setFillColor(green);
+		}
+		else
+		{
+			PlayButton.setFillColor(white);
+		}
+
+		if (ExitButtonBox.contains(cursPos))
+		{
+			ExitButton.setFillColor(green);
+		}
+		else
+		{
+			ExitButton.setFillColor(white);
+		}
+	}
+	else
+	{
+	while (Engine::GetWindow().pollEvent(event))
+	{
+		switch (event.type)
+		{
+		case sf::Event::MouseButtonPressed:
+		if (event.mouseButton.button == sf::Mouse::Left)
+			{
+				if (ResButtonBox.contains(cursPos))
+				{
+					if (Engine::getWindowSize().y != 1080)
+					{
+						ResChange.setString("1080p");
+						ChangeResolution(1920, 1080);
+					}
+					else
+					{
+						ResChange.setString("720p");
+						ChangeResolution(1280, 720);
+					}
+				}
+			}
+
+		case sf::Event::KeyPressed:
+			if (event.key.code == sf::Keyboard::Right)
+			{
+				if (Engine::getWindowSize().y != 1080)
+				{
+					ResChange.setString("1080p");
+					ChangeResolution(1920, 1080);
+				}
+				else
+				{
+					ResChange.setString("720p");
+					ChangeResolution(1280, 720);
+				}
+			}
+			if (event.key.code == sf::Keyboard::Num2)
+			{
+				inOptions = false;
 			}
 		}
 	}
-
-	//Checks if button box's contain mouse, and makes text green if so
-	if (PlayButtonBox.contains(cursPos))
+	if (ResButtonBox.contains(cursPos))
 	{
-		PlayButton.setFillColor(green);
+		ResButton.setFillColor(green);
 	}
 	else
 	{
-		PlayButton.setFillColor(white);
+		ResButton.setFillColor(white);
 	}
-
-	if (ExitButtonBox.contains(cursPos))
-	{
-		ExitButton.setFillColor(green);
-	}
-	else
-	{
-		ExitButton.setFillColor(white);
-	}
-
+	 }
 	Scene::Update(dt);
 	
 }
@@ -136,9 +193,18 @@ void MenuScene::Update(const double& dt) {
 //Renders Text
 void MenuScene::Render() {
 	//Queues text to render in system renderer
-	Renderer::queue(&GameName);
-	Renderer::queue(&PlayButton);
-	Renderer::queue(&ExitButton);
+	if (!inOptions)
+	{
+		Renderer::queue(&GameName);
+		Renderer::queue(&PlayButton);
+		Renderer::queue(&ExitButton);
+	}
+	else
+	{
+		Renderer::queue(&ResChange);
+		Renderer::queue(&ResText);
+		Renderer::queue(&ResButton);
+	}
 	Scene::Render();
 }
 
@@ -155,6 +221,9 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/r
 	GameName.setFont(font);
 	PlayButton.setFont(font);
 	ExitButton.setFont(font);
+	ResChange.setFont(font);
+	ResButton.setFont(font);
+	ResText.setFont(font);
 
 	//Sets values for text
 	GameName.setString("Void Run()");
@@ -164,14 +233,25 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/r
 	PlayButton.setCharacterSize(60);
 	PlayButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (PlayButton.getGlobalBounds().width / 2), (GAMEY / 5.0f) + 150.0f));
 	PlayButtonBox = PlayButton.getGlobalBounds(); //Creates the button boundaries
-	std::cout << PlayButtonBox.getPosition().x << " , " << PlayButtonBox.getPosition().y << "\n";
+	//std::cout << PlayButtonBox.getPosition().x << " , " << PlayButtonBox.getPosition().y << "\n";
 	ExitButton.setString("EXIT - 2");
 	ExitButton.setCharacterSize(60);
 	ExitButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (ExitButton.getGlobalBounds().width / 2), (GAMEY / 5.0f) + 250.0f));
 	ExitButtonBox = ExitButton.getGlobalBounds(); //Button Boundaries
+	ResChange.setString("720p");
+	ResChange.setCharacterSize(60);
+	ResChange.setPosition(sf::Vector2f(GAMEX / 2.0f - (ResChange.getGlobalBounds().width / 2), GAMEY / 2.0f - (ResChange.getGlobalBounds().height / 2)));
+	ResText.setString("Resolution: ");
+	ResText.setCharacterSize(60);
+	ResText.setPosition(sf::Vector2f(GAMEX / 2.0f - 300.0f, GAMEY / 2.0f - (ResText.getGlobalBounds().height / 2)));
+	ResButton.setString(" > ");
+	ResButton.setCharacterSize(60);
+	ResButton.setPosition(sf::Vector2f(GAMEX / 2.0f + 60.0f, GAMEY / 2.0f - (ResButton.getGlobalBounds().height / 2)));
+	ResButtonBox = ResButton.getGlobalBounds();
 
 	xMultiply = 1.0f;
 	yMultiply = 1.0f;
+	inOptions = false;
 }
 
 void GameScene::Load() {

@@ -10,9 +10,15 @@ private:
 	sf::Text GameName;
 	sf::Text PlayButton;
 	sf::Text ExitButton;
+	sf::Text ResButton;
+	sf::Text ResChange;
+	sf::Text ResText;
 	sf::Font font;
 	sf::FloatRect PlayButtonBox;
 	sf::FloatRect ExitButtonBox;
+	sf::FloatRect ResButtonBox;
+
+	bool inOptions;
 
 public:
 	MenuScene() = default;
@@ -20,6 +26,7 @@ public:
 	void Update(const double& dt) override;
 	void Render() override;
 	void Load() override;
+	void ChangeResolution(int x, int y);
 };
 
 class GameScene : public Scene {
