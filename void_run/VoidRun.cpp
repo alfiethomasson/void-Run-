@@ -171,6 +171,7 @@ void GameScene::Update(double dt) {
 		}
 		if (player->isFinishedTurn)
 		{
+			sf::sleep(sf::seconds(1.0));
 			playerTurn = false;
 			player->isTurn = false;
 			player->isFinishedTurn = false;
@@ -184,6 +185,7 @@ void GameScene::Update(double dt) {
 		}
 		if (enemy->isFinishedTurn)
 		{
+			sf::sleep(sf::seconds(1.0));
 			playerTurn = true;
 			enemy->isTurn = false;
 			enemy->isFinishedTurn = false;
