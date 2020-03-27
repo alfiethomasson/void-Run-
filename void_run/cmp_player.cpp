@@ -19,16 +19,20 @@ BasePlayerComponent::BasePlayerComponent(Entity* p)
 void BasePlayerComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
 	//Clock.Reset();
-
-	if (Keyboard::isKeyPressed(Keyboard::Q))
+	if (isTurn)
 	{
-		cout << "Player Attacks!";
-		attack(playerDamage);
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::W))
-	{	
-		cout << "Player Heals!";
-		heal(playerHealQuantity);
+		if (Keyboard::isKeyPressed(Keyboard::Q))
+		{
+			cout << "Player Attacks!";
+			attack(playerDamage);
+			EndTurn();
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::W))
+		{
+			cout << "Player Heals!";
+			heal(playerHealQuantity);
+			EndTurn();
+		}
 	}
 }
 
@@ -45,4 +49,9 @@ void BasePlayerComponent::attack(float damage)
 void BasePlayerComponent::heal(float healBy)
 {
 	playerInfo[0]->healDamage(healBy);
+}
+
+void BasePlayerComponent::EndTurn()
+{
+	isFinishedTurn = true;
 }

@@ -7,6 +7,8 @@ protected:
 	float playerHealQuantity;
 	std::shared_ptr<Entity> currentEnemy;
 public:
+	bool isTurn;
+	bool isFinishedTurn;
 	explicit BasePlayerComponent(Entity* p);
 	BasePlayerComponent() = delete;
 
@@ -17,4 +19,5 @@ public:
 
 	void attack(float damage);
 	void heal(float heal);
+	void EndTurn();
 };

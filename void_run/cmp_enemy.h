@@ -6,6 +6,8 @@ protected:
 	float enemyDamage;
 	std::shared_ptr<Entity> currentEnemy;
 public:
+	bool isTurn;
+	bool isFinishedTurn;
 	explicit BaseEnemyComponent(Entity* p);
 	BaseEnemyComponent() = delete;
 
@@ -15,4 +17,5 @@ public:
 	void updateEnemy(std::shared_ptr<Entity> e);
 
 	void attackEnemy(float damage);
+	void EndTurn();
 };

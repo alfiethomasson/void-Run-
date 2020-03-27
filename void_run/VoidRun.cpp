@@ -8,6 +8,7 @@
 #include "cmp_actor_movement.h"
 #include "cmp_entityinfo.h"
 #include "cmp_player.h"
+#include "cmp_enemy.h"
 
 using namespace sf;
 using namespace std;
@@ -17,6 +18,7 @@ std::shared_ptr<Scene> menuScene;
 std::shared_ptr<Scene> activeScene;
 
 std::shared_ptr<BasePlayerComponent> player;
+std::shared_ptr<BaseEnemyComponent> enemy;
 
 sf::Event event;
 
@@ -142,6 +144,7 @@ void GameScene::Load() {
 	auto enemy1 = make_shared<Entity>();
 	s = enemy1->addComponent<ShapeComponent>();
 	i = enemy1->addComponent<EntityInfo>();
+	enemy = enemy1->addComponent<BaseEnemyComponent>();
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Blue);
 	s->getShape().setOrigin(Vector2f(-500.0f, -200.0f));
@@ -160,17 +163,32 @@ void GameScene::Update(double dt) {
 		activeScene = menuScene;
 	}
 
-	int TEMP = 1; //Shitty fake variable to impose an infinite loop
-	do {
-		if(playerTurn == true)
-			{
-				
-			}
-		else if (playerTurn == false)
-			{
-				
-			}
-	} while (TEMP == 1);
+	if (playerTurn)
+	{
+		if (!player->isTurn)
+		{
+			player->isTurn = true;
+		}
+		if (player->isFinishedTurn)
+		{
+			playerTurn = false;
+			player->isTurn = false;
+			player->isFinishedTurn = false;
+		}
+	}
+	else
+	{
+		if (!enemy->isTurn)
+		{
+			enemy->isTurn = true;
+		}
+		if (enemy->isFinishedTurn)
+		{
+			playerTurn = true;
+			enemy->isTurn = false;
+			enemy->isFinishedTurn = false;
+		}
+	}
 
 	//Update from base class
 	Scene::Update(dt);
