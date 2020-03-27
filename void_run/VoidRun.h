@@ -21,6 +21,8 @@ private:
 	sf::FloatRect ResButtonBox;
 	sf::FloatRect OptionsButtonBox;
 	sf::FloatRect BackButtonBox;
+	sf::Texture SettingIcon;
+	sf::Sprite SettingSprite;
 
 	bool inOptions;
 
@@ -35,8 +37,17 @@ public:
 
 class GameScene : public Scene {
 private:
-	sf::Text text;
+	sf::Text OptionsText;
+	sf::Text ResButton;
+	sf::Text ResChange;
+	sf::Text ResText;
+	sf::Text BackButton;
+	sf::Font font;
+	sf::FloatRect ResButtonBox;
+	sf::FloatRect BackButtonBox;
 	sf::Clock scoreClock;
+	bool isPaused;
+
 	void respawn();
 
 public:
@@ -45,5 +56,6 @@ public:
 	void Update(const double& dt) override;
 	void Render() override;
 	void Load() override;
+	void Pause();
 	void ChangeRoom();
 };

@@ -224,6 +224,7 @@ void MenuScene::Render() {
 		Renderer::queue(&PlayButton);
 		Renderer::queue(&ExitButton);
 		Renderer::queue(&OptionsButton);
+		Renderer::queue(&SettingSprite);
 	}
 	else
 	{
@@ -285,6 +286,14 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/r
 	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - 300.0f, GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 50.0f));
 	BackButtonBox = BackButton.getGlobalBounds();
 
+	if (!SettingIcon.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Sprites/SettingIcon.png", sf::IntRect(200, 200, 64, 64)))
+	{
+		std::cout << "Error loading texture for settings icon :(\n";
+	}
+	
+	SettingSprite.setTexture(SettingIcon);
+	SettingSprite.setPosition(300.0f, 0.0f);
+
 	xMultiply = 1.0f; //Initial values for variables
 	yMultiply = 1.0f;
 	inOptions = false;
@@ -327,13 +336,24 @@ void GameScene::Load() {
 }
 
 void GameScene::Update(const double& dt) {
-	//Changes scene to Menu ****TO REMOVE****
-	if (Keyboard::isKeyPressed(Keyboard::Tab)) {
-		Engine::ChangeScene(&menuScene);
-	}
+	if (!isPaused)
+	{
+		//Changes scene to Menu ****TO REMOVE****
+		if (Keyboard::isKeyPressed(Keyboard::Tab)) {
+			Engine::ChangeScene(&menuScene);
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Num2))
+		{
+			isPaused = true;
+		}
 
-	//Update from base class
-	Scene::Update(dt);
+		//Update from base class
+		Scene::Update(dt);
+	}
+	else
+	{
+
+	}
 }
 
 //Renders Scene
@@ -345,6 +365,9 @@ void GameScene::Render() {
 void GameScene::ChangeRoom() {
 	//Updates the player's current enemy
 	player->updateEnemy(ents.list[ents.list.size() - 1]);
+}
+
+void GameScene::Pause() {
 }
 
 // Create FloatRect to fits Game into Screen while preserving aspect
