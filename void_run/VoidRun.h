@@ -34,4 +34,5 @@ public:
 	void Render() override;
 	void Load() override;
 	void ChangeRoom();
+	bool playerTurn;
 };

@@ -23,6 +23,8 @@ sf::Event event;
 sf::Color green(0, 255, 0, 255);
 sf::Color white(255, 255, 255, 255);
 
+bool playerTurn = true;
+
 
 void MenuScene::Update(double dt) {
 
@@ -158,6 +160,18 @@ void GameScene::Update(double dt) {
 		activeScene = menuScene;
 	}
 
+	int TEMP = 1; //Shitty fake variable to impose an infinite loop
+	do {
+		if(playerTurn == true)
+			{
+				
+			}
+		else if (playerTurn == false)
+			{
+				
+			}
+	} while (TEMP == 1);
+
 	//Update from base class
 	Scene::Update(dt);
 }
@@ -171,4 +185,5 @@ void GameScene::Render() {
 void GameScene::ChangeRoom() {
 	//Updates the player's current enemy
 	player->updateEnemy(_ents.list[_ents.list.size() - 1]);
+	playerTurn = true;
 }
