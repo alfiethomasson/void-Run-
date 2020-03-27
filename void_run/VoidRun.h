@@ -21,8 +21,6 @@ private:
 	sf::FloatRect ResButtonBox;
 	sf::FloatRect OptionsButtonBox;
 	sf::FloatRect BackButtonBox;
-	sf::Texture SettingIcon;
-	sf::Sprite SettingSprite;
 
 	bool inOptions;
 
@@ -45,6 +43,10 @@ private:
 	sf::Font font;
 	sf::FloatRect ResButtonBox;
 	sf::FloatRect BackButtonBox;
+	sf::Texture SettingIcon;
+	sf::Texture BackgroundIcon;
+	sf::Sprite SettingSprite;
+	sf::Sprite BackgroundSprite;
 	sf::Clock scoreClock;
 	bool isPaused;
 
@@ -58,4 +60,5 @@ public:
 	void Load() override;
 	void Pause();
 	void ChangeRoom();
+	void LoadUI();
 };

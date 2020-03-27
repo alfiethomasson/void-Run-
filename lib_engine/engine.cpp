@@ -78,7 +78,6 @@ void Engine::Render(RenderWindow& window) {
 	else if (_activeScene != nullptr) {
 		_activeScene->Render();
 	}
-
 	Renderer::render();
 }
 

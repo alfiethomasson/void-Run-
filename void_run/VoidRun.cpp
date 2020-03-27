@@ -1,13 +1,13 @@
 #include "VoidRun.h"
 #include "Game.h"
 #include <iostream>
-#include "System_Renderer.h"
 #include "System_resources.h"
 #include "cmp_sprite.h"
 #include "cmp_actor_movement.h"
 #include "cmp_entityinfo.h"
 #include "cmp_player.h"
 #include "engine.h"
+#include "system_renderer.h"
 
 #define GAMEX 1280
 #define GAMEY 720
@@ -224,7 +224,6 @@ void MenuScene::Render() {
 		Renderer::queue(&PlayButton);
 		Renderer::queue(&ExitButton);
 		Renderer::queue(&OptionsButton);
-		Renderer::queue(&SettingSprite);
 	}
 	else
 	{
@@ -286,14 +285,6 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/r
 	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - 300.0f, GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 50.0f));
 	BackButtonBox = BackButton.getGlobalBounds();
 
-	if (!SettingIcon.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Sprites/SettingIcon.png", sf::IntRect(200, 200, 64, 64)))
-	{
-		std::cout << "Error loading texture for settings icon :(\n";
-	}
-	
-	SettingSprite.setTexture(SettingIcon);
-	SettingSprite.setPosition(300.0f, 0.0f);
-
 	xMultiply = 1.0f; //Initial values for variables
 	yMultiply = 1.0f;
 	inOptions = false;
@@ -329,10 +320,11 @@ void GameScene::Load() {
 	ents.list.push_back(enemy1);
 
 	ChangeRoom();
+	LoadUI();
 	
 	//UNCOMMENT TO SEE LOADING IN ACTION
-	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-	setLoaded(true);
+	//std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+	//setLoaded(true);
 }
 
 void GameScene::Update(const double& dt) {
@@ -358,13 +350,36 @@ void GameScene::Update(const double& dt) {
 
 //Renders Scene
 void GameScene::Render() {
-	Scene::Render();
+	Renderer::queue(&BackgroundSprite);
+	Renderer::queue(&SettingSprite);
+//	Scene::Render();
 }
 
 //Does all the things needed when we change rooms
 void GameScene::ChangeRoom() {
 	//Updates the player's current enemy
 	player->updateEnemy(ents.list[ents.list.size() - 1]);
+}
+
+void GameScene::LoadUI() {
+
+	if (!SettingIcon.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Sprites/SettingIconAlfie.png"))
+	{
+		std::cout << "Error loading texture for settings icon :(\n";
+	}
+	if (!BackgroundIcon.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Sprites/stars.jpg"))
+	{
+		std::cout << "Error loading texture for background icon :(\n";
+	}
+
+	BackgroundSprite.setTexture(BackgroundIcon);
+	BackgroundSprite.setScale(Engine::getWindowSize().x / BackgroundSprite.getLocalBounds().width, Engine::getWindowSize().x / BackgroundSprite.getLocalBounds().height);
+
+	SettingSprite.setTexture(SettingIcon);
+	SettingSprite.setPosition(sf::Vector2f(1100.0f, 550.0f));
+	SettingSprite.setScale(0.3f, 0.3f);
+	std::cout << "Setting Sprite at: " << SettingSprite.getPosition().x << " , " << SettingSprite.getPosition().y << "\n";
+
 }
 
 void GameScene::Pause() {
