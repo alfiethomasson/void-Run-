@@ -10,3 +10,4 @@ constexpr uint16_t gameHeight = 720;
 
 extern MenuScene menuScene;
 extern GameScene gameScene;
+extern bool isPaused;

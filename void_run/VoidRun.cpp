@@ -8,6 +8,9 @@
 #include "cmp_entityinfo.h"
 #include "cmp_player.h"
 #include "engine.h"
+#include "CombatRoom.h"
+#include "TreasureRoom.h"
+#include <time.h>  
 
 #define GAMEX 1280
 #define GAMEY 720
@@ -21,7 +24,11 @@ using namespace std;
 
 std::shared_ptr<BasePlayerComponent> player;
 
+CombatRoom* testRoom;
+
+
 sf::Event event;
+bool isPaused = false;
 
 sf::Color green(0, 255, 0, 255);
 sf::Color white(255, 255, 255, 255);
@@ -31,6 +38,8 @@ void UpdateButton(FloatRect &button);
 
 float xMultiply;
 float yMultiply;
+
+shared_ptr<Entity> pl;
 
 void MenuScene::ChangeResolution(int x, int y)
 {
@@ -301,7 +310,7 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/r
 
 void GameScene::Load() {
 	//Creates Player and adds components
-	auto pl = make_shared<Entity>(); 
+	pl = make_shared<Entity>(); 
 	auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
 	auto i = pl->addComponent<EntityInfo>();
@@ -312,41 +321,19 @@ void GameScene::Load() {
 	i->setStrength(10);
 	i->setHealth(50);
 	i->setDexterity(10);
-
 	ents.list.push_back(pl);
-
-	//Creates Enemy and adds components
-	auto enemy1 = make_shared<Entity>();
-	s = enemy1->addComponent<ShapeComponent>();
-	i = enemy1->addComponent<EntityInfo>();
-	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
-	s->getShape().setFillColor(Color::Blue);
-	s->getShape().setOrigin(Vector2f(-500.0f, -200.0f));
-	i->setStrength(10);
-	i->setHealth(50);
-	i->setDexterity(10);
-
-	ents.list.push_back(enemy1);
 
 	ChangeRoom();
 	
 	//UNCOMMENT TO SEE LOADING IN ACTION
-	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-	setLoaded(true);
+//	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+	//setLoaded(true);
 }
 
 void GameScene::Update(const double& dt) {
 	if (!isPaused)
 	{
-		//Changes scene to Menu ****TO REMOVE****
-		if (Keyboard::isKeyPressed(Keyboard::Tab)) {
-			Engine::ChangeScene(&menuScene);
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Num2))
-		{
-			isPaused = true;
-		}
-
+		currentRoom->Update(dt);
 		//Update from base class
 		Scene::Update(dt);
 	}
@@ -363,6 +350,28 @@ void GameScene::Render() {
 
 //Does all the things needed when we change rooms
 void GameScene::ChangeRoom() {
+	srand(time(0));
+	int roomType = rand() % 2;
+	cout << "Room type number: " << roomType << "\n";
+	if (roomType == 0)
+	{
+		//Combat Room
+		std::shared_ptr<CombatRoom> newRoom = make_shared<CombatRoom>(pl);
+		newRoom->Load();
+		rooms.push_back(newRoom);
+		for each (auto e in newRoom->GetEnts())
+		{
+			ents.list.push_back(e);
+		}
+		currentRoom = newRoom;
+	}
+	else if(roomType == 1)
+	{
+		std::shared_ptr<TreasureRoom> newRoom = make_shared<TreasureRoom>();
+		newRoom->Load();
+		rooms.push_back(newRoom);
+		currentRoom = newRoom;
+	}
 	//Updates the player's current enemy
 	player->updateEnemy(ents.list[ents.list.size() - 1]);
 }

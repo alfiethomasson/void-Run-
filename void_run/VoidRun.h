@@ -3,6 +3,8 @@
 //#include "ecm.h"
 #include <iostream>
 #include "engine.h"
+#include "CombatRoom.h"
+#include "Room.h"
 //#include "Game.h"
 
 class MenuScene : public Scene {
@@ -46,9 +48,12 @@ private:
 	sf::FloatRect ResButtonBox;
 	sf::FloatRect BackButtonBox;
 	sf::Clock scoreClock;
-	bool isPaused;
 
 	void respawn();
+	std::vector<std::shared_ptr<Room>> rooms;
+	std::shared_ptr<Room> currentRoom;
+
+
 
 public:
 	GameScene() = default;
