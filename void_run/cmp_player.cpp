@@ -54,5 +54,4 @@ void BasePlayerComponent::EndTurn()
 {
 	cout << "Player Turn Ends!";
 	isFinishedTurn = true;
-	sf::sleep(sf::seconds(3.0));
 }

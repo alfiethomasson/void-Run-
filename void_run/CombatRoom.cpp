@@ -5,12 +5,12 @@
 #include "cmp_sprite.h"
 #include "cmp_enemy.h"
 
+
 std::shared_ptr<BaseEnemyComponent> enemy;
 
 bool playerTurn;
 
 void CombatRoom::Update(const double& dt) {
-	//std::cout << "HEY";
 
 	if (playerTurn)
 	{
@@ -20,10 +20,10 @@ void CombatRoom::Update(const double& dt) {
 		}
 		if (p->isFinishedTurn)
 		{
-			cout << "----------";
+			sf::sleep(sf::seconds(1.0));
 			playerTurn = false;
 			p->isTurn = false;
-			//enemy->isTurn = true;
+			enemy->isTurn = true;
 			p->isFinishedTurn = false;
 		}
 	}
@@ -35,11 +35,10 @@ void CombatRoom::Update(const double& dt) {
 		}
 		if (enemy->isFinishedTurn)
 		{
-			cout << "----------";
-			//sf::sleep(sf::seconds(1.0));
+			sf::sleep(sf::seconds(1.0));
 			playerTurn = true;
 			enemy->isTurn = false;
-			//p->isTurn = true;
+			p->isTurn = true;
 			enemy->isFinishedTurn = false;
 		}
 	}
@@ -65,12 +64,14 @@ void CombatRoom::Load() {
 	i->setHealth(50);
 	i->setDexterity(10);
 	ents.list.push_back(enemy1);
-	enemy = enemy1->addComponent<BaseEnemyComponent>();
 
+	enemy = enemy1->addComponent<BaseEnemyComponent>();
 	auto a = player->GetCompatibleComponent<BasePlayerComponent>();
 	p = a[0];
 	
 	playerTurn = true;
+	p->isFinishedTurn = false;
+	enemy->isTurn = false;
 	
 }
 //CombatRoom::CombatRoom(Entity* p) : Room() { player = p; };

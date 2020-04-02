@@ -15,8 +15,6 @@ using namespace std;
 
 BaseEnemyComponent::BaseEnemyComponent(Entity* p)
 	: enemyDamage(3.0f), Component(p) {}
-	
-int TEMP = 1;
 
 void BaseEnemyComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
@@ -45,5 +43,4 @@ void BaseEnemyComponent::EndTurn()
 {
 	cout << "Enemy Turn Ends!";
 	isFinishedTurn = true;
-	sf::sleep(sf::seconds(1.0));
 }
