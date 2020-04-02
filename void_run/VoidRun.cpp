@@ -364,34 +364,14 @@ void GameScene::Update(const double& dt) {
 	}
 	else
 	{
-				if (Mouse::isButtonPressed(sf::Mouse::Left))
-				{
-					if (ResButtonBox.contains(cursPos))
-					{
-						if (Engine::getWindowSize().y != 1080)
-						{
-							ResChange.setString("1080p");
-							ChangeResolution(1920, 1080, GAMEX, GAMEY);
-						}
-						else
-						{
-							ResChange.setString("720p");
-							ChangeResolution(1280, 720, GAMEX, GAMEY);
-						}
-					}
-					if (BackButtonBox.contains(cursPos))
-					{
-						isPaused = false;
-					}
-				}
-
-				if (Keyboard::isKeyPressed(sf::Keyboard::Right))
+		if (Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				if (ResButtonBox.contains(cursPos))
 				{
 					if (Engine::getWindowSize().y != 1080)
 					{
 						ResChange.setString("1080p");
 						ChangeResolution(1920, 1080, GAMEX, GAMEY);
-						UpdateButtons();
 					}
 					else
 					{
@@ -399,11 +379,31 @@ void GameScene::Update(const double& dt) {
 						ChangeResolution(1280, 720, GAMEX, GAMEY);
 					}
 				}
-				if(Keyboard::isKeyPressed(sf::Keyboard::Num2))
+				if (BackButtonBox.contains(cursPos))
 				{
 					isPaused = false;
 				}
 			}
+		if (Keyboard::isKeyPressed(sf::Keyboard::Right))
+			{
+				if (Engine::getWindowSize().y != 1080)
+				{
+					ResChange.setString("1080p");
+					ChangeResolution(1920, 1080, GAMEX, GAMEY);
+					UpdateButtons();
+				}
+				else
+				{
+					ResChange.setString("720p");
+					ChangeResolution(1280, 720, GAMEX, GAMEY);
+				}
+			}
+		if(Keyboard::isKeyPressed(sf::Keyboard::Num2))
+			{
+				isPaused = false;
+			}
+	}
+
 
 	if (playerTurn)
 	{
