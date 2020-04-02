@@ -308,7 +308,7 @@ void GameScene::Load() {
 	i->setDexterity(10);
 	ents.list.push_back(pl);
 
-	_ents.list.push_back(pl);
+	ents.list.push_back(pl);
 
 	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
@@ -322,7 +322,7 @@ void GameScene::Load() {
 	i->setHealth(50);
 	i->setDexterity(10);
 	
-	_ents.list.push_back(enemy1);
+	ents.list.push_back(enemy1);
 	sceneChangeDelay = 1.0f;
 
 	ChangeRoom();
@@ -404,7 +404,6 @@ void GameScene::Update(const double& dt) {
 					isPaused = false;
 				}
 			}
-		}
 
 	if (playerTurn)
 	{
@@ -459,11 +458,11 @@ void GameScene::Render() {
 //Does all the things needed when we change rooms
 void GameScene::ChangeRoom() {
 	//Updates the player's current enemy
-	player->updateEnemy(_ents.list[_ents.list.size() - 1]);
+	player->updateEnemy(ents.list[ents.list.size() - 1]);
 	playerTurn = true;
-}
+
 	//Makes sure you don't delete the player entity
-	if (ents.list.size() > 1)
+	if(ents.list.size() > 1)
 	{
 		ents.list[ents.list.size() - 1]->setForDelete();
 	}

@@ -41,12 +41,6 @@ add_library(lib_ecm STATIC ${SOURCE_FILES})
 target_include_directories(lib_ecm INTERFACE "${CMAKE_SOURCE_DIR}/lib_ecm" )
 target_link_libraries(lib_ecm PRIVATE lib_maths)
 
-# B2D - Box2D phyics library
-add_subdirectory("lib/b2d/Box2D")
-#include_directories("lib/b2d/Box2D/")
-set(B2D_INCS "lib/b2d/Box2D/")
-link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
-
 ## engine
 file(GLOB_RECURSE SOURCE_FILES lib_engine/*.cpp lib_engine/*.h)
 add_library(lib_engine STATIC ${SOURCE_FILES}  ${RESOURCE_FILES})

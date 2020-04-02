@@ -1,7 +1,6 @@
 #include "cmp_enemy.h"
 #include "cmp_entityinfo.h"
 #include "VoidRun.h"
-#include "Scene.h"
 #include "ecm.h"
 #include <string>
 #include <iostream>
