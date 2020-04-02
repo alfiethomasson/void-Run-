@@ -7,36 +7,8 @@
 
 std::shared_ptr<BaseEnemyComponent> enemy;
 
-bool playerTurn = true;
-
 void CombatRoom::Update(const double& dt) {
-	//std::cout << "HEY";
-	Room::Update(dt);
-}
 
-void CombatRoom::Render() {
-
-}
-
-void CombatRoom::Load() {
-	std::cout << "Entered a Combat Room!\n";
-	//Creates Enemy and adds components
-	auto enemy1 = make_shared<Entity>();
-	auto s = enemy1->addComponent<ShapeComponent>();
-	auto i = enemy1->addComponent<EntityInfo>();
-	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
-	s->getShape().setFillColor(Color::Blue);
-	s->getShape().setOrigin(Vector2f(-500.0f, -200.0f));
-	i->setStrength(10);
-	i->setHealth(50);
-	i->setDexterity(10);
-
-	ents.list.push_back(enemy1);
-
-	p = player->GetCompatibleComponent<BasePlayerComponent>;
-	
-	playerTurn = true;
-	
 	if (playerTurn)
 	{
 		if (!p->isTurn)
@@ -65,6 +37,36 @@ void CombatRoom::Load() {
 			enemy->isFinishedTurn = false;
 		}
 	}
+
+	//std::cout << "HEY";
+	Room::Update(dt);
+}
+
+void CombatRoom::Render() {
+
+}
+
+void CombatRoom::Load() {
+	std::cout << "Entered a Combat Room!\n";
+	//Creates Enemy and adds components
+	auto enemy1 = make_shared<Entity>();
+	auto s = enemy1->addComponent<ShapeComponent>();
+	auto i = enemy1->addComponent<EntityInfo>();
+	auto enemy = enemy1->addComponent<BaseEnemyComponent>();
+	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
+	s->getShape().setFillColor(Color::Blue);
+	s->getShape().setOrigin(Vector2f(-500.0f, -200.0f));
+	i->setStrength(10);
+	i->setHealth(50);
+	i->setDexterity(10);
+
+	ents.list.push_back(enemy1);
+
+	auto a = player->GetCompatibleComponent<BasePlayerComponent>();
+	p = a[0];
+	
+	playerTurn = true;
+
 	
 	
 }
