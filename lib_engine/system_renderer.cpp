@@ -7,9 +7,7 @@ using namespace sf;
 static queue<const Drawable*> sprites;
 static RenderWindow* rw;
 
-void Renderer::initialise(sf::RenderWindow& r) { rw = &r; }
-
-sf::RenderWindow& Renderer::getWindow() { return *rw; }
+void Renderer::initialise(sf::RenderWindow& r) { rw = &r;}
 
 void Renderer::shutdown() {
 	while (!sprites.empty())
