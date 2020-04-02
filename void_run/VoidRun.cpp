@@ -27,7 +27,6 @@ std::shared_ptr<BasePlayerComponent> player;
 
 CombatRoom* testRoom;
 
-
 sf::Event event;
 bool isPaused = false;
 
@@ -191,7 +190,7 @@ void MenuScene::Render() {
 
 void MenuScene::Load() {
 	//Loads font
-if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
+if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
@@ -252,12 +251,12 @@ if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
 
 void GameScene::Load() {
 
-	if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/res/Fonts/mandalore.ttf"))
+	if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
 
-	if (!SettingIcon.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Sprites/WhiteSquare.png"))
+	if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Sprites/WhiteSquare.png"))
 	{
 		cout << "Could not load setting icon White\n";
 	}

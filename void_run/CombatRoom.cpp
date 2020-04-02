@@ -1,10 +1,13 @@
 #include "CombatRoom.h"
 #include "Game.h"
+#include "system_renderer.h"
 #include "cmp_entityinfo.h"
 #include "cmp_player.h"
 #include "cmp_sprite.h"
 #include "cmp_enemy.h"
 
+#define GAMEX 1280
+#define GAMEY 720
 
 std::shared_ptr<BaseEnemyComponent> enemy;
 
@@ -43,11 +46,19 @@ void CombatRoom::Update(const double& dt) {
 		}
 	}
 
+	playerHP.setString("tmp");
+	enemyHP.setString("tmp");
+	window.draw(playerHP);
+	window.draw(enemyHP);
+
 	Room::Update(dt);
 }
 
 void CombatRoom::Render() {
+	Renderer::queue(&playerHP);
+	Renderer::queue(&enemyHP);
 
+	Room::Render();
 }
 
 void CombatRoom::Load() {
@@ -68,10 +79,22 @@ void CombatRoom::Load() {
 	enemy = enemy1->addComponent<BaseEnemyComponent>();
 	auto a = player->GetCompatibleComponent<BasePlayerComponent>();
 	p = a[0];
-	
+
 	playerTurn = true;
 	p->isFinishedTurn = false;
 	enemy->isTurn = false;
-	
+
+	if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	{
+		cout << "failed to load font";
+	}
+	playerHP.setFont(font);
+	enemyHP.setFont(font);
+	playerHP.setCharacterSize(100);
+	playerHP.setPosition(sf::Vector2f(GAMEX / 2.0f - (playerHP.getGlobalBounds().width / 2), GAMEY / 5.0f));
+	playerHP.setFillColor(sf::Color::Red);
+	enemyHP.setCharacterSize(100);
+	enemyHP.setPosition(sf::Vector2f(GAMEX / 2.0f - (enemyHP.getGlobalBounds().width / 2), GAMEY / 5.0f));
+	enemyHP.setFillColor(sf::Color::Red);
 }
 //CombatRoom::CombatRoom(Entity* p) : Room() { player = p; };
