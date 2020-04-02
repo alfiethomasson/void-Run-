@@ -33,7 +33,8 @@ void CombatRoom::Load() {
 
 	ents.list.push_back(enemy1);
 
-	p = player->GetCompatibleComponent<BasePlayerComponent>;
+	auto a = player->GetCompatibleComponent<BasePlayerComponent>();
+	p = a[0];
 	
 	playerTurn = true;
 	
