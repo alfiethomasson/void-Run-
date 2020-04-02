@@ -52,5 +52,6 @@ void BasePlayerComponent::heal(float healBy)
 
 void BasePlayerComponent::EndTurn()
 {
+	cout << "Player Turn Ends!";
 	isFinishedTurn = true;
 }
