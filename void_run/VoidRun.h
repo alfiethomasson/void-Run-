@@ -23,9 +23,7 @@ private:
 	sf::FloatRect ResButtonBox;
 	sf::FloatRect OptionsButtonBox;
 	sf::FloatRect BackButtonBox;
-	sf::Texture SettingIcon;
-	sf::Sprite SettingSprite;
-
+	
 	bool inOptions;
 
 public:
@@ -34,12 +32,11 @@ public:
 	void Update(const double& dt) override;
 	void Render() override;
 	void Load() override;
-	void ChangeResolution(int x, int y);
 };
 
 class GameScene : public Scene {
 private:
-	sf::Text OptionsText;
+	sf::Text PauseText;
 	sf::Text ResButton;
 	sf::Text ResChange;
 	sf::Text ResText;
@@ -49,7 +46,10 @@ private:
 	sf::FloatRect BackButtonBox;
 	sf::Clock scoreClock;
 
-	void respawn();
+	sf::FloatRect SettingBox;
+	sf::Texture SettingIcon;
+	sf::Sprite SettingSprite;
+
 	std::vector<std::shared_ptr<Room>> rooms;
 	std::shared_ptr<Room> currentRoom;
 
@@ -63,4 +63,5 @@ public:
 	void Load() override;
 	void Pause();
 	void ChangeRoom();
+	void UpdateButtons();
 };

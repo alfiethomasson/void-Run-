@@ -15,8 +15,14 @@ public:
 	virtual void UnLoad();
 	virtual void Update(const double& dt);
 	virtual void Render();
+	void ChangeResolution(int x, int y, int GAMEX, int GAMEY);
+	sf::FloatRect CalculateViewport(const sf::Vector2u& screensize,
+		const sf::Vector2u& gamesize);
+	void UpdateButton(sf::FloatRect& button);
 	bool isLoaded() const;
 	std::shared_ptr<Entity> makeEntity();
+	float xMultiply;
+	float yMultiply;
 
 	EntityManager ents;
 

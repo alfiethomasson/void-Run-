@@ -28,5 +28,4 @@ void CombatRoom::Load() {
 
 	ents.list.push_back(enemy1);
 }
-
 //CombatRoom::CombatRoom(Entity* p) : Room() { player = p; };

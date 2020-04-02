@@ -8,5 +8,5 @@ MenuScene menuScene;
 GameScene gameScene;
 
 int main() {
-	Engine::Start(1280, 720, "void Run()", &gameScene);
+	Engine::Start(1280, 720, "void Run()", &menuScene);
 }
