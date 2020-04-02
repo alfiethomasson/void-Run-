@@ -3,6 +3,11 @@
 #include "cmp_entityinfo.h"
 #include "cmp_player.h"
 #include "cmp_sprite.h"
+#include "cmp_enemy.h"
+
+std::shared_ptr<BaseEnemyComponent> enemy;
+
+bool playerTurn = true;
 
 void CombatRoom::Update(const double& dt) {
 	//std::cout << "HEY";
@@ -27,5 +32,40 @@ void CombatRoom::Load() {
 	i->setDexterity(10);
 
 	ents.list.push_back(enemy1);
+
+	p = player->GetCompatibleComponent<BasePlayerComponent>;
+	
+	playerTurn = true;
+	
+	if (playerTurn)
+	{
+		if (!p->isTurn)
+		{
+			p->isTurn = true;
+		}
+		if (p->isFinishedTurn)
+		{
+			sf::sleep(sf::seconds(1.0));
+			playerTurn = false;
+			p->isTurn = false;
+			p->isFinishedTurn = false;
+		}
+	}
+	else
+	{
+		if (!enemy->isTurn)
+		{
+			enemy->isTurn = true;
+		}
+		if (enemy->isFinishedTurn)
+		{
+			sf::sleep(sf::seconds(1.0));
+			playerTurn = true;
+			enemy->isTurn = false;
+			enemy->isFinishedTurn = false;
+		}
+	}
+	
+	
 }
 //CombatRoom::CombatRoom(Entity* p) : Room() { player = p; };

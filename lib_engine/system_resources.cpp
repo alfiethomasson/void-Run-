@@ -7,9 +7,9 @@ namespace Resources {
 	template<>
 	std::shared_ptr<sf::Font> load(const std::string& name) {
 		auto f = std::make_shared<sf::Font>();
-		if (!f->loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/res/Fonts/" + name)) {
+		/*if (!f->loadFromFile("res/Fonts/" + name)) {
 			throw("not found: " + name);
-		};
+		};*/
 		std::cout << "made it here";
 		return f;
 	};

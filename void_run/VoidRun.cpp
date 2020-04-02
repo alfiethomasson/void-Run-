@@ -24,7 +24,6 @@ using namespace std;
 //std::shared_ptr<Scene> activeScene;
 
 std::shared_ptr<BasePlayerComponent> player;
-std::shared_ptr<BaseEnemyComponent> enemy;
 
 CombatRoom* testRoom;
 
@@ -404,36 +403,6 @@ void GameScene::Update(const double& dt) {
 			}
 	}
 
-
-	if (playerTurn)
-	{
-		if (!player->isTurn)
-		{
-			player->isTurn = true;
-		}
-		if (player->isFinishedTurn)
-		{
-			sf::sleep(sf::seconds(1.0));
-			playerTurn = false;
-			player->isTurn = false;
-			player->isFinishedTurn = false;
-		}
-	}
-	else
-	{
-		if (!enemy->isTurn)
-		{
-			enemy->isTurn = true;
-		}
-		if (enemy->isFinishedTurn)
-		{
-			sf::sleep(sf::seconds(1.0));
-			playerTurn = true;
-			enemy->isTurn = false;
-			enemy->isFinishedTurn = false;
-		}
-	}
-
 	//Update from base class
 	Scene::Update(dt);
 }
@@ -459,7 +428,6 @@ void GameScene::Render() {
 void GameScene::ChangeRoom() {
 	//Updates the player's current enemy
 	player->updateEnemy(ents.list[ents.list.size() - 1]);
-	playerTurn = true;
 
 	//Makes sure you don't delete the player entity
 	if(ents.list.size() > 1)

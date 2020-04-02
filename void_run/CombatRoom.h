@@ -6,6 +6,7 @@
 class CombatRoom : public Room {
 protected:
 	std::shared_ptr<Entity> player;
+	std::shared_ptr<BasePlayerComponent> p;
 public:
 	CombatRoom(std::shared_ptr<Entity> p) : player(p) {};
 	~CombatRoom() override = default;
@@ -14,5 +15,4 @@ public:
 	void Render() override;
 	void Load() override;
 	void UnLoad();
-	
 }; 
