@@ -25,6 +25,7 @@ public:
 	float yMultiply;
 
 	EntityManager ents;
+	std::vector<sf::FloatRect> buttons;
 
 protected:
 	void setLoaded(bool);

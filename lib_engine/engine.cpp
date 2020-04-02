@@ -191,7 +191,7 @@ void Scene::ChangeResolution(int x, int y, int GAMEX, int GAMEY)
 		viewport.left = (1.0 - viewport.width) * 0.5;
 		viewport.top = (1.0 - viewport.height) * 0.5;
 	}
-	//set!
+	//set
 	v.setViewport(viewport);
 	Engine::GetWindow().setView(v);
 	//ExitButtonBox = ExitButton.getGlobalBounds();
@@ -200,6 +200,10 @@ void Scene::ChangeResolution(int x, int y, int GAMEX, int GAMEY)
 	float winY = Engine::getWindowSize().y;
 	xMultiply = winX / GAMEX;
 	yMultiply = winY / GAMEY;
+	for(sf::FloatRect b : buttons)
+	{
+		UpdateButton(b);
+	}
 }
 
 sf::FloatRect Scene::CalculateViewport(const sf::Vector2u& screensize,

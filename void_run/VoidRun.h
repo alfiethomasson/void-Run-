@@ -32,6 +32,7 @@ public:
 	void Update(const double& dt) override;
 	void Render() override;
 	void Load() override;
+	void UpdateButtons();
 };
 
 class GameScene : public Scene {

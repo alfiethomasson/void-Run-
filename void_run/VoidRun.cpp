@@ -238,6 +238,12 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/GamesEngAlfie/r
 	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - 300.0f, GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 50.0f));
 	BackButtonBox = BackButton.getGlobalBounds();
 
+	buttons.push_back(PlayButtonBox);
+	buttons.push_back(ExitButtonBox);
+	buttons.push_back(ResButtonBox);
+	buttons.push_back(OptionsButtonBox);
+	buttons.push_back(BackButtonBox);
+
 	xMultiply = 1.0f; //Initial values for variables
 	yMultiply = 1.0f;
 	inOptions = false;
@@ -281,6 +287,8 @@ void GameScene::Load() {
 	ResButton.setPosition(sf::Vector2f(GAMEX / 2.0f + 80.0f, GAMEY / 2.0f - (ResButton.getGlobalBounds().height / 2)));
 	ResButtonBox = ResButton.getGlobalBounds();
 
+	buttons.push_back(SettingBox);
+	buttons.push_back(ResButtonBox);
 
 	//Creates Player and adds components
 	pl = make_shared<Entity>(); 
