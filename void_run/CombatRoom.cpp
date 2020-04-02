@@ -7,7 +7,7 @@
 
 std::shared_ptr<BaseEnemyComponent> enemy;
 
-bool playerTurn = true;
+bool playerTurn;
 
 void CombatRoom::Update(const double& dt) {
 	//std::cout << "HEY";
@@ -20,9 +20,10 @@ void CombatRoom::Update(const double& dt) {
 		}
 		if (p->isFinishedTurn)
 		{
-			sf::sleep(sf::seconds(1.0));
+			cout << "----------";
 			playerTurn = false;
 			p->isTurn = false;
+			//enemy->isTurn = true;
 			p->isFinishedTurn = false;
 		}
 	}
@@ -34,9 +35,11 @@ void CombatRoom::Update(const double& dt) {
 		}
 		if (enemy->isFinishedTurn)
 		{
-			sf::sleep(sf::seconds(1.0));
+			cout << "----------";
+			//sf::sleep(sf::seconds(1.0));
 			playerTurn = true;
 			enemy->isTurn = false;
+			//p->isTurn = true;
 			enemy->isFinishedTurn = false;
 		}
 	}

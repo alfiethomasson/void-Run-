@@ -21,7 +21,7 @@ int TEMP = 1;
 void BaseEnemyComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
 	//Clock.Reset();
-	if (isTurn)
+	if (isTurn && isFinishedTurn != true)
 	{
 		int enemyAI = rand() % 2; //Random number from 0-1. 0 is attack, 1 is pass.
 		if (enemyAI == 0) {
@@ -43,5 +43,7 @@ void BaseEnemyComponent::attackEnemy(float damage)
 
 void BaseEnemyComponent::EndTurn()
 {
+	cout << "Enemy Turn Ends!";
 	isFinishedTurn = true;
+	sf::sleep(sf::seconds(1.0));
 }

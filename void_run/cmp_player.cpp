@@ -18,7 +18,7 @@ BasePlayerComponent::BasePlayerComponent(Entity* p)
 void BasePlayerComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
 	//Clock.Reset();
-	if (isTurn)
+	if (isTurn && isFinishedTurn != true)
 	{
 		if (Keyboard::isKeyPressed(Keyboard::Q))
 		{
@@ -54,4 +54,5 @@ void BasePlayerComponent::EndTurn()
 {
 	cout << "Player Turn Ends!";
 	isFinishedTurn = true;
+	sf::sleep(sf::seconds(3.0));
 }
