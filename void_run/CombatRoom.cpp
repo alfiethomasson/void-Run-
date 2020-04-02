@@ -27,5 +27,6 @@ void CombatRoom::Load() {
 	i->setDexterity(10);
 
 	ents.list.push_back(enemy1);
+	auto p = player->GetCompatibleComponent<BasePlayerComponent>();
 }
 //CombatRoom::CombatRoom(Entity* p) : Room() { player = p; };
