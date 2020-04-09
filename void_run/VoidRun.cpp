@@ -190,7 +190,7 @@ void MenuScene::Render() {
 
 void MenuScene::Load() {
 	//Loads font
-if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
@@ -251,12 +251,12 @@ if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/ma
 
 void GameScene::Load() {
 
-	if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
 
-	if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Sprites/WhiteSquare.png"))
+	if (!SettingIcon.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Sprites/WhiteSquare.png"))
 	{
 		cout << "Could not load setting icon White\n";
 	}
