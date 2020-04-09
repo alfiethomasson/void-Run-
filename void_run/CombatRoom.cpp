@@ -48,6 +48,8 @@ void CombatRoom::Update(const double& dt) {
 
 	playerHP.setString("tmp");
 	enemyHP.setString("tmp");
+	Renderer::queue(&playerHP);
+	Renderer::queue(&enemyHP);
 
 	Room::Update(dt);
 }
