@@ -176,6 +176,9 @@ void Scene::ChangeResolution(int x, int y, int GAMEX, int GAMEY)
 {
 	std::cout << "Should change Res\n";
 
+	int oldX = Engine::getWindowSize().x;
+	int oldY = Engine::getWindowSize().y;
+
 	// All together now in a reusable solution.
 	const sf::Vector2u screensize(x, y);
 	const sf::Vector2u gamesize(GAMEX, GAMEY);
@@ -198,12 +201,8 @@ void Scene::ChangeResolution(int x, int y, int GAMEX, int GAMEY)
 	//std::cout << PlayButtonBox.getPosition().x << " , " << PlayButtonBox.getPosition().y << "\n";
 	float winX = Engine::getWindowSize().x;
 	float winY = Engine::getWindowSize().y;
-	xMultiply = winX / GAMEX;
-	yMultiply = winY / GAMEY;
-	for(sf::FloatRect b : buttons)
-	{
-		UpdateButton(b);
-	}
+	xMultiply = winX / oldX;
+	yMultiply = winY / oldY;
 }
 
 sf::FloatRect Scene::CalculateViewport(const sf::Vector2u& screensize,

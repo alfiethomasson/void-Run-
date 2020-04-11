@@ -45,9 +45,11 @@ void MenuScene::Update(const double& dt) {
 	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	Vector2f cursPos = sf::Vector2f(tempPos);
 
+	scene_delay = scene_clock.getElapsedTime();
+
 	if (!inOptions)
 	{
-		if (Mouse::isButtonPressed(sf::Mouse::Left))
+		if (Mouse::isButtonPressed(sf::Mouse::Left) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
 			if (PlayButtonBox.contains(cursPos))
 			{
@@ -56,6 +58,7 @@ void MenuScene::Update(const double& dt) {
 			if (OptionsButtonBox.contains(cursPos))
 			{
 				inOptions = true;
+				scene_clock.restart();
 			}
 			if (ExitButtonBox.contains(cursPos))
 			{
@@ -72,9 +75,11 @@ void MenuScene::Update(const double& dt) {
 		{
 			Engine::GetWindow().close();
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Num2))
+		if (Keyboard::isKeyPressed(Keyboard::Num2) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
 			inOptions = true;
+			scene_clock.restart();
+			std::cout << "Bruh.";
 		}
 
 		//Checks if button box's contain mouse, and makes text green if so
@@ -107,43 +112,28 @@ void MenuScene::Update(const double& dt) {
 	}
 	else
 	{
-
-		if (Mouse::isButtonPressed(sf::Mouse::Left))
+		if ((Keyboard::isKeyPressed(sf::Keyboard::Right) || (Mouse::isButtonPressed(sf::Mouse::Left) && ResButtonBox.contains(cursPos)))
+			&& scene_delay.asSeconds() >= sceneChangeDelay)
 		{
-			if (ResButtonBox.contains(cursPos))
-			{
-				if (Engine::getWindowSize().y != 1080)
-				{
-					ResChange.setString("1080p");
-					ChangeResolution(1920, 1080, GAMEX, GAMEY);
-				}
-				else
-				{
-					ResChange.setString("720p");
-					ChangeResolution(1280, 720, GAMEX, GAMEY);
-				}
-			}
-			if (BackButtonBox.contains(cursPos))
-			{
-				inOptions = false;
-			}
-		}
+			scene_clock.restart();
 
-		if (Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
 			if (Engine::getWindowSize().y != 1080)
 			{
 				ResChange.setString("1080p");
 				ChangeResolution(1920, 1080, GAMEX, GAMEY);
+				UpdateButtons();
 			}
 			else
 			{
 				ResChange.setString("720p");
 				ChangeResolution(1280, 720, GAMEX, GAMEY);
+				UpdateButtons();
 			}
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Num2))
+		if ((Keyboard::isKeyPressed(sf::Keyboard::Num2) || (Mouse::isButtonPressed(sf::Mouse::Left) && BackButtonBox.contains(cursPos)))
+			&& scene_delay.asSeconds() >= sceneChangeDelay)
 		{
+			scene_clock.restart();
 			inOptions = false;
 		}
 
@@ -190,7 +180,8 @@ void MenuScene::Render() {
 
 void MenuScene::Load() {
 	//Loads font
-if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	//if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
@@ -247,6 +238,17 @@ if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/F
 	xMultiply = 1.0f; //Initial values for variables
 	yMultiply = 1.0f;
 	inOptions = false;
+
+	sceneChangeDelay = 1.0f;
+}
+
+void MenuScene::UpdateButtons()
+{
+	UpdateButton(PlayButtonBox);
+	UpdateButton(ExitButtonBox);
+	UpdateButton(ResButtonBox);
+	UpdateButton(OptionsButtonBox);
+	UpdateButton(BackButtonBox);
 }
 
 void GameScene::Load() {
@@ -379,6 +381,7 @@ void GameScene::Update(const double& dt) {
 				{
 					ResChange.setString("720p");
 					ChangeResolution(1280, 720, GAMEX, GAMEY);
+					UpdateButtons();
 				}
 			}
 		if(Keyboard::isKeyPressed(sf::Keyboard::Num2))
