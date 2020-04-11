@@ -295,7 +295,7 @@ void GameScene::Load() {
 	auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
 	auto i = pl->addComponent<EntityInfo>();
-	player = pl->addComponent<BasePlayerComponent>();
+	player = pl->addComponent<BasePlayerComponent>(100, 20, 10);
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Yellow);
 	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
@@ -411,7 +411,7 @@ void GameScene::Render() {
 //Does all the things needed when we change rooms
 void GameScene::ChangeRoom() {
 	//Updates the player's current enemy
-	player->updateEnemy(ents.list[ents.list.size() - 1]);
+	//player->updateEnemy(ents.list[ents.list.size() - 1]);
 
 	//Makes sure you don't delete the player entity
 	if(ents.list.size() > 1)
@@ -434,7 +434,7 @@ void GameScene::ChangeRoom() {
 		for each (auto e in newRoom->GetEnts())
 		{
 			//Updates the player's current enemy
-			player->updateEnemy(ents.list[ents.list.size() - 1]);
+		//	player->updateEnemy(ents.list[ents.list.size() - 1]);
 			ents.list.push_back(e);
 		}
 		//Set's current room to be the newly created room

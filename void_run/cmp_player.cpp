@@ -1,4 +1,5 @@
 #include "cmp_player.h"
+#include "cmp_enemy.h"
 //#include "cmp_BasePlayerComponent.h"
 #include "VoidRun.h"
 #include "ecm.h"
@@ -7,13 +8,13 @@
 
 using namespace sf;
 using namespace std;
-std::vector<std::shared_ptr<BasePlayerComponent>> enemyInfo;
+std::shared_ptr<BaseEnemyComponent> enemyInfo;
 std::vector<std::shared_ptr<BasePlayerComponent>> playerInfo;
 
 //Clock clock;
 
-BasePlayerComponent::BasePlayerComponent(Entity* p)
-	: playerDamage(5.0f), playerHealQuantity(10.0f), Component(p) {}
+BasePlayerComponent::BasePlayerComponent(Entity* p, float health, float strength, float dex)
+	: _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, Component(p) {}
 
 void BasePlayerComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
@@ -23,7 +24,7 @@ void BasePlayerComponent::update(double dt) {
 		if (Keyboard::isKeyPressed(Keyboard::Q))
 		{
 			cout << "Player Attacks!";
-			attack(playerDamage);
+			attack(_strength);
 			EndTurn();
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::W))
@@ -35,15 +36,14 @@ void BasePlayerComponent::update(double dt) {
 	}
 }
 
-void BasePlayerComponent::updateEnemy(std::shared_ptr<Entity> e)
+void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)
 {
 	currentEnemy = e;
-	enemyInfo = e->get_components<BasePlayerComponent>();
 }
 
 void BasePlayerComponent::attack(float damage)
 {
-	enemyInfo[0]->takeDamage(damage);
+	currentEnemy->TakeDamage(damage);
 }
 void BasePlayerComponent::heal(float healBy)
 {

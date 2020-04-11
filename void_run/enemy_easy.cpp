@@ -12,7 +12,7 @@ void EasyEnemy::update(double dt)
 		int enemyAI = rand() % 2; //Random number from 0-1. 0 is attack, 1 is pass.
 		if (enemyAI == 0) {
 			std::cout << "The enemy attacks!";
-			attackEnemy(enemyDamage);
+			attackEnemy(_strength);
 			EndTurn();
 		}
 		else if (enemyAI == 1) {

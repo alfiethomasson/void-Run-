@@ -1,5 +1,5 @@
 #include "cmp_enemy.h"
-#include "cmp_entityinfo.h"
+#include "cmp_player.h"
 #include "VoidRun.h"
 #include "ecm.h"
 #include <string>
@@ -14,7 +14,7 @@ using namespace std;
 //Clock clock;
 
 BaseEnemyComponent::BaseEnemyComponent(Entity* p, float health, float strength, float dex)
-	: enemyDamage(3.0f), _maxHealth{ health }, _strength{ strength }, _dexterity{ dex }, Component(p) {}
+	: enemyDamage(3.0f), _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, Component(p) {}
 
 void BaseEnemyComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
@@ -34,9 +34,14 @@ void BaseEnemyComponent::update(double dt) {
 	//}
 }
 
+void BaseEnemyComponent::updateEnemy(std::shared_ptr<BasePlayerComponent> player)
+{
+	currentEnemy = player;
+}
+
 void BaseEnemyComponent::attackEnemy(float damage)
 {
-	//playerInfo[0]->takeDamage(damage);
+	currentEnemy->takeDamage(damage);
 }
 
 void BaseEnemyComponent::EndTurn()
@@ -45,6 +50,16 @@ void BaseEnemyComponent::EndTurn()
 	isFinishedTurn = true;
 }
 
+void BaseEnemyComponent::TakeDamage(float damage)
+{
+	currentHealth -= damage;
+	if (currentHealth <= 0)
+	{
+		currentHealth = 0;
+		_parent->setAlive(false);
+		EndTurn();
+	}
+}
 
 int BaseEnemyComponent::getStrength() {
 	return _strength;

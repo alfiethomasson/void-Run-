@@ -81,6 +81,8 @@ void CombatRoom::Load() {
 	auto a = player->GetCompatibleComponent<BasePlayerComponent>();
 	p = a[0];
 
+	p->updateEnemy(enemy);
+
 	playerTurn = true;
 	p->isFinishedTurn = false;
 	enemy->isTurn = false;
@@ -92,10 +94,10 @@ void CombatRoom::Load() {
 	playerHP.setFont(font);
 	enemyHP.setFont(font);
 	playerHP.setCharacterSize(100);
-	playerHP.setPosition(sf::Vector2f(GAMEX / 2.0f - (playerHP.getGlobalBounds().width / 2), GAMEY / 5.0f));
+	playerHP.setPosition(sf::Vector2f(GAMEX / 4 - (playerHP.getGlobalBounds().width / 2), GAMEY / 5.0f));
 	playerHP.setFillColor(sf::Color::Red);
 	enemyHP.setCharacterSize(100);
-	enemyHP.setPosition(sf::Vector2f(GAMEX / 2.0f - (enemyHP.getGlobalBounds().width / 2), GAMEY / 5.0f));
+	enemyHP.setPosition(sf::Vector2f((GAMEX / 4 * 3) - (enemyHP.getGlobalBounds().width / 2), GAMEY / 5.0f));
 	enemyHP.setFillColor(sf::Color::Red);
 }
 //CombatRoom::CombatRoom(Entity* p) : Room() { player = p; };
