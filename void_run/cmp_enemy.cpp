@@ -13,25 +13,25 @@ using namespace std;
 //bool playerTurn = true;
 //Clock clock;
 
-BaseEnemyComponent::BaseEnemyComponent(Entity* p)
-	: enemyDamage(3.0f), Component(p) {}
+BaseEnemyComponent::BaseEnemyComponent(Entity* p, float health, float strength, float dex)
+	: enemyDamage(3.0f), _maxHealth{ health }, _strength{ strength }, _dexterity{ dex }, Component(p) {}
 
 void BaseEnemyComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
 	//Clock.Reset();
-	if (isTurn && isFinishedTurn != true)
-	{
-		int enemyAI = rand() % 2; //Random number from 0-1. 0 is attack, 1 is pass.
-		if (enemyAI == 0) {
-			cout << "The enemy attacks!";
-			attackEnemy(enemyDamage);
-			EndTurn();
-		}
-		else if (enemyAI == 1) {
-			cout << "The enemy passes its turn!";
-			EndTurn();
-		}
-	}
+	//if (isTurn && isFinishedTurn != true)
+	//{
+	//	int enemyAI = rand() % 2; //Random number from 0-1. 0 is attack, 1 is pass.
+	//	if (enemyAI == 0) {
+	//		cout << "The enemy attacks!";
+	//		attackEnemy(enemyDamage);
+	//		EndTurn();
+	//	}
+	//	else if (enemyAI == 1) {
+	//		cout << "The enemy passes its turn!";
+	//		EndTurn();
+	//	}
+	//}
 }
 
 void BaseEnemyComponent::attackEnemy(float damage)

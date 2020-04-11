@@ -4,12 +4,12 @@
 #include "cmp_entityinfo.h"
 #include "cmp_player.h"
 #include "cmp_sprite.h"
-#include "cmp_enemy.h"
+#include "enemy_easy.h"
 
 #define GAMEX 1280
 #define GAMEY 720
 
-std::shared_ptr<BaseEnemyComponent> enemy;
+std::shared_ptr<EasyEnemy> enemy;
 
 bool playerTurn;
 
@@ -67,13 +67,15 @@ void CombatRoom::Load() {
 	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
 	auto s = enemy1->addComponent<ShapeComponent>();
-	enemy = enemy1->addComponent<BaseEnemyComponent>();
+	enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5);
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Blue);
 	s->getShape().setOrigin(Vector2f(-500.0f, -200.0f));
-	enemy->setMaxHealth(50);
-	enemy->setDexterity(10);
-	enemy->setStrength(5);
+
+	cout << "Enemy HP : #praying " << enemy->getMaxHealth() << "\n";
+	//enemy->setMaxHealth(50);
+	//enemy->setDexterity(10);
+	//enemy->setStrength(5);
 	ents.list.push_back(enemy1);
 
 	auto a = player->GetCompatibleComponent<BasePlayerComponent>();

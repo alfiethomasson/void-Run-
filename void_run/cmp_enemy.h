@@ -12,7 +12,7 @@ protected:
 public:
 	bool isTurn;
 	bool isFinishedTurn;
-	explicit BaseEnemyComponent(Entity* p);
+	BaseEnemyComponent(Entity* p, float health, float strength, float dex);
 	BaseEnemyComponent() = delete;
 
 	void render() override {}
