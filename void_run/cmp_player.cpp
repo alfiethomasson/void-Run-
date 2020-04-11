@@ -1,5 +1,5 @@
 #include "cmp_player.h"
-#include "cmp_entityinfo.h"
+//#include "cmp_BasePlayerComponent.h"
 #include "VoidRun.h"
 #include "ecm.h"
 #include <string>
@@ -7,8 +7,8 @@
 
 using namespace sf;
 using namespace std;
-std::vector<std::shared_ptr<EntityInfo>> enemyInfo;
-std::vector<std::shared_ptr<EntityInfo>> playerInfo;
+std::vector<std::shared_ptr<BasePlayerComponent>> enemyInfo;
+std::vector<std::shared_ptr<BasePlayerComponent>> playerInfo;
 
 //Clock clock;
 
@@ -38,7 +38,7 @@ void BasePlayerComponent::update(double dt) {
 void BasePlayerComponent::updateEnemy(std::shared_ptr<Entity> e)
 {
 	currentEnemy = e;
-	enemyInfo = e->get_components<EntityInfo>();
+	enemyInfo = e->get_components<BasePlayerComponent>();
 }
 
 void BasePlayerComponent::attack(float damage)
@@ -47,11 +47,62 @@ void BasePlayerComponent::attack(float damage)
 }
 void BasePlayerComponent::heal(float healBy)
 {
-	playerInfo[0]->healDamage(healBy);
+	int tempHealth = currentHealth + healBy;
+	if (tempHealth > _maxHealth)
+	{
+		currentHealth = _maxHealth;
+	}
+	else
+	{
+		currentHealth += healBy;
+	}
 }
 
 void BasePlayerComponent::EndTurn()
 {
 	cout << "Player Turn Ends!";
 	isFinishedTurn = true;
+}
+
+int BasePlayerComponent::getStrength() {
+	return _strength;
+}
+
+int BasePlayerComponent::getMaxHealth() {
+	return _maxHealth;
+}
+
+int BasePlayerComponent::getCurrentHealth() {
+	return currentHealth;
+}
+
+int BasePlayerComponent::getDexterity() {
+	return _dexterity;
+}
+
+void BasePlayerComponent::setStrength(int strength) {
+	_strength = strength;
+}
+
+void BasePlayerComponent::setMaxHealth(int maxHealth) {
+	_maxHealth = maxHealth;
+}
+
+void BasePlayerComponent::setCurrentHealth(int health) {
+	currentHealth = health;
+}
+
+void BasePlayerComponent::setDexterity(int dexterity)
+{
+	_dexterity = dexterity;
+}
+
+void BasePlayerComponent::takeDamage(int dmgRecieved)
+{
+	currentHealth -= dmgRecieved;
+	if (currentHealth <= 0)
+	{
+		currentHealth = 0;
+		_parent->setAlive(false);
+	}
 }

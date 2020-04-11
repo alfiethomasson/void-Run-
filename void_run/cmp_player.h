@@ -22,7 +22,7 @@ public:
 	void updateEnemy(std::shared_ptr<Entity> e);
 
 	void attack(float damage);
-	void heal(float heal);
+	void heal(float healBy);
 	void EndTurn();
 
 	int getStrength();

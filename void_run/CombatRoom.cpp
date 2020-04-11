@@ -46,8 +46,8 @@ void CombatRoom::Update(const double& dt) {
 		}
 	}
 
-	playerHP.setString("tmp");
-	enemyHP.setString("tmp");
+	playerHP.setString(std::to_string(p->getCurrentHealth()));
+	enemyHP.setString(std::to_string(enemy->getCurrentHealth()));
 	Renderer::queue(&playerHP);
 	Renderer::queue(&enemyHP);
 
@@ -67,16 +67,15 @@ void CombatRoom::Load() {
 	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
 	auto s = enemy1->addComponent<ShapeComponent>();
-	auto i = enemy1->addComponent<EntityInfo>();
+	enemy = enemy1->addComponent<BaseEnemyComponent>();
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Blue);
 	s->getShape().setOrigin(Vector2f(-500.0f, -200.0f));
-	i->setStrength(10);
-	i->setHealth(50);
-	i->setDexterity(10);
+	enemy->setMaxHealth(50);
+	enemy->setDexterity(10);
+	enemy->setStrength(5);
 	ents.list.push_back(enemy1);
 
-	enemy = enemy1->addComponent<BaseEnemyComponent>();
 	auto a = player->GetCompatibleComponent<BasePlayerComponent>();
 	p = a[0];
 

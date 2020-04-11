@@ -44,3 +44,37 @@ void BaseEnemyComponent::EndTurn()
 	cout << "Enemy Turn Ends!";
 	isFinishedTurn = true;
 }
+
+
+int BaseEnemyComponent::getStrength() {
+	return _strength;
+}
+
+int BaseEnemyComponent::getMaxHealth() {
+	return _maxHealth;
+}
+
+int BaseEnemyComponent::getCurrentHealth() {
+	return currentHealth;
+}
+
+int BaseEnemyComponent::getDexterity() {
+	return _dexterity;
+}
+
+void BaseEnemyComponent::setStrength(int strength) {
+	_strength = strength;
+}
+
+void BaseEnemyComponent::setMaxHealth(int maxHealth) {
+	_maxHealth = maxHealth;
+}
+
+void BaseEnemyComponent::setCurrentHealth(int health) {
+	currentHealth = health;
+}
+
+void BaseEnemyComponent::setDexterity(int dexterity)
+{
+	_dexterity = dexterity;
+}
