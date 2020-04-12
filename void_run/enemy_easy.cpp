@@ -17,6 +17,7 @@ void EasyEnemy::update(double dt)
 		}
 		else if (enemyAI == 1) {
 			std::cout << "The enemy passes its turn!";
+			attackEnemy(_strength);
 			EndTurn();
 		}
 	}

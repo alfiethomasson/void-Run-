@@ -80,6 +80,7 @@ void CombatRoom::Load() {
 
 	auto a = player->GetCompatibleComponent<BasePlayerComponent>();
 	p = a[0];
+	enemy->updateEnemy(p);
 
 	p->updateEnemy(enemy);
 
@@ -87,8 +88,8 @@ void CombatRoom::Load() {
 	p->isFinishedTurn = false;
 	enemy->isTurn = false;
 
-	//if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
-	if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	//if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}

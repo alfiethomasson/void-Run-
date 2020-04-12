@@ -31,12 +31,12 @@ public:
 	int getStrength();
 	int getMaxHealth();
 	int getDexterity();
-	int getCurrentHealth();
+	float getCurrentHealth();
 
 	void setStrength(int strength);
 	void setMaxHealth(int maxHealth);
 	void setDexterity(int dexterity);
 	void setCurrentHealth(int health);
 
-	void takeDamage(int dmgRecieved);
+	void takeDamage(float dmgRecieved);
 };

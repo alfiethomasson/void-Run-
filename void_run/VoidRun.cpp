@@ -181,7 +181,7 @@ void MenuScene::Render() {
 void MenuScene::Load() {
 	//Loads font
 	//if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
-	if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
@@ -297,7 +297,7 @@ void GameScene::Load() {
 	auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
 	auto i = pl->addComponent<EntityInfo>();
-	player = pl->addComponent<BasePlayerComponent>(100, 20, 10);
+	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f);
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Yellow);
 	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));

@@ -41,6 +41,7 @@ void BaseEnemyComponent::updateEnemy(std::shared_ptr<BasePlayerComponent> player
 
 void BaseEnemyComponent::attackEnemy(float damage)
 {
+	std::cout << "Player assigned to enemy = " << "\n";
 	currentEnemy->takeDamage(damage);
 }
 
@@ -56,7 +57,7 @@ void BaseEnemyComponent::TakeDamage(float damage)
 	if (currentHealth <= 0)
 	{
 		currentHealth = 0;
-		_parent->setAlive(false);
+		_parent->setForDelete();
 		EndTurn();
 	}
 }
