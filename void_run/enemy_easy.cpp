@@ -2,8 +2,8 @@
 #include <iostream>
 #include "enemy_easy.h"
 
-EasyEnemy::EasyEnemy(Entity* p, int health, int strength, int dex)
-	: BaseEnemyComponent{ p, health, strength, dex } {}
+EasyEnemy::EasyEnemy(Entity* p, int health, int strength, int dex, float expReward)
+	: BaseEnemyComponent{ p, health, strength, dex, expReward } {}
 	
 void EasyEnemy::update(double dt)
 {

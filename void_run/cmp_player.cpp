@@ -13,32 +13,52 @@ std::vector<std::shared_ptr<BasePlayerComponent>> playerInfo;
 
 //Clock clock;
 
-BasePlayerComponent::BasePlayerComponent(Entity* p, float health, float strength, float dex)
-	: _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, Component(p) {}
+BasePlayerComponent::BasePlayerComponent(Entity* p, float health, float strength, float dex, float experience)
+	: _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, _experience{ experience }, Component(p) {}
 
 void BasePlayerComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
 	//Clock.Reset();
-	if (isTurn && isFinishedTurn != true)
-	{
-		if (Keyboard::isKeyPressed(Keyboard::Q))
+
+	if (checkEnemyStatus() == true) {
+		if (isTurn && isFinishedTurn != true)
 		{
-			cout << "Player Attacks!";
-			attack(_strength);
-			EndTurn();
+			if (Keyboard::isKeyPressed(Keyboard::Q))
+			{
+				cout << "Player Attacks!";
+				attack(_strength);
+				EndTurn();
+			}
+			else if (Keyboard::isKeyPressed(Keyboard::W))
+			{
+				cout << "Player Heals!";
+				heal(playerHealQuantity);
+				EndTurn();
+			}
 		}
-		else if (Keyboard::isKeyPressed(Keyboard::W))
-		{
-			cout << "Player Heals!";
-			heal(playerHealQuantity);
-			EndTurn();
-		}
+	}
+	else {
+		expGet();
 	}
 }
 
 void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)
 {
 	currentEnemy = e;
+}
+
+bool BasePlayerComponent::checkEnemyStatus(){
+	if (currentEnemy->is_fordeletion() == true) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+void BasePlayerComponent::expGet() {
+	cout << "The enemy has become die.";
+	_experience += currentEnemy->expReward;
 }
 
 void BasePlayerComponent::attack(float damage)
@@ -57,6 +77,7 @@ void BasePlayerComponent::heal(float healBy)
 		currentHealth += healBy;
 	}
 }
+
 
 void BasePlayerComponent::EndTurn()
 {
@@ -80,6 +101,10 @@ int BasePlayerComponent::getDexterity() {
 	return _dexterity;
 }
 
+int BasePlayerComponent::getExperience() {
+	return _experience;
+}
+
 void BasePlayerComponent::setStrength(int strength) {
 	_strength = strength;
 }
@@ -95,6 +120,11 @@ void BasePlayerComponent::setCurrentHealth(int health) {
 void BasePlayerComponent::setDexterity(int dexterity)
 {
 	_dexterity = dexterity;
+}
+
+void BasePlayerComponent::setExperience(int experience)
+{
+	_experience = experience;
 }
 
 void BasePlayerComponent::takeDamage(float dmgRecieved)

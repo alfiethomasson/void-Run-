@@ -15,6 +15,8 @@ bool playerTurn;
 
 void CombatRoom::Update(const double& dt) {
 
+	checkEnemyStatus();
+
 	if (playerTurn)
 	{
 		if (!p->isTurn)
@@ -48,8 +50,10 @@ void CombatRoom::Update(const double& dt) {
 
 	playerHP.setString(std::to_string(p->getCurrentHealth()));
 	enemyHP.setString(std::to_string(enemy->getCurrentHealth()));
+	experienceCounter.setString(std::to_string(p->getExperience()));
 	Renderer::queue(&playerHP);
 	Renderer::queue(&enemyHP);
+	Renderer::queue(&experienceCounter);
 
 	Room::Update(dt);
 }
@@ -57,6 +61,7 @@ void CombatRoom::Update(const double& dt) {
 void CombatRoom::Render() {
 	Renderer::queue(&playerHP);
 	Renderer::queue(&enemyHP);
+	Renderer::queue(&experienceCounter);
 
 	Room::Render();
 }
@@ -67,7 +72,7 @@ void CombatRoom::Load() {
 	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
 	auto s = enemy1->addComponent<ShapeComponent>();
-	enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5);
+	enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5, 5);
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Blue);
 	s->getShape().setOrigin(Vector2f(-500.0f, -200.0f));
@@ -88,18 +93,22 @@ void CombatRoom::Load() {
 	p->isFinishedTurn = false;
 	enemy->isTurn = false;
 
-	if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
-	//if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	//if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
 	playerHP.setFont(font);
 	enemyHP.setFont(font);
+	experienceCounter.setFont(font);
 	playerHP.setCharacterSize(100);
 	playerHP.setPosition(sf::Vector2f(GAMEX / 4 - (playerHP.getGlobalBounds().width / 2), GAMEY / 5.0f));
 	playerHP.setFillColor(sf::Color::Red);
 	enemyHP.setCharacterSize(100);
 	enemyHP.setPosition(sf::Vector2f((GAMEX / 4 * 3) - (enemyHP.getGlobalBounds().width / 2), GAMEY / 5.0f));
 	enemyHP.setFillColor(sf::Color::Red);
+	experienceCounter.setCharacterSize(101);
+	experienceCounter.setPosition(sf::Vector2f(GAMEX / 4 - (experienceCounter.getGlobalBounds().width / 4), GAMEY / 5.0f));
+	experienceCounter.setFillColor(sf::Color::Yellow);
 }
 //CombatRoom::CombatRoom(Entity* p) : Room() { player = p; };

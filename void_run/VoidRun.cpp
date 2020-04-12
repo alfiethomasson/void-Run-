@@ -297,7 +297,7 @@ void GameScene::Load() {
 	auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
 	auto i = pl->addComponent<EntityInfo>();
-	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f);
+	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f);
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Yellow);
 	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
@@ -417,6 +417,9 @@ void GameScene::ChangeRoom() {
 	//player->updateEnemy(ents.list[ents.list.size() - 1]);
 
 	//Makes sure you don't delete the player entity
+
+	player->expGained = false;
+
 	if(ents.list.size() > 1)
 	{
 		ents.list[ents.list.size() - 1]->setForDelete();

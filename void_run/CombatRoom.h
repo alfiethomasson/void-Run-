@@ -10,6 +10,7 @@ protected:
 	sf::Font font;
 	sf::Text playerHP;
 	sf::Text enemyHP;
+	sf::Text experienceCounter;
 public:
 	CombatRoom(std::shared_ptr<Entity> p) : player(p) {};
 	~CombatRoom() override = default;
