@@ -5,6 +5,7 @@
 #include "engine.h"
 #include "CombatRoom.h"
 #include "Room.h"
+#include "ItemDB.h"
 //#include "Game.h"
 
 class MenuScene : public Scene {

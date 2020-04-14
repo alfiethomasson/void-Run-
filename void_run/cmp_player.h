@@ -38,5 +38,7 @@ public:
 	void setDexterity(int dexterity);
 	void setCurrentHealth(int health);
 
+	void addStats(int strength, int health, int dex);
+
 	void takeDamage(float dmgRecieved);
 };

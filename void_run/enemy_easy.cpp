@@ -9,6 +9,7 @@ void EasyEnemy::update(double dt)
 {
 	if (isTurn && isFinishedTurn != true)
 	{
+		srand(time(0));
 		int enemyAI = rand() % 2; //Random number from 0-1. 0 is attack, 1 is pass.
 		if (enemyAI == 0) {
 			std::cout << "The enemy attacks!";
@@ -17,7 +18,6 @@ void EasyEnemy::update(double dt)
 		}
 		else if (enemyAI == 1) {
 			std::cout << "The enemy passes its turn!";
-			attackEnemy(_strength);
 			EndTurn();
 		}
 	}

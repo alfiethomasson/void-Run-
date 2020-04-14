@@ -67,15 +67,11 @@ void CombatRoom::Load() {
 	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
 	auto s = enemy1->addComponent<ShapeComponent>();
-	enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5);
+	enemy = enemy1->addComponent<EasyEnemy>(150, 10, 5);
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Blue);
 	s->getShape().setOrigin(Vector2f(-500.0f, -200.0f));
 
-	cout << "Enemy HP : #praying " << enemy->getMaxHealth() << "\n";
-	//enemy->setMaxHealth(50);
-	//enemy->setDexterity(10);
-	//enemy->setStrength(5);
 	ents.list.push_back(enemy1);
 
 	auto a = player->GetCompatibleComponent<BasePlayerComponent>();

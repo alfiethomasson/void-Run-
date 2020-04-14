@@ -8,6 +8,7 @@
 #include "cmp_entityinfo.h"
 #include "cmp_player.h"
 #include "cmp_enemy.h"
+#include "cmp_inventory.h"
 #include "engine.h"
 #include "CombatRoom.h"
 #include "TreasureRoom.h"
@@ -24,6 +25,8 @@ using namespace std;
 //std::shared_ptr<Scene> activeScene;
 
 std::shared_ptr<BasePlayerComponent> player;
+std::shared_ptr<Inventory> inv;
+ItemDB itemDB;
 
 CombatRoom* testRoom;
 
@@ -38,6 +41,10 @@ shared_ptr<Entity> pl;
 sf::Time scene_delay;
 sf::Clock scene_clock;
 float sceneChangeDelay;
+
+sf::Clock pauseClock;
+sf::Time pause_delay;
+float pauseDelay = 0.5f;
 
 void MenuScene::Update(const double& dt) {
 
@@ -288,9 +295,10 @@ void GameScene::Load() {
 	ResButton.setCharacterSize(60);
 	ResButton.setPosition(sf::Vector2f(GAMEX / 2.0f + 80.0f, GAMEY / 2.0f - (ResButton.getGlobalBounds().height / 2)));
 	ResButtonBox = ResButton.getGlobalBounds();
-
-	buttons.push_back(SettingBox);
-	buttons.push_back(ResButtonBox);
+	BackButton.setString("BACK - 2");
+	BackButton.setCharacterSize(60);
+	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (BackButton.getGlobalBounds().width / 2), GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 100.0f));
+	BackButtonBox = BackButton.getGlobalBounds();
 
 	//Creates Player and adds components
 	pl = make_shared<Entity>(); 
@@ -298,6 +306,7 @@ void GameScene::Load() {
 	//pl->addComponent<PlayerMovementComponent>();
 	auto i = pl->addComponent<EntityInfo>();
 	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f);
+	inv = pl->addComponent<Inventory>(2);
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Yellow);
 	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
@@ -306,9 +315,11 @@ void GameScene::Load() {
 	i->setDexterity(10);
 	ents.list.push_back(pl);
 
+	itemDB.PopulateDB();
+
 	//ents.list.push_back(pl);
 
-	sceneChangeDelay = 1.0f;
+	sceneChangeDelay = 0.5f;
 
 	ChangeRoom();
 	
@@ -321,11 +332,18 @@ void GameScene::Update(const double& dt) {
 	//Gets Mouse position in an int format
 	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	Vector2f cursPos = sf::Vector2f(tempPos);
+	scene_delay = scene_clock.getElapsedTime();
+	pause_delay = pauseClock.getElapsedTime();
 
 	if (!isPaused)
 	{
-		scene_delay = scene_clock.getElapsedTime();
 		currentRoom->Update(dt);
+
+		if (Keyboard::isKeyPressed(Keyboard::Num4) && scene_delay.asSeconds() >= sceneChangeDelay)
+		{
+			scene_clock.restart();
+			inv->add(itemDB.randomCommonItem());
+		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Space) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
@@ -350,26 +368,8 @@ void GameScene::Update(const double& dt) {
 	else
 	{
 		if (Mouse::isButtonPressed(sf::Mouse::Left))
-			{
-				if (ResButtonBox.contains(cursPos))
-				{
-					if (Engine::getWindowSize().y != 1080)
-					{
-						ResChange.setString("1080p");
-						ChangeResolution(1920, 1080, GAMEX, GAMEY);
-					}
-					else
-					{
-						ResChange.setString("720p");
-						ChangeResolution(1280, 720, GAMEX, GAMEY);
-					}
-				}
-				if (BackButtonBox.contains(cursPos))
-				{
-					isPaused = false;
-				}
-			}
-		if (Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			if (ResButtonBox.contains(cursPos))
 			{
 				if (Engine::getWindowSize().y != 1080)
 				{
@@ -384,10 +384,48 @@ void GameScene::Update(const double& dt) {
 					UpdateButtons();
 				}
 			}
-		if(Keyboard::isKeyPressed(sf::Keyboard::Num2))
+			if (BackButtonBox.contains(cursPos))
 			{
 				isPaused = false;
 			}
+		}
+		if (Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			if (Engine::getWindowSize().y != 1080)
+			{
+				ResChange.setString("1080p");
+				ChangeResolution(1920, 1080, GAMEX, GAMEY);
+				UpdateButtons();
+			}
+			else
+			{
+				ResChange.setString("720p");
+				ChangeResolution(1280, 720, GAMEX, GAMEY);
+				UpdateButtons();
+			}
+		}
+		if (Keyboard::isKeyPressed(sf::Keyboard::Num2) && pause_delay.asSeconds() >= pauseDelay)
+		{
+			pauseClock.restart();
+			isPaused = false;
+		}
+
+		if (BackButtonBox.contains(cursPos))
+		{
+			BackButton.setFillColor(green);
+		}
+		else
+		{
+			BackButton.setFillColor(white);
+		}
+		if (ResButtonBox.contains(cursPos))
+		{
+			ResButton.setFillColor(green);
+		}
+		else
+		{
+			ResButton.setFillColor(white);
+		}
 	}
 
 	//Update from base class

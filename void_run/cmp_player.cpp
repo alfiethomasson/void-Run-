@@ -97,10 +97,24 @@ void BasePlayerComponent::setDexterity(int dexterity)
 	_dexterity = dexterity;
 }
 
+void BasePlayerComponent::addStats(int strength, int health, int dex)
+{
+	_strength += strength;
+	_maxHealth += health;
+	if (currentHealth + health >= _maxHealth)
+	{
+		currentHealth = _maxHealth;
+	}
+	else
+	{
+		currentHealth += health;
+	}
+	_dexterity += dex;
+}
+
 void BasePlayerComponent::takeDamage(float dmgRecieved)
 {
-	std::cout << "Current Player HP : " << currentHealth << "\n";
-	currentHealth -= 1.0f;
+	currentHealth -= dmgRecieved;
 	if (currentHealth <= 0)
 	{
 		currentHealth = 0;
