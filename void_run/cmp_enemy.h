@@ -15,7 +15,9 @@ protected:
 public:
 	bool isTurn;
 	bool isFinishedTurn;
-	BaseEnemyComponent(Entity* p, float health, float strength, float dex);
+	float expReward;
+
+	BaseEnemyComponent(Entity* p, float health, float strength, float dex, float expReward);
 	BaseEnemyComponent() = delete;
 
 	void render() override {}

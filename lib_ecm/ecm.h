@@ -87,6 +87,8 @@ public:
 	virtual void update(double dt) = 0;
 	virtual void render() = 0;
 	virtual ~Component();
+
+	Entity getParent();
 };
 
 struct EntityManager {

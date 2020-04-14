@@ -118,3 +118,7 @@ void EntityManager::Update(double dt) {
 		e->Update(dt);
 	}
 }
+
+Entity Component::getParent() {
+	return *_parent;
+}

@@ -12,31 +12,37 @@ protected:
 	float _maxHealth;
 	float currentHealth;
 	float playerHealQuantity;
+	float _experience;
 	std::shared_ptr<BaseEnemyComponent> currentEnemy;
 public:
 	bool isTurn;
 	bool isFinishedTurn;
-	explicit BasePlayerComponent(Entity* p, float health, float strength, float dex);
+	bool expGained;
+	explicit BasePlayerComponent(Entity* p, float health, float strength, float dex, float experience);
 	BasePlayerComponent() = delete;
 
 	void render() override {}
 	void update(double dt) override;
 
 	void updateEnemy(std::shared_ptr<BaseEnemyComponent> e);
+	bool checkEnemyStatus();
 
 	void attack(float damage);
 	void heal(float healBy);
+	void expGet();
 	void EndTurn();
 
 	int getStrength();
 	int getMaxHealth();
 	int getDexterity();
 	float getCurrentHealth();
+	int getExperience();
 
 	void setStrength(int strength);
 	void setMaxHealth(int maxHealth);
 	void setDexterity(int dexterity);
 	void setCurrentHealth(int health);
+	void setExperience(int experience);
 
 	void addStats(int strength, int health, int dex);
 
