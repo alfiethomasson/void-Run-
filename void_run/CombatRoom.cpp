@@ -15,7 +15,7 @@ bool playerTurn;
 
 void CombatRoom::Update(const double& dt) {
 
-	checkEnemyStatus();
+	//checkEnemyStatus();
 
 	if (playerTurn)
 	{

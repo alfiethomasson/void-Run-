@@ -20,25 +20,29 @@ void BasePlayerComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
 	//Clock.Reset();
 
-	if (checkEnemyStatus() == true) {
-		if (isTurn && isFinishedTurn != true)
+	if (isTurn)
+	{
+		if (checkEnemyStatus())
 		{
-			if (Keyboard::isKeyPressed(Keyboard::Q))
+			if (isFinishedTurn != true)
 			{
-				cout << "Player Attacks!";
-				attack(_strength);
-				EndTurn();
-			}
-			else if (Keyboard::isKeyPressed(Keyboard::W))
-			{
-				cout << "Player Heals!";
-				heal(playerHealQuantity);
-				EndTurn();
+				if (Keyboard::isKeyPressed(Keyboard::Q))
+				{
+					cout << "Player Attacks!";
+					attack(_strength);
+					EndTurn();
+				}
+				else if (Keyboard::isKeyPressed(Keyboard::W))
+				{
+					cout << "Player Heals!";
+					heal(playerHealQuantity);
+					EndTurn();
+				}
 			}
 		}
-	}
-	else {
-		expGet();
+		else {
+			expGet();
+		}
 	}
 }
 
@@ -48,17 +52,20 @@ void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)
 }
 
 bool BasePlayerComponent::checkEnemyStatus(){
-	if (currentEnemy->is_fordeletion() == true) {
-		return true;
+	if (currentEnemy->getParent().is_forDeletion()) {
+		return false;
 	}
 	else {
-		return false;
+		return true;
 	}
 }
 
 void BasePlayerComponent::expGet() {
-	cout << "The enemy has become die.";
-	_experience += currentEnemy->expReward;
+	if (expGained == false) {
+		cout << "The enemy has become die.";
+		_experience += currentEnemy->expReward;
+		expGained = true;
+	}
 }
 
 void BasePlayerComponent::attack(float damage)

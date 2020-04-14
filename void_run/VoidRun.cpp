@@ -448,7 +448,7 @@ void GameScene::ChangeRoom() {
 	}
 	else if(roomType == 1) //Treasure Room
 	{
-		std::shared_ptr<TreasureRoom> newRoom = make_shared<TreasureRoom>();
+		std::shared_ptr<TreasureRoom> newRoom = make_shared<TreasureRoom>(pl);
 		newRoom->Load();
 		rooms.push_back(newRoom);
 		currentRoom = newRoom;

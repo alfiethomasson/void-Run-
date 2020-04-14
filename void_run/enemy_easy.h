@@ -2,7 +2,6 @@
 #include <iostream>
 #include "ecm.h"
 #include "cmp_enemy.h"
-#include "ecm.h"
 
 class EasyEnemy : public BaseEnemyComponent {
 protected:
