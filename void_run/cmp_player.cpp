@@ -26,6 +26,7 @@ void BasePlayerComponent::update(double dt) {
 			cout << "Player Attacks!";
 			attack(_strength);
 			EndTurn();
+			currentEnemy->
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::W))
 		{

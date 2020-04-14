@@ -15,6 +15,7 @@ void Inventory::add(std::shared_ptr<Item> item)
 
 void Inventory::remove(int position)
 {
+	items[position]->Unequip();
 	items.erase(items.begin() + position);
 }
 

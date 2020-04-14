@@ -339,6 +339,7 @@ void GameScene::Update(const double& dt) {
 	{
 		currentRoom->Update(dt);
 
+		//Adds item!
 		if (Keyboard::isKeyPressed(Keyboard::Num4) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
 			scene_clock.restart();

@@ -16,10 +16,13 @@ void Item::Equip(Entity newUser)
 
 void Item::Unequip()
 {
+	auto p = user.GetCompatibleComponent<BasePlayerComponent>();
+	auto s = p[0];
 
+	s->addStats(-strengthMod, -healthMod, -dexMod);
 }
 
 void Item::Load()
 {
-
+	
 }
