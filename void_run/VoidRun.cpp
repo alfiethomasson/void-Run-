@@ -13,6 +13,7 @@
 #include "CombatRoom.h"
 #include "TreasureRoom.h"
 #include <time.h>  
+#include <SFML/Graphics.hpp>
 
 #define GAMEX 1280
 #define GAMEY 720
@@ -306,6 +307,8 @@ void GameScene::Load() {
 	//pl->addComponent<PlayerMovementComponent>();
 	auto i = pl->addComponent<EntityInfo>();
 	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f);
+	inv = pl->addComponent<Inventory>(2);
+	inv->Load();
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Yellow);
 	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
@@ -316,8 +319,24 @@ void GameScene::Load() {
 
 	itemDB.PopulateDB();
 
-	//ents.list.push_back(pl);
+	if (!BoxTexture.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Sprites/TextBox.png"))
+	{
+		cout << "Couldn't load textbox png\n";
+	}
+	textBox.setTexture(BoxTexture);
+	textBox.setScale(sf::Vector2f(0.7f, 0.5f));
+	textBox.setPosition(sf::Vector2f((GAMEX / 2) - (textBox.getGlobalBounds().width / 2), 50.0f));
+	ui.list.push_back(textBox);
 
+	screenText.setFont(font);
+	screenText.setString("Welcome to Void Run!");
+	screenText.setCharacterSize(30);
+	screenText.setFillColor(Color(255, 255, 255, 255));
+	screenText.setPosition((textBox.getPosition().x + textBox.getGlobalBounds().width / 2) - (screenText.getGlobalBounds().width / 2),
+		(textBox.getPosition().y + textBox.getGlobalBounds().height /2)- (screenText.getGlobalBounds().height));
+
+	//ents.list.push_back(pl);
+	alphaUpdate = 255;
 	sceneChangeDelay = 0.5f;
 
 	ChangeRoom();
@@ -334,6 +353,12 @@ void GameScene::Update(const double& dt) {
 	scene_delay = scene_clock.getElapsedTime();
 	pause_delay = pauseClock.getElapsedTime();
 
+	if (screenText.getFillColor().a != 0)
+	{
+		alphaUpdate -= 0.1;
+		screenText.setFillColor(Color(255, 255, 255, alphaUpdate));
+	}
+
 	if (!isPaused)
 	{
 		currentRoom->Update(dt);
@@ -342,7 +367,12 @@ void GameScene::Update(const double& dt) {
 		if (Keyboard::isKeyPressed(Keyboard::Num4) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
 			scene_clock.restart();
-			inv->add(itemDB.randomCommonItem());
+			auto randItem = itemDB.randomCommonItem();
+			if (inv->add(randItem))
+			{
+				cout << "Space in inventory!\n";
+				ui.list.push_back(randItem->getSprite());
+			}
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Space) && scene_delay.asSeconds() >= sceneChangeDelay)
@@ -436,7 +466,9 @@ void GameScene::Update(const double& dt) {
 void GameScene::Render() {
 	if (!isPaused)
 	{
+		currentRoom->Render();
 		Renderer::queue(&SettingSprite);
+		Renderer::queue(&screenText);
 		Scene::Render();
 	}
 	else
@@ -505,3 +537,10 @@ void GameScene::UpdateButtons()
 	UpdateButton(SettingBox);
 }
 
+void GameScene::UpdateTextBox(sf::String newText)
+{
+	screenText.setString(newText);
+	screenText.setFillColor(Color(255, 255, 255, 255));
+	screenText.setPosition((textBox.getPosition().x + textBox.getGlobalBounds().width / 2) - (screenText.getGlobalBounds().width / 2),
+		(textBox.getPosition().y + textBox.getGlobalBounds().height / 2) - (screenText.getGlobalBounds().height));
+}

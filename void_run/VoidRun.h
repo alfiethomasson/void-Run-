@@ -55,9 +55,15 @@ private:
 	std::vector<std::shared_ptr<Room>> rooms;
 	std::shared_ptr<Room> currentRoom;
 
+	sf::Sprite textBox;
+	sf::Texture BoxTexture;
+
+	float alphaUpdate;
 
 
 public:
+	sf::Text screenText;
+
 	GameScene() = default;
 	~GameScene() override = default;
 	void Update(const double& dt) override;
@@ -67,4 +73,5 @@ public:
 	void ChangeRoom();
 	bool playerTurn;
 	void UpdateButtons();
+	void UpdateTextBox(sf::String newText);
 };

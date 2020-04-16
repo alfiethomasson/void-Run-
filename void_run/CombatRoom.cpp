@@ -13,37 +13,41 @@ std::shared_ptr<EasyEnemy> enemy;
 
 bool playerTurn;
 
+sf::Time turn_delay;
+sf::Clock turn_clock;
+float turnDelayValue;
+
 void CombatRoom::Update(const double& dt) {
 
-	//checkEnemyStatus();
+	turn_delay = turn_clock.getElapsedTime();
 
 	if (playerTurn)
 	{
-		if (!p->isTurn)
+		if (!p->isTurn && turn_delay.asSeconds() >= turnDelayValue)
 		{
 			p->isTurn = true;
 		}
 		if (p->isFinishedTurn)
 		{
-			sf::sleep(sf::seconds(1.0));
+			turn_clock.restart();
 			playerTurn = false;
 			p->isTurn = false;
-			enemy->isTurn = true;
+			//enemy->isTurn = true;
 			p->isFinishedTurn = false;
 		}
 	}
 	else
 	{
-		if (!enemy->isTurn)
+		if (!enemy->isTurn && turn_delay.asSeconds() >= turnDelayValue)
 		{
 			enemy->isTurn = true;
 		}
 		if (enemy->isFinishedTurn)
 		{
-			sf::sleep(sf::seconds(1.0));
+			turn_clock.restart();
 			playerTurn = true;
 			enemy->isTurn = false;
-			p->isTurn = true;
+			//p->isTurn = true;
 			enemy->isFinishedTurn = false;
 		}
 	}
@@ -51,9 +55,9 @@ void CombatRoom::Update(const double& dt) {
 	playerHP.setString(std::to_string(p->getCurrentHealth()));
 	enemyHP.setString(std::to_string(enemy->getCurrentHealth()));
 	experienceCounter.setString(std::to_string(p->getExperience()));
-	Renderer::queue(&playerHP);
-	Renderer::queue(&enemyHP);
-	Renderer::queue(&experienceCounter);
+//	Renderer::queue(&playerHP);
+	//Renderer::queue(&enemyHP);
+//	Renderer::queue(&experienceCounter);
 
 	Room::Update(dt);
 }
@@ -88,9 +92,10 @@ void CombatRoom::Load() {
 	playerTurn = true;
 	p->isFinishedTurn = false;
 	enemy->isTurn = false;
+	enemy->isFinishedTurn = false;
 
 	//if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
-	if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
@@ -106,5 +111,9 @@ void CombatRoom::Load() {
 	experienceCounter.setCharacterSize(101);
 	experienceCounter.setPosition(sf::Vector2f(GAMEX / 4 - (experienceCounter.getGlobalBounds().width / 4), GAMEY / 5.0f));
 	experienceCounter.setFillColor(sf::Color::Yellow);
+
+	turnDelayValue = 1.0f;
+
+	Room::Load();
 }
 //CombatRoom::CombatRoom(Entity* p) : Room() { player = p; };

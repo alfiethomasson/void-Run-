@@ -141,9 +141,9 @@ void Engine::ChangeScene(Scene* s) {
 	}
 }
 
-void Scene::Update(const double& dt) { ents.Update(dt); }
+void Scene::Update(const double& dt) { ents.Update(dt); ui.Update(dt); }
 
-void Scene::Render() { ents.Render(); }
+void Scene::Render() { ents.Render(); ui.Render(); }
 
 bool Scene::isLoaded() const {
 	{
@@ -168,6 +168,7 @@ void Scene::setLoaded(bool b) {
 }
 
 void Scene::UnLoad() {
+	ui.list.clear();
 	ents.list.clear();
 	setLoaded(false);
 }
@@ -288,3 +289,10 @@ namespace timing {
 } // namespace timing
 
 Scene::~Scene() { UnLoad(); }
+
+void UIManager::Render()
+{
+	for (auto& _i : list) {
+		Renderer::queue(&_i);
+	}
+}

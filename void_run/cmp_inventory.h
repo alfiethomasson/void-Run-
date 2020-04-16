@@ -7,6 +7,7 @@ class Inventory : public Component {
 protected:
 	float inventorySize;
 	std::vector<std::shared_ptr<Item>> items;
+	sf::Vector2f positions[9];
 public: 
 
 	Inventory() = delete;
@@ -14,8 +15,9 @@ public:
 
 	void update(double dt) override;
 	void render() override {};
+	void Load();
 
-	void add(std::shared_ptr<Item> item);
+	bool add(std::shared_ptr<Item> item);
 	void remove(int position);
 
 	bool checkEmptySlot();
