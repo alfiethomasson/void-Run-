@@ -25,7 +25,8 @@ void Item::Unequip()
 
 void Item::Load()
 {
-	if (!tex.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Icons/" + texName + ".png"))
+//	if (!tex.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Icons/" + texName + ".png"))
+	if(!tex.loadFromFile("res/Icons/" + texName + ".png"))
 	{
 		std::cout << "Failed to load Texture: " << texName << "\n";
 	}

@@ -94,8 +94,7 @@ void CombatRoom::Load() {
 	enemy->isTurn = false;
 	enemy->isFinishedTurn = false;
 
-	//if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
-	if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}

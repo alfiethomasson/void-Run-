@@ -188,8 +188,7 @@ void MenuScene::Render() {
 
 void MenuScene::Load() {
 	//Loads font
-	//if (!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
-	if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
@@ -261,14 +260,12 @@ void MenuScene::UpdateButtons()
 
 void GameScene::Load() {
 
-	//if(!font.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
-	if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
 
-	//if(!SettingIcon.loadFromFile("C:/Users/Flat 48/Documents/GitHub/void-Run-/res/Sprites/WhiteSquare.png"))
-	if (!SettingIcon.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Sprites/WhiteSquare.png"))
+	if (!SettingIcon.loadFromFile("res/Sprites/WhiteSquare.png"))
 	{
 		cout << "Could not load setting icon White\n";
 	}
@@ -321,7 +318,7 @@ void GameScene::Load() {
 
 	itemDB.PopulateDB();
 
-	if (!BoxTexture.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Sprites/TextBox.png"))
+	if (!BoxTexture.loadFromFile("res/Sprites/TextBox.png"))
 	{
 		cout << "Couldn't load textbox png\n";
 	}
