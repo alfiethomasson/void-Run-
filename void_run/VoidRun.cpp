@@ -87,7 +87,6 @@ void MenuScene::Update(const double& dt) {
 		{
 			inOptions = true;
 			scene_clock.restart();
-			std::cout << "Bruh.";
 		}
 
 		//Checks if button box's contain mouse, and makes text green if so
@@ -265,15 +264,16 @@ void GameScene::Load() {
 		cout << "failed to load font";
 	}
 
-	if (!SettingIcon.loadFromFile("res/Sprites/WhiteSquare.png"))
+	if (!SettingIcon.loadFromFile("res/Icons/SettingsIcon.png"))
 	{
 		cout << "Could not load setting icon White\n";
 	}
 
 	SettingSprite.setTexture(SettingIcon);
-	SettingSprite.setPosition(1150.0f, 600.0f);
-	SettingSprite.setScale(0.2f, 0.2f);
+	SettingSprite.setPosition(1200.0f, 630.0f);
+	SettingSprite.setScale(0.3f, 0.3f);
 	SettingBox = SettingSprite.getGlobalBounds();
+	//ui.list.push_back(SettingSprite);
 
 	PauseText.setFont(font);
 	ResText.setFont(font);
@@ -466,8 +466,8 @@ void GameScene::Render() {
 	if (!isPaused)
 	{
 		currentRoom->Render();
-		Renderer::queue(&SettingSprite);
 		Renderer::queue(&screenText);
+		Renderer::queue(&SettingSprite);
 		Scene::Render();
 	}
 	else
