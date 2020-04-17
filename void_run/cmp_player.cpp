@@ -19,6 +19,7 @@ BasePlayerComponent::BasePlayerComponent(Entity* p, float health, float strength
 void BasePlayerComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
 	//Clock.Reset();
+	auto s = _parent->GetCompatibleComponent<SpecialItem>();
 
 	if (isTurn)
 	{
@@ -37,6 +38,10 @@ void BasePlayerComponent::update(double dt) {
 					cout << "Player Heals!";
 					heal(playerHealQuantity);
 					EndTurn();
+				}
+				for (auto c : s)
+				{
+					c->doEffect();
 				}
 			}
 		}

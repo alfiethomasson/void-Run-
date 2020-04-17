@@ -9,7 +9,7 @@
 #define GAMEX 1280
 #define GAMEY 720
 
-std::shared_ptr<EasyEnemy> enemy;
+std::shared_ptr<BaseEnemyComponent> enemy;
 
 bool playerTurn;
 

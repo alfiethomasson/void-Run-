@@ -9,6 +9,7 @@
 #include "cmp_player.h"
 #include "cmp_enemy.h"
 #include "cmp_inventory.h"
+#include "SpecialItem.h"
 #include "engine.h"
 #include "CombatRoom.h"
 #include "TreasureRoom.h"
@@ -265,7 +266,7 @@ void GameScene::Load() {
 		cout << "failed to load font";
 	}
 
-	if (!SettingIcon.loadFromFile("res/Sprites/WhiteSquare.png"))
+	if (!SettingIcon.loadFromFile("res/Icons/Settings.png"))
 	{
 		cout << "Could not load setting icon White\n";
 	}
@@ -361,6 +362,13 @@ void GameScene::Update(const double& dt) {
 	if (!isPaused)
 	{
 		currentRoom->Update(dt);
+
+		if (Keyboard::isKeyPressed(Keyboard::Num3) && scene_delay.asSeconds() >= sceneChangeDelay)
+		{
+			scene_clock.restart();
+			auto lb = pl->addComponent<LaserBurst>();
+			lb->load();
+		}
 
 		//Adds item!
 		if (Keyboard::isKeyPressed(Keyboard::Num4) && scene_delay.asSeconds() >= sceneChangeDelay)
@@ -538,6 +546,7 @@ void GameScene::UpdateButtons()
 
 void GameScene::UpdateTextBox(sf::String newText)
 {
+	alphaUpdate = 255;
 	screenText.setString(newText);
 	screenText.setFillColor(Color(255, 255, 255, 255));
 	screenText.setPosition((textBox.getPosition().x + textBox.getGlobalBounds().width / 2) - (screenText.getGlobalBounds().width / 2),
