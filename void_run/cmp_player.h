@@ -3,7 +3,6 @@
 #include "cmp_enemy.h"
 #include "cmp_abilitymanager.h"
 #include "UI.h"
-//#include "Game.h"
 
 class BaseEnemyComponent;
 class SpecialItem;

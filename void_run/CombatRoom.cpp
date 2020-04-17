@@ -57,9 +57,6 @@ void CombatRoom::Update(const double& dt) {
 	playerHP.setString(std::to_string(p->getCurrentHealth()));
 	enemyHP.setString(std::to_string(enemy->getCurrentHealth()));
 	experienceCounter.setString(std::to_string(p->getExperience()));
-//	Renderer::queue(&playerHP);
-	//Renderer::queue(&enemyHP);
-//	Renderer::queue(&experienceCounter);
 
 	Room::Update(dt);
 }

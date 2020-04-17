@@ -1,3 +1,4 @@
+#include "Game.h"
 #include "cmp_player.h"
 #include <string>
 #include <iostream>
@@ -19,7 +20,7 @@ void BasePlayerComponent::update(double dt) {
 	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	sf::Vector2f cursPos = sf::Vector2f(tempPos);
 
-	if (isTurn)
+	if (isTurn && !isPaused)
 	{
 		if (checkEnemyStatus())
 		{

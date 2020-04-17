@@ -15,12 +15,13 @@ ItemDB itemDB;
 CombatRoom* testRoom;
 
 sf::Event event;
-bool isPaused = false;
 
 sf::Color green(0, 255, 0, 255);
 sf::Color white(255, 255, 255, 255);
 
 shared_ptr<Entity> pl;
+
+bool isPaused;
 
 sf::Time scene_delay;
 sf::Clock scene_clock;
@@ -177,10 +178,12 @@ void MenuScene::Load() {
 		cout << "failed to load font";
 	}
 
+	//Loads music
 	if (!titleMusic.openFromFile("res/Sounds/Music/TitleMusic.wav"))
 	{
 		cout << "Couldn't load title music\n";
 	}
+	//Starts music
 	titleMusic.play();
 	titleMusic.setVolume(50.0f);
 	titleMusic.setLoop(true);
@@ -241,6 +244,7 @@ void MenuScene::Load() {
 	sceneChangeDelay = 1.0f;
 }
 
+//Updates the bounding boxes of buttons
 void MenuScene::UpdateButtons()
 {
 	UpdateButton(PlayButtonBox);
@@ -252,21 +256,23 @@ void MenuScene::UpdateButtons()
 
 void GameScene::Load() {
 
+	//Loads font
 	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
 
+	//Loads settings icon
 	if (!SettingIcon.loadFromFile("res/Icons/Settings.png"))
 	{
 		cout << "Could not load setting icon White\n";
 	}
 
+	//Loads the settings icon stuff
 	SettingSprite.setTexture(SettingIcon);
 	SettingSprite.setPosition(1200.0f, 630.0f);
 	SettingSprite.setScale(0.3f, 0.3f);
 	SettingBox = SettingSprite.getGlobalBounds();
-	//ui.list.push_back(SettingSprite);
 
 	PauseText.setFont(font);
 	ResText.setFont(font);
@@ -293,6 +299,7 @@ void GameScene::Load() {
 	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (BackButton.getGlobalBounds().width / 2), GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 100.0f));
 	BackButtonBox = BackButton.getGlobalBounds();
 
+	//Calls load function of the combatUI
 	combatUI.Load();
 
 	//Creates Player and adds components
@@ -308,9 +315,11 @@ void GameScene::Load() {
 	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
 	ents.list.push_back(pl);
 
+	//Populates the item database with pre defined items
 	itemDB.PopulateDB();
 	player->load();
 
+	//Loads the texture icon
 	if (!BoxTexture.loadFromFile("res/Sprites/TextBox.png"))
 	{
 		cout << "Couldn't load textbox png\n";
@@ -326,14 +335,16 @@ void GameScene::Load() {
 	screenText.setPosition((textBox.getPosition().x + textBox.getGlobalBounds().width / 2) - (screenText.getGlobalBounds().width / 2),
 		(textBox.getPosition().y + textBox.getGlobalBounds().height /2)- (screenText.getGlobalBounds().height));
 
-	//ents.list.push_back(pl);
+	//Some initializing stuff
 	alphaUpdate = 255;
 	sceneChangeDelay = 0.5f;
+	isPaused = false;
 
+	//Calls ChangeRoom to start the game with a random room
 	ChangeRoom();
 	
 	//UNCOMMENT TO SEE LOADING IN ACTION
-//	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+	//std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	//setLoaded(true);
 }
 
@@ -344,6 +355,7 @@ void GameScene::Update(const double& dt) {
 	scene_delay = scene_clock.getElapsedTime();
 	pause_delay = pauseClock.getElapsedTime();
 
+	//Sets the text in the box to fade out after it is updated
 	if (screenText.getFillColor().a != 0)
 	{
 		alphaUpdate -= 0.1;
@@ -352,38 +364,54 @@ void GameScene::Update(const double& dt) {
 
 	if (!isPaused)
 	{
+		//calls the current rooms update function
 		currentRoom->Update(dt);
 
+		//Adds random special item to inventory
 		if (Keyboard::isKeyPressed(Keyboard::Num3) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
-			inv->add(itemDB.randomSpecialItem());
+			auto tempItem = itemDB.randomSpecialItem();
+			UpdateTextBox(tempItem->description);
+			inv->add(tempItem);
 			scene_clock.restart();
 		}
 
+		//Removes an item from the inventory
 		if (Keyboard::isKeyPressed(Keyboard::R) && inv->getItems().size() != 0 && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
 			inv->remove(0);
 			scene_clock.restart();
 		}
 
-		//Adds item!
+		//Adds random common item
 		if (Keyboard::isKeyPressed(Keyboard::Num4) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
 			scene_clock.restart();
 			auto randItem = itemDB.randomCommonItem();
+			UpdateTextBox(randItem->description);
 			inv->add(randItem);
 		}
 
+		//Changes to a new room
 		if (Keyboard::isKeyPressed(Keyboard::Space) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
 			scene_clock.restart();
 			ChangeRoom();
 		}
+
+		if (Keyboard::isKeyPressed(Keyboard::Num2) && pause_delay.asSeconds() >= pauseDelay)
+		{
+			pauseClock.restart();
+			isPaused = true;
+		}
+
+		//Checks if user clicks settings button
 		if (SettingBox.contains(cursPos))
 		{
 			SettingSprite.setColor(green);
-			if (Mouse::isButtonPressed(Mouse::Left))
+			if (Mouse::isButtonPressed(Mouse::Left) && pause_delay.asSeconds() >= pauseDelay)
 			{
+				pauseClock.restart();
 				isPaused = true;
 			}
 		}
@@ -463,14 +491,14 @@ void GameScene::Update(const double& dt) {
 
 //Renders Scene
 void GameScene::Render() {
-	if (!isPaused)
+	if (!isPaused) // If game is not pause
 	{
 		currentRoom->Render();
 		Renderer::queue(&screenText);
 		Renderer::queue(&SettingSprite);
 		Scene::Render();
 	}
-	else
+	else // if paused
 	{
 		Renderer::queue(&PauseText);
 		Renderer::queue(&ResButton);
@@ -482,11 +510,6 @@ void GameScene::Render() {
 
 //Does all the things needed when we change rooms
 void GameScene::ChangeRoom() {
-	//Updates the player's current enemy
-	//player->updateEnemy(ents.list[ents.list.size() - 1]);
-
-	//Makes sure you don't delete the player entity
-
 	player->expGained = false;
 
 	if(ents.list.size() > 1)
@@ -514,6 +537,7 @@ void GameScene::ChangeRoom() {
 		}
 		//Set's current room to be the newly created room
 		currentRoom = newRoom;
+		UpdateTextBox("Entered Combat Room");
 	}
 	else if(roomType == 1) //Treasure Room
 	{
@@ -521,14 +545,12 @@ void GameScene::ChangeRoom() {
 		newRoom->Load();
 		rooms.push_back(newRoom);
 		currentRoom = newRoom;
+		UpdateTextBox("Entered Treasure Room");
 	}
 	
 }
 
-//Need to fill in Pause function
-void GameScene::Pause() {
-}
-
+//Updates the bounding boxes of all Buttons
 void GameScene::UpdateButtons()
 {
 	UpdateButton(ResButtonBox);
@@ -536,6 +558,7 @@ void GameScene::UpdateButtons()
 	UpdateButton(SettingBox);
 }
 
+//Updates the text inside the update box, to new text and resets the text to fade out
 void GameScene::UpdateTextBox(sf::String newText)
 {
 	alphaUpdate = 255;
