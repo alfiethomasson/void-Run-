@@ -8,10 +8,13 @@
 #include "cmp_entityinfo.h"
 #include "cmp_player.h"
 #include "cmp_enemy.h"
+#include "cmp_inventory.h"
+#include "SpecialItem.h"
 #include "engine.h"
 #include "CombatRoom.h"
 #include "TreasureRoom.h"
 #include <time.h>  
+#include <SFML/Graphics.hpp>
 
 #define GAMEX 1280
 #define GAMEY 720
@@ -24,6 +27,8 @@ using namespace std;
 //std::shared_ptr<Scene> activeScene;
 
 std::shared_ptr<BasePlayerComponent> player;
+std::shared_ptr<Inventory> inv;
+ItemDB itemDB;
 
 CombatRoom* testRoom;
 
@@ -38,6 +43,10 @@ shared_ptr<Entity> pl;
 sf::Time scene_delay;
 sf::Clock scene_clock;
 float sceneChangeDelay;
+
+sf::Clock pauseClock;
+sf::Time pause_delay;
+float pauseDelay = 0.5f;
 
 void MenuScene::Update(const double& dt) {
 
@@ -79,7 +88,6 @@ void MenuScene::Update(const double& dt) {
 		{
 			inOptions = true;
 			scene_clock.restart();
-			std::cout << "Bruh.";
 		}
 
 		//Checks if button box's contain mouse, and makes text green if so
@@ -180,8 +188,7 @@ void MenuScene::Render() {
 
 void MenuScene::Load() {
 	//Loads font
-	//if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
-	if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
@@ -253,20 +260,21 @@ void MenuScene::UpdateButtons()
 
 void GameScene::Load() {
 
-	if (!font.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Fonts/mandalore.ttf"))
+	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
 
-	if (!SettingIcon.loadFromFile("C:/Users/alfie/OneDrive/Documents/GitHub/void-Run-/res/Sprites/WhiteSquare.png"))
+	if (!SettingIcon.loadFromFile("res/Icons/Settings.png"))
 	{
 		cout << "Could not load setting icon White\n";
 	}
 
 	SettingSprite.setTexture(SettingIcon);
-	SettingSprite.setPosition(1150.0f, 600.0f);
-	SettingSprite.setScale(0.2f, 0.2f);
+	SettingSprite.setPosition(1200.0f, 630.0f);
+	SettingSprite.setScale(0.3f, 0.3f);
 	SettingBox = SettingSprite.getGlobalBounds();
+	//ui.list.push_back(SettingSprite);
 
 	PauseText.setFont(font);
 	ResText.setFont(font);
@@ -288,9 +296,10 @@ void GameScene::Load() {
 	ResButton.setCharacterSize(60);
 	ResButton.setPosition(sf::Vector2f(GAMEX / 2.0f + 80.0f, GAMEY / 2.0f - (ResButton.getGlobalBounds().height / 2)));
 	ResButtonBox = ResButton.getGlobalBounds();
-
-	buttons.push_back(SettingBox);
-	buttons.push_back(ResButtonBox);
+	BackButton.setString("BACK - 2");
+	BackButton.setCharacterSize(60);
+	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (BackButton.getGlobalBounds().width / 2), GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 100.0f));
+	BackButtonBox = BackButton.getGlobalBounds();
 
 	//Creates Player and adds components
 	pl = make_shared<Entity>(); 
@@ -298,6 +307,8 @@ void GameScene::Load() {
 	//pl->addComponent<PlayerMovementComponent>();
 	auto i = pl->addComponent<EntityInfo>();
 	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f);
+	inv = pl->addComponent<Inventory>(2);
+	inv->Load();
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Yellow);
 	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
@@ -306,9 +317,27 @@ void GameScene::Load() {
 	i->setDexterity(10);
 	ents.list.push_back(pl);
 
-	//ents.list.push_back(pl);
+	itemDB.PopulateDB();
 
-	sceneChangeDelay = 1.0f;
+	if (!BoxTexture.loadFromFile("res/Sprites/TextBox.png"))
+	{
+		cout << "Couldn't load textbox png\n";
+	}
+	textBox.setTexture(BoxTexture);
+	textBox.setScale(sf::Vector2f(0.7f, 0.5f));
+	textBox.setPosition(sf::Vector2f((GAMEX / 2) - (textBox.getGlobalBounds().width / 2), 50.0f));
+	ui.list.push_back(textBox);
+
+	screenText.setFont(font);
+	screenText.setString("Welcome to Void Run!");
+	screenText.setCharacterSize(30);
+	screenText.setFillColor(Color(255, 255, 255, 255));
+	screenText.setPosition((textBox.getPosition().x + textBox.getGlobalBounds().width / 2) - (screenText.getGlobalBounds().width / 2),
+		(textBox.getPosition().y + textBox.getGlobalBounds().height /2)- (screenText.getGlobalBounds().height));
+
+	//ents.list.push_back(pl);
+	alphaUpdate = 255;
+	sceneChangeDelay = 0.5f;
 
 	ChangeRoom();
 	
@@ -321,11 +350,37 @@ void GameScene::Update(const double& dt) {
 	//Gets Mouse position in an int format
 	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	Vector2f cursPos = sf::Vector2f(tempPos);
+	scene_delay = scene_clock.getElapsedTime();
+	pause_delay = pauseClock.getElapsedTime();
+
+	if (screenText.getFillColor().a != 0)
+	{
+		alphaUpdate -= 0.1;
+		screenText.setFillColor(Color(255, 255, 255, alphaUpdate));
+	}
 
 	if (!isPaused)
 	{
-		scene_delay = scene_clock.getElapsedTime();
 		currentRoom->Update(dt);
+
+		if (Keyboard::isKeyPressed(Keyboard::Num3) && scene_delay.asSeconds() >= sceneChangeDelay)
+		{
+			scene_clock.restart();
+			auto lb = pl->addComponent<LaserBurst>();
+			lb->load();
+		}
+
+		//Adds item!
+		if (Keyboard::isKeyPressed(Keyboard::Num4) && scene_delay.asSeconds() >= sceneChangeDelay)
+		{
+			scene_clock.restart();
+			auto randItem = itemDB.randomCommonItem();
+			if (inv->add(randItem))
+			{
+				cout << "Space in inventory!\n";
+				ui.list.push_back(randItem->getSprite());
+			}
+		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Space) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
@@ -350,26 +405,8 @@ void GameScene::Update(const double& dt) {
 	else
 	{
 		if (Mouse::isButtonPressed(sf::Mouse::Left))
-			{
-				if (ResButtonBox.contains(cursPos))
-				{
-					if (Engine::getWindowSize().y != 1080)
-					{
-						ResChange.setString("1080p");
-						ChangeResolution(1920, 1080, GAMEX, GAMEY);
-					}
-					else
-					{
-						ResChange.setString("720p");
-						ChangeResolution(1280, 720, GAMEX, GAMEY);
-					}
-				}
-				if (BackButtonBox.contains(cursPos))
-				{
-					isPaused = false;
-				}
-			}
-		if (Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			if (ResButtonBox.contains(cursPos))
 			{
 				if (Engine::getWindowSize().y != 1080)
 				{
@@ -384,10 +421,48 @@ void GameScene::Update(const double& dt) {
 					UpdateButtons();
 				}
 			}
-		if(Keyboard::isKeyPressed(sf::Keyboard::Num2))
+			if (BackButtonBox.contains(cursPos))
 			{
 				isPaused = false;
 			}
+		}
+		if (Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			if (Engine::getWindowSize().y != 1080)
+			{
+				ResChange.setString("1080p");
+				ChangeResolution(1920, 1080, GAMEX, GAMEY);
+				UpdateButtons();
+			}
+			else
+			{
+				ResChange.setString("720p");
+				ChangeResolution(1280, 720, GAMEX, GAMEY);
+				UpdateButtons();
+			}
+		}
+		if (Keyboard::isKeyPressed(sf::Keyboard::Num2) && pause_delay.asSeconds() >= pauseDelay)
+		{
+			pauseClock.restart();
+			isPaused = false;
+		}
+
+		if (BackButtonBox.contains(cursPos))
+		{
+			BackButton.setFillColor(green);
+		}
+		else
+		{
+			BackButton.setFillColor(white);
+		}
+		if (ResButtonBox.contains(cursPos))
+		{
+			ResButton.setFillColor(green);
+		}
+		else
+		{
+			ResButton.setFillColor(white);
+		}
 	}
 
 	//Update from base class
@@ -398,6 +473,8 @@ void GameScene::Update(const double& dt) {
 void GameScene::Render() {
 	if (!isPaused)
 	{
+		currentRoom->Render();
+		Renderer::queue(&screenText);
 		Renderer::queue(&SettingSprite);
 		Scene::Render();
 	}
@@ -467,3 +544,11 @@ void GameScene::UpdateButtons()
 	UpdateButton(SettingBox);
 }
 
+void GameScene::UpdateTextBox(sf::String newText)
+{
+	alphaUpdate = 255;
+	screenText.setString(newText);
+	screenText.setFillColor(Color(255, 255, 255, 255));
+	screenText.setPosition((textBox.getPosition().x + textBox.getGlobalBounds().width / 2) - (screenText.getGlobalBounds().width / 2),
+		(textBox.getPosition().y + textBox.getGlobalBounds().height / 2) - (screenText.getGlobalBounds().height));
+}

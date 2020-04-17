@@ -16,7 +16,10 @@ add_subdirectory("lib/sfml")
 set(SFML_INCS "lib/sfml/include")
 link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
 
-file(GLOB_RECURSE RESOURCE_FILES "res/fonts/*.*")
+add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND} 
+  -E copy_directory
+    "${PROJECT_SOURCE_DIR}/res"
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIGURATION>/res)
 
 ## Tile loader lib
 file(GLOB_RECURSE SOURCE_FILES lib_tile_level_loader/*.cpp lib_tile_level_loader/*.h)
@@ -31,9 +34,11 @@ target_include_directories(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths" S
 
 ## Void_Run
 file(GLOB_RECURSE SOURCES void_run/*.cpp void_run/*.h)
-add_executable(void_run ${SOURCES} ${RESOURCE_FILES})
+add_executable(void_run ${SOURCES})
 target_include_directories(void_run SYSTEM PRIVATE ${SFML_INCS})
 target_link_libraries(void_run lib_engine)
+set_target_properties(void_run PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration))
+add_dependencies(void_run copy_resources)
 
 ## Ecm
 file(GLOB_RECURSE SOURCE_FILES lib_ecm/*.cpp lib_ecm/*.h)

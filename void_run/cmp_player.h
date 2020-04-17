@@ -1,8 +1,10 @@
 #pragma once
 #include "ecm.h"
 #include "cmp_enemy.h"
+#include "cmp_special.h"
 
 class BaseEnemyComponent;
+class SpecialItem;
 
 class BasePlayerComponent : public Component {
 protected:
@@ -14,6 +16,7 @@ protected:
 	float playerHealQuantity;
 	float _experience;
 	std::shared_ptr<BaseEnemyComponent> currentEnemy;
+	std::vector<SpecialItem> specialMoves;
 public:
 	bool isTurn;
 	bool isFinishedTurn;
@@ -43,6 +46,8 @@ public:
 	void setDexterity(int dexterity);
 	void setCurrentHealth(int health);
 	void setExperience(int experience);
+
+	void addStats(int strength, int health, int dex);
 
 	void takeDamage(float dmgRecieved);
 };

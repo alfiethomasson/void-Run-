@@ -6,6 +6,13 @@
 #include <mutex>
 #include <string>
 
+struct UIManager
+{
+	std::vector<sf::Sprite> list;
+	void Update(double dt) {};
+	void Render();
+};
+
 class Scene {
 public:
 	Scene() = default;
@@ -25,6 +32,7 @@ public:
 	float yMultiply;
 
 	EntityManager ents;
+	UIManager ui;
 	std::vector<sf::FloatRect> buttons;
 
 protected:
