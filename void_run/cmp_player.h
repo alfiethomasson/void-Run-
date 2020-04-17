@@ -2,6 +2,8 @@
 #include "ecm.h"
 #include "cmp_enemy.h"
 #include "cmp_special.h"
+#include "UI.h"
+//#include "Game.h"
 
 class BaseEnemyComponent;
 class SpecialItem;
@@ -17,11 +19,13 @@ protected:
 	float _experience;
 	std::shared_ptr<BaseEnemyComponent> currentEnemy;
 	std::vector<SpecialItem> specialMoves;
+	CombatUI combatUI;
+
 public:
 	bool isTurn;
 	bool isFinishedTurn;
 	bool expGained;
-	explicit BasePlayerComponent(Entity* p, float health, float strength, float dex, float experience);
+	explicit BasePlayerComponent(Entity* p, float health, float strength, float dex, float experience, CombatUI ui);
 	BasePlayerComponent() = delete;
 
 	void render() override {}

@@ -311,12 +311,14 @@ void GameScene::Load() {
 	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (BackButton.getGlobalBounds().width / 2), GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 100.0f));
 	BackButtonBox = BackButton.getGlobalBounds();
 
+	combatUI.Load();
+
 	//Creates Player and adds components
 	pl = make_shared<Entity>(); 
 	auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
 	auto i = pl->addComponent<EntityInfo>();
-	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f);
+	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f, combatUI);
 	inv = pl->addComponent<Inventory>(2);
 	inv->Load();
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));

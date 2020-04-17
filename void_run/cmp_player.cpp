@@ -13,13 +13,16 @@ std::vector<std::shared_ptr<BasePlayerComponent>> playerInfo;
 
 //Clock clock;
 
-BasePlayerComponent::BasePlayerComponent(Entity* p, float health, float strength, float dex, float experience)
-	: _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, _experience{ experience }, Component(p) {}
+BasePlayerComponent::BasePlayerComponent(Entity* p, float health, float strength, float dex, float experience, CombatUI ui)
+	: _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, _experience{ experience }, combatUI{ ui }, Component(p) {}
 
 void BasePlayerComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
 	//Clock.Reset();
 	auto s = _parent->GetCompatibleComponent<SpecialItem>();
+
+	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
+	sf::Vector2f cursPos = sf::Vector2f(tempPos);
 
 	if (isTurn)
 	{
@@ -39,10 +42,19 @@ void BasePlayerComponent::update(double dt) {
 					heal(playerHealQuantity);
 					EndTurn();
 				}
+
+				if (Mouse::isButtonPressed(Mouse::Left) && combatUI.getAttackBox().contains(cursPos))
+				{
+					cout << "Player Attacks!";
+					attack(_strength);
+					EndTurn();
+				}
+
 				for (auto c : s)
 				{
 					c->doEffect();
 				}
+			//	gameScene.combatUI.turnUpdate();
 			}
 		}
 		else {

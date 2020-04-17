@@ -7,6 +7,7 @@
 #include "CombatRoom.h"
 #include "Room.h"
 #include "ItemDB.h"
+#include "UI.h"
 //#include "Game.h"
 
 class MenuScene : public Scene {
@@ -66,6 +67,7 @@ private:
 
 public:
 	sf::Text screenText;
+	CombatUI combatUI;
 
 	GameScene() = default;
 	~GameScene() override = default;
