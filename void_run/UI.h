@@ -18,6 +18,6 @@ public:
 	void Render();
 	void Load();
 
-	void addSpecial(sf::Sprite special);
+	void addSpecial(std::string texName);
 	void resetSpecial();
 };

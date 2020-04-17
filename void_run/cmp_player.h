@@ -1,12 +1,13 @@
 #pragma once
 #include "ecm.h"
 #include "cmp_enemy.h"
-#include "cmp_special.h"
+#include "cmp_abilitymanager.h"
 #include "UI.h"
 //#include "Game.h"
 
 class BaseEnemyComponent;
 class SpecialItem;
+class AbilityManager;
 
 class BasePlayerComponent : public Component {
 protected:
@@ -18,7 +19,8 @@ protected:
 	float playerHealQuantity;
 	float _experience;
 	std::shared_ptr<BaseEnemyComponent> currentEnemy;
-	std::vector<SpecialItem> specialMoves;
+	std::shared_ptr<AbilityManager> abilityManager;
+//	std::vector<SpecialAbility> specialMoves;
 	CombatUI combatUI;
 
 public:
@@ -30,6 +32,7 @@ public:
 
 	void render() override {}
 	void update(double dt) override;
+	void load();
 
 	void updateEnemy(std::shared_ptr<BaseEnemyComponent> e);
 	bool checkEnemyStatus();

@@ -1,20 +1,5 @@
 #include "VoidRun.h"
 #include "Game.h"
-#include <iostream>
-#include "System_Renderer.h"
-#include "System_resources.h"
-#include "cmp_sprite.h"
-#include "cmp_actor_movement.h"
-#include "cmp_entityinfo.h"
-#include "cmp_player.h"
-#include "cmp_enemy.h"
-#include "cmp_inventory.h"
-#include "SpecialItem.h"
-#include "engine.h"
-#include "CombatRoom.h"
-#include "TreasureRoom.h"
-#include <time.h>  
-#include <SFML/Graphics.hpp>
 
 #define GAMEX 1280
 #define GAMEY 720
@@ -22,12 +7,9 @@
 using namespace sf;
 using namespace std;
 
-//std::shared_ptr<Scene> gameScene;
-//std::shared_ptr<Scene> menuScene;
-//std::shared_ptr<Scene> activeScene;
-
 std::shared_ptr<BasePlayerComponent> player;
 std::shared_ptr<Inventory> inv;
+std::shared_ptr<AbilityManager> am;
 ItemDB itemDB;
 
 CombatRoom* testRoom;
@@ -317,19 +299,17 @@ void GameScene::Load() {
 	pl = make_shared<Entity>(); 
 	auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
-	auto i = pl->addComponent<EntityInfo>();
 	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f, combatUI);
+	am = pl->addComponent<AbilityManager>(3);
 	inv = pl->addComponent<Inventory>(2);
 	inv->Load();
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Yellow);
 	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
-	i->setStrength(10);
-	i->setHealth(50);
-	i->setDexterity(10);
 	ents.list.push_back(pl);
 
 	itemDB.PopulateDB();
+	player->load();
 
 	if (!BoxTexture.loadFromFile("res/Sprites/TextBox.png"))
 	{
@@ -339,7 +319,6 @@ void GameScene::Load() {
 	textBox.setScale(sf::Vector2f(0.7f, 0.5f));
 	textBox.setPosition(sf::Vector2f((GAMEX / 2) - (textBox.getGlobalBounds().width / 2), 50.0f));
 	ui.list.push_back(textBox);
-
 	screenText.setFont(font);
 	screenText.setString("Welcome to Void Run!");
 	screenText.setCharacterSize(30);
@@ -377,9 +356,14 @@ void GameScene::Update(const double& dt) {
 
 		if (Keyboard::isKeyPressed(Keyboard::Num3) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
+			inv->add(itemDB.randomSpecialItem());
 			scene_clock.restart();
-			auto lb = pl->addComponent<LaserBurst>();
-			lb->load();
+		}
+
+		if (Keyboard::isKeyPressed(Keyboard::R) && inv->getItems().size() != 0 && scene_delay.asSeconds() >= sceneChangeDelay)
+		{
+			inv->remove(0);
+			scene_clock.restart();
 		}
 
 		//Adds item!
@@ -387,11 +371,7 @@ void GameScene::Update(const double& dt) {
 		{
 			scene_clock.restart();
 			auto randItem = itemDB.randomCommonItem();
-			if (inv->add(randItem))
-			{
-				cout << "Space in inventory!\n";
-				ui.list.push_back(randItem->getSprite());
-			}
+			inv->add(randItem);
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Space) && scene_delay.asSeconds() >= sceneChangeDelay)

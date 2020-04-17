@@ -21,7 +21,7 @@ bool Inventory::add(std::shared_ptr<Item> item)
 
 void Inventory::remove(int position)
 {
-	items[position]->Unequip();
+	items[position]->Unequip(position);
 	items.erase(items.begin() + position);
 }
 
@@ -50,4 +50,17 @@ void Inventory::Load()
 	positions[8] = sf::Vector2f(300.0f, 700.0f);
 }
 
+std::vector<std::shared_ptr<Item>> Inventory::getItems()
+{
+	return items;
+}
+
 void Inventory::update(double dt) {}
+
+void Inventory::render()
+{
+	for(auto& e : items)
+	{
+		Renderer::queue(&e->getSprite());
+	}
+}

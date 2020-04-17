@@ -1,5 +1,4 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "VoidRun.h"
 
 using namespace sf;
@@ -10,4 +9,5 @@ constexpr uint16_t gameHeight = 720;
 
 extern MenuScene menuScene;
 extern GameScene gameScene;
+extern std::shared_ptr<BasePlayerComponent> player;
 extern bool isPaused;

@@ -1,14 +1,21 @@
 #pragma once
-//#include "Scene.h"
-//#include "ecm.h"
 #include <iostream>
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
 #include "engine.h"
 #include "CombatRoom.h"
 #include "Room.h"
 #include "ItemDB.h"
 #include "UI.h"
-//#include "Game.h"
+#include "System_Renderer.h"
+#include "System_resources.h"
+#include "cmp_player.h"
+#include "cmp_enemy.h"
+#include "cmp_inventory.h"
+#include "cmp_sprite.h"
+#include "cmp_abilitymanager.h"
+#include "TreasureRoom.h"
+#include <time.h>  
 
 class MenuScene : public Scene {
 private:

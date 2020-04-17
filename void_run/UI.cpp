@@ -2,7 +2,8 @@
 
 void CombatUI::Render()
 {
-	Renderer::queue(&attackSprite);
+ 	Renderer::queue(&attackSprite);
+	Renderer::queue(&specialSprite);
 }
 
 void CombatUI::turnUpdate()
@@ -21,7 +22,7 @@ void CombatUI::Load()
 	attackSprite.setPosition(sf::Vector2f(500.0f, 600.0f));
 	attackBox = attackSprite.getGlobalBounds();
 
-	specialSprite.setPosition(sf::Vector2f(600.0f, 700.0f));
+	specialSprite.setPosition(sf::Vector2f(600.0f, 600.0f));
 	specialBox = specialSprite.getGlobalBounds();
 }
 
@@ -30,9 +31,15 @@ sf::FloatRect& CombatUI::getAttackBox()
 	return attackBox;
 }
 
-void CombatUI::addSpecial(sf::Sprite special)
+void CombatUI::addSpecial(std::string texName)
 {
-	specialSprite = special;
+	if (!specialTex.loadFromFile("res/icons/" + texName + ".png"))
+	{
+		std::cout << "Failed to load " << texName << " combat icon\n";
+	}
+	specialSprite.setTexture(specialTex);
+	specialSprite.setPosition(sf::Vector2f(600.0f, 600.0f));
+	specialSprite.setScale(0.3f, 0.3f);
 }
 
 void CombatUI::resetSpecial()

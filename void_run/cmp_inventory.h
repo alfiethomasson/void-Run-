@@ -12,13 +12,14 @@ public:
 
 	Inventory() = delete;
 	explicit Inventory(Entity* p, float inventorySize);
-
 	void update(double dt) override;
-	void render() override {};
+	void render() override;
 	void Load();
 
 	bool add(std::shared_ptr<Item> item);
 	void remove(int position);
+
+	std::vector<std::shared_ptr<Item>> getItems();
 
 	bool checkEmptySlot();
 };

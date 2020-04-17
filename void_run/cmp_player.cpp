@@ -1,8 +1,4 @@
 #include "cmp_player.h"
-#include "cmp_enemy.h"
-//#include "cmp_BasePlayerComponent.h"
-#include "VoidRun.h"
-#include "ecm.h"
 #include <string>
 #include <iostream>
 
@@ -19,7 +15,6 @@ BasePlayerComponent::BasePlayerComponent(Entity* p, float health, float strength
 void BasePlayerComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
 	//Clock.Reset();
-	auto s = _parent->GetCompatibleComponent<SpecialItem>();
 
 	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	sf::Vector2f cursPos = sf::Vector2f(tempPos);
@@ -50,10 +45,7 @@ void BasePlayerComponent::update(double dt) {
 					EndTurn();
 				}
 
-				for (auto c : s)
-				{
-					c->doEffect();
-				}
+				abilityManager->combatCheck();
 			//	gameScene.combatUI.turnUpdate();
 			}
 		}
@@ -61,6 +53,12 @@ void BasePlayerComponent::update(double dt) {
 			expGet();
 		}
 	}
+}
+
+void BasePlayerComponent::load()
+{
+	auto am = _parent->GetCompatibleComponent<AbilityManager>();
+	abilityManager = am[0];
 }
 
 void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)
