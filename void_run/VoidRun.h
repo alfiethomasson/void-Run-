@@ -2,6 +2,7 @@
 //#include "Scene.h"
 //#include "ecm.h"
 #include <iostream>
+#include <SFML/Audio.hpp>
 #include "engine.h"
 #include "CombatRoom.h"
 #include "Room.h"
@@ -24,6 +25,8 @@ private:
 	sf::FloatRect ResButtonBox;
 	sf::FloatRect OptionsButtonBox;
 	sf::FloatRect BackButtonBox;
+
+	sf::Music titleMusic;
 	
 	bool inOptions;
 

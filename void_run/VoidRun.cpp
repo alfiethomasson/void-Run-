@@ -62,6 +62,7 @@ void MenuScene::Update(const double& dt) {
 		{
 			if (PlayButtonBox.contains(cursPos))
 			{
+				titleMusic.stop();
 				Engine::ChangeScene(&gameScene);
 			}
 			if (OptionsButtonBox.contains(cursPos))
@@ -78,6 +79,7 @@ void MenuScene::Update(const double& dt) {
 
 		if (Keyboard::isKeyPressed(Keyboard::Num1))
 		{
+			titleMusic.stop();
 			Engine::ChangeScene(&gameScene);
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Num3))
@@ -192,6 +194,14 @@ void MenuScene::Load() {
 	{
 		cout << "failed to load font";
 	}
+
+	if (!titleMusic.openFromFile("res/Sounds/Music/TitleMusic.wav"))
+	{
+		cout << "Couldn't load title music\n";
+	}
+	titleMusic.play();
+	titleMusic.setVolume(50.0f);
+	titleMusic.setLoop(true);
 	//const string& fontName = "Mandalore";
 	//Resources::load(fontName);
 
