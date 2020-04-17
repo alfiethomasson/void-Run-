@@ -5,11 +5,13 @@
 #include "cmp_player.h"
 #include "cmp_sprite.h"
 #include "enemy_easy.h"
+#include "enemy_medium.h"
+#include "enemy_tough.h"
 
 #define GAMEX 1280
 #define GAMEY 720
 
-std::shared_ptr<EasyEnemy> enemy;
+std::shared_ptr<BaseEnemyComponent> enemy;
 
 bool playerTurn;
 
@@ -72,7 +74,16 @@ void CombatRoom::Load() {
 	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
 	auto s = enemy1->addComponent<ShapeComponent>();
-	enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5, 5);
+
+	srand(time(0));
+	int enemyType = rand() % 3; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
+	if (enemyType == 0)
+	{enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5, 5);}
+	else if (enemyType == 1)
+	{enemy = enemy1->addComponent<MediumEnemy>(180, 15, 15, 15);}
+	else if (enemyType == 2)
+	{enemy = enemy1->addComponent<ToughEnemy>(250, 20, 20, 20);}
+
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Blue);
 	s->getShape().setOrigin(Vector2f(-500.0f, -200.0f));
