@@ -7,6 +7,7 @@
 class BaseEnemyComponent;
 class SpecialItem;
 class AbilityManager;
+class CombatUI;
 
 class BasePlayerComponent : public Component {
 protected:
@@ -17,16 +18,28 @@ protected:
 	float currentHealth;
 	float playerHealQuantity;
 	float _experience;
+	int actionPoints;
+	int _actionPointsMax;
+
+	int baseAttackCost;
+	int mediumAttackCost;
+	int heavyAttackCost;
+	int healCost;
+	int meditateCost;
+	int fleeCost;
+
 	std::shared_ptr<BaseEnemyComponent> currentEnemy;
 	std::shared_ptr<AbilityManager> abilityManager;
 //	std::vector<SpecialAbility> specialMoves;
 	CombatUI combatUI;
+	GameUI& gameUI;
 
 public:
 	bool isTurn;
 	bool isFinishedTurn;
 	bool expGained;
-	explicit BasePlayerComponent(Entity* p, float health, float strength, float dex, float experience, CombatUI ui);
+	explicit BasePlayerComponent(Entity* p, float health, float strength, float dex,
+		float experience, int actionPoints, CombatUI ui, GameUI *gameUI);
 	BasePlayerComponent() = delete;
 
 	void render() override {}
@@ -41,12 +54,18 @@ public:
 	void expGet();
 	void EndTurn();
 
+	bool CheckAP(int ap);
+	void SpendAP(int ap);
+	void gainAP(int amount);
+
+	int getCurrentAP();
 	int getStrength();
 	int getMaxHealth();
 	int getDexterity();
 	float getCurrentHealth();
 	int getExperience();
 
+	void setMaxAP(int maxAP);
 	void setStrength(int strength);
 	void setMaxHealth(int maxHealth);
 	void setDexterity(int dexterity);

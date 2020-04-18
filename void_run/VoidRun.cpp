@@ -301,12 +301,13 @@ void GameScene::Load() {
 
 	//Calls load function of the combatUI
 	combatUI.Load();
+	gameUI.Load(10);
 
 	//Creates Player and adds components
 	pl = make_shared<Entity>(); 
 	auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
-	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f, combatUI);
+	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f, 10, combatUI, &gameUI);
 	am = pl->addComponent<AbilityManager>(3);
 	inv = pl->addComponent<Inventory>(2);
 	inv->Load();
@@ -327,7 +328,7 @@ void GameScene::Load() {
 	textBox.setTexture(BoxTexture);
 	textBox.setScale(sf::Vector2f(0.7f, 0.5f));
 	textBox.setPosition(sf::Vector2f((GAMEX / 2) - (textBox.getGlobalBounds().width / 2), 50.0f));
-	ui.list.push_back(textBox);
+	//ui.list.push_back(textBox);
 	screenText.setFont(font);
 	screenText.setString("Welcome to Void Run!");
 	screenText.setCharacterSize(30);
@@ -496,6 +497,7 @@ void GameScene::Render() {
 		currentRoom->Render();
 		Renderer::queue(&screenText);
 		Renderer::queue(&SettingSprite);
+		gameUI.Render();
 		Scene::Render();
 	}
 	else // if paused

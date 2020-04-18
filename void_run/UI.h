@@ -21,3 +21,24 @@ public:
 	void addSpecial(std::string texName);
 	void resetSpecial();
 };
+
+class GameUI : UIManager {
+protected:
+	int APAmount;
+	int MaxAP;
+	int height;
+	//sf::Sprite APContainer;
+	//sf::Texture APContainerTex;
+	sf::Texture CellTex;
+	std::vector<sf::Sprite> cells;
+public:
+	void Update(double dt);
+	void Render();
+	void Load(int maxAP);
+
+	sf::Sprite getNewCell();
+
+	int getAPAmount();
+	void useAP(int amount);
+	void gainAP(int amount);
+};
