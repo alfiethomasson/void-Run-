@@ -28,6 +28,7 @@ void CombatRoom::Update(const double& dt) {
 		if (!p->isTurn && turn_delay.asSeconds() >= turnDelayValue)
 		{
 			p->isTurn = true;
+			p->gainAP(2);
 		}
 		if (p->isFinishedTurn)
 		{

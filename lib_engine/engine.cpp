@@ -141,9 +141,9 @@ void Engine::ChangeScene(Scene* s) {
 	}
 }
 
-void Scene::Update(const double& dt) { ents.Update(dt); ui.Update(dt); }
+void Scene::Update(const double& dt) { ents.Update(dt); }
 
-void Scene::Render() { ents.Render(); ui.Render(); }
+void Scene::Render() { ents.Render(); }
 
 bool Scene::isLoaded() const {
 	{
@@ -290,9 +290,9 @@ namespace timing {
 
 Scene::~Scene() { UnLoad(); }
 
-void UIManager::Render()
-{
-	for (auto& _i : list) {
-		Renderer::queue(&_i);
-	}
-}
+//void UIManager::Render()
+//{
+//	for (auto& _i : list) {
+//		Renderer::queue(&_i);
+//	}
+//}

@@ -46,3 +46,114 @@ void CombatUI::resetSpecial()
 {
 	specialSprite = sf::Sprite();
 }
+
+void GameUI::Update(double dt)
+{
+
+}
+
+void GameUI::Render()
+{
+	for (auto& e : cells)
+	{
+		Renderer::queue(&e);
+	}
+//	Renderer::queue(&APContainer);
+}
+
+void GameUI::Load(int maxAP)
+{
+	//if (!APContainerTex.loadFromFile("res/Icons/PowerCell.png"))
+	//{
+	//	std::cout << "Could not load power cell\n ";
+	//}
+	//APContainer.setTexture(APContainerTex);
+	//APContainer.setScale(0.4f, 0.4f);
+	//APContainer.setPosition(100.0f, 400.0f);
+	if (!CellTex.loadFromFile("res/Icons/Charge.png"))
+	{
+		std::cout << "Couldnt load AP Charge\n";
+	}
+	MaxAP = maxAP;
+	APAmount = MaxAP;
+
+	for(int i = 0; i < MaxAP; i++)
+	{
+		sf::Sprite cell;
+		cell.setTexture(CellTex);
+		cell.setScale(0.2f, 0.15f);
+		height += 20;
+		cell.setPosition(sf::Vector2f(60.0f, 550.0f - (height)));
+		cells.push_back(cell);
+	}
+}
+
+sf::Sprite GameUI::getNewCell()
+{
+	//if (!CellTex.loadFromFile("res/Icons/Charge.png"))
+	//{
+	//	std::cout << "Couldnt load AP Charge\n";
+	//}
+	sf::Sprite cell;
+	cell.setTexture(CellTex);
+	cell.setScale(0.2f, 0.15f);
+	height += 20;
+	cell.setPosition(sf::Vector2f(60.0f, 550.0f - (height)));
+	return cell;
+}
+
+
+void GameUI::useAP(int amount)
+{
+	int temp = APAmount - amount;
+	if (temp < 0)
+	{
+		APAmount = 0;
+	}
+	else
+	{
+		APAmount = temp;
+	}
+	if (APAmount != 0)
+	{
+		for (int i = 0; i < amount; i++)
+		{
+			cells.pop_back();
+			height -= 20;
+		}
+	}
+	else
+	{
+		while (!cells.empty())
+		{
+			cells.pop_back();
+			height -= 20;
+		}
+	}
+}
+
+void GameUI::gainAP(int amount)
+{
+	int temp = APAmount + amount;
+	if (temp > MaxAP)
+	{
+		for (int i = 0; i < MaxAP - APAmount; i++)
+		{
+			cells.push_back(getNewCell());
+		}
+		APAmount = MaxAP;
+	}
+	else
+	{
+		APAmount = temp;
+		for (int i = 0; i < amount; i++)
+		{
+			cells.push_back(getNewCell());
+		}
+	}
+}
+
+int GameUI::getAPAmount()
+{
+	return cells.size();
+}

@@ -75,6 +75,7 @@ private:
 public:
 	sf::Text screenText;
 	CombatUI combatUI;
+	GameUI gameUI;
 
 	GameScene() = default;
 	~GameScene() override = default;
