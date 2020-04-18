@@ -5,6 +5,8 @@
 #include "cmp_player.h"
 #include "cmp_sprite.h"
 #include "enemy_easy.h"
+#include "enemy_medium.h"
+#include "enemy_tough.h"
 
 #define GAMEX 1280
 #define GAMEY 720
@@ -77,10 +79,20 @@ void CombatRoom::Load() {
 	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
 	auto s = enemy1->addComponent<ShapeComponent>();
-	enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5, 5);
+
+	srand(time(0));
+	int enemyType = rand() % 3; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
+	if (enemyType == 0)
+	{	enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5, 5, (rand() % 3));} //Random number from 0-2. 0 is Debuff, 1 is Enrage, 2 is Double-Slice.
+	else if (enemyType == 1)
+	{	enemy = enemy1->addComponent<MediumEnemy>(180, 15, 15, 15, (rand() % 4));} //Random number from 0-3. 0 is Pain Share, 1 is Regeneration, 2 is Orbital Attack, 3 is Curse.
+	else if (enemyType == 2)
+	{	enemy = enemy1->addComponent<ToughEnemy>(250, 20, 20, 20, (rand() % 3));} //Random number from 0-2. 0 is Excruciate, 1 is Charged Shot, 2 is Suicide Shot.
+
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Blue);
 	s->getShape().setOrigin(Vector2f(-500.0f, -200.0f));
+	s->getShape().setPosition(Vector2f(700.0f, 200.0f));
 
 	ents.list.push_back(enemy1);
 
