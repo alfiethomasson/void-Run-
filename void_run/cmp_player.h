@@ -14,8 +14,8 @@ protected:
 	float playerDamage;
 	float _strength;
 	float _dexterity;
-	float _maxHealth;
-	float currentHealth;
+	int _maxHealth;
+	int currentHealth;
 	float playerHealQuantity;
 	float _experience;
 	int actionPoints;
@@ -38,7 +38,7 @@ public:
 	bool isTurn;
 	bool isFinishedTurn;
 	bool expGained;
-	explicit BasePlayerComponent(Entity* p, float health, float strength, float dex,
+	explicit BasePlayerComponent(Entity* p, int health, float strength, float dex,
 		float experience, int actionPoints, CombatUI ui, GameUI *gameUI);
 	BasePlayerComponent() = delete;
 
@@ -62,7 +62,7 @@ public:
 	int getStrength();
 	int getMaxHealth();
 	int getDexterity();
-	float getCurrentHealth();
+	int getCurrentHealth();
 	int getExperience();
 
 	void setMaxAP(int maxAP);

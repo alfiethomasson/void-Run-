@@ -10,7 +10,7 @@ std::vector<std::shared_ptr<BasePlayerComponent>> playerInfo;
 
 //Clock clock;
 
-BasePlayerComponent::BasePlayerComponent(Entity* p, float health, float strength, float dex,
+BasePlayerComponent::BasePlayerComponent(Entity* p, int health, float strength, float dex,
 	float experience, int actionPoints, CombatUI ui, GameUI *gui)
 	: _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, 
 	_experience{ experience }, _actionPointsMax{ actionPoints }, combatUI{ ui }, gameUI{ *gui }, Component(p) {}
@@ -163,7 +163,7 @@ int BasePlayerComponent::getMaxHealth() {
 	return _maxHealth;
 }
 
-float BasePlayerComponent::getCurrentHealth() {
+int BasePlayerComponent::getCurrentHealth() {
 	return currentHealth;
 }
 
