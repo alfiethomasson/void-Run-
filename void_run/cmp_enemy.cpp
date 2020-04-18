@@ -4,6 +4,7 @@
 #include "ecm.h"
 #include <string>
 #include <iostream>
+#include "Game.h"
 
 using namespace sf;
 using namespace std;
@@ -42,10 +43,28 @@ void BaseEnemyComponent::updateEnemy(std::shared_ptr<BasePlayerComponent> player
 	currentEnemy = player;
 }
 
-void BaseEnemyComponent::attackEnemy(float damage)
+void BaseEnemyComponent::attackEnemy(float str, float dex)
 {
-	std::cout << "Player assigned to enemy = " << "\n";
-	currentEnemy->takeDamage(damage);
+	if (calculateHit(dex))
+	{
+		currentEnemy->takeDamage(str);
+	}
+	else {
+		gameScene.UpdateTextBox("The stupid dumb idiot enemy missed!");
+	}
+}
+
+bool BaseEnemyComponent::calculateHit(float dex)
+{
+	int chanceToHit = (80 + (dex - (currentEnemy->getDexterity()))); //Calculates if the enemy can hit
+	int willTheyHitOhNo = rand() % 100;
+	if (willTheyHitOhNo <= chanceToHit)
+	{
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 void BaseEnemyComponent::EndTurn()

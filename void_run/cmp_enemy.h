@@ -26,8 +26,9 @@ public:
 	void updateEnemy(std::shared_ptr<BasePlayerComponent> player);
 
 	void TakeDamage(float damage);
+	bool calculateHit(float dex);
 
-	void attackEnemy(float damage);
+	void attackEnemy(float str, float dex);
 	void EndTurn();
 
 	int getStrength();

@@ -29,7 +29,7 @@ void BasePlayerComponent::update(double dt) {
 				if (Keyboard::isKeyPressed(Keyboard::Q))
 				{
 					cout << "Player Attacks!";
-					attack(_strength);
+					attack(_strength, _dexterity);
 					EndTurn();
 				}
 				else if (Keyboard::isKeyPressed(Keyboard::W))
@@ -42,7 +42,7 @@ void BasePlayerComponent::update(double dt) {
 				if (Mouse::isButtonPressed(Mouse::Left) && combatUI.getAttackBox().contains(cursPos))
 				{
 					cout << "Player Attacks!";
-					attack(_strength);
+					attack(_strength, _dexterity);
 					EndTurn();
 				}
 
@@ -84,10 +84,30 @@ void BasePlayerComponent::expGet() {
 	}
 }
 
-void BasePlayerComponent::attack(float damage)
+void BasePlayerComponent::attack(float str, float dex)
 {
-	currentEnemy->TakeDamage(damage);
+	if (calculateHit(dex))
+	{
+		currentEnemy->TakeDamage(str);
+	}
+	else {
+		gameScene.UpdateTextBox("You missed!");
+	}
 }
+
+bool BasePlayerComponent::calculateHit(float dex)
+{
+	int chanceToHit = (80 + (dex - (currentEnemy->getDexterity()))); //Calculates if the player can hit
+	int willTheyHitOhNo = rand() % 100;
+	if (willTheyHitOhNo >= chanceToHit)
+	{
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 void BasePlayerComponent::heal(float healBy)
 {
 	int tempHealth = currentHealth + healBy;

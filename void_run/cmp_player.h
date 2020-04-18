@@ -36,7 +36,7 @@ public:
 	void updateEnemy(std::shared_ptr<BaseEnemyComponent> e);
 	bool checkEnemyStatus();
 
-	void attack(float damage);
+	void attack(float damage, float dex);
 	void heal(float healBy);
 	void expGet();
 	void EndTurn();
@@ -56,4 +56,5 @@ public:
 	void addStats(int strength, int health, int dex);
 
 	void takeDamage(float dmgRecieved);
+	bool calculateHit(float enemyDex);
 };
