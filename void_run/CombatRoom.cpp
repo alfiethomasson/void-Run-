@@ -23,6 +23,8 @@ void CombatRoom::Update(const double& dt) {
 
 	turn_delay = turn_clock.getElapsedTime();
 
+//	gameScene.combatUI.Update(dt);
+
 	if (playerTurn)
 	{
 		if (!p->isTurn && turn_delay.asSeconds() >= turnDelayValue)
@@ -57,14 +59,12 @@ void CombatRoom::Update(const double& dt) {
 	playerHP.setString(std::to_string(p->getCurrentHealth()));
 	enemyHP.setString(std::to_string(enemy->getCurrentHealth()));
 	experienceCounter.setString(std::to_string(p->getExperience()));
-//	Renderer::queue(&playerHP);
-	//Renderer::queue(&enemyHP);
-//	Renderer::queue(&experienceCounter);
 
 	Room::Update(dt);
 }
 
 void CombatRoom::Render() {
+	gameScene.combatUI.Render();
 	Renderer::queue(&playerHP);
 	Renderer::queue(&enemyHP);
 	Renderer::queue(&experienceCounter);
