@@ -12,12 +12,6 @@ void Room::Update(const double& dt) {
 		if (Keyboard::isKeyPressed(Keyboard::Tab)) {
 			Engine::ChangeScene(&menuScene);
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Num2))
-		{
-			cout << "GAME PAUSED\n";
-
-			isPaused = true;
-		}
 	}
 }
 
