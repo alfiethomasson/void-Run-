@@ -21,7 +21,7 @@ void LaserBurst::doEffect()
 	{
 		std::cout << "LASER BURST!\n";
 		gameScene.UpdateTextBox("LASER BURST!");
-		player->attack(100);
+		player->attack(100, 0);
 		player->EndTurn();
 	}
 }

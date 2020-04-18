@@ -22,11 +22,11 @@ void EasyEnemy::update(double dt)
 		if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2) {
 			std::cout << "The enemy makes a weak attack! \n";
 			if (enraged == true) {
-				attackEnemy(_strength+(_strength/2));
+				attackEnemy(_strength+(_strength/2), _dexterity-5);
 				enraged = false;
 			}
 			else {
-				attackEnemy(_strength);
+				attackEnemy(_strength, _dexterity);
 			}
 			EndTurn();
 		}
@@ -39,19 +39,19 @@ void EasyEnemy::update(double dt)
 			else if (specialMove == 1) {
 				std::cout << "The enemy uses its unique attack: Enrage! \n";
 				enraged = true;
-				//This line should do something so that the enemy takes half damage from the next attack, but I'm stupid
+				currentHealth += 10;
 				EndTurn();
 			}
 			else if (specialMove == 2) {
 				std::cout << "The enemy uses its unique attack: Double Slice! \n";
-				attackEnemy(_strength); //Currently makes two normal attacks
-				attackEnemy(_strength); //When accuracy framework is in place, these will have a penalty to hit
+				attackEnemy(_strength, _dexterity-10); //Currently makes two normal attacks
+				attackEnemy(_strength, _dexterity-10); //When accuracy framework is in place, these will have a penalty to hit
 				EndTurn();
 			}
 		}
 		else if (enemyAI == 5) {
 			std::cout << "The enemy makes a medium attack! \n";
-			attackEnemy(_strength + 5);
+			attackEnemy(_strength + 5, _dexterity);
 			EndTurn();
 		}
 	}
