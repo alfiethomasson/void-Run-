@@ -2,8 +2,10 @@
 #include <iostream>
 #include "enemy_easy.h"
 
-EasyEnemy::EasyEnemy(Entity* p, int health, int strength, int dex, float expReward)
-	: BaseEnemyComponent{ p, health, strength, dex, expReward } {}
+EasyEnemy::EasyEnemy(Entity* p, int health, int strength, int dex, float expReward, int specialMove)
+	: BaseEnemyComponent{ p, health, strength, dex, expReward, specialMove } {}
+
+bool enraged;
 
 void EasyEnemy::update(double dt)
 {
@@ -11,14 +13,41 @@ void EasyEnemy::update(double dt)
 	{
 		srand(time(0));
 		int enemyAI = rand() % 6; //Random number from 0-5. 1-2 is light attack, 3-4 is unique ability, 5 is a medium attack.
+		if (enraged == true) { //If the enemy used Enrage last turn, it will always make a weak attack.
+			enemyAI = 0;
+		}
+
+		enemyAI = 3;
+
 		if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2) {
 			std::cout << "The enemy makes a weak attack! \n";
-			attackEnemy(_strength);
+			if (enraged == true) {
+				attackEnemy(_strength+(_strength/2));
+				enraged = false;
+			}
+			else {
+				attackEnemy(_strength);
+			}
 			EndTurn();
 		}
 		else if (enemyAI == 3 || enemyAI == 4) {
-			std::cout << "The enemy would use its unique attack here, if I'd programmed it! \n";
-			EndTurn();
+			if (specialMove == 0) {
+				std::cout << "The enemy uses its unique attack: Debuff! \n";
+				_dexterity++; //Hacky fix: Simulates penalty to player's attack by increasing monster's dodge
+				EndTurn();
+			}
+			else if (specialMove == 1) {
+				std::cout << "The enemy uses its unique attack: Enrage! \n";
+				enraged = true;
+				//This line should do something so that the enemy takes half damage from the next attack, but I'm stupid
+				EndTurn();
+			}
+			else if (specialMove == 2) {
+				std::cout << "The enemy uses its unique attack: Double Slice! \n";
+				attackEnemy(_strength); //Currently makes two normal attacks
+				attackEnemy(_strength); //When accuracy framework is in place, these will have a penalty to hit
+				EndTurn();
+			}
 		}
 		else if (enemyAI == 5) {
 			std::cout << "The enemy makes a medium attack! \n";

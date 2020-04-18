@@ -2,8 +2,8 @@
 #include <iostream>
 #include "enemy_medium.h"
 
-MediumEnemy::MediumEnemy(Entity* p, int health, int strength, int dex, float expReward)
-	: BaseEnemyComponent{ p, health, strength, dex, expReward } {}
+MediumEnemy::MediumEnemy(Entity* p, int health, int strength, int dex, float expReward, int specialMove)
+	: BaseEnemyComponent{ p, health, strength, dex, expReward, specialMove } {}
 	
 void MediumEnemy::update(double dt)
 {

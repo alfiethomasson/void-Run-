@@ -2,8 +2,8 @@
 #include <iostream>
 #include "enemy_tough.h"
 
-ToughEnemy::ToughEnemy(Entity* p, int health, int strength, int dex, float expReward)
-	: BaseEnemyComponent{ p, health, strength, dex, expReward } {}
+ToughEnemy::ToughEnemy(Entity* p, int health, int strength, int dex, float expReward, int specialMove)
+	: BaseEnemyComponent{ p, health, strength, dex, expReward, specialMove} {}
 	
 void ToughEnemy::update(double dt)
 {
