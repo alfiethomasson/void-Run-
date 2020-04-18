@@ -62,6 +62,17 @@ void BasePlayerComponent::update(double dt) {
 			expGet();
 		}
 	}
+
+	if (combatUI.getAttackBox().contains(cursPos))
+	{
+		gameUI.descText.setString("ATTACK ENEMY\nDamage = " + std::to_string(_strength));
+		gameUI.descText.setPosition(sf::Vector2f(combatUI.getAttackBox().getPosition().x,
+			combatUI.getAttackBox().getPosition().y - 75.0f));
+	}
+	else
+	{
+		gameUI.descText.setString("");
+	}
 }
 
 bool BasePlayerComponent::CheckAP(int ap)

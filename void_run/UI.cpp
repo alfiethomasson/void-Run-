@@ -58,18 +58,12 @@ void GameUI::Render()
 	{
 		Renderer::queue(&e);
 	}
+	Renderer::queue(&descText);
 //	Renderer::queue(&APContainer);
 }
 
 void GameUI::Load(int maxAP)
 {
-	//if (!APContainerTex.loadFromFile("res/Icons/PowerCell.png"))
-	//{
-	//	std::cout << "Could not load power cell\n ";
-	//}
-	//APContainer.setTexture(APContainerTex);
-	//APContainer.setScale(0.4f, 0.4f);
-	//APContainer.setPosition(100.0f, 400.0f);
 	if (!CellTex.loadFromFile("res/Icons/Charge.png"))
 	{
 		std::cout << "Couldnt load AP Charge\n";
@@ -86,6 +80,13 @@ void GameUI::Load(int maxAP)
 		cell.setPosition(sf::Vector2f(60.0f, 550.0f - (height)));
 		cells.push_back(cell);
 	}
+	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
+	{
+		std::cout << "failed to load mandalore font in game ui\n";
+	}
+	descText.setFont(font);
+	descText.setCharacterSize(30);
+	descText.setString("");
 }
 
 sf::Sprite GameUI::getNewCell()
@@ -156,4 +157,14 @@ void GameUI::gainAP(int amount)
 int GameUI::getAPAmount()
 {
 	return cells.size();
+}
+
+void GameUI::UpdateDesc(std::string string)
+{
+	descText.setString(string);
+}
+
+void GameUI::UpdateDescPos(sf::Vector2f pos)
+{
+	descText.setPosition(pos);
 }

@@ -31,7 +31,10 @@ protected:
 	//sf::Texture APContainerTex;
 	sf::Texture CellTex;
 	std::vector<sf::Sprite> cells;
+
+	sf::Font font;
 public:
+	sf::Text descText;
 	void Update(double dt);
 	void Render();
 	void Load(int maxAP);
@@ -41,4 +44,7 @@ public:
 	int getAPAmount();
 	void useAP(int amount);
 	void gainAP(int amount);
+
+	void UpdateDesc(std::string string);
+	void UpdateDescPos(sf::Vector2f pos);
 };
