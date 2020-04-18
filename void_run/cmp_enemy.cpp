@@ -16,8 +16,8 @@ using namespace std;
 //BasePlayerComponent::BasePlayerComponent(Entity* p, float health, float strength, float dex, float experience)
 //	: _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, _experience{ experience }, Component(p) {}
 
-BaseEnemyComponent::BaseEnemyComponent(Entity* p, float health, float strength, float dex, float expReward)
-	: enemyDamage(3.0f), _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, expReward{ expReward }, Component(p) {}
+BaseEnemyComponent::BaseEnemyComponent(Entity* p, float health, float strength, float dex, float expReward, int specialMove)
+	: enemyDamage(3.0f), _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, expReward{ expReward }, specialMove{ specialMove }, Component(p) {}
 
 void BaseEnemyComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();

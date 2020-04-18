@@ -16,8 +16,9 @@ public:
 	bool isTurn;
 	bool isFinishedTurn;
 	float expReward;
+	int specialMove;
 
-	BaseEnemyComponent(Entity* p, float health, float strength, float dex, float expReward);
+	BaseEnemyComponent(Entity* p, float health, float strength, float dex, float expReward, int specialMove);
 	BaseEnemyComponent() = delete;
 
 	void render() override {}
