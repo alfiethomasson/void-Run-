@@ -21,13 +21,14 @@ protected:
 	float _experience;
 	int actionPoints;
 	int _actionPointsMax;
+	int runChance;
 
 	int baseAttackCost;
 	int mediumAttackCost;
 	int heavyAttackCost;
 	int healCost;
-	int meditateCost;
-	int fleeCost;
+	int rechargeCost;
+	int runCost;
 
 	std::shared_ptr<BaseEnemyComponent> currentEnemy;
 	std::shared_ptr<AbilityManager> abilityManager;
@@ -40,7 +41,7 @@ public:
 	bool isFinishedTurn;
 	bool expGained;
 	explicit BasePlayerComponent(Entity* p, int health, float strength, float dex,
-		float experience, int actionPoints, CombatUI ui, GameUI *gameUI);
+		float experience, int actionPoints, CombatUI *ui, GameUI *gameUI);
 	BasePlayerComponent() = delete;
 
 	void render() override {}
@@ -52,6 +53,8 @@ public:
 
 	void attack(float damage, float dex);
 	void heal(float healBy);
+	void recharge(int amount);
+	void run();
 	void expGet();
 	void EndTurn();
 
@@ -77,4 +80,5 @@ public:
 
 	void takeDamage(float dmgRecieved);
 	bool calculateHit(float enemyDex);
+	int calcRunChance();
 };

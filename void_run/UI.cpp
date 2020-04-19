@@ -5,6 +5,9 @@ void CombatUI::Render()
 {
  	Renderer::queue(&attackSprite);
 	Renderer::queue(&specialSprite);
+	Renderer::queue(&healSprite);
+	Renderer::queue(&rechargeSprite);
+	Renderer::queue(&runSprite);
 }
 
 void CombatUI::turnUpdate()
@@ -18,18 +21,74 @@ void CombatUI::Load()
 	{
 		std::cout << "Couldn't load attack icon\n";
 	}
+	if (!healTex.loadFromFile("res/Icons/Heal.png"))
+	{
+		std::cout << "Couldn't load heal icon\n";
+	}
+	if (!rechargeTex.loadFromFile("res/Icons/Meditate.png"))
+	{
+		std::cout << "Couldn't load meditate icon\n";
+	}
+	if (!runTex.loadFromFile("res/Icons/Run.png"))
+	{
+		std::cout << "Couldn't load run icon\n";
+	}
+
 	attackSprite.setTexture(attackTex);
 	attackSprite.setScale(0.3f, 0.3f);
-	attackSprite.setPosition(sf::Vector2f(500.0f, 600.0f));
+	attackSprite.setPosition(sf::Vector2f(400.0f, 600.0f));
 	attackBox = attackSprite.getGlobalBounds();
 
-	specialSprite.setPosition(sf::Vector2f(600.0f, 600.0f));
+	healSprite.setTexture(healTex);
+	healSprite.setScale(0.3f, 0.3f);
+	healSprite.setPosition(sf::Vector2f(500.0f, 600.0f));
+	healBox = healSprite.getGlobalBounds();
+
+	rechargeSprite.setTexture(rechargeTex);
+	rechargeSprite.setScale(0.3f, 0.3f);
+	rechargeSprite.setPosition(sf::Vector2f(600.0f, 600.0f));
+	rechargeBox = rechargeSprite.getGlobalBounds();
+
+	runSprite.setTexture(runTex);
+	runSprite.setScale(0.3f, 0.3f);
+	runSprite.setPosition(sf::Vector2f(700.0f, 600.0f));
+	runBox = runSprite.getGlobalBounds();
+
+	specialSprite.setPosition(sf::Vector2f(800.0f, 600.0f));
 	specialBox = specialSprite.getGlobalBounds();
 }
 
 sf::FloatRect& CombatUI::getAttackBox()
 {
 	return attackBox;
+}
+
+sf::FloatRect& CombatUI::getHealBox()
+{
+	return healBox;
+}
+
+sf::FloatRect& CombatUI::getRechargeBox()
+{
+	return rechargeBox;
+}
+
+sf::FloatRect& CombatUI::getRunBox()
+{
+	return runBox;
+}
+
+bool CombatUI::CheckBoxes(sf::Vector2f curspos)
+{
+	if (attackBox.contains(curspos) || specialBox.contains(curspos) || healBox.contains(curspos)
+		|| rechargeBox.contains(curspos) || runBox.contains(curspos))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void CombatUI::addSpecial(std::string texName)

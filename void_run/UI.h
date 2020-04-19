@@ -9,15 +9,28 @@ class CombatUI : UIManager {
 protected:
 	sf::Sprite attackSprite;
 	sf::Sprite specialSprite;
+	sf::Sprite healSprite;
+	sf::Sprite rechargeSprite;
+	sf::Sprite runSprite;
 	sf::Texture attackTex;
 	sf::Texture specialTex;
+	sf::Texture healTex;
+	sf::Texture rechargeTex;
+	sf::Texture runTex;
 	sf::FloatRect attackBox;
 	sf::FloatRect specialBox;
+	sf::FloatRect healBox;
+	sf::FloatRect rechargeBox;
+	sf::FloatRect runBox;
 public:
 
 	void Update(double dt);
 	void turnUpdate();
 	sf::FloatRect& getAttackBox();
+	sf::FloatRect& getHealBox();
+	sf::FloatRect& getRechargeBox();
+	sf::FloatRect& getRunBox();
+	bool CheckBoxes(sf::Vector2f curspos);
 	void Render();
 	void Load();
 
