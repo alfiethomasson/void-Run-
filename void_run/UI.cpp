@@ -50,16 +50,7 @@ void CombatUI::resetSpecial()
 
 void GameUI::Update(double dt)
 {
-	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
-	{
-		std::cout << "failed to load font";
-	}
 
-	//GameOverButton.setFont(font);
-	//GameOverButton.setString("Gg idiot");
-	//GameOverButton.setCharacterSize(60);
-	//GameOverButton.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - (GameOverButton.getGlobalBounds().width / 2), Engine::getWindowSize().y / 2.0f - (GameOverButton.getGlobalBounds().height / 2) + 100.0f));
-	//GameOverButtonBox = GameOverButton.getGlobalBounds();
 }
 
 void GameUI::Render()
@@ -77,8 +68,8 @@ void GameUI::Render()
 
 	//if (player->getCurrentHealth() == 0)
 	//{
-	//	Renderer::queue(&GameOverButton);
-	//}
+		Renderer::queue(&GameOverButton);
+//	}
 }
 
 void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
@@ -142,6 +133,13 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	StrengthText.setPosition((Engine::getWindowSize().x / 4) - (StrengthText.getLocalBounds().width / 2), 300.0f);
 	HealthText.setPosition(((Engine::getWindowSize().x / 4) * 2) - (HealthText.getLocalBounds().width / 2), 300.0f);
 	DexterityText.setPosition(((Engine::getWindowSize().x / 34) * 3) - (DexterityText.getLocalBounds().width / 2), 300.0f);
+
+	GameOverButton.setFont(font);
+	GameOverButton.setString("Gg idiot");
+	GameOverButton.setCharacterSize(60);
+	GameOverButton.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - (GameOverButton.getGlobalBounds().width / 2),
+		Engine::getWindowSize().y / 2.0f - (GameOverButton.getGlobalBounds().height / 2) + 100.0f));
+	GameOverButtonBox = GameOverButton.getGlobalBounds();
 }
 
 sf::Sprite GameUI::getNewCell()
