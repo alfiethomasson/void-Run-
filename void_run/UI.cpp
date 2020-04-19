@@ -50,7 +50,38 @@ void CombatUI::resetSpecial()
 
 void GameUI::Update(double dt)
 {
+}
 
+bool GameUI::updateStatOptions()
+{
+	statUp();
+	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
+	sf::Vector2f cursPos = sf::Vector2f(tempPos);
+	if (inStatUp)
+	{
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			if (stat1Box.contains(cursPos))
+			{
+				player->addStats(10, 0, 0);
+				inStatUp = false;
+				return false;
+			}
+			if (stat2Box.contains(cursPos))
+			{
+				player->addStats(0, 20, 0);
+				inStatUp = false;
+				return false;
+			}
+			if (stat3Box.contains(cursPos))
+			{
+				player->addStats(0, 0, 10);
+				inStatUp = false;
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 void GameUI::Render()
@@ -60,21 +91,24 @@ void GameUI::Render()
 		Renderer::queue(&e);
 	}
 	Renderer::queue(&descText);
-	//Renderer::queue(&stat1);
-	//Renderer::queue(&stat2);
-	//Renderer::queue(&stat3);
-	//Renderer::queue(&RewardsText);
-	//Renderer::queue(&DexterityText);
+		Renderer::queue(&stat1);
+		Renderer::queue(&stat2);
+		Renderer::queue(&stat3);
+		Renderer::queue(&RewardsText);
+		Renderer::queue(&DexterityText);
+		Renderer::queue(&HealthText);
+		Renderer::queue(&StrengthText);
 
-	//if (player->getCurrentHealth() == 0)
-	//{
+	if (player->getCurrentHealth() == 0)
+	{
 		Renderer::queue(&GameOverButton);
-//	}
+	}
 }
 
 void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 {
 	player = p;
+	inStatUp = false;
 
 	if (!CellTex.loadFromFile("res/Icons/Charge.png"))
 	{
@@ -117,6 +151,10 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	stat2.setPosition(700.0f, 400.0f);
 	stat3.setPosition(900.0f, 400.0f);
 
+	stat1Box = stat1.getGlobalBounds();
+	stat2Box = stat2.getGlobalBounds();
+	stat3Box = stat3.getGlobalBounds();
+
 	RewardsText.setFont(font);
 	StrengthText.setFont(font);
 	HealthText.setFont(font);
@@ -126,13 +164,13 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	HealthText.setCharacterSize(30);
 	DexterityText.setCharacterSize(30);
 	RewardsText.setString("REWARDS");
-	//StrengthText.setString("Strength Up\n Current Strength - " + p->getStrength());
-	//HealthText.setString("Health Up\n Current Max Health - " + p->getMaxHealth());
-	//DexterityText.setString("Dexterity Up\n Current Dex - " + p->getDexterity());
+	StrengthText.setString("Strength - " + std::to_string(player->getStrength()));
+	HealthText.setString("Max Health - " + std::to_string(player->getMaxHealth()));
+	DexterityText.setString("Dexterity - " + std::to_string(player->getDexterity()));
 	RewardsText.setPosition((Engine::getWindowSize().x / 2) - (RewardsText.getLocalBounds().width / 2), 100.0f);
-	StrengthText.setPosition((Engine::getWindowSize().x / 4) - (StrengthText.getLocalBounds().width / 2), 300.0f);
-	HealthText.setPosition(((Engine::getWindowSize().x / 4) * 2) - (HealthText.getLocalBounds().width / 2), 300.0f);
-	DexterityText.setPosition(((Engine::getWindowSize().x / 34) * 3) - (DexterityText.getLocalBounds().width / 2), 300.0f);
+	StrengthText.setPosition(stat1.getPosition().x - StrengthText.getLocalBounds().width, 300.0f);
+	HealthText.setPosition(stat2.getPosition().x - HealthText.getLocalBounds().width, 300.0f);
+	DexterityText.setPosition(stat3.getPosition().x - DexterityText.getLocalBounds().width, 300.0f);
 
 	GameOverButton.setFont(font);
 	GameOverButton.setString("Gg idiot");
@@ -156,6 +194,13 @@ sf::Sprite GameUI::getNewCell()
 	return cell;
 }
 
+void GameUI::statUp()
+{
+	inStatUp = true;
+	StrengthText.setString("Strength + 10");
+	HealthText.setString("Max Health + 20 ");
+	DexterityText.setString("Current Dex + 10 ");
+}
 
 void GameUI::useAP(int amount)
 {
