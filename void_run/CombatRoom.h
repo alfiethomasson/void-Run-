@@ -30,4 +30,6 @@ public:
 	void Render() override;
 	void Load() override;
 	void UnLoad();
+
+	bool checkStatus();
 }; 

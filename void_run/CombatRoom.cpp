@@ -26,8 +26,7 @@ void CombatRoom::Update(const double& dt) {
 
 	turn_delay = turn_clock.getElapsedTime();
 
-//	gameScene.combatUI.Update(dt);
-	if (enemy->is_fordeletion)
+	if (enemy->getCurrentHealth() != 0)
 	{
 		if (playerTurn)
 		{
@@ -61,6 +60,15 @@ void CombatRoom::Update(const double& dt) {
 			}
 		}
 	}
+	else
+	{
+		if (!gameScene.gameUI.updateStatOptions())
+		{
+			active = false;
+		}
+
+	}
+	
 
 	playerHP.setString(std::to_string(p->getCurrentHealth()));
 	enemyHP.setString(std::to_string(enemy->getCurrentHealth()));
@@ -132,4 +140,5 @@ void CombatRoom::Load() {
 
 	turnDelayValue = 1.0f;
 }
+
 //CombatRoom::CombatRoom(Entity* p) : Room() { player = p; };

@@ -50,6 +50,11 @@ void CombatUI::resetSpecial()
 
 void GameUI::Update(double dt)
 {
+}
+
+bool GameUI::updateStatOptions()
+{
+	statUp();
 	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	sf::Vector2f cursPos = sf::Vector2f(tempPos);
 	if (inStatUp)
@@ -58,21 +63,25 @@ void GameUI::Update(double dt)
 		{
 			if (stat1Box.contains(cursPos))
 			{
-				player->addStats(100, 0, 0);
+				player->addStats(10, 0, 0);
 				inStatUp = false;
+				return false;
 			}
 			if (stat2Box.contains(cursPos))
 			{
-				player->addStats(0, 100, 0);
+				player->addStats(0, 20, 0);
 				inStatUp = false;
+				return false;
 			}
 			if (stat3Box.contains(cursPos))
 			{
-				player->addStats(0, 0, 100);
+				player->addStats(0, 0, 10);
 				inStatUp = false;
+				return false;
 			}
 		}
 	}
+	return true;
 }
 
 void GameUI::Render()
@@ -82,7 +91,7 @@ void GameUI::Render()
 		Renderer::queue(&e);
 	}
 	Renderer::queue(&descText);
-	if (!inStatUp)
+	if (inStatUp)
 	{
 		Renderer::queue(&stat1);
 		Renderer::queue(&stat2);
@@ -179,9 +188,9 @@ sf::Sprite GameUI::getNewCell()
 void GameUI::statUp()
 {
 	inStatUp = true;
-	StrengthText.setString("Current Strength - " + std::to_string(player->getStrength()));
-	HealthText.setString("Health Up\n Current Max Health - " + std::to_string(player->getMaxHealth()));
-	DexterityText.setString("Dexterity Up\n Current Dex - " + std::to_string(player->getDexterity()));
+	StrengthText.setString("Strength + 10");
+	HealthText.setString("Max Health + 20 ");
+	DexterityText.setString("Current Dex + 10 ");
 }
 
 void GameUI::useAP(int amount)

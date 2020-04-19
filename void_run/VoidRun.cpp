@@ -367,8 +367,15 @@ void GameScene::Update(const double& dt) {
 
 	if (!isPaused)
 	{
+		if(currentRoom->isActive())
+		{
+			currentRoom->Update(dt);
+		}
+		else
+		{
+			ChangeRoom();
+		}
 		//calls the current rooms update function
-		currentRoom->Update(dt);
 		gameUI.Update(dt);
 
 		//Adds random special item to inventory

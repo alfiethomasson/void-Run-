@@ -17,6 +17,7 @@ void Room::Update(const double& dt) {
 
 void Room::Load()
 {
+	active = true;
 	std::cout << "Entered a Treasure Room!\n";
 	auto a = player->GetCompatibleComponent<BasePlayerComponent>();
 	p = a[0];
@@ -32,4 +33,9 @@ std::vector<std::shared_ptr<Entity>> Room::GetEnts()
 void Room::StatUp()
 {
 
+}
+
+bool Room::isActive()
+{
+	return active;
 }

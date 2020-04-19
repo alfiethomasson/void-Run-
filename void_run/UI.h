@@ -70,4 +70,5 @@ public:
 	void UpdateDescPos(sf::Vector2f pos);
 
 	void statUp();
+	bool updateStatOptions();
 };
