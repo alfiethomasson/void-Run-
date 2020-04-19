@@ -49,6 +49,8 @@ protected:
 	sf::FloatRect stat2Box;
 	sf::FloatRect stat3Box;
 	std::shared_ptr<BasePlayerComponent> player;
+
+	bool inStatUp;
 public:
 	GameUI() = default;
 	~GameUI() = default;
@@ -67,4 +69,5 @@ public:
 	void UpdateDesc(std::string string);
 	void UpdateDescPos(sf::Vector2f pos);
 
+	void statUp();
 };

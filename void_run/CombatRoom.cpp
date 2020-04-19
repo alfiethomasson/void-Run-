@@ -27,36 +27,38 @@ void CombatRoom::Update(const double& dt) {
 	turn_delay = turn_clock.getElapsedTime();
 
 //	gameScene.combatUI.Update(dt);
-
-	if (playerTurn)
+	if (enemy->is_fordeletion)
 	{
-		if (!p->isTurn && turn_delay.asSeconds() >= turnDelayValue)
+		if (playerTurn)
 		{
-			p->isTurn = true;
-			p->gainAP(2);
+			if (!p->isTurn && turn_delay.asSeconds() >= turnDelayValue)
+			{
+				p->isTurn = true;
+				p->gainAP(2);
+			}
+			if (p->isFinishedTurn)
+			{
+				turn_clock.restart();
+				playerTurn = false;
+				p->isTurn = false;
+				//enemy->isTurn = true;
+				p->isFinishedTurn = false;
+			}
 		}
-		if (p->isFinishedTurn)
+		else
 		{
-			turn_clock.restart();
-			playerTurn = false;
-			p->isTurn = false;
-			//enemy->isTurn = true;
-			p->isFinishedTurn = false;
-		}
-	}
-	else
-	{
-		if (!enemy->isTurn && turn_delay.asSeconds() >= turnDelayValue)
-		{
-			enemy->isTurn = true;
-		}
-		if (enemy->isFinishedTurn)
-		{
-			turn_clock.restart();
-			playerTurn = true;
-			enemy->isTurn = false;
-			//p->isTurn = true;
-			enemy->isFinishedTurn = false;
+			if (!enemy->isTurn && turn_delay.asSeconds() >= turnDelayValue)
+			{
+				enemy->isTurn = true;
+			}
+			if (enemy->isFinishedTurn)
+			{
+				turn_clock.restart();
+				playerTurn = true;
+				enemy->isTurn = false;
+				//p->isTurn = true;
+				enemy->isFinishedTurn = false;
+			}
 		}
 	}
 
