@@ -16,5 +16,5 @@ public:
 	virtual void Load();
 	std::vector<std::shared_ptr<Entity>> GetEnts();
 
-
+	void StatUp();
 };

@@ -26,6 +26,11 @@ void Inventory::remove(int position)
 	items[position]->Unequip(position);
 	items.erase(items.begin() + position);
 	boxes.erase(boxes.begin() + position);
+	for (int i = 0; i < items.size(); i++)
+	{
+		items[i]->getSprite().setPosition(positions[i]);
+		boxes[i] = items[i]->getSprite().getGlobalBounds();
+	}
 }
 
 bool Inventory::checkEmptySlot()

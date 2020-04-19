@@ -28,3 +28,8 @@ std::vector<std::shared_ptr<Entity>> Room::GetEnts()
 {
 	return ents.list;
 }
+
+void Room::StatUp()
+{
+
+}
