@@ -254,6 +254,5 @@ void BasePlayerComponent::takeDamage(float dmgRecieved)
 		currentHealth = 0;
 		_parent->setAlive(false);
 		gameScene.UpdateTextBox("You fucking idiot, you're dead.");
-
 	}
 }
