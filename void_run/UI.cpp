@@ -1,5 +1,10 @@
 #include "UI.h"
 #include "cmp_player.h"
+#include "system_renderer.h"
+#include "game.h"
+
+sf::Color Green(0, 255, 0, 255);
+sf::Color White(255, 255, 255, 255);
 
 void CombatUI::Render()
 {
@@ -50,6 +55,21 @@ void CombatUI::resetSpecial()
 
 void GameUI::Update(double dt)
 {
+	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
+	sf::Vector2f cursPos = sf::Vector2f(tempPos);
+
+	if (GameOverButtonBox.contains(cursPos))
+	{
+		GameOverButton.setColor(Green);
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			Engine::ChangeScene(&menuScene);
+		}
+	}
+	else
+	{
+		GameOverButton.setColor(White);
+	}
 }
 
 bool GameUI::updateStatOptions()
@@ -91,6 +111,7 @@ void GameUI::Render()
 		Renderer::queue(&e);
 	}
 	Renderer::queue(&descText);
+	if (inStatUp) {
 		Renderer::queue(&stat1);
 		Renderer::queue(&stat2);
 		Renderer::queue(&stat3);
@@ -98,6 +119,7 @@ void GameUI::Render()
 		Renderer::queue(&DexterityText);
 		Renderer::queue(&HealthText);
 		Renderer::queue(&StrengthText);
+	}
 
 	if (player->getCurrentHealth() == 0)
 	{

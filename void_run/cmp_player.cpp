@@ -27,7 +27,7 @@ void BasePlayerComponent::update(double dt) {
 
 	if (isTurn && !isPaused)
 	{
-		if (checkEnemyStatus())
+		if (checkEnemyStatus() && getCurrentHealth() != 0)
 		{
 			if (isFinishedTurn != true)
 			{
