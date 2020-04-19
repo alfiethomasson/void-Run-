@@ -157,7 +157,7 @@ bool BasePlayerComponent::calculateHit(float dex)
 {
 	int chanceToHit = (80 + (dex - (currentEnemy->getDexterity()))); //Calculates if the player can hit
 	int willTheyHitOhNo = rand() % 100;
-	if (willTheyHitOhNo >= chanceToHit)
+	if (willTheyHitOhNo <= chanceToHit)
 	{
 		return true;
 	}

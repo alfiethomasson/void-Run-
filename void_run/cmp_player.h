@@ -8,6 +8,7 @@ class BaseEnemyComponent;
 class SpecialItem;
 class AbilityManager;
 class CombatUI;
+class GameUI;
 
 class BasePlayerComponent : public Component {
 protected:
@@ -31,7 +32,7 @@ protected:
 	std::shared_ptr<BaseEnemyComponent> currentEnemy;
 	std::shared_ptr<AbilityManager> abilityManager;
 //	std::vector<SpecialAbility> specialMoves;
-	CombatUI combatUI;
+	CombatUI& combatUI;
 	GameUI& gameUI;
 
 public:

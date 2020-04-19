@@ -341,6 +341,8 @@ void GameScene::Load() {
 	sceneChangeDelay = 0.5f;
 	isPaused = false;
 
+	std::shared_ptr<StatRoom> statRoom = std::make_shared<StatRoom>(pl);
+
 	//Calls ChangeRoom to start the game with a random room
 	ChangeRoom();
 	
