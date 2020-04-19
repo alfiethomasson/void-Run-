@@ -5,6 +5,9 @@
 #include "cmp_player.h"
 #include "cmp_sprite.h"
 
+TreasureRoom::TreasureRoom(std::shared_ptr <Entity> p)
+	: Room(p) {};
+
 void TreasureRoom::Update(const double& dt) {
 	Room::Update(dt);
 }

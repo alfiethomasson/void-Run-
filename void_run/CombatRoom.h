@@ -5,14 +5,12 @@
 
 class CombatRoom : public Room {
 protected:
-	std::shared_ptr<Entity> player;
-	std::shared_ptr<BasePlayerComponent> p;
 	sf::Font font;
 	sf::Text playerHP;
 	sf::Text enemyHP;
 	sf::Text experienceCounter;
 public:
-	CombatRoom(std::shared_ptr<Entity> p) : player(p) {};
+	CombatRoom(std::shared_ptr<Entity> p);
 	~CombatRoom() override = default;
 	//explicit CombatRoom(Entity* p);
 	void Update(const double& dt) override;

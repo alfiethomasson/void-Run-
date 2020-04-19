@@ -19,6 +19,9 @@ sf::Time turn_delay;
 sf::Clock turn_clock;
 float turnDelayValue;
 
+CombatRoom::CombatRoom(std::shared_ptr <Entity> p)
+	: Room(p) {};
+
 void CombatRoom::Update(const double& dt) {
 
 	turn_delay = turn_clock.getElapsedTime();
@@ -75,6 +78,7 @@ void CombatRoom::Render() {
 
 void CombatRoom::Load() {
 	std::cout << "Entered a Combat Room!\n";
+	Room::Load();
 
 	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
@@ -125,7 +129,5 @@ void CombatRoom::Load() {
 	experienceCounter.setFillColor(sf::Color::Yellow);
 
 	turnDelayValue = 1.0f;
-
-	Room::Load();
 }
 //CombatRoom::CombatRoom(Entity* p) : Room() { player = p; };
