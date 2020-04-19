@@ -17,10 +17,19 @@ void Room::Update(const double& dt) {
 
 void Room::Load()
 {
-	
+	std::cout << "Entered a Treasure Room!\n";
+	auto a = player->GetCompatibleComponent<BasePlayerComponent>();
+	p = a[0];
+
+	p->isTurn = false;
 }
 
 std::vector<std::shared_ptr<Entity>> Room::GetEnts()
 {
 	return ents.list;
+}
+
+void Room::StatUp()
+{
+
 }

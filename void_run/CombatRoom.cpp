@@ -19,6 +19,9 @@ sf::Time turn_delay;
 sf::Clock turn_clock;
 float turnDelayValue;
 
+CombatRoom::CombatRoom(std::shared_ptr <Entity> p)
+	: Room(p) {};
+
 void CombatRoom::Update(const double& dt) {
 
 	turn_delay = turn_clock.getElapsedTime();
@@ -30,6 +33,7 @@ void CombatRoom::Update(const double& dt) {
 		if (!p->isTurn && turn_delay.asSeconds() >= turnDelayValue)
 		{
 			p->isTurn = true;
+			p->gainAP(2);
 		}
 		if (p->isFinishedTurn)
 		{
@@ -74,6 +78,7 @@ void CombatRoom::Render() {
 
 void CombatRoom::Load() {
 	std::cout << "Entered a Combat Room!\n";
+	Room::Load();
 
 	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
@@ -90,7 +95,8 @@ void CombatRoom::Load() {
 
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Blue);
-	s->getShape().setOrigin(Vector2f(-500.0f, -200.0f));
+	s->getShape().setOrigin(Vector2f(-1000.0f, -200.0f));
+	//s->getShape().setPosition(Vector2f(1000.0f, 200.0f));
 
 	ents.list.push_back(enemy1);
 
@@ -113,17 +119,15 @@ void CombatRoom::Load() {
 	enemyHP.setFont(font);
 	experienceCounter.setFont(font);
 	playerHP.setCharacterSize(100);
-	playerHP.setPosition(sf::Vector2f(GAMEX / 4 - (playerHP.getGlobalBounds().width / 2), GAMEY / 5.0f));
+	playerHP.setPosition(200.0f, 50.0f);
 	playerHP.setFillColor(sf::Color::Red);
 	enemyHP.setCharacterSize(100);
-	enemyHP.setPosition(sf::Vector2f((GAMEX / 4 * 3) - (enemyHP.getGlobalBounds().width / 2), GAMEY / 5.0f));
+	enemyHP.setPosition(1000.0f, 50.0f);
 	enemyHP.setFillColor(sf::Color::Red);
-	experienceCounter.setCharacterSize(101);
-	experienceCounter.setPosition(sf::Vector2f(GAMEX / 4 - (experienceCounter.getGlobalBounds().width / 4), GAMEY / 5.0f));
+	experienceCounter.setCharacterSize(100);
+	experienceCounter.setPosition(sf::Vector2f(1200.0f, 0.0f));
 	experienceCounter.setFillColor(sf::Color::Yellow);
 
 	turnDelayValue = 1.0f;
-
-	Room::Load();
 }
 //CombatRoom::CombatRoom(Entity* p) : Room() { player = p; };

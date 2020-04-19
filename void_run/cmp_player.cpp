@@ -13,8 +13,10 @@ std::vector<std::shared_ptr<BasePlayerComponent>> playerInfo;
 
 //Clock clock;
 
-BasePlayerComponent::BasePlayerComponent(Entity* p, float health, float strength, float dex, float experience, CombatUI ui)
-	: _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, _experience{ experience }, combatUI{ ui }, Component(p) {}
+BasePlayerComponent::BasePlayerComponent(Entity* p, int health, float strength, float dex,
+	float experience, int actionPoints, CombatUI ui, GameUI *gui)
+	: _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, 
+	_experience{ experience }, _actionPointsMax{ actionPoints }, combatUI{ ui }, gameUI{ *gui }, Component(p) {}
 
 void BasePlayerComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
@@ -29,21 +31,27 @@ void BasePlayerComponent::update(double dt) {
 		{
 			if (isFinishedTurn != true)
 			{
-				if (Keyboard::isKeyPressed(Keyboard::Q))
+				if (Keyboard::isKeyPressed(Keyboard::Q) && CheckAP(baseAttackCost))
 				{
+					actionPoints -= 1;
+					gameUI.useAP(1);
 					cout << "Player Attacks!";
 					attack(_strength, _dexterity);
 					EndTurn();
 				}
-				else if (Keyboard::isKeyPressed(Keyboard::W))
+				if (Keyboard::isKeyPressed(Keyboard::W) && CheckAP(healCost))
 				{
+					actionPoints -= 2;
+					gameUI.useAP(2);
 					cout << "Player Heals!";
-					heal(playerHealQuantity);
+					heal(5);
 					EndTurn();
 				}
 
-				if (Mouse::isButtonPressed(Mouse::Left) && combatUI.getAttackBox().contains(cursPos))
+				if (Mouse::isButtonPressed(Mouse::Left) && combatUI.getAttackBox().contains(cursPos) && CheckAP(baseAttackCost))
 				{
+					actionPoints -= 1;
+					gameUI.useAP(1);
 					cout << "Player Attacks!";
 					attack(_strength, _dexterity);
 					EndTurn();
@@ -57,23 +65,62 @@ void BasePlayerComponent::update(double dt) {
 			expGet();
 		}
 	}
+
+	if (combatUI.getAttackBox().contains(cursPos))
+	{
+		gameUI.descText.setString("ATTACK ENEMY\nDamage = " + std::to_string(_strength));
+		gameUI.descText.setPosition(sf::Vector2f(combatUI.getAttackBox().getPosition().x,
+			combatUI.getAttackBox().getPosition().y - 75.0f));
+	}
+	else
+	{
+		gameUI.descText.setString("");
+	}
+}
+
+bool BasePlayerComponent::CheckAP(int ap)
+{
+	if (actionPoints >= ap)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void BasePlayerComponent::SpendAP(int ap)
+{
+	actionPoints -= ap;
+	gameUI.useAP(ap);
+}
+
+void BasePlayerComponent::gainAP(int amount)
+{
+	int temp = actionPoints += amount;
+	if (temp > _actionPointsMax)
+	{
+		actionPoints = _actionPointsMax;
+	}
+	else
+	{
+		actionPoints = temp;
+	}
+	gameUI.gainAP(amount);
 }
 
 void BasePlayerComponent::load()
 {
 	auto am = _parent->GetCompatibleComponent<AbilityManager>();
 	abilityManager = am[0];
-
-	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
-	{
-		cout << "failed to load font";
-	}
-
-	GameOverButton.setFont(font);
-	GameOverButton.setString("BACK - 2");
-	GameOverButton.setCharacterSize(60);
-	GameOverButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (GameOverButton.getGlobalBounds().width / 2), GAMEY / 2.0f - (GameOverButton.getGlobalBounds().height / 2) + 100.0f));
-	GameOverButtonBox = GameOverButton.getGlobalBounds();
+	actionPoints = _actionPointsMax;
+	baseAttackCost = 1;
+	mediumAttackCost = 3;
+	heavyAttackCost = 5;
+	healCost = 3;
+	meditateCost = 0;
+	fleeCost = 1;
 }
 
 void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)
@@ -150,7 +197,7 @@ int BasePlayerComponent::getMaxHealth() {
 	return _maxHealth;
 }
 
-float BasePlayerComponent::getCurrentHealth() {
+int BasePlayerComponent::getCurrentHealth() {
 	return currentHealth;
 }
 

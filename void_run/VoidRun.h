@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "engine.h"
 #include "CombatRoom.h"
+#include "StatRoom.h"
 #include "Room.h"
 #include "ItemDB.h"
 #include "UI.h"
@@ -71,10 +72,12 @@ private:
 
 	float alphaUpdate;
 
+	std::shared_ptr<Room> statRoom;
 
 public:
 	sf::Text screenText;
 	CombatUI combatUI;
+	GameUI gameUI;
 
 	GameScene() = default;
 	~GameScene() override = default;
