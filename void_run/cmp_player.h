@@ -3,6 +3,7 @@
 #include "cmp_enemy.h"
 #include "cmp_abilitymanager.h"
 #include "UI.h"
+#include "system_renderer.h"
 
 class BaseEnemyComponent;
 class SpecialItem;
@@ -21,6 +22,11 @@ protected:
 	std::shared_ptr<AbilityManager> abilityManager;
 //	std::vector<SpecialAbility> specialMoves;
 	CombatUI combatUI;
+
+private:
+	sf::Font font;
+	sf::Text GameOverButton;
+	sf::FloatRect GameOverButtonBox;
 
 public:
 	bool isTurn;

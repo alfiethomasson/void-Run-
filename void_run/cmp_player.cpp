@@ -8,6 +8,9 @@ using namespace std;
 std::shared_ptr<BaseEnemyComponent> enemyInfo;
 std::vector<std::shared_ptr<BasePlayerComponent>> playerInfo;
 
+#define GAMEX 1280
+#define GAMEY 720
+
 //Clock clock;
 
 BasePlayerComponent::BasePlayerComponent(Entity* p, float health, float strength, float dex, float experience, CombatUI ui)
@@ -60,6 +63,17 @@ void BasePlayerComponent::load()
 {
 	auto am = _parent->GetCompatibleComponent<AbilityManager>();
 	abilityManager = am[0];
+
+	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
+	{
+		cout << "failed to load font";
+	}
+
+	GameOverButton.setFont(font);
+	GameOverButton.setString("BACK - 2");
+	GameOverButton.setCharacterSize(60);
+	GameOverButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (GameOverButton.getGlobalBounds().width / 2), GAMEY / 2.0f - (GameOverButton.getGlobalBounds().height / 2) + 100.0f));
+	GameOverButtonBox = GameOverButton.getGlobalBounds();
 }
 
 void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)
@@ -99,7 +113,7 @@ bool BasePlayerComponent::calculateHit(float dex)
 {
 	int chanceToHit = (80 + (dex - (currentEnemy->getDexterity()))); //Calculates if the player can hit
 	int willTheyHitOhNo = rand() % 100;
-	if (willTheyHitOhNo >= chanceToHit)
+	if (willTheyHitOhNo <= chanceToHit)
 	{
 		return true;
 	}
@@ -192,5 +206,7 @@ void BasePlayerComponent::takeDamage(float dmgRecieved)
 	{
 		currentHealth = 0;
 		_parent->setAlive(false);
+		gameScene.UpdateTextBox("You fucking idiot, you're dead.");
+
 	}
 }
