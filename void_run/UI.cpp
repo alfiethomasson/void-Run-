@@ -67,8 +67,10 @@ void GameUI::Render()
 	//Renderer::queue(&DexterityText);
 }
 
-void GameUI::Load(int maxAP)
+void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 {
+	player = p;
+
 	if (!CellTex.loadFromFile("res/Icons/Charge.png"))
 	{
 		std::cout << "Couldnt load AP Charge\n";

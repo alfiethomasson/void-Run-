@@ -48,11 +48,15 @@ protected:
 	sf::FloatRect stat1Box;
 	sf::FloatRect stat2Box;
 	sf::FloatRect stat3Box;
+	std::shared_ptr<BasePlayerComponent> player;
 public:
+	GameUI() = default;
+	~GameUI() = default;
+
 	sf::Text descText;
 	void Update(double dt);
 	void Render();
-	void Load(int maxAP);
+	void Load(int maxAP, std::shared_ptr<BasePlayerComponent> p);
 
 	sf::Sprite getNewCell();
 

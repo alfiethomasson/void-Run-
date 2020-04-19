@@ -299,10 +299,6 @@ void GameScene::Load() {
 	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (BackButton.getGlobalBounds().width / 2), GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 100.0f));
 	BackButtonBox = BackButton.getGlobalBounds();
 
-	//Calls load function of the combatUI
-	combatUI.Load();
-	gameUI.Load(10);
-
 	//Creates Player and adds components
 	pl = make_shared<Entity>(); 
 	auto s = pl->addComponent<ShapeComponent>();
@@ -315,6 +311,10 @@ void GameScene::Load() {
 	s->getShape().setFillColor(Color::Yellow);
 	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
 	ents.list.push_back(pl);
+
+	//Calls load function of the UIs
+	combatUI.Load();
+	gameUI.Load(10, player);
 
 	//Populates the item database with pre defined items
 	itemDB.PopulateDB();
