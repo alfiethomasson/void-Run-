@@ -6,39 +6,13 @@ float animDelay;
 int animCounter;
 int animRowCounter;
 
-SpriteComponent::SpriteComponent(Entity* p, sf::Vector2f pos,
-	std::string attack, int attackNum, sf::Vector2f attackS,
-	std::string hit, int hitNum, sf::Vector2f hitS,
-	std::string die, int dieNum, sf::Vector2f dieS)
-	: inAttack{ false }, inHit{ false }, inDie(false), defaultPos{ pos },
-	attackSpriteNum(attackNum), hitSpriteNum(hitNum), dieSpriteNum(dieNum),
-	attackName {attack}, hitName{ hit }, dieName{ die },
-	attackSize{ attackS }, hitSize{ hitS }, dieSize{ dieS },Component(p) {}
+SpriteComponent::SpriteComponent(Entity* p) 
+	: Component(p) {}
 
 void SpriteComponent::load()
 {
 	animCounter = 0;
 	animRowCounter = 0;
-
-	if (!attackSheet.loadFromFile("res/Sprites/SpriteSheets/" + attackName + ".png"))
-	{
-		std::cout << "failed to load attack sprite sheet: " << attackName << "\n";
-	}
-	if (!hitSheet.loadFromFile("res/Sprites/SpriteSheets/" + hitName + ".png"))
-	{
-		std::cout << "failed to load hit sprite sheet: " << hitName << "\n";
-	}
-	if (!dieSheet.loadFromFile("res/Sprites/SpriteSheets/" + dieName + ".png"))
-	{
-		std::cout << "failed to load die sprite sheet: " << dieName << "\n";
-	}
-
-	sheetRect = sf::IntRect(0, 0, 460, 411);
-	sprite = sf::Sprite(attackSheet, sheetRect);	
-
-	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
-	sprite.setPosition(defaultPos);
-	sprite.setScale(-1.0f, 1.0f);
 }
 
 void SpriteComponent::render()
@@ -143,10 +117,6 @@ void SpriteComponent::update(double dt)
 void SpriteComponent::playAttack()
 {
 	inAttack = true;
-
-	//sprite.setScale(-1.0f, 1.0f);
-	//sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
-	//sprite.setPosition(100.0f, 300.0f);
 	animDelay = 0.05f;
 }
 

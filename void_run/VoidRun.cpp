@@ -311,8 +311,7 @@ void GameScene::Load() {
 	pl = make_shared<Entity>(); 
 	//auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
-	playerSprite = pl->addComponent<SpriteComponent>("PlayerAttack", 16, sf::Vector2f(460, 411),
-		"PlayerHit", 7, sf::Vector2f(310, 447), "PlayerDie", 20, sf::Vector2f(320, 516));
+	playerSprite = pl->addComponent<PlayerSprite>();
 	playerSprite->load();
 	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f, 10, &combatUI, &gameUI);
 	am = pl->addComponent<AbilityManager>(3);
