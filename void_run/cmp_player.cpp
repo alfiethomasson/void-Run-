@@ -147,6 +147,8 @@ void BasePlayerComponent::load()
 {
 	auto am = _parent->GetCompatibleComponent<AbilityManager>();
 	abilityManager = am[0];
+	auto sm = _parent->GetCompatibleComponent <SpriteComponent>();
+	spriteManager = sm[0];
 	actionPoints = _actionPointsMax;
 	baseAttackCost = 1;
 	mediumAttackCost = 3;
@@ -183,6 +185,7 @@ void BasePlayerComponent::attack(float str, float dex)
 {
 	SpendAP(baseAttackCost);
 	cout << "Player Attacks!";
+	spriteManager->playAttack();
 	if (calculateHit(dex))
 	{
 		currentEnemy->TakeDamage(str);
@@ -333,5 +336,10 @@ void BasePlayerComponent::takeDamage(float dmgRecieved)
 	{
 		currentHealth = 0;
 		_parent->setAlive(false);
+		spriteManager->playDie();
+	}
+	else
+	{
+		spriteManager->playHit();
 	}
 }

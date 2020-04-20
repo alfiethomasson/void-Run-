@@ -13,7 +13,7 @@
 #include "cmp_player.h"
 #include "cmp_enemy.h"
 #include "cmp_inventory.h"
-#include "cmp_sprite.h"
+#include "cmp_sprites.h"
 #include "cmp_abilitymanager.h"
 #include "TreasureRoom.h"
 #include <time.h>  
@@ -73,6 +73,11 @@ private:
 	float alphaUpdate;
 
 	std::shared_ptr<Room> statRoom;
+
+	std::shared_ptr<BasePlayerComponent> player;
+	std::shared_ptr<Inventory> inv;
+	std::shared_ptr<AbilityManager> am;
+	std::shared_ptr<SpriteComponent> playerSprite;
 
 public:
 	sf::Text screenText;

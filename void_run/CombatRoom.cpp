@@ -106,7 +106,7 @@ void CombatRoom::Load() {
 	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	s->getShape().setFillColor(Color::Blue);
 	s->getShape().setOrigin(Vector2f(-1000.0f, -200.0f));
-	//s->getShape().setPosition(Vector2f(1000.0f, 200.0f));
+	s->getShape().setPosition(Vector2f(1000.0f, 200.0f));
 
 	ents.list.push_back(enemy1);
 

@@ -2,6 +2,7 @@
 #include "ecm.h"
 #include "cmp_enemy.h"
 #include "cmp_abilitymanager.h"
+#include "cmp_sprites.h"
 #include "UI.h"
 
 class BaseEnemyComponent;
@@ -25,6 +26,7 @@ protected:
 
 	std::shared_ptr<BaseEnemyComponent> currentEnemy;
 	std::shared_ptr<AbilityManager> abilityManager;
+	std::shared_ptr<SpriteComponent> spriteManager;
 //	std::vector<SpecialAbility> specialMoves;
 	CombatUI& combatUI;
 	GameUI& gameUI;

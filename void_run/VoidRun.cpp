@@ -6,10 +6,6 @@
 
 using namespace sf;
 using namespace std;
-
-std::shared_ptr<BasePlayerComponent> player;
-std::shared_ptr<Inventory> inv;
-std::shared_ptr<AbilityManager> am;
 ItemDB itemDB;
 
 CombatRoom* testRoom;
@@ -313,15 +309,18 @@ void GameScene::Load() {
 
 	//Creates Player and adds components
 	pl = make_shared<Entity>(); 
-	auto s = pl->addComponent<ShapeComponent>();
+	//auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
+	playerSprite = pl->addComponent<SpriteComponent>("PlayerAttack", 16, sf::Vector2f(460, 411),
+		"PlayerHit", 7, sf::Vector2f(310, 447), "PlayerDie", 20, sf::Vector2f(320, 516));
+	playerSprite->load();
 	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f, 10, &combatUI, &gameUI);
 	am = pl->addComponent<AbilityManager>(3);
 	inv = pl->addComponent<Inventory>(2, &gameUI);
 	inv->Load();
-	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
-	s->getShape().setFillColor(Color::Yellow);
-	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
+	//s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
+	//s->getShape().setFillColor(Color::Yellow);
+	//s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
 	ents.list.push_back(pl);
 
 	//Populates the item database with pre defined items
@@ -393,10 +392,13 @@ void GameScene::Update(const double& dt) {
 		//Adds random special item to inventory
 		if (Keyboard::isKeyPressed(Keyboard::Num3) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
-			auto tempItem = itemDB.randomSpecialItem();
+		/*	auto tempItem = itemDB.randomSpecialItem();
 			UpdateTextBox(tempItem->description);
-			inv->add(tempItem);
+			inv->add(tempItem);*/
+			playerSprite->playDie();
 			scene_clock.restart();
+			std::cout << "\nshould play attack\n";
+
 		}
 
 		//Removes an item from the inventory
