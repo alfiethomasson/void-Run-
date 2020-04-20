@@ -11,12 +11,13 @@
 #include "System_Renderer.h"
 #include "System_resources.h"
 #include "cmp_player.h"
+#include "LevelUpRoom.h"
 #include "cmp_enemy.h"
 #include "cmp_inventory.h"
 #include "cmp_sprite.h"
 #include "cmp_abilitymanager.h"
 #include "TreasureRoom.h"
-#include <time.h>  
+#include <time.h>
 
 class MenuScene : public Scene {
 private:

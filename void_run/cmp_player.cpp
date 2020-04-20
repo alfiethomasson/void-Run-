@@ -179,6 +179,16 @@ void BasePlayerComponent::expGet() {
 	}
 }
 
+bool BasePlayerComponent::checkLevelUp () {
+	if (getExperience() >= 30) {
+		_experience -= 30;
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 void BasePlayerComponent::attack(float str, float dex)
 {
 	SpendAP(baseAttackCost);

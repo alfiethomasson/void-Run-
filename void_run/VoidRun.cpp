@@ -536,13 +536,19 @@ void GameScene::Render() {
 void GameScene::ChangeRoom() {
 	player->expGained = false;
 
-	if(ents.list.size() > 1)
+	if (ents.list.size() > 1)
 	{
 		ents.list[ents.list.size() - 1]->setForDelete();
 	}
 	//srand to ensure the random number is actually random
 	srand(time(0));
 	int roomType = rand() % 2;
+
+	//TODO: Make it so that if the player's EXP is enough to level up, then the room automatically sets to 2, otherwise it is set to 0 or 1 aat random.
+	if (player->checkLevelUp()) {
+		roomType = 2;
+	}
+
 	if (roomType == 0) //Combat Room
 	{
 		//Makes new combat Room
@@ -563,7 +569,7 @@ void GameScene::ChangeRoom() {
 		currentRoom = newRoom;
 		UpdateTextBox("Entered Combat Room");
 	}
-	else if(roomType == 1) //Treasure Room
+	else if (roomType == 1) //Treasure Room
 	{
 		std::shared_ptr<TreasureRoom> newRoom = make_shared<TreasureRoom>(pl);
 		newRoom->Load();
@@ -571,7 +577,14 @@ void GameScene::ChangeRoom() {
 		currentRoom = newRoom;
 		UpdateTextBox("Entered Treasure Room");
 	}
-	
+	else if (roomType == 2)
+	{
+		std::shared_ptr<LevelUpRoom> newRoom = make_shared<LevelUpRoom>(pl);
+		newRoom->Load();
+		rooms.push_back(newRoom);
+		currentRoom = newRoom;
+		UpdateTextBox("Level Up!");
+	}
 }
 
 //Updates the bounding boxes of all Buttons
