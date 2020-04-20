@@ -1,5 +1,6 @@
 #include "UI.h"
 #include "cmp_player.h"
+#include "Game.h"
 
 void CombatUI::Render()
 {
@@ -8,6 +9,10 @@ void CombatUI::Render()
 	Renderer::queue(&healSprite);
 	Renderer::queue(&rechargeSprite);
 	Renderer::queue(&runSprite);
+	Renderer::queue(&attackControl);
+	Renderer::queue(&healControl);
+	Renderer::queue(&rechargeControl);
+	Renderer::queue(&runControl);
 }
 
 void CombatUI::turnUpdate()
@@ -56,6 +61,23 @@ void CombatUI::Load()
 
 	specialSprite.setPosition(sf::Vector2f(800.0f, 600.0f));
 	specialBox = specialSprite.getGlobalBounds();
+
+	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
+	{
+		std::cout << "couldnt load font combat ui\n";
+	}
+
+	attackControl.setFont(font);
+	healControl.setFont(font);
+	rechargeControl.setFont(font);
+	runControl.setFont(font);
+	
+	attackControl.setCharacterSize(30);
+	healControl.setCharacterSize(30);
+	rechargeControl.setCharacterSize(30);
+	runControl.setCharacterSize(30);
+
+	UpdateControls();
 }
 
 sf::FloatRect& CombatUI::getAttackBox()
@@ -105,6 +127,23 @@ void CombatUI::addSpecial(std::string texName)
 void CombatUI::resetSpecial()
 {
 	specialSprite = sf::Sprite();
+}
+
+void CombatUI::UpdateControls()
+{
+	attackControl.setString(Engine::keyToString(attackKey));
+	healControl.setString(Engine::keyToString(healKey));
+	rechargeControl.setString(Engine::keyToString(rechargeKey));
+	runControl.setString(Engine::keyToString(runKey));
+
+	attackControl.setPosition(attackSprite.getPosition().x + (attackSprite.getGlobalBounds().width / 2)
+		- (attackControl.getGlobalBounds().width / 2), 680.0f);
+	healControl.setPosition(healSprite.getPosition().x + (healSprite.getGlobalBounds().width / 2)
+		- (healControl.getGlobalBounds().width / 2), 680.0f);
+	rechargeControl.setPosition(rechargeSprite.getPosition().x + (rechargeSprite.getGlobalBounds().width / 2)
+		- (rechargeControl.getGlobalBounds().width / 2), 680.0f);
+	runControl.setPosition(runSprite.getPosition().x + (runSprite.getGlobalBounds().width / 2)
+		- (runControl.getGlobalBounds().width / 2), 680.0f);
 }
 
 void GameUI::Update(double dt)

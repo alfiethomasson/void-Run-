@@ -31,6 +31,12 @@ sf::Clock pauseClock;
 sf::Time pause_delay;
 float pauseDelay = 0.5f;
 
+Keyboard::Key attackKey;
+Keyboard::Key healKey;
+Keyboard::Key rechargeKey;
+Keyboard::Key runKey;
+Keyboard::Key pauseKey;
+
 void MenuScene::Update(const double& dt) {
 
 	//Gets Mouse position in an int format
@@ -242,6 +248,12 @@ void MenuScene::Load() {
 	inOptions = false;
 
 	sceneChangeDelay = 1.0f;
+
+	attackKey = Keyboard::Q;
+	healKey = Keyboard::W;
+	rechargeKey = Keyboard::E;
+	runKey = Keyboard::R;
+	pauseKey = Keyboard::Num2;
 }
 
 //Updates the bounding boxes of buttons

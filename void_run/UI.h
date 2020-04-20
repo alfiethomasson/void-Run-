@@ -7,6 +7,8 @@ class BasePlayerComponent;
 
 class CombatUI : UIManager {
 protected:
+	sf::Font font;
+
 	sf::Sprite attackSprite;
 	sf::Sprite specialSprite;
 	sf::Sprite healSprite;
@@ -22,6 +24,13 @@ protected:
 	sf::FloatRect healBox;
 	sf::FloatRect rechargeBox;
 	sf::FloatRect runBox;
+	sf::Text attackControl;
+	sf::Text healControl;
+	sf::Text rechargeControl;
+	sf::Text runControl;
+	sf::Text specialControl1;	
+	sf::Text specialControl2;
+	sf::Text specialControl3;
 public:
 
 	void Update(double dt);
@@ -33,7 +42,8 @@ public:
 	bool CheckBoxes(sf::Vector2f curspos);
 	void Render();
 	void Load();
-
+	
+	void UpdateControls();
 	void addSpecial(std::string texName);
 	void resetSpecial();
 };

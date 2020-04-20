@@ -28,19 +28,19 @@ void BasePlayerComponent::update(double dt) {
 		{
 			if (isFinishedTurn != true)
 			{
-				if (Keyboard::isKeyPressed(Keyboard::Q) && CheckAP(baseAttackCost))
+				if (Keyboard::isKeyPressed(attackKey) && CheckAP(baseAttackCost))
 				{
 					attack(_strength, _dexterity);
 				}
-				if (Keyboard::isKeyPressed(Keyboard::W) && CheckAP(healCost))
+				if (Keyboard::isKeyPressed(healKey) && CheckAP(healCost))
 				{
 					heal(30);
 				}
-				if (Keyboard::isKeyPressed(Keyboard::E) && CheckAP(rechargeCost))
+				if (Keyboard::isKeyPressed(rechargeKey) && CheckAP(rechargeCost))
 				{
 					recharge(6);
 				}
-				if (Keyboard::isKeyPressed(Keyboard::R) && CheckAP(runCost))
+				if (Keyboard::isKeyPressed(runKey) && CheckAP(runCost))
 				{
 					run();
 				}
@@ -251,6 +251,14 @@ int BasePlayerComponent::calcRunChance()
 	srand(time(0));
 	int random = rand() % 100;
 	random = random + _dexterity - currentEnemy->getDexterity();
+	if (random < 0)
+	{
+		random = 0;
+	}
+	if (random > 100)
+	{
+		random = 100;
+	}
 	return random;
 }
 
