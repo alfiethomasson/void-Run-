@@ -1,6 +1,7 @@
 #pragma once
 #include "ecm.h"
 #include "cmp_player.h"
+#include "AlienSprites.h"
 
 class BasePlayerComponent;
 
@@ -8,10 +9,14 @@ class BaseEnemyComponent : public Component {
 protected:
 	float enemyDamage;
 	std::shared_ptr<BasePlayerComponent> currentEnemy;
+	std::shared_ptr<SpriteComponent> spriteManager;
 	float _strength;
 	float _dexterity;
 	float _maxHealth;
 	float currentHealth;
+	bool inAttack;
+
+	sf::Clock animClock;
 public:
 	bool isTurn;
 	bool isFinishedTurn;

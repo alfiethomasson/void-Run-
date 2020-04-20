@@ -185,10 +185,10 @@ void BasePlayerComponent::attack(float str, float dex)
 {
 	SpendAP(baseAttackCost);
 	cout << "Player Attacks!";
-	spriteManager->playAttack();
 	if (calculateHit(dex))
 	{
 		currentEnemy->TakeDamage(str);
+		spriteManager->playAttack();
 	}
 	else {
 		gameScene.UpdateTextBox("You missed!");

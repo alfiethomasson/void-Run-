@@ -5,7 +5,7 @@ PlayerSprite::PlayerSprite(Entity* p)
 
 void PlayerSprite::load()
 {
-	defaultPos = sf::Vector2f(400.0f, 200.0f);
+	defaultPos = sf::Vector2f(600.0f, 120.0f);
 
 	attackSize = sf::Vector2f(460, 411);
 	hitSize = sf::Vector2f(310, 447);
@@ -14,6 +14,8 @@ void PlayerSprite::load()
 	attackSpriteNum = 16;
 	hitSpriteNum = 7;
 	dieSpriteNum = 20;
+
+	hitDelay = 0.5f;
 
 	if (!attackSheet.loadFromFile("res/Sprites/SpriteSheets/PlayerAttack.png"))
 	{
@@ -54,14 +56,20 @@ void PlayerSprite::playAttack()
 void PlayerSprite::playHit()
 {
 	SpriteComponent::playHit();
+	sprite.setPosition(360.0f, 80.0f);
+	sprite.setScale(-1.0f, 1.0f);
+
 }
 
 void PlayerSprite::playDie()
 {
 	SpriteComponent::playDie();
+	sprite.setPosition(360.0f, 100.0f);
+	sprite.setScale(-1.0f, 1.0f);
 }
 
 void PlayerSprite::ResetAnim()
 {
 	SpriteComponent::ResetAnim();
+	sprite.setScale(-1.0f, 1.0f);
 }

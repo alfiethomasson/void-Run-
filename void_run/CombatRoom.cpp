@@ -3,7 +3,7 @@
 #include "system_renderer.h"
 #include "cmp_entityinfo.h"
 #include "cmp_player.h"
-#include "cmp_sprite.h"
+#include "AlienSprites.h"
 #include "enemy_easy.h"
 #include "enemy_medium.h"
 #include "enemy_tough.h"
@@ -25,6 +25,7 @@ CombatRoom::CombatRoom(std::shared_ptr <Entity> p)
 void CombatRoom::Update(const double& dt) {
 
 	turn_delay = turn_clock.getElapsedTime();
+	enemy->update(dt);
 
 	if (enemy->getCurrentHealth() != 0)
 	{
@@ -92,8 +93,7 @@ void CombatRoom::Load() {
 
 	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
-	auto s = enemy1->addComponent<ShapeComponent>();
-
+	//auto s = enemy1->addComponent<ShapeComponent>();
 	srand(time(0));
 	int enemyType = rand() % 3; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
 	if (enemyType == 0)
@@ -102,11 +102,12 @@ void CombatRoom::Load() {
 	{	enemy = enemy1->addComponent<MediumEnemy>(180, 15, 15, 15, (rand() % 4));} //Random number from 0-3. 0 is Pain Share, 1 is Regeneration, 2 is Orbital Attack, 3 is Curse.
 	else if (enemyType == 2)
 	{	enemy = enemy1->addComponent<ToughEnemy>(250, 20, 20, 20, (rand() % 3));} //Random number from 0-2. 0 is Excruciate, 1 is Charged Shot, 2 is Suicide Shot.
-
-	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
-	s->getShape().setFillColor(Color::Blue);
-	s->getShape().setOrigin(Vector2f(-1000.0f, -200.0f));
-	s->getShape().setPosition(Vector2f(1000.0f, 200.0f));
+	auto sm = enemy1->addComponent<AlienSprite1>();
+	sm->load();
+	//s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
+	//s->getShape().setFillColor(Color::Blue);
+	//s->getShape().setOrigin(Vector2f(-1000.0f, -200.0f));
+	//s->getShape().setPosition(Vector2f(1000.0f, 200.0f));
 
 	ents.list.push_back(enemy1);
 
@@ -138,7 +139,7 @@ void CombatRoom::Load() {
 	experienceCounter.setPosition(sf::Vector2f(1200.0f, 0.0f));
 	experienceCounter.setFillColor(sf::Color::Yellow);
 
-	turnDelayValue = 1.0f;
+	turnDelayValue = 2.0f;
 }
 
 //CombatRoom::CombatRoom(Entity* p) : Room() { player = p; };

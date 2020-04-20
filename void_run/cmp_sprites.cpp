@@ -2,7 +2,9 @@
 #include "system_renderer.h"
 
 sf::Clock animClock;
+sf::Clock hitClock;
 float animDelay;
+float hitDelay;
 int animCounter;
 int animRowCounter;
 
@@ -13,6 +15,7 @@ void SpriteComponent::load()
 {
 	animCounter = 0;
 	animRowCounter = 0;
+	ResetAnim();
 }
 
 void SpriteComponent::render()
@@ -26,6 +29,7 @@ void SpriteComponent::update(double dt)
 	{
 		if (animClock.getElapsedTime().asSeconds() > animDelay)
 		{
+			std::cout << "In attack anim part: " << animCounter << "\n";
 			if (animCounter < attackSpriteNum)
 			{
 				if (animRowCounter <= 3)
@@ -54,61 +58,69 @@ void SpriteComponent::update(double dt)
 	}
 	if (inHit)
 	{
-		if (animClock.getElapsedTime().asSeconds() > animDelay)
+		if (hitClock.getElapsedTime().asSeconds() > hitDelay)
 		{
-			if (animCounter < hitSpriteNum)
+			if (animClock.getElapsedTime().asSeconds() > animDelay)
 			{
-				if (animRowCounter <= 3)
+				std::cout << "In hit anim part: " << animCounter << "\n";
+				if (animCounter < hitSpriteNum)
 				{
-					if (animRowCounter == 3)
+					if (animRowCounter <= 3)
 					{
-						sheetRect.top += hitSize.y;
-						sheetRect.left = 0;
-						animRowCounter = 0;
+						if (animRowCounter == 3)
+						{
+							sheetRect.top += hitSize.y;
+							sheetRect.left = 0;
+							animRowCounter = 0;
+						}
+						else
+						{
+							sheetRect.left += hitSize.x;
+							animRowCounter++;
+						}
 					}
-					else
-					{
-						sheetRect.left += hitSize.x;
-						animRowCounter++;
-					}
+					sprite.setTextureRect(sheetRect);
+					animClock.restart();
+					animCounter++;
 				}
-				sprite.setTextureRect(sheetRect);
-				animClock.restart();
-				animCounter++;
-			}
-			else
-			{
-				ResetAnim();
+				else
+				{
+					ResetAnim();
+				}
 			}
 		}
 	}
 	if (inDie)
 	{
-		if (animClock.getElapsedTime().asSeconds() > animDelay)
+		if (hitClock.getElapsedTime().asSeconds() > dieDelay)
 		{
-			if (animCounter < dieSpriteNum)
+
+			if (animClock.getElapsedTime().asSeconds() > animDelay)
 			{
-				if (animRowCounter <= 3)
+				if (animCounter < dieSpriteNum)
 				{
-					if (animRowCounter == 3)
+					if (animRowCounter <= 3)
 					{
-						sheetRect.top += dieSize.y;
-						sheetRect.left = 0;
-						animRowCounter = 0;
+						if (animRowCounter == 3)
+						{
+							sheetRect.top += dieSize.y;
+							sheetRect.left = 0;
+							animRowCounter = 0;
+						}
+						else
+						{
+							sheetRect.left += dieSize.x;
+							animRowCounter++;
+						}
 					}
-					else
-					{
-						sheetRect.left += dieSize.x;
-						animRowCounter++;
-					}
+					sprite.setTextureRect(sheetRect);
+					animClock.restart();
+					animCounter++;
 				}
-				sprite.setTextureRect(sheetRect);
-				animClock.restart();
-				animCounter++;
-			}
-			else
-			{
-			//	ResetAnim();
+				else
+				{
+					//	ResetAnim();
+				}
 			}
 		}
 	}
@@ -117,32 +129,29 @@ void SpriteComponent::update(double dt)
 void SpriteComponent::playAttack()
 {
 	inAttack = true;
-	animDelay = 0.05f;
+	animDelay = 0.08f;
 }
 
 void SpriteComponent::playHit()
 {
 	inHit = true;
-	sheetRect = sf::IntRect(0, 0, 310, 447);
+	sheetRect = sf::IntRect(0, 0, hitSize.x, hitSize.y);
 	sprite = sf::Sprite(hitSheet, sheetRect);
+	hitClock.restart();
 
-	sprite.setScale(-1.0f, 1.0f);
 	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
-	sprite.setPosition(defaultPos);
 	animDelay = 0.05f;
 }
 
 void SpriteComponent::playDie()
 {
 	inDie = true;
-
+	hitClock.restart();
 	//auto tempSprite = sprite.getPosition().x; //+ (sprite.getGlobalBounds().width / 2);
-	sheetRect = sf::IntRect(0, 0, 320, 516);
+	sheetRect = sf::IntRect(0, 0, dieSize.x, dieSize.y);
 	sprite = sf::Sprite(dieSheet, sheetRect);
 
-	sprite.setScale(-1.0f, 1.0f);
 	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
-	sprite.setPosition(defaultPos);
 	animDelay = 0.05f;
 }
 
@@ -151,12 +160,10 @@ void SpriteComponent::ResetAnim()
 	inAttack = false;
 	inHit = false;
 	inDie = false;
-	sheetRect = sf::IntRect(0, 0, 460, 411);
+	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
 	sprite = sf::Sprite(attackSheet, sheetRect);
 	animRowCounter = 0;
 	animCounter = 0;
 
-	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
 	sprite.setPosition(defaultPos);
-	sprite.setScale(-1.0f, 1.0f);
 }

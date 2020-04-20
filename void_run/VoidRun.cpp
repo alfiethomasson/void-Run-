@@ -311,12 +311,12 @@ void GameScene::Load() {
 	pl = make_shared<Entity>(); 
 	//auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
-	playerSprite = pl->addComponent<PlayerSprite>();
-	playerSprite->load();
 	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f, 10, &combatUI, &gameUI);
 	am = pl->addComponent<AbilityManager>(3);
 	inv = pl->addComponent<Inventory>(2, &gameUI);
 	inv->Load();
+	playerSprite = pl->addComponent<PlayerSprite>();
+	playerSprite->load();
 	//s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	//s->getShape().setFillColor(Color::Yellow);
 	//s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));

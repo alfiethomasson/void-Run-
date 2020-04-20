@@ -27,6 +27,9 @@ protected:
 	bool inAttack;
 	bool inHit;
 	bool inDie;
+
+	float hitDelay;
+	float dieDelay;
 public:
 	SpriteComponent() = delete;
 	explicit SpriteComponent(Entity* p);
