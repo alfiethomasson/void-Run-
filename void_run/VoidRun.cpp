@@ -324,13 +324,13 @@ void GameScene::Load() {
 	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
 	ents.list.push_back(pl);
 
-	//Calls load function of the UIs
-	combatUI.Load();
-	gameUI.Load(10, player);
-
 	//Populates the item database with pre defined items
 	itemDB.PopulateDB();
 	player->load();
+
+	//Calls load function of the UIs
+	combatUI.Load(player);
+	gameUI.Load(10, player);
 
 	//Loads the texture icon
 	if (!BoxTexture.loadFromFile("res/Sprites/TextBox.png"))

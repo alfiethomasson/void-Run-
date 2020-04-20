@@ -127,11 +127,14 @@ void BasePlayerComponent::SpendAP(int ap)
 
 void BasePlayerComponent::gainAP(int amount)
 {
+	std::cout << "Currenet AP AMOUNT " << actionPoints << "\n";
+	std::cout << "Should gain AP Amount: " << amount << "\n";
 	int temp = actionPoints + amount;
 	if (temp > _actionPointsMax)
 	{
+	//	actionPoints = _actionPointsMax;
+		gameUI.gainAP(_actionPointsMax - actionPoints);
 		actionPoints = _actionPointsMax;
-		gameUI.gainAP(_actionPointsMax - amount);
 	}
 	else
 	{
@@ -178,8 +181,7 @@ void BasePlayerComponent::expGet() {
 
 void BasePlayerComponent::attack(float str, float dex)
 {
-	actionPoints -= baseAttackCost;
-	gameUI.useAP(baseAttackCost);
+	SpendAP(baseAttackCost);
 	cout << "Player Attacks!";
 	if (calculateHit(dex))
 	{
@@ -206,8 +208,7 @@ bool BasePlayerComponent::calculateHit(float dex)
 
 void BasePlayerComponent::heal(float healBy)
 {
-	actionPoints -= healCost;
-	gameUI.useAP(healCost);
+	SpendAP(healCost);
 	cout << "Player Heals!";
 	int tempHealth = currentHealth + healBy;
 	if (tempHealth > _maxHealth)
@@ -224,14 +225,14 @@ void BasePlayerComponent::heal(float healBy)
 void BasePlayerComponent::recharge(int amount)
 {
 	cout << "Player Recharges!";
-	gameUI.useAP(rechargeCost);
+	SpendAP(rechargeCost);
 	gainAP(amount);
 	EndTurn();
 }
 
 void BasePlayerComponent::run()
 {
-	gameUI.useAP(runCost);
+	SpendAP(runCost);
 	srand(time(0));
 	int random = rand() % 100;
 	if (random < runChance)

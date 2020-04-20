@@ -13,6 +13,10 @@ void CombatUI::Render()
 	Renderer::queue(&healControl);
 	Renderer::queue(&rechargeControl);
 	Renderer::queue(&runControl);
+	Renderer::queue(&attackCost);
+	Renderer::queue(&healCost);
+	Renderer::queue(&rechargeCost);
+	Renderer::queue(&runCost);
 }
 
 void CombatUI::turnUpdate()
@@ -20,8 +24,10 @@ void CombatUI::turnUpdate()
 
 }
 
-void CombatUI::Load()
+void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p)
 {
+	player = p;
+
 	if (!attackTex.loadFromFile("res/Icons/Attack.png"))
 	{
 		std::cout << "Couldn't load attack icon\n";
@@ -78,6 +84,26 @@ void CombatUI::Load()
 	runControl.setCharacterSize(30);
 
 	UpdateControls();
+
+	attackCost.setFont(font);
+	healCost.setFont(font);
+	rechargeCost.setFont(font);
+	runCost.setFont(font);
+	specialCost1.setFont(font);
+	specialCost2.setFont(font);
+	specialCost3.setFont(font);
+
+	attackCost.setCharacterSize(25);
+	healCost.setCharacterSize(25);
+	rechargeCost.setCharacterSize(25);
+	runCost.setCharacterSize(25);
+
+	attackCost.setColor(sf::Color(30, 216, 255, 255));
+	healCost.setColor(sf::Color(30, 216, 255, 255));
+	rechargeCost.setColor(sf::Color(30, 216, 255, 255));
+	runCost.setColor(sf::Color(30, 216, 255, 255));
+
+	UpdateCosts();
 }
 
 sf::FloatRect& CombatUI::getAttackBox()
@@ -146,6 +172,24 @@ void CombatUI::UpdateControls()
 		- (runControl.getGlobalBounds().width / 2), 680.0f);
 }
 
+void CombatUI::UpdateCosts()
+{
+	std::cout << " player attackcost " << std::to_string(player->baseAttackCost);
+	attackCost.setString(std::to_string(player->baseAttackCost));
+	healCost.setString(std::to_string(player->healCost));
+	rechargeCost.setString(std::to_string(player->rechargeCost));
+	runCost.setString(std::to_string(player->runCost));
+
+	attackCost.setPosition(attackSprite.getPosition().x + attackSprite.getGlobalBounds().width - costOffset -
+		(attackCost.getGlobalBounds().width), attackSprite.getPosition().y  + costOffset - (attackCost.getGlobalBounds().height / 2));
+	healCost.setPosition(healSprite.getPosition().x + healSprite.getGlobalBounds().width - costOffset -
+		healCost.getGlobalBounds().width, rechargeSprite.getPosition().y + costOffset - (rechargeCost.getGlobalBounds().height / 2));
+	rechargeCost.setPosition(rechargeSprite.getPosition().x + rechargeSprite.getGlobalBounds().width - costOffset -
+		rechargeCost.getGlobalBounds().width, rechargeSprite.getPosition().y + costOffset - (rechargeCost.getGlobalBounds().height / 2));
+	runCost.setPosition(runSprite.getPosition().x + runSprite.getGlobalBounds().width - costOffset -
+		runCost.getGlobalBounds().width, runSprite.getPosition().y + costOffset - (runCost.getGlobalBounds().height / 2));
+}
+
 void GameUI::Update(double dt)
 {
 }
@@ -189,6 +233,7 @@ void GameUI::Render()
 		Renderer::queue(&e);
 	}
 	Renderer::queue(&descText);
+	Renderer::queue(&playerIcon);
 	if (inStatUp)
 	{
 		Renderer::queue(&stat1);
@@ -214,18 +259,24 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	{
 		std::cout << "Couldnt load up arrow in stat room\n";
 	}
-	MaxAP = maxAP;
-	APAmount = MaxAP;
-
-	for(int i = 0; i < MaxAP; i++)
+	if (!playerIconTex.loadFromFile("res/Sprites/Player.png"))
 	{
-		sf::Sprite cell;
-		cell.setTexture(CellTex);
-		cell.setScale(0.2f, 0.15f);
-		height += 20;
-		cell.setPosition(sf::Vector2f(60.0f, 550.0f - (height)));
-		cells.push_back(cell);
+		std::cout << "Couldnt load player icon\n";
 	}
+	MaxAP = maxAP;
+	APAmount = 0;
+
+	//for(int i = 0; i < MaxAP; i++)
+	//{
+	//	sf::Sprite cell;
+	//	cell.setTexture(CellTex);
+	//	cell.setScale(0.05f, 0.15f);
+	//	height += 20;
+	//	cell.setPosition(sf::Vector2f(400.0f + (height), 550.0f));
+	//	cell.setRotation(90);
+	//	cells.push_back(cell);
+	//}
+	gainAP(MaxAP);
 	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
 	{
 		std::cout << "failed to load mandalore font in game ui\n";
@@ -233,6 +284,10 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	descText.setFont(font);
 	descText.setCharacterSize(30);
 	descText.setString("");
+
+	playerIcon.setTexture(playerIconTex);
+	playerIcon.setScale(0.5f, 0.5f);
+	playerIcon.setPosition(0.0f, 500.0f);
 
 	stat1.setTexture(statUPTex);
 	stat2.setTexture(statUPTex);
@@ -277,9 +332,10 @@ sf::Sprite GameUI::getNewCell()
 	//}
 	sf::Sprite cell;
 	cell.setTexture(CellTex);
-	cell.setScale(0.2f, 0.15f);
+	cell.setScale(0.05f, 0.15f);
 	height += 20;
-	cell.setPosition(sf::Vector2f(60.0f, 550.0f - (height)));
+	cell.setPosition(sf::Vector2f(550.0f + height, 550.0));
+	cell.setRotation(90);
 	return cell;
 }
 
@@ -322,6 +378,7 @@ void GameUI::useAP(int amount)
 
 void GameUI::gainAP(int amount)
 {
+	std::cout << "GAMEUI GAINING AP: " << amount << "\n";
 	int temp = APAmount + amount;
 	if (temp > MaxAP)
 	{

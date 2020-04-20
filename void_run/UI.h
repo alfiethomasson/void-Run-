@@ -31,6 +31,17 @@ protected:
 	sf::Text specialControl1;	
 	sf::Text specialControl2;
 	sf::Text specialControl3;
+	sf::Text attackCost;
+	sf::Text healCost;
+	sf::Text rechargeCost;
+	sf::Text runCost;
+	sf::Text specialCost1;
+	sf::Text specialCost2;
+	sf::Text specialCost3;
+
+	const int costOffset = 5;
+
+	std::shared_ptr<BasePlayerComponent> player;
 public:
 
 	void Update(double dt);
@@ -41,9 +52,10 @@ public:
 	sf::FloatRect& getRunBox();
 	bool CheckBoxes(sf::Vector2f curspos);
 	void Render();
-	void Load();
+	void Load(std::shared_ptr<BasePlayerComponent> p);
 	
 	void UpdateControls();
+	void UpdateCosts();
 	void addSpecial(std::string texName);
 	void resetSpecial();
 };
@@ -63,6 +75,9 @@ protected:
 	sf::Sprite stat2;
 	sf::Sprite stat3;
 	sf::Font font;
+
+	sf::Sprite playerIcon;
+	sf::Texture playerIconTex;
 
 	sf::Text RewardsText;
 	sf::Text StrengthText;

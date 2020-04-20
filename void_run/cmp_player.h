@@ -23,13 +23,6 @@ protected:
 	int _actionPointsMax;
 	int runChance;
 
-	int baseAttackCost;
-	int mediumAttackCost;
-	int heavyAttackCost;
-	int healCost;
-	int rechargeCost;
-	int runCost;
-
 	std::shared_ptr<BaseEnemyComponent> currentEnemy;
 	std::shared_ptr<AbilityManager> abilityManager;
 //	std::vector<SpecialAbility> specialMoves;
@@ -40,6 +33,13 @@ public:
 	bool isTurn;
 	bool isFinishedTurn;
 	bool expGained;
+	int baseAttackCost;
+	int mediumAttackCost;
+	int heavyAttackCost;
+	int healCost;
+	int rechargeCost;
+	int runCost;
+
 	explicit BasePlayerComponent(Entity* p, int health, float strength, float dex,
 		float experience, int actionPoints, CombatUI *ui, GameUI *gameUI);
 	BasePlayerComponent() = delete;
