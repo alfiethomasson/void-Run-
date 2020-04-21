@@ -228,6 +228,8 @@ bool GameUI::updateStatOptions()
 
 void GameUI::Render()
 {
+	Renderer::queue(&background);
+
 	for (auto& e : cells)
 	{
 		Renderer::queue(&e);
@@ -322,6 +324,13 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	StrengthText.setPosition(stat1.getPosition().x - StrengthText.getLocalBounds().width, 300.0f);
 	HealthText.setPosition(stat2.getPosition().x - HealthText.getLocalBounds().width, 300.0f);
 	DexterityText.setPosition(stat3.getPosition().x - DexterityText.getLocalBounds().width, 300.0f);
+
+	if (!backgroundTex.loadFromFile("res/Sprites/BGspace1.jpg"))
+	{
+		std::cout << "COULDNT LOAD BACKGROUND :(";
+	}
+	background.setTexture(backgroundTex);
+	background.setScale(Engine::getWindowSize().x / background.getGlobalBounds().width, 0.5f);
 }
 
 sf::Sprite GameUI::getNewCell()

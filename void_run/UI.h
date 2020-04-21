@@ -88,6 +88,9 @@ protected:
 	sf::FloatRect stat3Box;
 	std::shared_ptr<BasePlayerComponent> player;
 
+	sf::Sprite background;
+	sf::Texture backgroundTex;
+
 	bool inStatUp;
 public:
 	GameUI() = default;

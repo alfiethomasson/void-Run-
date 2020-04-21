@@ -517,10 +517,10 @@ void GameScene::Update(const double& dt) {
 void GameScene::Render() {
 	if (!isPaused) // If game is not pause
 	{
+		gameUI.Render();
 		currentRoom->Render();
 		Renderer::queue(&screenText);
 		Renderer::queue(&SettingSprite);
-		gameUI.Render();
 		Scene::Render();
 	}
 	else // if paused
