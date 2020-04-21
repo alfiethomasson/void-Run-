@@ -102,7 +102,7 @@ void CombatRoom::Load() {
 	{	enemy = enemy1->addComponent<MediumEnemy>(180, 15, 15, 15, (rand() % 4));} //Random number from 0-3. 0 is Pain Share, 1 is Regeneration, 2 is Orbital Attack, 3 is Curse.
 	else if (enemyType == 2)
 	{	enemy = enemy1->addComponent<ToughEnemy>(250, 20, 20, 20, (rand() % 3));} //Random number from 0-2. 0 is Excruciate, 1 is Charged Shot, 2 is Suicide Shot.
-	auto sm = enemy1->addComponent<AlienSprite2>();
+	auto sm = enemy1->addComponent<AlienSprite3>();
 	sm->load();
 	//s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
 	//s->getShape().setFillColor(Color::Blue);
