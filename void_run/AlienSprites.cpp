@@ -35,7 +35,8 @@ void AlienSprite1::load()
 
 	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
 	sprite.setPosition(defaultPos);
-	//sprite.setScale(0.6f, 0.6f);
+
+	SpriteComponent::load();
 }
 
 void AlienSprite1::render()
@@ -74,6 +75,90 @@ void AlienSprite1::playDie()
 }
 
 void AlienSprite1::ResetAnim()
+{
+	SpriteComponent::ResetAnim();
+	sheetRect = sf::IntRect(0, 0, hitSize.x, hitSize.y);
+	sprite = sf::Sprite(hitSheet, sheetRect);
+	sprite.setPosition(defaultPos);
+	//sprite.setScale(0.6f, 0.6f);
+}
+
+AlienSprite2::AlienSprite2(Entity* p)
+	: SpriteComponent{ p } {}
+
+void AlienSprite2::load()
+{
+	defaultPos = sf::Vector2f(850.0f, 200.0f);
+
+	attackSize = sf::Vector2f(625, 384);
+	hitSize = sf::Vector2f(430, 327);
+	dieSize = sf::Vector2f(591, 352);
+
+	attackSpriteNum = 12;
+	hitSpriteNum = 12;
+	dieSpriteNum = 12;
+
+	dieDelay = 0.5f;
+
+	if (!attackSheet.loadFromFile("res/Sprites/SpriteSheets/Alien2Attack.png"))
+	{
+		std::cout << "failed to load attack sprite sheet: " << attackName << "\n";
+	}
+	if (!hitSheet.loadFromFile("res/Sprites/SpriteSheets/Alien2Hit.png"))
+	{
+		std::cout << "failed to load hit sprite sheet: " << hitName << "\n";
+	}
+	if (!dieSheet.loadFromFile("res/Sprites/SpriteSheets/Alien2Die.png"))
+	{
+		std::cout << "failed to load die sprite sheet: " << dieName << "\n";
+	}
+
+	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
+	sprite = sf::Sprite(attackSheet, sheetRect);
+
+	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
+	sprite.setPosition(defaultPos);
+
+	SpriteComponent::load();
+}
+
+void AlienSprite2::render()
+{
+	SpriteComponent::render();
+}
+
+void AlienSprite2::update(double dt)
+{
+	SpriteComponent::update(dt);
+}
+
+void AlienSprite2::playAttack()
+{
+	SpriteComponent::playAttack();
+	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
+	sprite = sf::Sprite(attackSheet, sheetRect);
+	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
+	sprite.setPosition(880.0f, 130.0f);
+	//sprite.setScale(0.6f, 0.6f);
+}
+
+void AlienSprite2::playHit()
+{
+	SpriteComponent::playHit();
+	hitDelay = 1.0f;
+	sprite.setPosition(943.0f, 200.0f);
+	//sprite.setScale(0.6f, 0.6f);
+
+}
+
+void AlienSprite2::playDie()
+{
+	SpriteComponent::playDie();
+	sprite.setPosition(1080.0f, 207.0f);
+	//sprite.setScale(0.6f, 0.6f);
+}
+
+void AlienSprite2::ResetAnim()
 {
 	SpriteComponent::ResetAnim();
 	sheetRect = sf::IntRect(0, 0, hitSize.x, hitSize.y);

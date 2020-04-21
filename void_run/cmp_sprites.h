@@ -27,9 +27,14 @@ protected:
 	bool inAttack;
 	bool inHit;
 	bool inDie;
-
-	float hitDelay;
 	float dieDelay;
+
+	sf::Clock animClock;
+	sf::Clock hitClock;
+	float animDelay;
+	float hitDelay;
+	int animCounter;
+	int animRowCounter;
 public:
 	SpriteComponent() = delete;
 	explicit SpriteComponent(Entity* p);

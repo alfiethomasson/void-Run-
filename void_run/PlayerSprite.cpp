@@ -36,6 +36,8 @@ void PlayerSprite::load()
 	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
 	sprite.setPosition(defaultPos);
 	sprite.setScale(-1.0f, 1.0f);
+
+	SpriteComponent::load();
 }
 
 void PlayerSprite::render()
@@ -45,6 +47,7 @@ void PlayerSprite::render()
 
 void PlayerSprite::update(double dt)
 {
+	//std::cout << "PLAYER - " << animDelay;
 	SpriteComponent::update(dt);
 }
 

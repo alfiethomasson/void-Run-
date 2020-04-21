@@ -1,15 +1,8 @@
 #include "cmp_sprites.h"
 #include "system_renderer.h"
 
-sf::Clock animClock;
-sf::Clock hitClock;
-float animDelay;
-float hitDelay;
-int animCounter;
-int animRowCounter;
-
 SpriteComponent::SpriteComponent(Entity* p) 
-	: Component(p) {}
+	: inAttack{ false }, inHit{ false }, inDie{ false }, Component(p) {}
 
 void SpriteComponent::load()
 {
@@ -129,7 +122,7 @@ void SpriteComponent::update(double dt)
 void SpriteComponent::playAttack()
 {
 	inAttack = true;
-	animDelay = 0.08f;
+	animDelay = 0.05f;
 }
 
 void SpriteComponent::playHit()

@@ -19,3 +19,21 @@ public:
 	void ResetAnim() override;
 
 };
+
+class AlienSprite2 : public SpriteComponent {
+private:
+public:
+	explicit AlienSprite2(Entity* p);
+	AlienSprite2() = default;
+
+	void update(double dt) override;
+	void render() override;
+	void load();
+
+	void playAttack() override;
+	void playHit() override;
+	void playDie() override;
+
+	void ResetAnim() override;
+
+};
