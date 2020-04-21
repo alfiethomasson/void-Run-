@@ -62,18 +62,18 @@ void MediumEnemy::load()
 
 	if (specialMove == 0)
 	{
-
+		spriteManager->AddIcon("PainShare", "PAIN SHARE\nDamages itself to inflict large damage\nto player", true);
 	}
 	if (specialMove == 1)
 	{
-
+		spriteManager->AddIcon("Regeneration", "REGENERATION\nPassively heals every turn", true);
 	}
 	if (specialMove == 2)
 	{
-
+		spriteManager->AddIcon("Bullseye", "BULLSEYE\nAn attack that never misses", true);
 	}
 	if (specialMove == 3)
 	{
-
+		spriteManager->AddIcon("Curse", "CURSE\nCurses the player, dealing \ndamage every turn", true);
 	}
 }

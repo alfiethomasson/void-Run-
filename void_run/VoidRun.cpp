@@ -556,8 +556,6 @@ void GameScene::ChangeRoom() {
 		//into current scenes entity manager so they are renderered
 		for each (auto e in newRoom->GetEnts())
 		{
-			//Updates the player's current enemy
-		//	player->updateEnemy(ents.list[ents.list.size() - 1]);
 			ents.list.push_back(e);
 		}
 		//Set's current room to be the newly created room

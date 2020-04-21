@@ -14,7 +14,7 @@ void SpriteComponent::load()
 void SpriteComponent::render()
 {
 	Renderer::queue(&sprite);
-	for (auto s : icons)
+	for (sf::Sprite &s : icons)
 	{
 		Renderer::queue(&s);
 	}
@@ -172,15 +172,16 @@ void SpriteComponent::AddIcon(std::string texName, std::string desc, bool leftri
 	{
 		std::cout << "Couldnt load icon tex " << texName << "\n";
 	}
+	std::cout << "Shoudl load tex " << texName << "\n";
 	sf::Sprite tempSprite;
 	tempSprite.setTexture(tempTex);
 	if (leftright)
 	{
-		tempSprite.setPosition(_parent->getPosition().x + 100.0f, _parent->getPosition().y);
+		tempSprite.setPosition(1000.0f, 300.0f);
 	}
 	else
 	{
-		tempSprite.setPosition(_parent->getPosition().x - 100.0f, _parent->getPosition().y);
+		tempSprite.setPosition(1000.0f, 300.0f);
 	}
 	icons.push_back(tempSprite);
 }

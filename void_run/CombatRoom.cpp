@@ -103,7 +103,6 @@ void CombatRoom::Load() {
 	}
 	else if (enemyType == 1)
 	{	enemy = enemy1->addComponent<MediumEnemy>(180, 15, 15, 15, (rand() % 4));
-	enemy->load();
 		auto sm = enemy1->addComponent<AlienSprite3>();
 		sm->load();
 	} //Random number from 0-3. 0 is Pain Share, 1 is Regeneration, 2 is Orbital Attack, 3 is Curse.

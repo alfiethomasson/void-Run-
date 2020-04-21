@@ -9,6 +9,7 @@ bool Inventory::add(std::shared_ptr<Item> item)
 	{
 		std::cout << "Adding item to inventory! \n";
 		item->Equip(*_parent);
+		//item->getSprite().set
 		item->getSprite().setPosition(positions[items.size()]);
 		sf::FloatRect tempBox = item->getSprite().getGlobalBounds();
 		boxes.push_back(tempBox);
@@ -47,9 +48,9 @@ bool Inventory::checkEmptySlot()
 
 void Inventory::Load()
 {
-	positions[0] = sf::Vector2f(100.0f, 600.0f);
-	positions[1] = sf::Vector2f(200.0f, 600.0f);
-	positions[2] = sf::Vector2f(300.0f, 600.0f);
+	positions[0] = sf::Vector2f(900.0f, 600.0f);
+	positions[1] = sf::Vector2f(1000.0f, 600.0f);
+	positions[2] = sf::Vector2f(1100.0f, 600.0f);
 	positions[3] = sf::Vector2f(100.0f, 650.0f);
 	positions[4] = sf::Vector2f(200.0f, 650.0f);
 	positions[5] = sf::Vector2f(300.0f, 650.0f);
