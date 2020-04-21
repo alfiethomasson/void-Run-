@@ -1,5 +1,6 @@
 #include "cmp_sprites.h"
 #include "system_renderer.h"
+#include "Game.h"
 
 SpriteComponent::SpriteComponent(Entity* p) 
 	: inAttack{ false }, inHit{ false }, inDie{ false }, Component(p) {}
@@ -14,19 +15,30 @@ void SpriteComponent::load()
 void SpriteComponent::render()
 {
 	Renderer::queue(&sprite);
-	for (sf::Sprite &s : icons)
+	for (auto &i : icons)
 	{
-		Renderer::queue(&s);
+		Renderer::queue(&i.sprite);
 	}
 }
 
 void SpriteComponent::update(double dt)
 {
+	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
+	Vector2f cursPos = sf::Vector2f(tempPos);
+
+	for (auto b : icons)
+	{
+		if (b.box.contains(cursPos))
+		{
+			gameScene.UpdateDesctext(b.description, sf::Vector2f(b.sprite.getPosition().x + (b.sprite.getGlobalBounds().width / 2),
+				b.sprite.getPosition().y));
+		}
+	}
+
 	if (inAttack)
 	{
 		if (animClock.getElapsedTime().asSeconds() > animDelay)
 		{
-			std::cout << "In attack anim part: " << animCounter << "\n";
 			if (animCounter < attackSpriteNum)
 			{
 				if (animRowCounter <= 3)
@@ -59,7 +71,6 @@ void SpriteComponent::update(double dt)
 		{
 			if (animClock.getElapsedTime().asSeconds() > animDelay)
 			{
-				std::cout << "In hit anim part: " << animCounter << "\n";
 				if (animCounter < hitSpriteNum)
 				{
 					if (animRowCounter <= 3)
@@ -167,23 +178,20 @@ void SpriteComponent::ResetAnim()
 
 void SpriteComponent::AddIcon(std::string texName, std::string desc, bool leftright)
 {
-	sf::Texture tempTex;
-	if (!tempTex.loadFromFile("res/Icons/" + texName + ".png"))
-	{
-		std::cout << "Couldnt load icon tex " << texName << "\n";
-	}
-	std::cout << "Shoudl load tex " << texName << "\n";
-	sf::Sprite tempSprite;
-	tempSprite.setTexture(tempTex);
+	Icon tempIcon;
+	tempIcon.sprite.setTexture(gameScene.tm.getTex(texName));
+	tempIcon.sprite.setScale(0.15f, 0.15f);
 	if (leftright)
 	{
-		tempSprite.setPosition(1000.0f, 300.0f);
+		tempIcon.sprite.setPosition(1200.0f, 200.0f);
 	}
 	else
 	{
-		tempSprite.setPosition(1000.0f, 300.0f);
+		tempIcon.sprite.setPosition(800.0f, 300.0f);
 	}
-	icons.push_back(tempSprite);
+	tempIcon.box = tempIcon.sprite.getGlobalBounds();
+	tempIcon.description = desc;
+	icons.push_back(tempIcon);
 }
 
 void SpriteComponent::RemoveIcon(int position)

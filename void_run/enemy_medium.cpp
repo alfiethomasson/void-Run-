@@ -9,6 +9,9 @@ bool cursed = false;
 
 void MediumEnemy::update(double dt)
 {
+
+	BaseEnemyComponent::update(dt);
+
 	if (isTurn && isFinishedTurn != true)
 	{
 		srand(time(0));
@@ -76,4 +79,10 @@ void MediumEnemy::load()
 	{
 		spriteManager->AddIcon("Curse", "CURSE\nCurses the player, dealing \ndamage every turn", true);
 	}
+	BaseEnemyComponent::load();
+}
+
+void MediumEnemy::render()
+{
+	BaseEnemyComponent::render();
 }

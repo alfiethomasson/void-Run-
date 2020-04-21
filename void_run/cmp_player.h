@@ -31,6 +31,9 @@ protected:
 	CombatUI& combatUI;
 	GameUI& gameUI;
 
+	int healthSize;
+	sf::RectangleShape healthBar;
+
 public:
 	bool isTurn;
 	bool isFinishedTurn;
@@ -46,7 +49,7 @@ public:
 		float experience, int actionPoints, CombatUI *ui, GameUI *gameUI);
 	BasePlayerComponent() = delete;
 
-	void render() override {}
+	void render() override;
 	void update(double dt) override;
 	void load();
 

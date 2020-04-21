@@ -1,4 +1,5 @@
 #include "PlayerSprite.h"
+#include "Game.h"
 
 PlayerSprite::PlayerSprite(Entity* p)
 	: SpriteComponent{ p } {}
@@ -16,19 +17,9 @@ void PlayerSprite::load()
 	dieSpriteNum = 20;
 
 	hitDelay = 0.5f;
-
-	if (!attackSheet.loadFromFile("res/Sprites/SpriteSheets/PlayerAttack.png"))
-	{
-		std::cout << "failed to load attack sprite sheet: " << attackName << "\n";
-	}
-	if (!hitSheet.loadFromFile("res/Sprites/SpriteSheets/PlayerHit.png"))
-	{
-		std::cout << "failed to load hit sprite sheet: " << hitName << "\n";
-	}
-	if (!dieSheet.loadFromFile("res/Sprites/SpriteSheets/PlayerDie.png"))
-	{
-		std::cout << "failed to load die sprite sheet: " << dieName << "\n";
-	}
+	attackSheet = gameScene.tm.getTex("PlayerAttack");
+	hitSheet = gameScene.tm.getTex("PlayerHit");
+	dieSheet = gameScene.tm.getTex("PlayerDie");
 
 	sheetRect = sf::IntRect(0, 0, 460, 411);
 	sprite = sf::Sprite(attackSheet, sheetRect);

@@ -83,6 +83,7 @@ void CombatRoom::Render() {
 	Renderer::queue(&playerHP);
 	Renderer::queue(&enemyHP);
 	Renderer::queue(&experienceCounter);
+	enemy->render();
 
 	Room::Render();
 }

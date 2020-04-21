@@ -9,6 +9,8 @@ bool enraged;
 
 void EasyEnemy::update(double dt)
 {
+	BaseEnemyComponent::update(dt);
+
 	if (isTurn && isFinishedTurn != true)
 	{
 		srand(time(0));
@@ -74,4 +76,10 @@ void EasyEnemy::load()
 	{
 		spriteManager->AddIcon("DoubleSlice", "DOUBLE SLICE\nMakes two attacks in one turn", true);
 	}
+	BaseEnemyComponent::load();
+}
+
+void EasyEnemy::render()
+{
+	BaseEnemyComponent::render();
 }

@@ -2,21 +2,13 @@
 #include <iostream>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include "engine.h"
-#include "CombatRoom.h"
-#include "StatRoom.h"
-#include "Room.h"
-#include "ItemDB.h"
-#include "UI.h"
-#include "System_Renderer.h"
-#include "System_resources.h"
+#include <time.h>  
 #include "cmp_player.h"
-#include "cmp_enemy.h"
+#include "Room.h"
 #include "cmp_inventory.h"
 #include "PlayerSprite.h"
-#include "cmp_abilitymanager.h"
-#include "TreasureRoom.h"
-#include <time.h>  
+
+class PlayerSprite;
 
 class MenuScene : public Scene {
 private:
@@ -84,6 +76,9 @@ public:
 	CombatUI combatUI;
 	GameUI gameUI;
 
+	sf::Text descText;
+	sf::RectangleShape descRect;
+
 	GameScene() = default;
 	~GameScene() override = default;
 	void Update(const double& dt) override;
@@ -94,4 +89,7 @@ public:
 	bool playerTurn;
 	void UpdateButtons();
 	void UpdateTextBox(sf::String newText);
+	void LoadTextures() override;
+	void UpdateDesctext(std::string, sf::Vector2f pos);
+	void ResetDescText();
 };

@@ -11,18 +11,26 @@ using namespace std;
 
 int animDelay = 1.0f;
 
-BaseEnemyComponent::BaseEnemyComponent(Entity* p, float health, float strength, float dex, float expReward, int specialMove)
+BaseEnemyComponent::BaseEnemyComponent(Entity* p, int health, float strength, float dex, float expReward, int specialMove)
 	: enemyDamage(3.0f), _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, expReward{ expReward }, specialMove{ specialMove }, Component(p) {}
 
 void BaseEnemyComponent::update(double dt) 
 {
+	healthSize = _maxHealth;
+	healthBar.setSize(sf::Vector2f(healthSize * 1.5, 20.0f));
+}
 
-	/*if (Keyboard::isKeyPressed(Keyboard::Num9) && animClock.getElapsedTime().asSeconds() >= animDelay)
-	{
-		spriteManager->playHit();
-		animClock.restart();
-	}*/
+void BaseEnemyComponent::load()
+{
+	healthBar.setPosition(700.0f, 50.0f);
+	healthSize = _maxHealth;
+	healthBar.setSize(sf::Vector2f(healthSize * 1.5, 20.0f));
+	healthBar.setFillColor(sf::Color(220, 20, 60, 255));
+}
 
+void BaseEnemyComponent::render()
+{
+	Renderer::queue(&healthBar);
 }
 
 void BaseEnemyComponent::updateEnemy(std::shared_ptr<BasePlayerComponent> player)

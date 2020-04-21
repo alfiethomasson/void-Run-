@@ -28,39 +28,22 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p)
 {
 	player = p;
 
-	if (!attackTex.loadFromFile("res/Icons/Attack.png"))
-	{
-		std::cout << "Couldn't load attack icon\n";
-	}
-	if (!healTex.loadFromFile("res/Icons/Heal.png"))
-	{
-		std::cout << "Couldn't load heal icon\n";
-	}
-	if (!rechargeTex.loadFromFile("res/Icons/Meditate.png"))
-	{
-		std::cout << "Couldn't load meditate icon\n";
-	}
-	if (!runTex.loadFromFile("res/Icons/Run.png"))
-	{
-		std::cout << "Couldn't load run icon\n";
-	}
-
-	attackSprite.setTexture(attackTex);
+	attackSprite.setTexture(gameScene.tm.getTex("Attack"));
 	attackSprite.setScale(0.3f, 0.3f);
 	attackSprite.setPosition(sf::Vector2f(400.0f, 600.0f));
 	attackBox = attackSprite.getGlobalBounds();
 
-	healSprite.setTexture(healTex);
+	healSprite.setTexture(gameScene.tm.getTex("Heal"));
 	healSprite.setScale(0.3f, 0.3f);
 	healSprite.setPosition(sf::Vector2f(500.0f, 600.0f));
 	healBox = healSprite.getGlobalBounds();
 
-	rechargeSprite.setTexture(rechargeTex);
+	rechargeSprite.setTexture(gameScene.tm.getTex("Recharge"));
 	rechargeSprite.setScale(0.3f, 0.3f);
 	rechargeSprite.setPosition(sf::Vector2f(600.0f, 600.0f));
 	rechargeBox = rechargeSprite.getGlobalBounds();
 
-	runSprite.setTexture(runTex);
+	runSprite.setTexture(gameScene.tm.getTex("Run"));
 	runSprite.setScale(0.3f, 0.3f);
 	runSprite.setPosition(sf::Vector2f(700.0f, 600.0f));
 	runBox = runSprite.getGlobalBounds();
@@ -141,11 +124,7 @@ bool CombatUI::CheckBoxes(sf::Vector2f curspos)
 
 void CombatUI::addSpecial(std::string texName)
 {
-	if (!specialTex.loadFromFile("res/icons/" + texName + ".png"))
-	{
-		std::cout << "Failed to load " << texName << " combat icon\n";
-	}
-	specialSprite.setTexture(specialTex);
+	specialSprite.setTexture(gameScene.tm.getTex(texName));
 	specialSprite.setPosition(sf::Vector2f(600.0f, 600.0f));
 	specialSprite.setScale(0.3f, 0.3f);
 }
@@ -234,7 +213,6 @@ void GameUI::Render()
 	{
 		Renderer::queue(&e);
 	}
-	Renderer::queue(&descText);
 	Renderer::queue(&playerIcon);
 	if (inStatUp)
 	{
@@ -252,34 +230,11 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 {
 	player = p;
 	inStatUp = false;
-
-	if (!CellTex.loadFromFile("res/Icons/Charge.png"))
-	{
-		std::cout << "Couldnt load AP Charge\n";
-	}
-	if (!statUPTex.loadFromFile("res/Icons/Arrow.png"))
-	{
-		std::cout << "Couldnt load up arrow in stat room\n";
-	}
-	if (!playerIconTex.loadFromFile("res/Sprites/Player.png"))
-	{
-		std::cout << "Couldnt load player icon\n";
-	}
 	MaxAP = maxAP;
 	APAmount = 0;
 	cells.clear();
 	height = 0;
 
-	//for(int i = 0; i < MaxAP; i++)
-	//{
-	//	sf::Sprite cell;
-	//	cell.setTexture(CellTex);
-	//	cell.setScale(0.05f, 0.15f);
-	//	height += 20;
-	//	cell.setPosition(sf::Vector2f(400.0f + (height), 550.0f));
-	//	cell.setRotation(90);
-	//	cells.push_back(cell);
-	//}
 	gainAP(MaxAP);
 	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
 	{
@@ -289,13 +244,13 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	descText.setCharacterSize(30);
 	descText.setString("");
 
-	playerIcon.setTexture(playerIconTex);
+	playerIcon.setTexture(gameScene.tm.getTex("Player"));
 	playerIcon.setScale(0.5f, 0.5f);
 	playerIcon.setPosition(0.0f, 500.0f);
 
-	stat1.setTexture(statUPTex);
-	stat2.setTexture(statUPTex);
-	stat3.setTexture(statUPTex);
+	stat1.setTexture(gameScene.tm.getTex("StatUp"));
+	stat2.setTexture(gameScene.tm.getTex("StatUp"));
+	stat3.setTexture(gameScene.tm.getTex("StatUp"));
 	stat1.setScale(0.3f, 0.3f);
 	stat2.setScale(0.3f, 0.3f);
 	stat3.setScale(0.3f, 0.3f);
@@ -327,22 +282,14 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	HealthText.setPosition(stat2.getPosition().x - HealthText.getLocalBounds().width, 300.0f);
 	DexterityText.setPosition(stat3.getPosition().x - DexterityText.getLocalBounds().width, 300.0f);
 
-	if (!backgroundTex.loadFromFile("res/Sprites/BGspace1.jpg"))
-	{
-		std::cout << "COULDNT LOAD BACKGROUND :(";
-	}
-	background.setTexture(backgroundTex);
+	background.setTexture(gameScene.tm.getTex("Background1"));
 	background.setScale(Engine::getWindowSize().x / background.getGlobalBounds().width, 0.5f);
 }
 
 sf::Sprite GameUI::getNewCell()
 {
-	//if (!CellTex.loadFromFile("res/Icons/Charge.png"))
-	//{
-	//	std::cout << "Couldnt load AP Charge\n";
-	//}
 	sf::Sprite cell;
-	cell.setTexture(CellTex);
+	cell.setTexture(gameScene.tm.getTex("Charge"));
 	cell.setScale(0.05f, 0.15f);
 	height += 20;
 	cell.setPosition(sf::Vector2f(550.0f + height, 550.0));

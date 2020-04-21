@@ -9,6 +9,9 @@ bool charging;
 
 void ToughEnemy::update(double dt)
 {
+
+	BaseEnemyComponent::update(dt);
+
 	if (isTurn && isFinishedTurn != true)
 	{
 		srand(time(0));
@@ -72,4 +75,10 @@ void ToughEnemy::load()
 	{
 		spriteManager->AddIcon("SuicideCharge", "SUICIDE CHARGE\nGives itself a big strength\nboost but takes more damage", true);
 	}
+	BaseEnemyComponent::load();
+}
+
+void ToughEnemy::render()
+{
+	BaseEnemyComponent::render();
 }

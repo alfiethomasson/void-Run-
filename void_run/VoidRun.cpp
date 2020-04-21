@@ -1,5 +1,14 @@
 #include "VoidRun.h"
 #include "Game.h"
+#include "engine.h"
+#include "CombatRoom.h"
+#include "StatRoom.h"
+#include "ItemDB.h"
+#include "UI.h"
+#include "System_Renderer.h"
+#include "cmp_enemy.h"
+#include "cmp_abilitymanager.h"
+#include "TreasureRoom.h"
 
 #define GAMEX 1280
 #define GAMEY 720
@@ -185,6 +194,7 @@ void MenuScene::Load() {
 	{
 		cout << "Couldn't load title music\n";
 	}
+
 	//Starts music
 	titleMusic.play();
 	titleMusic.setVolume(50.0f);
@@ -263,24 +273,24 @@ void MenuScene::UpdateButtons()
 }
 
 void GameScene::Load() {
-
 	//Loads font
 	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
 	{
 		cout << "failed to load font";
 	}
 
-	//Loads settings icon
-	if (!SettingIcon.loadFromFile("res/Icons/Settings.png"))
-	{
-		cout << "Could not load setting icon White\n";
-	}
+	LoadTextures();
 
 	//Loads the settings icon stuff
-	SettingSprite.setTexture(SettingIcon);
+	SettingSprite.setTexture(gameScene.tm.getTex("Settings"));
 	SettingSprite.setPosition(1200.0f, 630.0f);
 	SettingSprite.setScale(0.3f, 0.3f);
 	SettingBox = SettingSprite.getGlobalBounds();
+
+	descText.setFont(font);
+	descText.setCharacterSize(30);
+	descText.setString("");
+
 
 	PauseText.setFont(font);
 	ResText.setFont(font);
@@ -330,12 +340,7 @@ void GameScene::Load() {
 	combatUI.Load(player);
 	gameUI.Load(10, player);
 
-	//Loads the texture icon
-	if (!BoxTexture.loadFromFile("res/Sprites/TextBox.png"))
-	{
-		cout << "Couldn't load textbox png\n";
-	}
-	textBox.setTexture(BoxTexture);
+	textBox.setTexture(gameScene.tm.getTex("TextBox"));
 	textBox.setScale(sf::Vector2f(0.7f, 0.5f));
 	textBox.setPosition(sf::Vector2f((GAMEX / 2) - (textBox.getGlobalBounds().width / 2), 50.0f));
 	//ui.list.push_back(textBox);
@@ -394,7 +399,6 @@ void GameScene::Update(const double& dt) {
 		/*	auto tempItem = itemDB.randomSpecialItem();
 			UpdateTextBox(tempItem->description);
 			inv->add(tempItem);*/
-			playerSprite->playDie();
 			scene_clock.restart();
 			std::cout << "\nshould play attack\n";
 
@@ -522,6 +526,8 @@ void GameScene::Render() {
 		Renderer::queue(&screenText);
 		Renderer::queue(&SettingSprite);
 		Scene::Render();
+		Renderer::queue(&descRect);
+		Renderer::queue(&descText);
 	}
 	else // if paused
 	{
@@ -589,4 +595,57 @@ void GameScene::UpdateTextBox(sf::String newText)
 	screenText.setFillColor(Color(255, 255, 255, 255));
 	screenText.setPosition((textBox.getPosition().x + textBox.getGlobalBounds().width / 2) - (screenText.getGlobalBounds().width / 2),
 		(textBox.getPosition().y + textBox.getGlobalBounds().height / 2) - (screenText.getGlobalBounds().height));
+}
+
+void GameScene::LoadTextures()
+{
+	tm.loadTexture("Settings", "Icons/Settings.png");
+	tm.loadTexture("TextBox", "Sprites/TextBox.png");
+	tm.loadTexture("Attack", "Icons/Attack.png");
+	tm.loadTexture("Heal", "Icons/Heal.png");
+	tm.loadTexture("Recharge", "Icons/Recharge.png");
+	tm.loadTexture("Run", "Icons/Run.png");
+	tm.loadTexture("Charge", "Icons/Charge.png");
+	tm.loadTexture("StatUp", "Icons/Arrow.png");
+	tm.loadTexture("Player", "Sprites/Player.png");
+	tm.loadTexture("Background1", "Sprites/BGspace1.jpg");
+	tm.loadTexture("LaserBurst", "Icons/LaserBurst.png");
+	tm.loadTexture("ChargedAttack", "Icons/ChargedAttack.png");
+	tm.loadTexture("Curse", "Icons/Curse.png");
+	tm.loadTexture("Dodge", "Icons/Dodge.png");
+	tm.loadTexture("DoubleSlice", "Icons/DoubleSlice.png");
+	tm.loadTexture("Enrage", "Icons/Enrage.png");
+	tm.loadTexture("Excruciate", "Icons/Excruciate.png");
+	tm.loadTexture("Bullseye", "Icons/Bullseye.png");
+	tm.loadTexture("OverloadWeapon", "Icons/OverloadWeapon.png");
+	tm.loadTexture("PainShare", "Icons/PainShare.png");
+	tm.loadTexture("Regeneration", "Icons/Regeneration.png");
+	tm.loadTexture("PlayerAttack", "Sprites/SpriteSheets/PlayerAttack.png");
+	tm.loadTexture("PlayerHit", "Sprites/SpriteSheets/PlayerHit.png");
+	tm.loadTexture("PlayerDie", "Sprites/SpriteSheets/PlayerDie.png");
+	tm.loadTexture("Alien1Attack", "Sprites/SpriteSheets/Alien1Attack.png");
+	tm.loadTexture("Alien1Hit", "Sprites/SpriteSheets/Alien1Hit.png");
+	tm.loadTexture("Alien1Die", "Sprites/SpriteSheets/Alien1Die.png");
+	tm.loadTexture("Alien2Attack", "Sprites/SpriteSheets/Alien2Attack.png");
+	tm.loadTexture("Alien2Hit", "Sprites/SpriteSheets/Alien2Hit.png");
+	tm.loadTexture("Alien2Die", "Sprites/SpriteSheets/Alien2Die.png");
+	tm.loadTexture("Alien3Attack", "Sprites/SpriteSheets/Alien3Attack.png");
+	tm.loadTexture("Alien3Hit", "Sprites/SpriteSheets/Alien3Hit.png");
+	tm.loadTexture("Alien3Die", "Sprites/SpriteSheets/Alien3Die.png");
+}
+
+void GameScene::UpdateDesctext(std::string desc, sf::Vector2f pos)
+{
+	descText.setString(desc);
+	descText.setPosition(pos.x - (descText.getGlobalBounds().width / 2), pos.y -
+	descText.getGlobalBounds().height + 10.0f);
+	descRect.setSize(sf::Vector2f(descText.getGlobalBounds().width, descText.getGlobalBounds().height + 20.0f));
+	descRect.setFillColor(sf::Color(0, 0, 0, 255));
+	descRect.setPosition(descText.getPosition());
+}
+
+void GameScene::ResetDescText()
+{
+	descText.setString("");
+	descRect.setFillColor(sf::Color(0.0f, 0.0f, 0.0f, 0.0f));
 }

@@ -15,9 +15,15 @@ BasePlayerComponent::BasePlayerComponent(Entity* p, int health, float strength, 
 	: _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, 
 	_experience{ experience }, _actionPointsMax{ actionPoints }, combatUI{ *ui }, gameUI{ *gui }, Component(p) {}
 
+void BasePlayerComponent::render()
+{
+	Renderer::queue(&healthBar);
+}
+
 void BasePlayerComponent::update(double dt) {
-	//float Time = Clock.GetElapsedTime();
-	//Clock.Reset();
+
+	healthSize = _maxHealth;
+	healthBar.setSize(sf::Vector2f(healthSize * 1.5, 20.0f));
 
 	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	sf::Vector2f cursPos = sf::Vector2f(tempPos);
@@ -78,32 +84,29 @@ void BasePlayerComponent::update(double dt) {
 	{
 		if (combatUI.getAttackBox().contains(cursPos))
 		{
-			gameUI.descText.setString("ATTACK ENEMY\nDamage = " + std::to_string(_strength));
-			gameUI.descText.setPosition(sf::Vector2f(combatUI.getAttackBox().getPosition().x,
+			gameScene.UpdateDesctext("ATTACK ENEMY\nDamage = " + std::to_string(_strength), sf::Vector2f(combatUI.getAttackBox().getPosition().x,
 				combatUI.getAttackBox().getPosition().y - 75.0f));
 		}
 		if (combatUI.getHealBox().contains(cursPos))
 		{
-			gameUI.descText.setString("HEAL\nAmount = " + std::to_string(30));
-			gameUI.descText.setPosition(sf::Vector2f(combatUI.getHealBox().getPosition().x,
+			gameScene.UpdateDesctext("HEAL\nAmount = " + std::to_string(30), sf::Vector2f(combatUI.getHealBox().getPosition().x,
 				combatUI.getHealBox().getPosition().y - 75.0f));
 		}
 		if (combatUI.getRechargeBox().contains(cursPos))
 		{
-			gameUI.descText.setString("RECHARGE ENERGY\nAmount = " + std::to_string(6));
-			gameUI.descText.setPosition(sf::Vector2f(combatUI.getRechargeBox().getPosition().x,
+			gameScene.UpdateDesctext("RECHARGE ENERGY\nAmount = " + std::to_string(6), sf::Vector2f(combatUI.getRechargeBox().getPosition().x,
 				combatUI.getRechargeBox().getPosition().y - 75.0f));
+
 		}
 		if (combatUI.getRunBox().contains(cursPos))
 		{
-			gameUI.descText.setString("RUN FROM ENEMY\nChance = " + std::to_string(runChance));
-			gameUI.descText.setPosition(sf::Vector2f(combatUI.getRunBox().getPosition().x,
+			gameScene.UpdateDesctext("RUN FROM ENEMY\nChance = " + std::to_string(runChance), sf::Vector2f(combatUI.getRunBox().getPosition().x,
 				combatUI.getRunBox().getPosition().y - 75.0f));
 		}
 	}
 	else
 	{
-		gameUI.descText.setString("");
+		gameScene.ResetDescText();
 	}
 }
 
@@ -156,6 +159,11 @@ void BasePlayerComponent::load()
 	healCost = 3;
 	rechargeCost = 0;
 	runCost = 5;
+
+	healthBar.setPosition(200.0f, 50.0f);
+	healthSize = _maxHealth;
+	healthBar.setSize(sf::Vector2f(healthSize * 1.5, 20.0f));
+	healthBar.setFillColor(sf::Color(220, 20, 60, 255));
 }
 
 void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)

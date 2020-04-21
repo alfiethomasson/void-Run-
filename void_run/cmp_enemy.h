@@ -12,24 +12,27 @@ protected:
 	std::shared_ptr<SpriteComponent> spriteManager;
 	float _strength;
 	float _dexterity;
-	float _maxHealth;
-	float currentHealth;
+	int _maxHealth;
+	int currentHealth;
 	bool inAttack;
 
 	sf::Clock animClock;
+
+	int healthSize;
+	sf::RectangleShape healthBar;
 public:
 	bool isTurn;
 	bool isFinishedTurn;
 	float expReward;
 	int specialMove;
 
-	BaseEnemyComponent(Entity* p, float health, float strength, float dex, float expReward, int specialMove);
+	BaseEnemyComponent(Entity* p, int health, float strength, float dex, float expReward, int specialMove);
 	BaseEnemyComponent() = delete;
 
-	void render() override {}
+	void render() override;
 	void update(double dt) override;
 	void updateEnemy(std::shared_ptr<BasePlayerComponent> player);
-	virtual void load() {};
+	virtual void load();
 
 	void TakeDamage(float damage);
 	bool calculateHit(float dex);
