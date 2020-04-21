@@ -29,6 +29,7 @@ public:
 	void render() override {}
 	void update(double dt) override;
 	void updateEnemy(std::shared_ptr<BasePlayerComponent> player);
+	virtual void load() {};
 
 	void TakeDamage(float damage);
 	bool calculateHit(float dex);

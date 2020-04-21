@@ -14,6 +14,10 @@ void SpriteComponent::load()
 void SpriteComponent::render()
 {
 	Renderer::queue(&sprite);
+	for (auto s : icons)
+	{
+		Renderer::queue(&s);
+	}
 }
 
 void SpriteComponent::update(double dt)
@@ -159,4 +163,29 @@ void SpriteComponent::ResetAnim()
 	animCounter = 0;
 
 	sprite.setPosition(defaultPos);
+}
+
+void SpriteComponent::AddIcon(std::string texName, std::string desc, bool leftright)
+{
+	sf::Texture tempTex;
+	if (!tempTex.loadFromFile("res/Icons/" + texName + ".png"))
+	{
+		std::cout << "Couldnt load icon tex " << texName << "\n";
+	}
+	sf::Sprite tempSprite;
+	tempSprite.setTexture(tempTex);
+	if (leftright)
+	{
+		tempSprite.setPosition(_parent->getPosition().x + 100.0f, _parent->getPosition().y);
+	}
+	else
+	{
+		tempSprite.setPosition(_parent->getPosition().x - 100.0f, _parent->getPosition().y);
+	}
+	icons.push_back(tempSprite);
+}
+
+void SpriteComponent::RemoveIcon(int position)
+{
+	icons.erase(icons.begin() + position);
 }

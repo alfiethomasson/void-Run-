@@ -56,3 +56,22 @@ void EasyEnemy::update(double dt)
 		}
 	}
 }
+
+void EasyEnemy::load()
+{
+	auto sm = _parent->GetCompatibleComponent<SpriteComponent>();
+	spriteManager = sm[0];
+
+	if (specialMove == 0)
+	{
+	
+	}
+	if (specialMove == 1)
+	{
+
+	}
+	if (specialMove == 2)
+	{
+
+	}
+}

@@ -54,3 +54,22 @@ void ToughEnemy::update(double dt)
 		}
 	}
 }
+
+void ToughEnemy::load()
+{
+	auto sm = _parent->GetCompatibleComponent<SpriteComponent>();
+	spriteManager = sm[0];
+
+	if (specialMove == 0)
+	{
+
+	}
+	if (specialMove == 1)
+	{
+
+	}
+	if (specialMove == 2)
+	{
+
+	}
+}

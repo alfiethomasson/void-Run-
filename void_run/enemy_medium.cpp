@@ -54,3 +54,26 @@ void MediumEnemy::update(double dt)
 		}
 	}
 }
+
+void MediumEnemy::load()
+{
+	auto sm = _parent->GetCompatibleComponent<SpriteComponent>();
+	spriteManager = sm[0];
+
+	if (specialMove == 0)
+	{
+
+	}
+	if (specialMove == 1)
+	{
+
+	}
+	if (specialMove == 2)
+	{
+
+	}
+	if (specialMove == 3)
+	{
+
+	}
+}

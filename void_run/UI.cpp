@@ -267,6 +267,8 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	}
 	MaxAP = maxAP;
 	APAmount = 0;
+	cells.clear();
+	height = 0;
 
 	//for(int i = 0; i < MaxAP; i++)
 	//{

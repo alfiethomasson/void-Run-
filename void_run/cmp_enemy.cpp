@@ -28,8 +28,6 @@ void BaseEnemyComponent::update(double dt)
 void BaseEnemyComponent::updateEnemy(std::shared_ptr<BasePlayerComponent> player)
 {
 	currentEnemy = player;
-	auto sm = _parent->GetCompatibleComponent<SpriteComponent>();
-	spriteManager = sm[0];
 }
 
 void BaseEnemyComponent::attackEnemy(float str, float dex)
