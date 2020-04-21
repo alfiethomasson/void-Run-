@@ -12,8 +12,6 @@ protected:
 	//sf::Text playerHP;
 	//sf::Text experienceCounter;
 
-	std::vector<sf::Sprite> cells;
-
 	sf::Sprite ability1;
 	sf::Sprite ability2;
 	sf::Sprite statIncrease1;
