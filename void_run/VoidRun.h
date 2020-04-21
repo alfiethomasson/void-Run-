@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "engine.h"
 #include "CombatRoom.h"
+#include "StatRoom.h"
 #include "Room.h"
 #include "ItemDB.h"
 #include "UI.h"
@@ -12,7 +13,7 @@
 #include "cmp_player.h"
 #include "cmp_enemy.h"
 #include "cmp_inventory.h"
-#include "cmp_sprite.h"
+#include "PlayerSprite.h"
 #include "cmp_abilitymanager.h"
 #include "TreasureRoom.h"
 #include <time.h>  
@@ -71,10 +72,17 @@ private:
 
 	float alphaUpdate;
 
+	std::shared_ptr<Room> statRoom;
+
+	std::shared_ptr<BasePlayerComponent> player;
+	std::shared_ptr<Inventory> inv;
+	std::shared_ptr<AbilityManager> am;
+	std::shared_ptr<PlayerSprite> playerSprite;
 
 public:
 	sf::Text screenText;
 	CombatUI combatUI;
+	GameUI gameUI;
 
 	GameScene() = default;
 	~GameScene() override = default;

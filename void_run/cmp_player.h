@@ -2,31 +2,48 @@
 #include "ecm.h"
 #include "cmp_enemy.h"
 #include "cmp_abilitymanager.h"
+#include "cmp_sprites.h"
 #include "UI.h"
 
 class BaseEnemyComponent;
 class SpecialItem;
 class AbilityManager;
+class CombatUI;
+class GameUI;
 
 class BasePlayerComponent : public Component {
 protected:
 	float playerDamage;
 	float _strength;
 	float _dexterity;
-	float _maxHealth;
-	float currentHealth;
+	int _maxHealth;
+	int currentHealth;
 	float playerHealQuantity;
 	float _experience;
+	int actionPoints;
+	int _actionPointsMax;
+	int runChance;
+
 	std::shared_ptr<BaseEnemyComponent> currentEnemy;
 	std::shared_ptr<AbilityManager> abilityManager;
+	std::shared_ptr<SpriteComponent> spriteManager;
 //	std::vector<SpecialAbility> specialMoves;
-	CombatUI combatUI;
+	CombatUI& combatUI;
+	GameUI& gameUI;
 
 public:
 	bool isTurn;
 	bool isFinishedTurn;
 	bool expGained;
-	explicit BasePlayerComponent(Entity* p, float health, float strength, float dex, float experience, CombatUI ui);
+	int baseAttackCost;
+	int mediumAttackCost;
+	int heavyAttackCost;
+	int healCost;
+	int rechargeCost;
+	int runCost;
+
+	explicit BasePlayerComponent(Entity* p, int health, float strength, float dex,
+		float experience, int actionPoints, CombatUI *ui, GameUI *gameUI);
 	BasePlayerComponent() = delete;
 
 	void render() override {}
@@ -36,17 +53,25 @@ public:
 	void updateEnemy(std::shared_ptr<BaseEnemyComponent> e);
 	bool checkEnemyStatus();
 
-	void attack(float damage);
+	void attack(float damage, float dex);
 	void heal(float healBy);
+	void recharge(int amount);
+	void run();
 	void expGet();
 	void EndTurn();
 
+	bool CheckAP(int ap);
+	void SpendAP(int ap);
+	void gainAP(int amount);
+
+	int getCurrentAP();
 	int getStrength();
 	int getMaxHealth();
 	int getDexterity();
-	float getCurrentHealth();
+	int getCurrentHealth();
 	int getExperience();
 
+	void setMaxAP(int maxAP);
 	void setStrength(int strength);
 	void setMaxHealth(int maxHealth);
 	void setDexterity(int dexterity);
@@ -56,4 +81,6 @@ public:
 	void addStats(int strength, int health, int dex);
 
 	void takeDamage(float dmgRecieved);
+	bool calculateHit(float enemyDex);
+	int calcRunChance();
 };

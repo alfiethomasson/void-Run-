@@ -11,3 +11,9 @@ extern MenuScene menuScene;
 extern GameScene gameScene;
 extern std::shared_ptr<BasePlayerComponent> player;
 extern bool isPaused;
+
+extern Keyboard::Key attackKey;
+extern Keyboard::Key healKey;
+extern Keyboard::Key rechargeKey;
+extern Keyboard::Key runKey;
+extern Keyboard::Key pauseKey;

@@ -52,6 +52,7 @@ public:
 	static sf::RenderWindow& GetWindow();
 	static sf::Vector2u getWindowSize();
 	static void setVsync(bool b);
+	static std::string keyToString(const sf::Keyboard::Key& key);
 
 private:
 	static Scene* _activeScene;

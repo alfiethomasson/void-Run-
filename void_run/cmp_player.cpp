@@ -10,8 +10,10 @@ std::vector<std::shared_ptr<BasePlayerComponent>> playerInfo;
 
 //Clock clock;
 
-BasePlayerComponent::BasePlayerComponent(Entity* p, float health, float strength, float dex, float experience, CombatUI ui)
-	: _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, _experience{ experience }, combatUI{ ui }, Component(p) {}
+BasePlayerComponent::BasePlayerComponent(Entity* p, int health, float strength, float dex,
+	float experience, int actionPoints, CombatUI *ui, GameUI *gui)
+	: _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, 
+	_experience{ experience }, _actionPointsMax{ actionPoints }, combatUI{ *ui }, gameUI{ *gui }, Component(p) {}
 
 void BasePlayerComponent::update(double dt) {
 	//float Time = Clock.GetElapsedTime();
@@ -26,33 +28,118 @@ void BasePlayerComponent::update(double dt) {
 		{
 			if (isFinishedTurn != true)
 			{
-				if (Keyboard::isKeyPressed(Keyboard::Q))
+				if (Keyboard::isKeyPressed(attackKey) && CheckAP(baseAttackCost))
 				{
-					cout << "Player Attacks!";
-					attack(_strength);
-					EndTurn();
+					attack(_strength, _dexterity);
 				}
-				else if (Keyboard::isKeyPressed(Keyboard::W))
+				if (Keyboard::isKeyPressed(healKey) && CheckAP(healCost))
 				{
-					cout << "Player Heals!";
-					heal(playerHealQuantity);
-					EndTurn();
+					heal(30);
+				}
+				if (Keyboard::isKeyPressed(rechargeKey) && CheckAP(rechargeCost))
+				{
+					recharge(6);
+				}
+				if (Keyboard::isKeyPressed(runKey) && CheckAP(runCost))
+				{
+					run();
 				}
 
-				if (Mouse::isButtonPressed(Mouse::Left) && combatUI.getAttackBox().contains(cursPos))
+				if (Mouse::isButtonPressed(Mouse::Left))
 				{
-					cout << "Player Attacks!";
-					attack(_strength);
-					EndTurn();
+					if (combatUI.getAttackBox().contains(cursPos) && CheckAP(baseAttackCost))
+					{
+						attack(_strength, _dexterity);
+					}
+					if (combatUI.getHealBox().contains(cursPos) && CheckAP(healCost))
+					{
+						heal(30);
+					}
+					if (combatUI.getRechargeBox().contains(cursPos) && CheckAP(rechargeCost))
+					{
+						recharge(6);
+					}
+					if (combatUI.getRunBox().contains(cursPos) && CheckAP(runCost))
+					{
+						run();
+					}
 				}
 
 				abilityManager->combatCheck();
-			//	gameScene.combatUI.turnUpdate();
+				//	gameScene.combatUI.turnUpdate();
 			}
 		}
 		else {
 			expGet();
 		}
+	}
+
+	if (combatUI.CheckBoxes(cursPos))
+	{
+		if (combatUI.getAttackBox().contains(cursPos))
+		{
+			gameUI.descText.setString("ATTACK ENEMY\nDamage = " + std::to_string(_strength));
+			gameUI.descText.setPosition(sf::Vector2f(combatUI.getAttackBox().getPosition().x,
+				combatUI.getAttackBox().getPosition().y - 75.0f));
+		}
+		if (combatUI.getHealBox().contains(cursPos))
+		{
+			gameUI.descText.setString("HEAL\nAmount = " + std::to_string(30));
+			gameUI.descText.setPosition(sf::Vector2f(combatUI.getHealBox().getPosition().x,
+				combatUI.getHealBox().getPosition().y - 75.0f));
+		}
+		if (combatUI.getRechargeBox().contains(cursPos))
+		{
+			gameUI.descText.setString("RECHARGE ENERGY\nAmount = " + std::to_string(6));
+			gameUI.descText.setPosition(sf::Vector2f(combatUI.getRechargeBox().getPosition().x,
+				combatUI.getRechargeBox().getPosition().y - 75.0f));
+		}
+		if (combatUI.getRunBox().contains(cursPos))
+		{
+			gameUI.descText.setString("RUN FROM ENEMY\nChance = " + std::to_string(runChance));
+			gameUI.descText.setPosition(sf::Vector2f(combatUI.getRunBox().getPosition().x,
+				combatUI.getRunBox().getPosition().y - 75.0f));
+		}
+	}
+	else
+	{
+		gameUI.descText.setString("");
+	}
+}
+
+bool BasePlayerComponent::CheckAP(int ap)
+{
+	if (actionPoints >= ap)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void BasePlayerComponent::SpendAP(int ap)
+{
+	actionPoints -= ap;
+	gameUI.useAP(ap);
+}
+
+void BasePlayerComponent::gainAP(int amount)
+{
+	std::cout << "Currenet AP AMOUNT " << actionPoints << "\n";
+	std::cout << "Should gain AP Amount: " << amount << "\n";
+	int temp = actionPoints + amount;
+	if (temp > _actionPointsMax)
+	{
+	//	actionPoints = _actionPointsMax;
+		gameUI.gainAP(_actionPointsMax - actionPoints);
+		actionPoints = _actionPointsMax;
+	}
+	else
+	{
+		actionPoints = temp;
+		gameUI.gainAP(amount);
 	}
 }
 
@@ -60,11 +147,21 @@ void BasePlayerComponent::load()
 {
 	auto am = _parent->GetCompatibleComponent<AbilityManager>();
 	abilityManager = am[0];
+	auto sm = _parent->GetCompatibleComponent <SpriteComponent>();
+	spriteManager = sm[0];
+	actionPoints = _actionPointsMax;
+	baseAttackCost = 1;
+	mediumAttackCost = 3;
+	heavyAttackCost = 5;
+	healCost = 3;
+	rechargeCost = 0;
+	runCost = 5;
 }
 
 void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)
 {
 	currentEnemy = e;
+	runChance = calcRunChance();
 }
 
 bool BasePlayerComponent::checkEnemyStatus(){
@@ -84,12 +181,38 @@ void BasePlayerComponent::expGet() {
 	}
 }
 
-void BasePlayerComponent::attack(float damage)
+void BasePlayerComponent::attack(float str, float dex)
 {
-	currentEnemy->TakeDamage(damage);
+	SpendAP(baseAttackCost);
+	cout << "Player Attacks!";
+	if (calculateHit(dex))
+	{
+		currentEnemy->TakeDamage(str);
+		spriteManager->playAttack();
+	}
+	else {
+		gameScene.UpdateTextBox("You missed!");
+	}
+	EndTurn();
 }
+
+bool BasePlayerComponent::calculateHit(float dex)
+{
+	int chanceToHit = (80 + (dex - (currentEnemy->getDexterity()))); //Calculates if the player can hit
+	int willTheyHitOhNo = rand() % 100;
+	if (willTheyHitOhNo <= chanceToHit)
+	{
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 void BasePlayerComponent::heal(float healBy)
 {
+	SpendAP(healCost);
+	cout << "Player Heals!";
 	int tempHealth = currentHealth + healBy;
 	if (tempHealth > _maxHealth)
 	{
@@ -99,8 +222,49 @@ void BasePlayerComponent::heal(float healBy)
 	{
 		currentHealth += healBy;
 	}
+	EndTurn();
 }
 
+void BasePlayerComponent::recharge(int amount)
+{
+	cout << "Player Recharges!";
+	SpendAP(rechargeCost);
+	gainAP(amount);
+	EndTurn();
+}
+
+void BasePlayerComponent::run()
+{
+	SpendAP(runCost);
+	srand(time(0));
+	int random = rand() % 100;
+	if (random < runChance)
+	{
+		cout << "Player runs! SUCCESS  NEED TO IMPLEMENT STUFF PROPERLY HELLO DEVS!\n";
+		currentEnemy->setfordeletion();
+	}
+	else
+	{
+		cout << "Player runs! FAILURE\n";
+	}
+	EndTurn();
+}
+
+int BasePlayerComponent::calcRunChance()
+{
+	srand(time(0));
+	int random = rand() % 100;
+	random = random + _dexterity - currentEnemy->getDexterity();
+	if (random < 0)
+	{
+		random = 0;
+	}
+	if (random > 100)
+	{
+		random = 100;
+	}
+	return random;
+}
 
 void BasePlayerComponent::EndTurn()
 {
@@ -116,7 +280,7 @@ int BasePlayerComponent::getMaxHealth() {
 	return _maxHealth;
 }
 
-float BasePlayerComponent::getCurrentHealth() {
+int BasePlayerComponent::getCurrentHealth() {
 	return currentHealth;
 }
 
@@ -172,5 +336,10 @@ void BasePlayerComponent::takeDamage(float dmgRecieved)
 	{
 		currentHealth = 0;
 		_parent->setAlive(false);
+		spriteManager->playDie();
+	}
+	else
+	{
+		spriteManager->playHit();
 	}
 }

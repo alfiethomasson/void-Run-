@@ -4,6 +4,8 @@
 class ShapeComponent : public Component {
 protected:
 	std::shared_ptr<sf::Shape> _shape;
+	sf::Sprite sprite;
+	sf::Sprite tex;
 
 public:
 	ShapeComponent() = delete;

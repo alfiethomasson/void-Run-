@@ -6,10 +6,6 @@
 
 using namespace sf;
 using namespace std;
-
-std::shared_ptr<BasePlayerComponent> player;
-std::shared_ptr<Inventory> inv;
-std::shared_ptr<AbilityManager> am;
 ItemDB itemDB;
 
 CombatRoom* testRoom;
@@ -30,6 +26,12 @@ float sceneChangeDelay;
 sf::Clock pauseClock;
 sf::Time pause_delay;
 float pauseDelay = 0.5f;
+
+Keyboard::Key attackKey;
+Keyboard::Key healKey;
+Keyboard::Key rechargeKey;
+Keyboard::Key runKey;
+Keyboard::Key pauseKey;
 
 void MenuScene::Update(const double& dt) {
 
@@ -242,6 +244,12 @@ void MenuScene::Load() {
 	inOptions = false;
 
 	sceneChangeDelay = 1.0f;
+
+	attackKey = Keyboard::Q;
+	healKey = Keyboard::W;
+	rechargeKey = Keyboard::E;
+	runKey = Keyboard::R;
+	pauseKey = Keyboard::Num2;
 }
 
 //Updates the bounding boxes of buttons
@@ -299,25 +307,28 @@ void GameScene::Load() {
 	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (BackButton.getGlobalBounds().width / 2), GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 100.0f));
 	BackButtonBox = BackButton.getGlobalBounds();
 
-	//Calls load function of the combatUI
-	combatUI.Load();
-
 	//Creates Player and adds components
 	pl = make_shared<Entity>(); 
-	auto s = pl->addComponent<ShapeComponent>();
+	//auto s = pl->addComponent<ShapeComponent>();
 	//pl->addComponent<PlayerMovementComponent>();
-	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f, combatUI);
+	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f, 10, &combatUI, &gameUI);
 	am = pl->addComponent<AbilityManager>(3);
-	inv = pl->addComponent<Inventory>(2);
+	inv = pl->addComponent<Inventory>(2, &gameUI);
 	inv->Load();
-	s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
-	s->getShape().setFillColor(Color::Yellow);
-	s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
+	playerSprite = pl->addComponent<PlayerSprite>();
+	playerSprite->load();
+	//s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
+	//s->getShape().setFillColor(Color::Yellow);
+	//s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
 	ents.list.push_back(pl);
 
 	//Populates the item database with pre defined items
 	itemDB.PopulateDB();
 	player->load();
+
+	//Calls load function of the UIs
+	combatUI.Load(player);
+	gameUI.Load(10, player);
 
 	//Loads the texture icon
 	if (!BoxTexture.loadFromFile("res/Sprites/TextBox.png"))
@@ -327,7 +338,7 @@ void GameScene::Load() {
 	textBox.setTexture(BoxTexture);
 	textBox.setScale(sf::Vector2f(0.7f, 0.5f));
 	textBox.setPosition(sf::Vector2f((GAMEX / 2) - (textBox.getGlobalBounds().width / 2), 50.0f));
-	ui.list.push_back(textBox);
+	//ui.list.push_back(textBox);
 	screenText.setFont(font);
 	screenText.setString("Welcome to Void Run!");
 	screenText.setCharacterSize(30);
@@ -339,6 +350,8 @@ void GameScene::Load() {
 	alphaUpdate = 255;
 	sceneChangeDelay = 0.5f;
 	isPaused = false;
+
+	std::shared_ptr<StatRoom> statRoom = std::make_shared<StatRoom>(pl);
 
 	//Calls ChangeRoom to start the game with a random room
 	ChangeRoom();
@@ -364,16 +377,27 @@ void GameScene::Update(const double& dt) {
 
 	if (!isPaused)
 	{
+		if(currentRoom->isActive())
+		{
+			currentRoom->Update(dt);
+		}
+		else
+		{
+			ChangeRoom();
+		}
 		//calls the current rooms update function
-		currentRoom->Update(dt);
+		gameUI.Update(dt);
 
 		//Adds random special item to inventory
 		if (Keyboard::isKeyPressed(Keyboard::Num3) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
-			auto tempItem = itemDB.randomSpecialItem();
+		/*	auto tempItem = itemDB.randomSpecialItem();
 			UpdateTextBox(tempItem->description);
-			inv->add(tempItem);
+			inv->add(tempItem);*/
+			playerSprite->playDie();
 			scene_clock.restart();
+			std::cout << "\nshould play attack\n";
+
 		}
 
 		//Removes an item from the inventory
@@ -493,6 +517,7 @@ void GameScene::Update(const double& dt) {
 void GameScene::Render() {
 	if (!isPaused) // If game is not pause
 	{
+		gameUI.Render();
 		currentRoom->Render();
 		Renderer::queue(&screenText);
 		Renderer::queue(&SettingSprite);
