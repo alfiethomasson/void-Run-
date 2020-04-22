@@ -7,8 +7,13 @@
 #include "Room.h"
 #include "cmp_inventory.h"
 #include "PlayerSprite.h"
-
 class PlayerSprite;
+#include "LevelUpRoom.h"
+#include "cmp_enemy.h"
+#include "cmp_sprite.h"
+#include "cmp_abilitymanager.h"
+#include "TreasureRoom.h"
+#include <time.h>
 
 class MenuScene : public Scene {
 private:

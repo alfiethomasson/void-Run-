@@ -7,6 +7,7 @@
 #include "enemy_easy.h"
 #include "enemy_medium.h"
 #include "enemy_tough.h"
+#include "VoidRun.h"
 
 #define GAMEX 1280
 #define GAMEY 720

@@ -56,6 +56,7 @@ public:
 
 	void updateEnemy(std::shared_ptr<BaseEnemyComponent> e);
 	bool checkEnemyStatus();
+	bool checkLevelUp();
 
 	void attack(float damage, float dex);
 	void heal(float healBy);
