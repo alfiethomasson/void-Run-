@@ -19,8 +19,6 @@ void EasyEnemy::update(double dt)
 			enemyAI = 0;
 		}
 
-		enemyAI = 3;
-
 		if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2) {
 			std::cout << "The enemy makes a weak attack! \n";
 			if (enraged == true) {
