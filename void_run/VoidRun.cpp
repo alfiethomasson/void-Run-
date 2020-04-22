@@ -273,11 +273,6 @@ void MenuScene::UpdateButtons()
 }
 
 void GameScene::Load() {
-	//Loads font
-	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
-	{
-		cout << "failed to load font";
-	}
 
 	LoadTextures();
 
@@ -286,6 +281,8 @@ void GameScene::Load() {
 	SettingSprite.setPosition(1200.0f, 630.0f);
 	SettingSprite.setScale(0.3f, 0.3f);
 	SettingBox = SettingSprite.getGlobalBounds();
+
+	font = tm.getFont();
 
 	descText.setFont(font);
 	descText.setCharacterSize(30);
@@ -599,6 +596,8 @@ void GameScene::UpdateTextBox(sf::String newText)
 
 void GameScene::LoadTextures()
 {
+	tm.loadFont("mandalore.ttf");
+
 	tm.loadTexture("Settings", "Icons/Settings.png");
 	tm.loadTexture("TextBox", "Sprites/TextBox.png");
 	tm.loadTexture("Attack", "Icons/Attack.png");

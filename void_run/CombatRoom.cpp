@@ -69,19 +69,12 @@ void CombatRoom::Update(const double& dt) {
 		}
 
 	}
-	
-
-	playerHP.setString(std::to_string(p->getCurrentHealth()));
-	enemyHP.setString(std::to_string(enemy->getCurrentHealth()));
-	experienceCounter.setString(std::to_string(p->getExperience()));
 
 	Room::Update(dt);
 }
 
 void CombatRoom::Render() {
 	gameScene.combatUI.Render();
-	Renderer::queue(&playerHP);
-	Renderer::queue(&enemyHP);
 	Renderer::queue(&experienceCounter);
 	enemy->render();
 
@@ -127,19 +120,7 @@ void CombatRoom::Load() {
 	enemy->isTurn = false;
 	enemy->isFinishedTurn = false;
 
-	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
-	{
-		cout << "failed to load font";
-	}
-	playerHP.setFont(font);
-	enemyHP.setFont(font);
-	experienceCounter.setFont(font);
-	playerHP.setCharacterSize(100);
-	playerHP.setPosition(200.0f, 50.0f);
-	playerHP.setFillColor(sf::Color::Red);
-	enemyHP.setCharacterSize(100);
-	enemyHP.setPosition(1000.0f, 50.0f);
-	enemyHP.setFillColor(sf::Color::Red);
+	experienceCounter.setFont(gameScene.tm.getFont());
 	experienceCounter.setCharacterSize(100);
 	experienceCounter.setPosition(sf::Vector2f(1200.0f, 0.0f));
 	experienceCounter.setFillColor(sf::Color::Yellow);

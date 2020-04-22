@@ -18,12 +18,14 @@ BasePlayerComponent::BasePlayerComponent(Entity* p, int health, float strength, 
 void BasePlayerComponent::render()
 {
 	Renderer::queue(&healthBar);
+	Renderer::queue(&healthText);
 }
 
 void BasePlayerComponent::update(double dt) {
 
-	healthSize = _maxHealth;
+	healthSize = currentHealth;
 	healthBar.setSize(sf::Vector2f(healthSize * 1.5, 20.0f));
+	healthText.setString(std::to_string(currentHealth) + " / " + std::to_string(_maxHealth));
 
 	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	sf::Vector2f cursPos = sf::Vector2f(tempPos);
@@ -160,10 +162,16 @@ void BasePlayerComponent::load()
 	rechargeCost = 0;
 	runCost = 5;
 
-	healthBar.setPosition(200.0f, 50.0f);
+	healthBar.setPosition(300.0f, 50.0f);
 	healthSize = _maxHealth;
 	healthBar.setSize(sf::Vector2f(healthSize * 1.5, 20.0f));
 	healthBar.setFillColor(sf::Color(220, 20, 60, 255));
+
+	healthText.setFont(gameScene.tm.getFont());
+	healthText.setCharacterSize(30);
+	healthText.setString(currentHealth + " / " + _maxHealth);
+	healthText.setPosition(200.0f, 40.0f);
+	healthText.setFillColor(sf::Color(220, 20, 60, 255));
 }
 
 void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)

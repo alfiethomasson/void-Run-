@@ -33,6 +33,7 @@ protected:
 
 	int healthSize;
 	sf::RectangleShape healthBar;
+	sf::Text healthText;
 
 public:
 	bool isTurn;

@@ -17,3 +17,13 @@ sf::Texture& TextureManager::getTex(const std::string& texture)
 {
 	return textures.at(texture);
 }
+
+void TextureManager::loadFont(const std::string& name)
+{
+	font.loadFromFile("res/Fonts/" + name);
+}
+
+sf::Font& TextureManager::getFont()
+{
+	return font;
+}
