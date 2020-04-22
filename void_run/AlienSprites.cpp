@@ -1,4 +1,5 @@
 #include "AlienSprites.h"
+#include "Game.h"
 
 AlienSprite1::AlienSprite1(Entity* p)
 	: SpriteComponent{ p } {}
@@ -17,18 +18,9 @@ void AlienSprite1::load()
 
 	dieDelay = 0.5f;
 
-	if (!attackSheet.loadFromFile("res/Sprites/SpriteSheets/Alien1Attack.png"))
-	{
-		std::cout << "failed to load attack sprite sheet: " << attackName << "\n";
-	}
-	if (!hitSheet.loadFromFile("res/Sprites/SpriteSheets/Alien1Hit.png"))
-	{
-		std::cout << "failed to load hit sprite sheet: " << hitName << "\n";
-	}
-	if (!dieSheet.loadFromFile("res/Sprites/SpriteSheets/Alien1Die.png"))
-	{
-		std::cout << "failed to load die sprite sheet: " << dieName << "\n";
-	}
+	attackSheet = gameScene.tm.getTex("Alien1Attack");
+	hitSheet = gameScene.tm.getTex("Alien1Hit");
+	dieSheet = gameScene.tm.getTex("Alien1Die");
 
 	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
 	sprite = sf::Sprite(attackSheet, sheetRect);
@@ -100,18 +92,9 @@ void AlienSprite2::load()
 
 	dieDelay = 0.5f;
 
-	if (!attackSheet.loadFromFile("res/Sprites/SpriteSheets/Alien2Attack.png"))
-	{
-		std::cout << "failed to load attack sprite sheet: " << attackName << "\n";
-	}
-	if (!hitSheet.loadFromFile("res/Sprites/SpriteSheets/Alien2Hit.png"))
-	{
-		std::cout << "failed to load hit sprite sheet: " << hitName << "\n";
-	}
-	if (!dieSheet.loadFromFile("res/Sprites/SpriteSheets/Alien2Die.png"))
-	{
-		std::cout << "failed to load die sprite sheet: " << dieName << "\n";
-	}
+	attackSheet = gameScene.tm.getTex("Alien2Attack");
+	hitSheet = gameScene.tm.getTex("Alien2Hit");
+	dieSheet = gameScene.tm.getTex("Alien2Die");
 
 	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
 	sprite = sf::Sprite(attackSheet, sheetRect);
@@ -184,18 +167,9 @@ void AlienSprite3::load()
 
 	dieDelay = 0.5f;
 
-	if (!attackSheet.loadFromFile("res/Sprites/SpriteSheets/Alien3Attack.png"))
-	{
-		std::cout << "failed to load attack sprite sheet: " << attackName << "\n";
-	}
-	if (!hitSheet.loadFromFile("res/Sprites/SpriteSheets/Alien3Hit.png"))
-	{
-		std::cout << "failed to load hit sprite sheet: " << hitName << "\n";
-	}
-	if (!dieSheet.loadFromFile("res/Sprites/SpriteSheets/Alien3Die.png"))
-	{
-		std::cout << "failed to load die sprite sheet: " << dieName << "\n";
-	}
+	attackSheet = gameScene.tm.getTex("Alien3Attack");
+	hitSheet = gameScene.tm.getTex("Alien3Hit");
+	dieSheet = gameScene.tm.getTex("Alien3Die");
 
 	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
 	sprite = sf::Sprite(attackSheet, sheetRect);

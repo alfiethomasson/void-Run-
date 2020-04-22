@@ -5,9 +5,6 @@
 
 class CombatRoom : public Room {
 protected:
-	sf::Font font;
-	sf::Text playerHP;
-	sf::Text enemyHP;
 	sf::Text experienceCounter;
 
 	sf::Texture statUPTex;

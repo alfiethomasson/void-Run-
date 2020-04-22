@@ -1,13 +1,19 @@
 #pragma once
 #include "ecm.h"
 
+struct Icon
+{
+	sf::Sprite sprite;
+	sf::FloatRect box;
+	std::string description;
+};
+
 class SpriteComponent : public Component {
 protected:
 	sf::Sprite sprite;
 	sf::Texture attackSheet;
 	sf::Texture hitSheet;
 	sf::Texture dieSheet;
-
 	std::string attackName;
 	std::string hitName;
 	std::string dieName;
@@ -35,6 +41,8 @@ protected:
 	float hitDelay;
 	int animCounter;
 	int animRowCounter;
+
+	std::vector<Icon> icons;
 public:
 	SpriteComponent() = delete;
 	explicit SpriteComponent(Entity* p);
@@ -48,4 +56,6 @@ public:
 	virtual void playDie();
 	virtual void ResetAnim();
 
+	void AddIcon(std::string texName, std::string desc, bool leftright);
+	void RemoveIcon(int position);
 };

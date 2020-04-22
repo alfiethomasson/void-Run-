@@ -1,5 +1,6 @@
 #include "cmp_sprites.h"
 #include "system_renderer.h"
+#include "Game.h"
 
 SpriteComponent::SpriteComponent(Entity* p) 
 	: inAttack{ false }, inHit{ false }, inDie{ false }, Component(p) {}
@@ -14,15 +15,30 @@ void SpriteComponent::load()
 void SpriteComponent::render()
 {
 	Renderer::queue(&sprite);
+	for (auto &i : icons)
+	{
+		Renderer::queue(&i.sprite);
+	}
 }
 
 void SpriteComponent::update(double dt)
 {
+	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
+	Vector2f cursPos = sf::Vector2f(tempPos);
+
+	for (auto b : icons)
+	{
+		if (b.box.contains(cursPos))
+		{
+			gameScene.UpdateDesctext(b.description, sf::Vector2f(b.sprite.getPosition().x + (b.sprite.getGlobalBounds().width / 2),
+				b.sprite.getPosition().y));
+		}
+	}
+
 	if (inAttack)
 	{
 		if (animClock.getElapsedTime().asSeconds() > animDelay)
 		{
-			std::cout << "In attack anim part: " << animCounter << "\n";
 			if (animCounter < attackSpriteNum)
 			{
 				if (animRowCounter <= 3)
@@ -55,7 +71,6 @@ void SpriteComponent::update(double dt)
 		{
 			if (animClock.getElapsedTime().asSeconds() > animDelay)
 			{
-				std::cout << "In hit anim part: " << animCounter << "\n";
 				if (animCounter < hitSpriteNum)
 				{
 					if (animRowCounter <= 3)
@@ -159,4 +174,27 @@ void SpriteComponent::ResetAnim()
 	animCounter = 0;
 
 	sprite.setPosition(defaultPos);
+}
+
+void SpriteComponent::AddIcon(std::string texName, std::string desc, bool leftright)
+{
+	Icon tempIcon;
+	tempIcon.sprite.setTexture(gameScene.tm.getTex(texName));
+	tempIcon.sprite.setScale(0.15f, 0.15f);
+	if (leftright)
+	{
+		tempIcon.sprite.setPosition(1150, 100.0f);
+	}
+	else
+	{
+		tempIcon.sprite.setPosition(800.0f, 300.0f);
+	}
+	tempIcon.box = tempIcon.sprite.getGlobalBounds();
+	tempIcon.description = desc;
+	icons.push_back(tempIcon);
+}
+
+void SpriteComponent::RemoveIcon(int position)
+{
+	icons.erase(icons.begin() + position);
 }

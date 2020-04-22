@@ -69,20 +69,14 @@ void CombatRoom::Update(const double& dt) {
 		}
 
 	}
-	
-
-	playerHP.setString(std::to_string(p->getCurrentHealth()));
-	enemyHP.setString(std::to_string(enemy->getCurrentHealth()));
-	experienceCounter.setString(std::to_string(p->getExperience()));
 
 	Room::Update(dt);
 }
 
 void CombatRoom::Render() {
 	gameScene.combatUI.Render();
-	Renderer::queue(&playerHP);
-	Renderer::queue(&enemyHP);
 	Renderer::queue(&experienceCounter);
+	enemy->render();
 
 	Room::Render();
 }
@@ -96,6 +90,7 @@ void CombatRoom::Load() {
 	//auto s = enemy1->addComponent<ShapeComponent>();
 	srand(time(0));
 	int enemyType = rand() % 3; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
+	enemyType = 2;
 	if (enemyType == 0)
 	{	enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5, 5, (rand() % 3)); //Random number from 0-2. 0 is Debuff, 1 is Enrage, 2 is Double-Slice.
 		auto sm = enemy1->addComponent<AlienSprite1>();
@@ -111,10 +106,7 @@ void CombatRoom::Load() {
 		auto sm = enemy1->addComponent<AlienSprite2>();
 		sm->load();
 	} //Random number from 0-2. 0 is Excruciate, 1 is Charged Shot, 2 is Suicide Shot.
-	//s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
-	//s->getShape().setFillColor(Color::Blue);
-	//s->getShape().setOrigin(Vector2f(-1000.0f, -200.0f));
-	//s->getShape().setPosition(Vector2f(1000.0f, 200.0f));
+	enemy->load();
 
 	ents.list.push_back(enemy1);
 
@@ -129,19 +121,7 @@ void CombatRoom::Load() {
 	enemy->isTurn = false;
 	enemy->isFinishedTurn = false;
 
-	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
-	{
-		cout << "failed to load font";
-	}
-	playerHP.setFont(font);
-	enemyHP.setFont(font);
-	experienceCounter.setFont(font);
-	playerHP.setCharacterSize(100);
-	playerHP.setPosition(200.0f, 50.0f);
-	playerHP.setFillColor(sf::Color::Red);
-	enemyHP.setCharacterSize(100);
-	enemyHP.setPosition(1000.0f, 50.0f);
-	enemyHP.setFillColor(sf::Color::Red);
+	experienceCounter.setFont(gameScene.tm.getFont());
 	experienceCounter.setCharacterSize(100);
 	experienceCounter.setPosition(sf::Vector2f(1200.0f, 0.0f));
 	experienceCounter.setFillColor(sf::Color::Yellow);

@@ -1,3 +1,4 @@
+#pragma once
 #include "cmp_sprites.h"
 
 class PlayerSprite : public SpriteComponent {
