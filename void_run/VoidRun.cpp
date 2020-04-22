@@ -285,7 +285,7 @@ void GameScene::Load() {
 	font = tm.getFont();
 
 	descText.setFont(font);
-	descText.setCharacterSize(30);
+	descText.setCharacterSize(15);
 	descText.setString("");
 
 
@@ -619,6 +619,7 @@ void GameScene::LoadTextures()
 	tm.loadTexture("OverloadWeapon", "Icons/OverloadWeapon.png");
 	tm.loadTexture("PainShare", "Icons/PainShare.png");
 	tm.loadTexture("Regeneration", "Icons/Regeneration.png");
+	tm.loadTexture("SuicideCharge", "Icons/SuicideCharge.png");
 	tm.loadTexture("PlayerAttack", "Sprites/SpriteSheets/PlayerAttack.png");
 	tm.loadTexture("PlayerHit", "Sprites/SpriteSheets/PlayerHit.png");
 	tm.loadTexture("PlayerDie", "Sprites/SpriteSheets/PlayerDie.png");
@@ -637,7 +638,7 @@ void GameScene::UpdateDesctext(std::string desc, sf::Vector2f pos)
 {
 	descText.setString(desc);
 	descText.setPosition(pos.x - (descText.getGlobalBounds().width / 2), pos.y -
-	descText.getGlobalBounds().height + 10.0f);
+		descText.getGlobalBounds().height);
 	descRect.setSize(sf::Vector2f(descText.getGlobalBounds().width, descText.getGlobalBounds().height + 20.0f));
 	descRect.setFillColor(sf::Color(0, 0, 0, 255));
 	descRect.setPosition(descText.getPosition());

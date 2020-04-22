@@ -183,7 +183,7 @@ void SpriteComponent::AddIcon(std::string texName, std::string desc, bool leftri
 	tempIcon.sprite.setScale(0.15f, 0.15f);
 	if (leftright)
 	{
-		tempIcon.sprite.setPosition(1200.0f, 200.0f);
+		tempIcon.sprite.setPosition(1150, 100.0f);
 	}
 	else
 	{

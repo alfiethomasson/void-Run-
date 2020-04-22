@@ -86,7 +86,7 @@ void BasePlayerComponent::update(double dt) {
 	{
 		if (combatUI.getAttackBox().contains(cursPos))
 		{
-			gameScene.UpdateDesctext("ATTACK ENEMY\nDamage = " + std::to_string(_strength), sf::Vector2f(combatUI.getAttackBox().getPosition().x,
+			gameScene.UpdateDesctext("ATTACK ENEMY\nDamage = " + std::to_string((int)_strength), sf::Vector2f(combatUI.getAttackBox().getPosition().x,
 				combatUI.getAttackBox().getPosition().y - 75.0f));
 		}
 		if (combatUI.getHealBox().contains(cursPos))
