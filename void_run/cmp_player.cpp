@@ -11,6 +11,8 @@ std::vector<std::shared_ptr<BasePlayerComponent>> playerInfo;
 #define GAMEX 1280
 #define GAMEY 720
 
+int level;
+
 //Clock clock;
 
 BasePlayerComponent::BasePlayerComponent(Entity* p, int health, float strength, float dex,
@@ -79,9 +81,6 @@ void BasePlayerComponent::update(double dt) {
 				abilityManager->combatCheck();
 				//	gameScene.combatUI.turnUpdate();
 			}
-		}
-		else {
-			expGet();
 		}
 	}
 
@@ -153,6 +152,8 @@ void BasePlayerComponent::gainAP(int amount)
 
 void BasePlayerComponent::load()
 {
+	level = 1;
+
 	auto am = _parent->GetCompatibleComponent<AbilityManager>();
 	abilityManager = am[0];
 	auto sm = _parent->GetCompatibleComponent <SpriteComponent>();
@@ -201,8 +202,9 @@ void BasePlayerComponent::expGet() {
 }
 
 bool BasePlayerComponent::checkLevelUp () {
-	if (getExperience() >= 30) {
+	if (_experience >= 30 && level < 5) {
 		_experience -= 30;
+		level++;
 		return true;
 	}
 	else {

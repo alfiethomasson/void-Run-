@@ -52,6 +52,7 @@ public:
 	int healCost;
 	int rechargeCost;
 	int runCost;
+	int level;
 
 	explicit BasePlayerComponent(Entity* p, int health, float strength, float dex,
 		float experience, int actionPoints, CombatUI *ui, GameUI *gameUI);
