@@ -17,6 +17,8 @@ protected:
 	float _strength;
 	float _dexterity;
 	int _maxHealth;
+	int _level;
+
 	int currentHealth;
 	float playerHealQuantity;
 	float _experience;
