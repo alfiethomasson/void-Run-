@@ -9,6 +9,9 @@ bool cursed = false;
 
 void MediumEnemy::update(double dt)
 {
+
+	BaseEnemyComponent::update(dt);
+
 	if (isTurn && isFinishedTurn != true)
 	{
 		srand(time(0));
@@ -53,4 +56,33 @@ void MediumEnemy::update(double dt)
 			}
 		}
 	}
+}
+
+void MediumEnemy::load()
+{
+	auto sm = _parent->GetCompatibleComponent<SpriteComponent>();
+	spriteManager = sm[0];
+
+	if (specialMove == 0)
+	{
+		spriteManager->AddIcon("PainShare", "PAIN SHARE\nDamages itself to inflict large damage\nto player", true);
+	}
+	if (specialMove == 1)
+	{
+		spriteManager->AddIcon("Regeneration", "REGENERATION\nPassively heals every turn", true);
+	}
+	if (specialMove == 2)
+	{
+		spriteManager->AddIcon("Bullseye", "BULLSEYE\nAn attack that never misses", true);
+	}
+	if (specialMove == 3)
+	{
+		spriteManager->AddIcon("Curse", "CURSE\nCurses the player, dealing \ndamage every turn", true);
+	}
+	BaseEnemyComponent::load();
+}
+
+void MediumEnemy::render()
+{
+	BaseEnemyComponent::render();
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "TextureManager.h"
 #include <ecm.h>
 #include <future>
 #include <maths.h>
@@ -22,6 +23,7 @@ public:
 	virtual void UnLoad();
 	virtual void Update(const double& dt);
 	virtual void Render();
+	virtual void LoadTextures() {};
 	void ChangeResolution(int x, int y, int GAMEX, int GAMEY);
 	sf::FloatRect CalculateViewport(const sf::Vector2u& screensize,
 		const sf::Vector2u& gamesize);
@@ -34,6 +36,8 @@ public:
 	EntityManager ents;
 	UIManager ui;
 	std::vector<sf::FloatRect> buttons;
+
+	TextureManager tm;
 
 protected:
 	void setLoaded(bool);
@@ -52,6 +56,7 @@ public:
 	static sf::RenderWindow& GetWindow();
 	static sf::Vector2u getWindowSize();
 	static void setVsync(bool b);
+	static std::string keyToString(const sf::Keyboard::Key& key);
 
 private:
 	static Scene* _activeScene;

@@ -2,6 +2,7 @@
 #include "ecm.h"
 #include "cmp_enemy.h"
 #include "cmp_abilitymanager.h"
+#include "cmp_sprites.h"
 #include "UI.h"
 #include "system_renderer.h"
 
@@ -24,16 +25,11 @@ protected:
 	float _experience;
 	int actionPoints;
 	int _actionPointsMax;
-
-	int baseAttackCost;
-	int mediumAttackCost;
-	int heavyAttackCost;
-	int healCost;
-	int meditateCost;
-	int fleeCost;
+	int runChance;
 
 	std::shared_ptr<BaseEnemyComponent> currentEnemy;
 	std::shared_ptr<AbilityManager> abilityManager;
+	std::shared_ptr<SpriteComponent> spriteManager;
 //	std::vector<SpecialAbility> specialMoves;
 	CombatUI& combatUI;
 	GameUI& gameUI;
@@ -42,16 +38,26 @@ private:
 	sf::Font font;
 	sf::Text GameOverButton;
 	sf::FloatRect GameOverButtonBox;
+	int healthSize;
+	sf::RectangleShape healthBar;
+	sf::Text healthText;
 
 public:
 	bool isTurn;
 	bool isFinishedTurn;
 	bool expGained;
+	int baseAttackCost;
+	int mediumAttackCost;
+	int heavyAttackCost;
+	int healCost;
+	int rechargeCost;
+	int runCost;
+
 	explicit BasePlayerComponent(Entity* p, int health, float strength, float dex,
-		float experience, int actionPoints, CombatUI ui, GameUI *gameUI);
+		float experience, int actionPoints, CombatUI *ui, GameUI *gameUI);
 	BasePlayerComponent() = delete;
 
-	void render() override {}
+	void render() override;
 	void update(double dt) override;
 	void load();
 
@@ -60,6 +66,8 @@ public:
 
 	void attack(float damage, float dex);
 	void heal(float healBy);
+	void recharge(int amount);
+	void run();
 	void expGet();
 	void EndTurn();
 
@@ -85,4 +93,5 @@ public:
 
 	void takeDamage(float dmgRecieved);
 	bool calculateHit(float enemyDex);
+	int calcRunChance();
 };

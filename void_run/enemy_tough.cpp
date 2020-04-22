@@ -9,6 +9,9 @@ bool charging;
 
 void ToughEnemy::update(double dt)
 {
+
+	BaseEnemyComponent::update(dt);
+
 	if (isTurn && isFinishedTurn != true)
 	{
 		srand(time(0));
@@ -53,4 +56,29 @@ void ToughEnemy::update(double dt)
 			EndTurn();
 		}
 	}
+}
+
+void ToughEnemy::load()
+{
+	auto sm = _parent->GetCompatibleComponent<SpriteComponent>();
+	spriteManager = sm[0];
+
+	if (specialMove == 0)
+	{
+		spriteManager->AddIcon("Excruciate", "EXCRUCIATE\nDrastically lowers chance of escape", true);
+	}
+	if (specialMove == 1)
+	{
+		spriteManager->AddIcon("ChargedAttack", "CHARGED ATTACK\nCharges for one turn to\nunleash a powerful attack", true);
+	}
+	if (specialMove == 2)
+	{
+		spriteManager->AddIcon("SuicideCharge", "SUICIDE CHARGE\nGives itself a big strength\nboost but takes more damage", true);
+	}
+	BaseEnemyComponent::load();
+}
+
+void ToughEnemy::render()
+{
+	BaseEnemyComponent::render();
 }

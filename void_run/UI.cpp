@@ -5,11 +5,23 @@
 
 sf::Color Green(0, 255, 0, 255);
 sf::Color White(255, 255, 255, 255);
+#include "Game.h"
 
 void CombatUI::Render()
 {
  	Renderer::queue(&attackSprite);
 	Renderer::queue(&specialSprite);
+	Renderer::queue(&healSprite);
+	Renderer::queue(&rechargeSprite);
+	Renderer::queue(&runSprite);
+	Renderer::queue(&attackControl);
+	Renderer::queue(&healControl);
+	Renderer::queue(&rechargeControl);
+	Renderer::queue(&runControl);
+	Renderer::queue(&attackCost);
+	Renderer::queue(&healCost);
+	Renderer::queue(&rechargeCost);
+	Renderer::queue(&runCost);
 }
 
 void CombatUI::turnUpdate()
@@ -17,19 +29,69 @@ void CombatUI::turnUpdate()
 
 }
 
-void CombatUI::Load()
+void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p)
 {
-	if (!attackTex.loadFromFile("res/Icons/Attack.png"))
-	{
-		std::cout << "Couldn't load attack icon\n";
-	}
-	attackSprite.setTexture(attackTex);
+	player = p;
+
+	attackSprite.setTexture(gameScene.tm.getTex("Attack"));
 	attackSprite.setScale(0.3f, 0.3f);
-	attackSprite.setPosition(sf::Vector2f(500.0f, 600.0f));
+	attackSprite.setPosition(sf::Vector2f(400.0f, 600.0f));
 	attackBox = attackSprite.getGlobalBounds();
 
-	specialSprite.setPosition(sf::Vector2f(600.0f, 600.0f));
+	healSprite.setTexture(gameScene.tm.getTex("Heal"));
+	healSprite.setScale(0.3f, 0.3f);
+	healSprite.setPosition(sf::Vector2f(500.0f, 600.0f));
+	healBox = healSprite.getGlobalBounds();
+
+	rechargeSprite.setTexture(gameScene.tm.getTex("Recharge"));
+	rechargeSprite.setScale(0.3f, 0.3f);
+	rechargeSprite.setPosition(sf::Vector2f(600.0f, 600.0f));
+	rechargeBox = rechargeSprite.getGlobalBounds();
+
+	runSprite.setTexture(gameScene.tm.getTex("Run"));
+	runSprite.setScale(0.3f, 0.3f);
+	runSprite.setPosition(sf::Vector2f(700.0f, 600.0f));
+	runBox = runSprite.getGlobalBounds();
+
+	specialSprite.setPosition(sf::Vector2f(800.0f, 600.0f));
 	specialBox = specialSprite.getGlobalBounds();
+
+	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
+	{
+		std::cout << "couldnt load font combat ui\n";
+	}
+
+	attackControl.setFont(font);
+	healControl.setFont(font);
+	rechargeControl.setFont(font);
+	runControl.setFont(font);
+	
+	attackControl.setCharacterSize(30);
+	healControl.setCharacterSize(30);
+	rechargeControl.setCharacterSize(30);
+	runControl.setCharacterSize(30);
+
+	UpdateControls();
+
+	attackCost.setFont(font);
+	healCost.setFont(font);
+	rechargeCost.setFont(font);
+	runCost.setFont(font);
+	specialCost1.setFont(font);
+	specialCost2.setFont(font);
+	specialCost3.setFont(font);
+
+	attackCost.setCharacterSize(25);
+	healCost.setCharacterSize(25);
+	rechargeCost.setCharacterSize(25);
+	runCost.setCharacterSize(25);
+
+	attackCost.setColor(sf::Color(30, 216, 255, 255));
+	healCost.setColor(sf::Color(30, 216, 255, 255));
+	rechargeCost.setColor(sf::Color(30, 216, 255, 255));
+	runCost.setColor(sf::Color(30, 216, 255, 255));
+
+	UpdateCosts();
 }
 
 sf::FloatRect& CombatUI::getAttackBox()
@@ -37,13 +99,37 @@ sf::FloatRect& CombatUI::getAttackBox()
 	return attackBox;
 }
 
+sf::FloatRect& CombatUI::getHealBox()
+{
+	return healBox;
+}
+
+sf::FloatRect& CombatUI::getRechargeBox()
+{
+	return rechargeBox;
+}
+
+sf::FloatRect& CombatUI::getRunBox()
+{
+	return runBox;
+}
+
+bool CombatUI::CheckBoxes(sf::Vector2f curspos)
+{
+	if (attackBox.contains(curspos) || specialBox.contains(curspos) || healBox.contains(curspos)
+		|| rechargeBox.contains(curspos) || runBox.contains(curspos))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void CombatUI::addSpecial(std::string texName)
 {
-	if (!specialTex.loadFromFile("res/icons/" + texName + ".png"))
-	{
-		std::cout << "Failed to load " << texName << " combat icon\n";
-	}
-	specialSprite.setTexture(specialTex);
+	specialSprite.setTexture(gameScene.tm.getTex(texName));
 	specialSprite.setPosition(sf::Vector2f(600.0f, 600.0f));
 	specialSprite.setScale(0.3f, 0.3f);
 }
@@ -51,6 +137,41 @@ void CombatUI::addSpecial(std::string texName)
 void CombatUI::resetSpecial()
 {
 	specialSprite = sf::Sprite();
+}
+
+void CombatUI::UpdateControls()
+{
+	attackControl.setString(Engine::keyToString(attackKey));
+	healControl.setString(Engine::keyToString(healKey));
+	rechargeControl.setString(Engine::keyToString(rechargeKey));
+	runControl.setString(Engine::keyToString(runKey));
+
+	attackControl.setPosition(attackSprite.getPosition().x + (attackSprite.getGlobalBounds().width / 2)
+		- (attackControl.getGlobalBounds().width / 2), 680.0f);
+	healControl.setPosition(healSprite.getPosition().x + (healSprite.getGlobalBounds().width / 2)
+		- (healControl.getGlobalBounds().width / 2), 680.0f);
+	rechargeControl.setPosition(rechargeSprite.getPosition().x + (rechargeSprite.getGlobalBounds().width / 2)
+		- (rechargeControl.getGlobalBounds().width / 2), 680.0f);
+	runControl.setPosition(runSprite.getPosition().x + (runSprite.getGlobalBounds().width / 2)
+		- (runControl.getGlobalBounds().width / 2), 680.0f);
+}
+
+void CombatUI::UpdateCosts()
+{
+	std::cout << " player attackcost " << std::to_string(player->baseAttackCost);
+	attackCost.setString(std::to_string(player->baseAttackCost));
+	healCost.setString(std::to_string(player->healCost));
+	rechargeCost.setString(std::to_string(player->rechargeCost));
+	runCost.setString(std::to_string(player->runCost));
+
+	attackCost.setPosition(attackSprite.getPosition().x + attackSprite.getGlobalBounds().width - costOffset -
+		(attackCost.getGlobalBounds().width), attackSprite.getPosition().y  + costOffset - (attackCost.getGlobalBounds().height / 2));
+	healCost.setPosition(healSprite.getPosition().x + healSprite.getGlobalBounds().width - costOffset -
+		healCost.getGlobalBounds().width, rechargeSprite.getPosition().y + costOffset - (rechargeCost.getGlobalBounds().height / 2));
+	rechargeCost.setPosition(rechargeSprite.getPosition().x + rechargeSprite.getGlobalBounds().width - costOffset -
+		rechargeCost.getGlobalBounds().width, rechargeSprite.getPosition().y + costOffset - (rechargeCost.getGlobalBounds().height / 2));
+	runCost.setPosition(runSprite.getPosition().x + runSprite.getGlobalBounds().width - costOffset -
+		runCost.getGlobalBounds().width, runSprite.getPosition().y + costOffset - (runCost.getGlobalBounds().height / 2));
 }
 
 void GameUI::Update(double dt)
@@ -106,12 +227,16 @@ bool GameUI::updateStatOptions()
 
 void GameUI::Render()
 {
+	Renderer::queue(&background);
+
 	for (auto& e : cells)
 	{
 		Renderer::queue(&e);
 	}
-	Renderer::queue(&descText);
-	if (inStatUp) {
+
+	Renderer::queue(&playerIcon);
+	if (inStatUp)
+	{
 		Renderer::queue(&stat1);
 		Renderer::queue(&stat2);
 		Renderer::queue(&stat3);
@@ -131,27 +256,12 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 {
 	player = p;
 	inStatUp = false;
-
-	if (!CellTex.loadFromFile("res/Icons/Charge.png"))
-	{
-		std::cout << "Couldnt load AP Charge\n";
-	}
-	if (!statUPTex.loadFromFile("res/Icons/Arrow.png"))
-	{
-		std::cout << "Couldnt load up arrow in stat room\n";
-	}
 	MaxAP = maxAP;
-	APAmount = MaxAP;
+	APAmount = 0;
+	cells.clear();
+	height = 0;
 
-	for(int i = 0; i < MaxAP; i++)
-	{
-		sf::Sprite cell;
-		cell.setTexture(CellTex);
-		cell.setScale(0.2f, 0.15f);
-		height += 20;
-		cell.setPosition(sf::Vector2f(60.0f, 550.0f - (height)));
-		cells.push_back(cell);
-	}
+	gainAP(MaxAP);
 	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
 	{
 		std::cout << "failed to load mandalore font in game ui\n";
@@ -160,9 +270,13 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	descText.setCharacterSize(30);
 	descText.setString("");
 
-	stat1.setTexture(statUPTex);
-	stat2.setTexture(statUPTex);
-	stat3.setTexture(statUPTex);
+	playerIcon.setTexture(gameScene.tm.getTex("Player"));
+	playerIcon.setScale(0.5f, 0.5f);
+	playerIcon.setPosition(0.0f, 500.0f);
+
+	stat1.setTexture(gameScene.tm.getTex("StatUp"));
+	stat2.setTexture(gameScene.tm.getTex("StatUp"));
+	stat3.setTexture(gameScene.tm.getTex("StatUp"));
 	stat1.setScale(0.3f, 0.3f);
 	stat2.setScale(0.3f, 0.3f);
 	stat3.setScale(0.3f, 0.3f);
@@ -200,19 +314,18 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	GameOverButton.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - (GameOverButton.getGlobalBounds().width / 2),
 		Engine::getWindowSize().y / 2.0f - (GameOverButton.getGlobalBounds().height / 2) + 100.0f));
 	GameOverButtonBox = GameOverButton.getGlobalBounds();
+	background.setTexture(gameScene.tm.getTex("Background1"));
+	background.setScale(Engine::getWindowSize().x / background.getGlobalBounds().width, 0.5f);
 }
 
 sf::Sprite GameUI::getNewCell()
 {
-	//if (!CellTex.loadFromFile("res/Icons/Charge.png"))
-	//{
-	//	std::cout << "Couldnt load AP Charge\n";
-	//}
 	sf::Sprite cell;
-	cell.setTexture(CellTex);
-	cell.setScale(0.2f, 0.15f);
+	cell.setTexture(gameScene.tm.getTex("Charge"));
+	cell.setScale(0.05f, 0.15f);
 	height += 20;
-	cell.setPosition(sf::Vector2f(60.0f, 550.0f - (height)));
+	cell.setPosition(sf::Vector2f(550.0f + height, 550.0));
+	cell.setRotation(90);
 	return cell;
 }
 
@@ -255,6 +368,7 @@ void GameUI::useAP(int amount)
 
 void GameUI::gainAP(int amount)
 {
+	std::cout << "GAMEUI GAINING AP: " << amount << "\n";
 	int temp = APAmount + amount;
 	if (temp > MaxAP)
 	{
