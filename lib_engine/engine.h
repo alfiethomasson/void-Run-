@@ -57,6 +57,12 @@ public:
 	static sf::Vector2u getWindowSize();
 	static void setVsync(bool b);
 	static std::string keyToString(const sf::Keyboard::Key& key);
+	static void ChangeResolution(int x, int y, int GAMEX, int GAMEY);
+	static sf::FloatRect CalculateViewport(const sf::Vector2u& screensize,
+		const sf::Vector2u& gamesize);
+
+	static float xMultiply;
+	static float yMultiply;
 
 private:
 	static Scene* _activeScene;
