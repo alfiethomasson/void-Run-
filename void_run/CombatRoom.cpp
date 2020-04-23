@@ -122,7 +122,7 @@ void CombatRoom::Load() {
 	enemy->isTurn = false;
 	enemy->isFinishedTurn = false;
 
-	experienceCounter.setFont(gameScene.tm.getFont());
+	experienceCounter.setFont(Engine::tm.getFont());
 	experienceCounter.setCharacterSize(100);
 	experienceCounter.setPosition(sf::Vector2f(1200.0f, 0.0f));
 	experienceCounter.setFillColor(sf::Color::Yellow);

@@ -30,6 +30,9 @@ void BasePlayerComponent::update(double dt) {
 	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	sf::Vector2f cursPos = sf::Vector2f(tempPos);
 
+	cursPos.x /= Engine::xMultiply;
+	cursPos.y /= Engine::yMultiply;
+
 	if (isTurn && !isPaused)
 	{
 		if (checkEnemyStatus())
@@ -55,7 +58,7 @@ void BasePlayerComponent::update(double dt) {
 
 				if (Mouse::isButtonPressed(Mouse::Left))
 				{
-					if (combatUI.getAttackBox().contains(cursPos) && CheckAP(baseAttackCost))
+					if (combatUI.getAttackBox().contains((sf::Vector2i)cursPos) && CheckAP(baseAttackCost))
 					{
 						attack(_strength, _dexterity);
 					}
@@ -84,8 +87,9 @@ void BasePlayerComponent::update(double dt) {
 
 	if (combatUI.CheckBoxes(cursPos))
 	{
-		if (combatUI.getAttackBox().contains(cursPos))
+		if (combatUI.getAttackBox().contains((sf::Vector2i) cursPos))
 		{
+			//std::cout << "HEY";
 			gameScene.UpdateDesctext("ATTACK ENEMY\nDamage = " + std::to_string((int)_strength), sf::Vector2f(combatUI.getAttackBox().getPosition().x,
 				combatUI.getAttackBox().getPosition().y - 75.0f));
 		}
@@ -167,7 +171,7 @@ void BasePlayerComponent::load()
 	healthBar.setSize(sf::Vector2f(healthSize * 1.5, 20.0f));
 	healthBar.setFillColor(sf::Color(220, 20, 60, 255));
 
-	healthText.setFont(gameScene.tm.getFont());
+	healthText.setFont(Engine::tm.getFont());
 	healthText.setCharacterSize(30);
 	healthText.setString(currentHealth + " / " + _maxHealth);
 	healthText.setPosition(200.0f, 40.0f);

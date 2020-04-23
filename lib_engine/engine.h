@@ -24,10 +24,6 @@ public:
 	virtual void Update(const double& dt);
 	virtual void Render();
 	virtual void LoadTextures() {};
-	void ChangeResolution(int x, int y, int GAMEX, int GAMEY);
-	sf::FloatRect CalculateViewport(const sf::Vector2u& screensize,
-		const sf::Vector2u& gamesize);
-	void UpdateButton(sf::FloatRect& button);
 	bool isLoaded() const;
 	std::shared_ptr<Entity> makeEntity();
 	float xMultiply;
@@ -36,8 +32,6 @@ public:
 	EntityManager ents;
 	UIManager ui;
 	std::vector<sf::FloatRect> buttons;
-
-	TextureManager tm;
 
 protected:
 	void setLoaded(bool);
@@ -60,7 +54,9 @@ public:
 	static void ChangeResolution(int x, int y, int GAMEX, int GAMEY);
 	static sf::FloatRect CalculateViewport(const sf::Vector2u& screensize,
 		const sf::Vector2u& gamesize);
+	static void UpdateButton(sf::FloatRect& button);
 
+	static TextureManager tm;
 	static float xMultiply;
 	static float yMultiply;
 
@@ -69,6 +65,8 @@ private:
 	static std::string _gameName;
 	static void Update();
 	static void Render(sf::RenderWindow& window);
+	static float oldWinX;
+	static float oldWinY;
 };
 
 namespace timing {

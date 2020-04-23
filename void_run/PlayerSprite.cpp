@@ -17,9 +17,9 @@ void PlayerSprite::load()
 	dieSpriteNum = 20;
 
 	hitDelay = 0.5f;
-	attackSheet = gameScene.tm.getTex("PlayerAttack");
-	hitSheet = gameScene.tm.getTex("PlayerHit");
-	dieSheet = gameScene.tm.getTex("PlayerDie");
+	attackSheet = Engine::tm.getTex("PlayerAttack");
+	hitSheet = Engine::tm.getTex("PlayerHit");
+	dieSheet = Engine::tm.getTex("PlayerDie");
 
 	sheetRect = sf::IntRect(0, 0, 460, 411);
 	sprite = sf::Sprite(attackSheet, sheetRect);

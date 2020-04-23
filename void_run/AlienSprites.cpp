@@ -18,9 +18,9 @@ void AlienSprite1::load()
 
 	dieDelay = 0.5f;
 
-	attackSheet = gameScene.tm.getTex("Alien1Attack");
-	hitSheet = gameScene.tm.getTex("Alien1Hit");
-	dieSheet = gameScene.tm.getTex("Alien1Die");
+	attackSheet = Engine::tm.getTex("Alien1Attack");
+	hitSheet = Engine::tm.getTex("Alien1Hit");
+	dieSheet = Engine::tm.getTex("Alien1Die");
 
 	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
 	sprite = sf::Sprite(attackSheet, sheetRect);
@@ -92,9 +92,9 @@ void AlienSprite2::load()
 
 	dieDelay = 0.5f;
 
-	attackSheet = gameScene.tm.getTex("Alien2Attack");
-	hitSheet = gameScene.tm.getTex("Alien2Hit");
-	dieSheet = gameScene.tm.getTex("Alien2Die");
+	attackSheet = Engine::tm.getTex("Alien2Attack");
+	hitSheet = Engine::tm.getTex("Alien2Hit");
+	dieSheet = Engine::tm.getTex("Alien2Die");
 
 	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
 	sprite = sf::Sprite(attackSheet, sheetRect);
@@ -167,9 +167,9 @@ void AlienSprite3::load()
 
 	dieDelay = 0.5f;
 
-	attackSheet = gameScene.tm.getTex("Alien3Attack");
-	hitSheet = gameScene.tm.getTex("Alien3Hit");
-	dieSheet = gameScene.tm.getTex("Alien3Die");
+	attackSheet = Engine::tm.getTex("Alien3Attack");
+	hitSheet = Engine::tm.getTex("Alien3Hit");
+	dieSheet = Engine::tm.getTex("Alien3Die");
 
 	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
 	sprite = sf::Sprite(attackSheet, sheetRect);

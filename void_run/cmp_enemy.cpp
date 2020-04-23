@@ -28,7 +28,7 @@ void BaseEnemyComponent::load()
 		std::cout << "making bar, ceiling value = " << std::ceil(currentHealth / 150) << "\n";
 		makeHPBar();
 	}
-	healthText.setFont(gameScene.tm.getFont());
+	healthText.setFont(Engine::tm.getFont());
 	healthText.setString(std::to_string((int)currentHealth) + " / " + std::to_string((int)_maxHealth));
 	healthText.setCharacterSize(30);
 	healthText.setPosition(1120.0f, 40.0f);

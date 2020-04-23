@@ -25,6 +25,8 @@ void SpriteComponent::update(double dt)
 {
 	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	Vector2f cursPos = sf::Vector2f(tempPos);
+	cursPos.x /= Engine::xMultiply;
+	cursPos.y /= Engine::yMultiply;
 
 	for (auto b : icons)
 	{
@@ -179,7 +181,7 @@ void SpriteComponent::ResetAnim()
 void SpriteComponent::AddIcon(std::string texName, std::string desc, bool leftright)
 {
 	Icon tempIcon;
-	tempIcon.sprite.setTexture(gameScene.tm.getTex(texName));
+	tempIcon.sprite.setTexture(Engine::tm.getTex(texName));
 	tempIcon.sprite.setScale(0.15f, 0.15f);
 	if (leftright)
 	{

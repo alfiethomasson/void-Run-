@@ -42,17 +42,19 @@ protected:
 	const int costOffset = 5;
 
 	std::shared_ptr<BasePlayerComponent> player;
+
+	TextureManager* texManager;
 public:
 
 	void Update(double dt);
 	void turnUpdate();
-	sf::FloatRect& getAttackBox();
+	sf::IntRect getAttackBox();
 	sf::FloatRect& getHealBox();
 	sf::FloatRect& getRechargeBox();
 	sf::FloatRect& getRunBox();
 	bool CheckBoxes(sf::Vector2f curspos);
 	void Render();
-	void Load(std::shared_ptr<BasePlayerComponent> p);
+	void Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm);
 	
 	void UpdateControls();
 	void UpdateCosts();
@@ -92,6 +94,8 @@ protected:
 	sf::Texture backgroundTex;
 
 	bool inStatUp;
+
+	//TextureManager& texManager;
 public:
 	GameUI() = default;
 	~GameUI() = default;

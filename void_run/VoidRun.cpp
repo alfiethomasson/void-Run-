@@ -124,13 +124,13 @@ void MenuScene::Update(const double& dt) {
 			if (Engine::getWindowSize().y != 1080)
 			{
 				ResChange.setString("1080p");
-				ChangeResolution(1920, 1080, GAMEX, GAMEY);
+				Engine::ChangeResolution(1920, 1080, GAMEX, GAMEY);
 				UpdateButtons();
 			}
 			else
 			{
 				ResChange.setString("720p");
-				ChangeResolution(1280, 720, GAMEX, GAMEY);
+				Engine::ChangeResolution(1280, 720, GAMEX, GAMEY);
 				UpdateButtons();
 			}
 		}
@@ -265,11 +265,11 @@ void MenuScene::Load() {
 //Updates the bounding boxes of buttons
 void MenuScene::UpdateButtons()
 {
-	UpdateButton(PlayButtonBox);
-	UpdateButton(ExitButtonBox);
-	UpdateButton(ResButtonBox);
-	UpdateButton(OptionsButtonBox);
-	UpdateButton(BackButtonBox);
+	Engine::UpdateButton(PlayButtonBox);
+	Engine::UpdateButton(ExitButtonBox);
+	Engine::UpdateButton(ResButtonBox);
+	Engine::UpdateButton(OptionsButtonBox);
+	Engine::UpdateButton(BackButtonBox);
 }
 
 void GameScene::Load() {
@@ -277,12 +277,12 @@ void GameScene::Load() {
 	LoadTextures();
 
 	//Loads the settings icon stuff
-	SettingSprite.setTexture(gameScene.tm.getTex("Settings"));
+	SettingSprite.setTexture(Engine::tm.getTex("Settings"));
 	SettingSprite.setPosition(1200.0f, 630.0f);
 	SettingSprite.setScale(0.3f, 0.3f);
 	SettingBox = SettingSprite.getGlobalBounds();
 
-	font = tm.getFont();
+	font = Engine::tm.getFont();
 
 	descText.setFont(font);
 	descText.setCharacterSize(15);
@@ -334,10 +334,10 @@ void GameScene::Load() {
 	player->load();
 
 	//Calls load function of the UIs
-	combatUI.Load(player);
+	combatUI.Load(player, &Engine::tm);
 	gameUI.Load(10, player);
 
-	textBox.setTexture(gameScene.tm.getTex("TextBox"));
+	textBox.setTexture(Engine::tm.getTex("TextBox"));
 	textBox.setScale(sf::Vector2f(0.7f, 0.5f));
 	textBox.setPosition(sf::Vector2f((GAMEX / 2) - (textBox.getGlobalBounds().width / 2), 50.0f));
 	//ui.list.push_back(textBox);
@@ -367,6 +367,8 @@ void GameScene::Update(const double& dt) {
 	//Gets Mouse position in an int format
 	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	Vector2f cursPos = sf::Vector2f(tempPos);
+	cursPos.x /= Engine::xMultiply;
+	cursPos.y /= Engine::yMultiply;
 	scene_delay = scene_clock.getElapsedTime();
 	pause_delay = pauseClock.getElapsedTime();
 
@@ -396,8 +398,10 @@ void GameScene::Update(const double& dt) {
 		/*	auto tempItem = itemDB.randomSpecialItem();
 			UpdateTextBox(tempItem->description);
 			inv->add(tempItem);*/
-			scene_clock.restart();
-			std::cout << "\nshould play attack\n";
+			//scene_clock.restart();
+			//std::cout << "\nshould play attack\n";
+			std::cout << "MouseX: " << Mouse::getPosition().x << " MouseY: " << Mouse::getPosition().y << "\n";
+			std::cout << "Adjusted MouseX: " << cursPos.x << " Adjusted MouseY: " << cursPos.y << "\n";
 
 		}
 
@@ -456,13 +460,14 @@ void GameScene::Update(const double& dt) {
 				if (Engine::getWindowSize().y != 1080)
 				{
 					ResChange.setString("1080p");
-					ChangeResolution(1920, 1080, GAMEX, GAMEY);
+					std::cout << "Hey alfie : " << Engine::tm.getButtonMap().size() << "\n";
+					Engine::ChangeResolution(1920, 1080, GAMEX, GAMEY);
 					UpdateButtons();
 				}
 				else
 				{
 					ResChange.setString("720p");
-					ChangeResolution(1280, 720, GAMEX, GAMEY);
+					Engine::ChangeResolution(1280, 720, GAMEX, GAMEY);
 					UpdateButtons();
 				}
 			}
@@ -476,13 +481,13 @@ void GameScene::Update(const double& dt) {
 			if (Engine::getWindowSize().y != 1080)
 			{
 				ResChange.setString("1080p");
-				ChangeResolution(1920, 1080, GAMEX, GAMEY);
+				Engine::ChangeResolution(1920, 1080, GAMEX, GAMEY);
 				UpdateButtons();
 			}
 			else
 			{
 				ResChange.setString("720p");
-				ChangeResolution(1280, 720, GAMEX, GAMEY);
+				Engine::ChangeResolution(1280, 720, GAMEX, GAMEY);
 				UpdateButtons();
 			}
 		}
@@ -579,9 +584,9 @@ void GameScene::ChangeRoom() {
 //Updates the bounding boxes of all Buttons
 void GameScene::UpdateButtons()
 {
-	UpdateButton(ResButtonBox);
-	UpdateButton(BackButtonBox);
-	UpdateButton(SettingBox);
+	Engine::UpdateButton(ResButtonBox);
+	Engine::UpdateButton(BackButtonBox);
+	Engine::UpdateButton(SettingBox);
 }
 
 //Updates the text inside the update box, to new text and resets the text to fade out
@@ -596,42 +601,42 @@ void GameScene::UpdateTextBox(sf::String newText)
 
 void GameScene::LoadTextures()
 {
-	tm.loadFont("mandalore.ttf");
+	Engine::tm.loadFont("mandalore.ttf");
 
-	tm.loadTexture("Settings", "Icons/Settings.png");
-	tm.loadTexture("TextBox", "Sprites/TextBox.png");
-	tm.loadTexture("Attack", "Icons/Attack.png");
-	tm.loadTexture("Heal", "Icons/Heal.png");
-	tm.loadTexture("Recharge", "Icons/Recharge.png");
-	tm.loadTexture("Run", "Icons/Run.png");
-	tm.loadTexture("Charge", "Icons/Charge.png");
-	tm.loadTexture("StatUp", "Icons/Arrow.png");
-	tm.loadTexture("Player", "Sprites/Player.png");
-	tm.loadTexture("Background1", "Sprites/BGspace1.jpg");
-	tm.loadTexture("LaserBurst", "Icons/LaserBurst.png");
-	tm.loadTexture("ChargedAttack", "Icons/ChargedAttack.png");
-	tm.loadTexture("Curse", "Icons/Curse.png");
-	tm.loadTexture("Dodge", "Icons/Dodge.png");
-	tm.loadTexture("DoubleSlice", "Icons/DoubleSlice.png");
-	tm.loadTexture("Enrage", "Icons/Enrage.png");
-	tm.loadTexture("Excruciate", "Icons/Excruciate.png");
-	tm.loadTexture("Bullseye", "Icons/Bullseye.png");
-	tm.loadTexture("OverloadWeapon", "Icons/OverloadWeapon.png");
-	tm.loadTexture("PainShare", "Icons/PainShare.png");
-	tm.loadTexture("Regeneration", "Icons/Regeneration.png");
-	tm.loadTexture("SuicideCharge", "Icons/SuicideCharge.png");
-	tm.loadTexture("PlayerAttack", "Sprites/SpriteSheets/PlayerAttack.png");
-	tm.loadTexture("PlayerHit", "Sprites/SpriteSheets/PlayerHit.png");
-	tm.loadTexture("PlayerDie", "Sprites/SpriteSheets/PlayerDie.png");
-	tm.loadTexture("Alien1Attack", "Sprites/SpriteSheets/Alien1Attack.png");
-	tm.loadTexture("Alien1Hit", "Sprites/SpriteSheets/Alien1Hit.png");
-	tm.loadTexture("Alien1Die", "Sprites/SpriteSheets/Alien1Die.png");
-	tm.loadTexture("Alien2Attack", "Sprites/SpriteSheets/Alien2Attack.png");
-	tm.loadTexture("Alien2Hit", "Sprites/SpriteSheets/Alien2Hit.png");
-	tm.loadTexture("Alien2Die", "Sprites/SpriteSheets/Alien2Die.png");
-	tm.loadTexture("Alien3Attack", "Sprites/SpriteSheets/Alien3Attack.png");
-	tm.loadTexture("Alien3Hit", "Sprites/SpriteSheets/Alien3Hit.png");
-	tm.loadTexture("Alien3Die", "Sprites/SpriteSheets/Alien3Die.png");
+	Engine::tm.loadTexture("Settings", "Icons/Settings.png");
+	Engine::tm.loadTexture("TextBox", "Sprites/TextBox.png");
+	Engine::tm.loadTexture("Attack", "Icons/Attack.png");
+	Engine::tm.loadTexture("Heal", "Icons/Heal.png");
+	Engine::tm.loadTexture("Recharge", "Icons/Recharge.png");
+	Engine::tm.loadTexture("Run", "Icons/Run.png");
+	Engine::tm.loadTexture("Charge", "Icons/Charge.png");
+	Engine::tm.loadTexture("StatUp", "Icons/Arrow.png");
+	Engine::tm.loadTexture("Player", "Sprites/Player.png");
+	Engine::tm.loadTexture("Background1", "Sprites/BGspace1.jpg");
+	Engine::tm.loadTexture("LaserBurst", "Icons/LaserBurst.png");
+	Engine::tm.loadTexture("ChargedAttack", "Icons/ChargedAttack.png");
+	Engine::tm.loadTexture("Curse", "Icons/Curse.png");
+	Engine::tm.loadTexture("Dodge", "Icons/Dodge.png");
+	Engine::tm.loadTexture("DoubleSlice", "Icons/DoubleSlice.png");
+	Engine::tm.loadTexture("Enrage", "Icons/Enrage.png");
+	Engine::tm.loadTexture("Excruciate", "Icons/Excruciate.png");
+	Engine::tm.loadTexture("Bullseye", "Icons/Bullseye.png");
+	Engine::tm.loadTexture("OverloadWeapon", "Icons/OverloadWeapon.png");
+	Engine::tm.loadTexture("PainShare", "Icons/PainShare.png");
+	Engine::tm.loadTexture("Regeneration", "Icons/Regeneration.png");
+	Engine::tm.loadTexture("SuicideCharge", "Icons/SuicideCharge.png");
+	Engine::tm.loadTexture("PlayerAttack", "Sprites/SpriteSheets/PlayerAttack.png");
+	Engine::tm.loadTexture("PlayerHit", "Sprites/SpriteSheets/PlayerHit.png");
+	Engine::tm.loadTexture("PlayerDie", "Sprites/SpriteSheets/PlayerDie.png");
+	Engine::tm.loadTexture("Alien1Attack", "Sprites/SpriteSheets/Alien1Attack.png");
+	Engine::tm.loadTexture("Alien1Hit", "Sprites/SpriteSheets/Alien1Hit.png");
+	Engine::tm.loadTexture("Alien1Die", "Sprites/SpriteSheets/Alien1Die.png");
+	Engine::tm.loadTexture("Alien2Attack", "Sprites/SpriteSheets/Alien2Attack.png");
+	Engine::tm.loadTexture("Alien2Hit", "Sprites/SpriteSheets/Alien2Hit.png");
+	Engine::tm.loadTexture("Alien2Die", "Sprites/SpriteSheets/Alien2Die.png");
+	Engine::tm.loadTexture("Alien3Attack", "Sprites/SpriteSheets/Alien3Attack.png");
+	Engine::tm.loadTexture("Alien3Hit", "Sprites/SpriteSheets/Alien3Hit.png");
+	Engine::tm.loadTexture("Alien3Die", "Sprites/SpriteSheets/Alien3Die.png");
 }
 
 void GameScene::UpdateDesctext(std::string desc, sf::Vector2f pos)

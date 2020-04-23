@@ -27,3 +27,18 @@ sf::Font& TextureManager::getFont()
 {
 	return font;
 }
+
+void TextureManager::addButton(const std::string& name, const sf::FloatRect& button)
+{
+	buttons[name] = button;
+}
+
+sf::FloatRect TextureManager::getButton(const std::string& name)
+{
+	return buttons.at(name);
+}
+
+std::map<std::string, sf::FloatRect>& TextureManager::getButtonMap()
+{
+	return buttons;
+}

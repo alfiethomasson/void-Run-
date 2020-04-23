@@ -24,26 +24,28 @@ void CombatUI::turnUpdate()
 
 }
 
-void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p)
+void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 {
 	player = p;
+	texManager = tm;
 
-	attackSprite.setTexture(gameScene.tm.getTex("Attack"));
+	attackSprite.setTexture(Engine::tm.getTex("Attack"));
 	attackSprite.setScale(0.3f, 0.3f);
 	attackSprite.setPosition(sf::Vector2f(400.0f, 600.0f));
 	attackBox = attackSprite.getGlobalBounds();
+	texManager->addButton("attackBox", attackBox);
 
-	healSprite.setTexture(gameScene.tm.getTex("Heal"));
+	healSprite.setTexture(Engine::tm.getTex("Heal"));
 	healSprite.setScale(0.3f, 0.3f);
 	healSprite.setPosition(sf::Vector2f(500.0f, 600.0f));
 	healBox = healSprite.getGlobalBounds();
 
-	rechargeSprite.setTexture(gameScene.tm.getTex("Recharge"));
+	rechargeSprite.setTexture(Engine::tm.getTex("Recharge"));
 	rechargeSprite.setScale(0.3f, 0.3f);
 	rechargeSprite.setPosition(sf::Vector2f(600.0f, 600.0f));
 	rechargeBox = rechargeSprite.getGlobalBounds();
 
-	runSprite.setTexture(gameScene.tm.getTex("Run"));
+	runSprite.setTexture(Engine::tm.getTex("Run"));
 	runSprite.setScale(0.3f, 0.3f);
 	runSprite.setPosition(sf::Vector2f(700.0f, 600.0f));
 	runBox = runSprite.getGlobalBounds();
@@ -87,11 +89,14 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p)
 	runCost.setColor(sf::Color(30, 216, 255, 255));
 
 	UpdateCosts();
+	std::cout << "UI SIZE = " << texManager->getButtonMap().size();
 }
 
-sf::FloatRect& CombatUI::getAttackBox()
+sf::IntRect CombatUI::getAttackBox()
 {
-	return attackBox;
+	//std::cout << "attack sprite is at: " << attackSprite.getPosition() << "\n";
+	return attackSprite.getTextureRect();
+	//return attackBox;
 }
 
 sf::FloatRect& CombatUI::getHealBox()
@@ -111,7 +116,7 @@ sf::FloatRect& CombatUI::getRunBox()
 
 bool CombatUI::CheckBoxes(sf::Vector2f curspos)
 {
-	if (attackBox.contains(curspos) || specialBox.contains(curspos) || healBox.contains(curspos)
+	if (attackSprite.getTextureRect().contains((sf::Vector2i)curspos) || specialBox.contains(curspos) || healBox.contains(curspos)
 		|| rechargeBox.contains(curspos) || runBox.contains(curspos))
 	{
 		return true;
@@ -124,7 +129,7 @@ bool CombatUI::CheckBoxes(sf::Vector2f curspos)
 
 void CombatUI::addSpecial(std::string texName)
 {
-	specialSprite.setTexture(gameScene.tm.getTex(texName));
+	specialSprite.setTexture(Engine::tm.getTex(texName));
 	specialSprite.setPosition(sf::Vector2f(600.0f, 600.0f));
 	specialSprite.setScale(0.3f, 0.3f);
 }
@@ -171,6 +176,7 @@ void CombatUI::UpdateCosts()
 
 void GameUI::Update(double dt)
 {
+
 }
 
 bool GameUI::updateStatOptions()
@@ -244,13 +250,13 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	descText.setCharacterSize(30);
 	descText.setString("");
 
-	playerIcon.setTexture(gameScene.tm.getTex("Player"));
+	playerIcon.setTexture(Engine::tm.getTex("Player"));
 	playerIcon.setScale(0.5f, 0.5f);
 	playerIcon.setPosition(0.0f, 500.0f);
 
-	stat1.setTexture(gameScene.tm.getTex("StatUp"));
-	stat2.setTexture(gameScene.tm.getTex("StatUp"));
-	stat3.setTexture(gameScene.tm.getTex("StatUp"));
+	stat1.setTexture(Engine::tm.getTex("StatUp"));
+	stat2.setTexture(Engine::tm.getTex("StatUp"));
+	stat3.setTexture(Engine::tm.getTex("StatUp"));
 	stat1.setScale(0.3f, 0.3f);
 	stat2.setScale(0.3f, 0.3f);
 	stat3.setScale(0.3f, 0.3f);
@@ -282,14 +288,14 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	HealthText.setPosition(stat2.getPosition().x - HealthText.getLocalBounds().width, 300.0f);
 	DexterityText.setPosition(stat3.getPosition().x - DexterityText.getLocalBounds().width, 300.0f);
 
-	background.setTexture(gameScene.tm.getTex("Background1"));
+	background.setTexture(Engine::tm.getTex("Background1"));
 	background.setScale(Engine::getWindowSize().x / background.getGlobalBounds().width, 0.5f);
 }
 
 sf::Sprite GameUI::getNewCell()
 {
 	sf::Sprite cell;
-	cell.setTexture(gameScene.tm.getTex("Charge"));
+	cell.setTexture(Engine::tm.getTex("Charge"));
 	cell.setScale(0.05f, 0.15f);
 	height += 20;
 	cell.setPosition(sf::Vector2f(550.0f + height, 550.0));
