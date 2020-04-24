@@ -94,6 +94,7 @@ protected:
 	sf::Texture backgroundTex;
 
 	bool inStatUp;
+	sf::Sound sound;
 
 	//TextureManager& texManager;
 public:
@@ -116,4 +117,6 @@ public:
 
 	void statUp();
 	bool updateStatOptions();
+
+	void playSound(const std::string& name, int volume);
 };

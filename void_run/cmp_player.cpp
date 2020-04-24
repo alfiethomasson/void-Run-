@@ -209,6 +209,7 @@ void BasePlayerComponent::attack(float str, float dex)
 	if (calculateHit(dex))
 	{
 		currentEnemy->TakeDamage(str);
+		gameUI.playSound("Attack", 30);
 		spriteManager->playAttack();
 	}
 	else {
@@ -235,6 +236,7 @@ void BasePlayerComponent::heal(float healBy)
 	SpendAP(healCost);
 	cout << "Player Heals!";
 	int tempHealth = currentHealth + healBy;
+	gameUI.playSound("Heal", 30);
 	if (tempHealth > _maxHealth)
 	{
 		currentHealth = _maxHealth;
@@ -249,6 +251,7 @@ void BasePlayerComponent::heal(float healBy)
 void BasePlayerComponent::recharge(int amount)
 {
 	cout << "Player Recharges!";
+	gameUI.playSound("Recharge", 30);
 	SpendAP(rechargeCost);
 	gainAP(amount);
 	EndTurn();
@@ -262,6 +265,7 @@ void BasePlayerComponent::run()
 	if (random < runChance)
 	{
 		currentEnemy->setfordeletion();
+		gameUI.playSound("Run", 30);
 		spriteManager->playRun();
 	}
 	else
@@ -353,6 +357,7 @@ void BasePlayerComponent::setExperience(int experience)
 void BasePlayerComponent::takeDamage(float dmgRecieved)
 {
 	currentHealth -= dmgRecieved;
+	gameUI.playSound("PlayerHit", 60);
 	if (currentHealth <= 0)
 	{
 		currentHealth = 0;

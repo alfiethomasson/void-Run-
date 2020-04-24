@@ -42,3 +42,18 @@ std::map<std::string, sf::FloatRect>& TextureManager::getButtonMap()
 {
 	return buttons;
 }
+
+void TextureManager::loadSound(const std::string& name, const std::string& filename)
+{
+	sf::SoundBuffer buf;
+	if (!buf.loadFromFile("res/" + filename))
+	{
+		std::cout << "Couldn't load " << filename << "\n";
+	}
+	sounds[name] = buf;
+}
+
+sf::SoundBuffer& TextureManager::getSound(const std::string& sound)
+{
+	return sounds[sound];
+}

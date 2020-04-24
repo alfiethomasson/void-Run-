@@ -423,6 +423,17 @@ void GameScene::Load() {
 
 	std::shared_ptr<StatRoom> statRoom = std::make_shared<StatRoom>(pl);
 
+	//Loads music
+	if (!gameMusic.openFromFile("res/Sounds/Music/GameMusic.wav"))
+	{
+		cout << "Couldn't load Game music\n";
+	}
+
+	//Starts music
+	gameMusic.play();
+	gameMusic.setVolume(50.0f);
+	gameMusic.setLoop(true);
+
 	//Calls ChangeRoom to start the game with a random room
 	ChangeRoom();
 	
@@ -717,6 +728,15 @@ void GameScene::LoadTextures()
 	Engine::tm.loadTexture("Alien3Attack", "Sprites/SpriteSheets/Alien3Attack.png");
 	Engine::tm.loadTexture("Alien3Hit", "Sprites/SpriteSheets/Alien3Hit.png");
 	Engine::tm.loadTexture("Alien3Die", "Sprites/SpriteSheets/Alien3Die.png");
+	Engine::tm.loadSound("Heal", "Sounds/FX/Heal.wav");
+	Engine::tm.loadSound("Attack", "Sounds/FX/PlayerAttack.wav");
+	Engine::tm.loadSound("Run", "Sounds/FX/Run.wav");
+	Engine::tm.loadSound("Recharge", "Sounds/FX/Recharge.wav");
+	Engine::tm.loadSound("LevelUp", "Sounds/FX/LevelUp.wav");
+	Engine::tm.loadSound("StatUp", "Sounds/FX/StatUp.wav");
+	Engine::tm.loadSound("ChestOpening", "Sounds/FX/ChestOpening.wav");
+	Engine::tm.loadSound("ButtonPress", "Sounds/FX/ButtonPress.wav");
+	Engine::tm.loadSound("PlayerHit", "Sounds/FX/PlayerHit.wav");
 }
 
 void GameScene::UpdateDesctext(std::string desc, sf::Vector2f pos)

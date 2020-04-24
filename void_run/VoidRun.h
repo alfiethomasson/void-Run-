@@ -20,6 +20,7 @@ private:
 	sf::Text ResChange;
 	sf::Text ResText;
 	sf::Text BackButton;
+	sf::Text toChangeControls;
 	sf::Font font;
 	sf::FloatRect PlayButtonBox;
 	sf::FloatRect ExitButtonBox;
@@ -37,6 +38,7 @@ public:
 	void Update(const double& dt) override;
 	void Render() override;
 	void Load() override;
+	void ChangeControls();
 	void UpdateButtons();
 };
 
@@ -72,6 +74,8 @@ private:
 	std::shared_ptr<PlayerSprite> playerSprite;
 
 	bool loadFromSave;
+
+	sf::Music gameMusic;
 
 public:
 	sf::Text screenText;

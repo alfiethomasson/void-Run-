@@ -191,18 +191,27 @@ bool GameUI::updateStatOptions()
 			if (stat1Box.contains(cursPos))
 			{
 				player->addStats(10, 0, 0);
+				sound.setBuffer(Engine::tm.getSound("StatUp"));
+				sound.setVolume(50);
+				sound.play();
 				inStatUp = false;
 				return false;
 			}
 			if (stat2Box.contains(cursPos))
 			{
 				player->addStats(0, 20, 0);
+				sound.setBuffer(Engine::tm.getSound("StatUp"));
+				sound.setVolume(50);
+				sound.play();
 				inStatUp = false;
 				return false;
 			}
 			if (stat3Box.contains(cursPos))
 			{
 				player->addStats(0, 0, 10);
+				sound.setBuffer(Engine::tm.getSound("StatUp"));
+				sound.setVolume(50);
+				sound.play();
 				inStatUp = false;
 				return false;
 			}
@@ -375,4 +384,11 @@ void GameUI::UpdateDesc(std::string string)
 void GameUI::UpdateDescPos(sf::Vector2f pos)
 {
 	descText.setPosition(pos);
+}
+
+void GameUI::playSound(const std::string& name, int volume)
+{
+	sound.setBuffer(Engine::tm.getSound(name));
+	sound.setVolume(volume);
+	sound.play();
 }
