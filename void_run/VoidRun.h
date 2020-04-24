@@ -71,6 +71,8 @@ private:
 	std::shared_ptr<AbilityManager> am;
 	std::shared_ptr<PlayerSprite> playerSprite;
 
+	bool loadFromSave;
+
 public:
 	sf::Text screenText;
 	CombatUI combatUI;
@@ -92,4 +94,6 @@ public:
 	void LoadTextures() override;
 	void UpdateDesctext(std::string, sf::Vector2f pos);
 	void ResetDescText();
+	void setLoadFromSave(bool tf);
+	Room& getCurrentRoom();
 };

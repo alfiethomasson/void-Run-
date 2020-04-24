@@ -19,7 +19,7 @@ public:
 	std::string description;
 
 	Item(int strength, int health, int dexterity, std::string desc, std::string texName);
-
+	Item() = default;
 	virtual void Equip(Entity newUser);
 	virtual void Unequip(int position);
 	void Load();
@@ -34,6 +34,7 @@ protected:
 public:
 	SpecialItem(int strength, int health, int dexterity, 
 		std::string desc, std::string texName, std::shared_ptr<SpecialAbility> sp);
+	SpecialItem() = default;
 
 	void Equip(Entity newUser);
 	void Unequip(int position);

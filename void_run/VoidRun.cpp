@@ -9,6 +9,7 @@
 #include "cmp_enemy.h"
 #include "cmp_abilitymanager.h"
 #include "TreasureRoom.h"
+#include <fstream>
 
 #define GAMEX 1280
 #define GAMEY 720
@@ -314,21 +315,88 @@ void GameScene::Load() {
 	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (BackButton.getGlobalBounds().width / 2), GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 100.0f));
 	BackButtonBox = BackButton.getGlobalBounds();
 
-	//Creates Player and adds components
-	pl = make_shared<Entity>(); 
-	//auto s = pl->addComponent<ShapeComponent>();
-	//pl->addComponent<PlayerMovementComponent>();
-	player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f, 10, &combatUI, &gameUI);
-	am = pl->addComponent<AbilityManager>(3);
-	inv = pl->addComponent<Inventory>(2, &gameUI);
-	inv->Load();
-	playerSprite = pl->addComponent<PlayerSprite>();
-	playerSprite->load();
-	//s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
-	//s->getShape().setFillColor(Color::Yellow);
-	//s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
-	ents.list.push_back(pl);
+	loadFromSave = true;
+	if (loadFromSave)
+	{
+		std::string line;
+		std::ifstream file;
 
+		std::vector<sf::Text> textList;
+		file.open("res/Saves/Save.txt");
+		int test = 0;
+		int linenumber = 0 ;
+		std::string string;
+		float x;
+
+		if (!file)
+		{
+			std::cout << "couldnt load file\n";
+		}
+
+		float HPMax = 0;
+		float strength = 0;
+		float dex = 0;
+		float exp = 0;
+
+		if (file.is_open())
+		{
+			std::cout << "In save file :) \n";
+			while (file >> x)
+			{
+				if (linenumber == 0)
+				{
+					HPMax = x;
+				}
+				else if (linenumber == 1)
+				{
+					strength = x;
+				}
+				else if (linenumber == 2)
+				{
+					dex = x;
+				}
+				else if (linenumber == 3)
+				{
+					exp = x;
+				}
+				linenumber++;
+				//test += x;
+			}
+			std::cout << "TEST LINE = " << dex << "\n";
+		}
+		//Creates Player and adds components
+		pl = make_shared<Entity>();
+		//auto s = pl->addComponent<ShapeComponent>();
+		//pl->addComponent<PlayerMovementComponent>();
+		player = pl->addComponent<BasePlayerComponent>(HPMax, strength, dex, exp, 10, &combatUI, &gameUI);
+		am = pl->addComponent<AbilityManager>(3);
+		inv = pl->addComponent<Inventory>(2, &gameUI);
+		inv->Load();
+		playerSprite = pl->addComponent<PlayerSprite>();
+		playerSprite->load();
+		//s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
+		//s->getShape().setFillColor(Color::Yellow);
+		//s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
+		ents.list.push_back(pl);
+	}
+	else
+	{
+
+		//Creates Player and adds components
+		pl = make_shared<Entity>();
+		//auto s = pl->addComponent<ShapeComponent>();
+		//pl->addComponent<PlayerMovementComponent>();
+		player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f, 10, &combatUI, &gameUI);
+		am = pl->addComponent<AbilityManager>(3);
+		inv = pl->addComponent<Inventory>(2, &gameUI);
+		inv->Load();
+		playerSprite = pl->addComponent<PlayerSprite>();
+		playerSprite->load();
+		//s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
+		//s->getShape().setFillColor(Color::Yellow);
+		//s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
+		ents.list.push_back(pl);
+	}
 	//Populates the item database with pre defined items
 	itemDB.PopulateDB();
 	player->load();
@@ -363,6 +431,11 @@ void GameScene::Load() {
 	//setLoaded(true);
 }
 
+void GameScene::setLoadFromSave(bool tf)
+{
+	loadFromSave = tf;
+}
+
 void GameScene::Update(const double& dt) {
 	//Gets Mouse position in an int format
 	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
@@ -395,10 +468,11 @@ void GameScene::Update(const double& dt) {
 		//Adds random special item to inventory
 		if (Keyboard::isKeyPressed(Keyboard::Num3) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
+			playerSprite->playRun();
 		/*	auto tempItem = itemDB.randomSpecialItem();
 			UpdateTextBox(tempItem->description);
 			inv->add(tempItem);*/
-			//scene_clock.restart();
+			scene_clock.restart();
 			//std::cout << "\nshould play attack\n";
 			std::cout << "MouseX: " << Mouse::getPosition().x << " MouseY: " << Mouse::getPosition().y << "\n";
 			std::cout << "Adjusted MouseX: " << cursPos.x << " Adjusted MouseY: " << cursPos.y << "\n";
@@ -525,9 +599,9 @@ void GameScene::Render() {
 	{
 		gameUI.Render();
 		currentRoom->Render();
+		Scene::Render();
 		Renderer::queue(&screenText);
 		Renderer::queue(&SettingSprite);
-		Scene::Render();
 		Renderer::queue(&descRect);
 		Renderer::queue(&descText);
 	}
@@ -554,6 +628,7 @@ void GameScene::ChangeRoom() {
 	int roomType = rand() % 2;
 	if (roomType == 0) //Combat Room
 	{
+		UpdateTextBox("Entered Combat Room");
 		//Makes new combat Room
 		std::shared_ptr<CombatRoom> newRoom = make_shared<CombatRoom>(pl);
 		//Calls load function of the new room 
@@ -568,7 +643,6 @@ void GameScene::ChangeRoom() {
 		}
 		//Set's current room to be the newly created room
 		currentRoom = newRoom;
-		UpdateTextBox("Entered Combat Room");
 	}
 	else if(roomType == 1) //Treasure Room
 	{
@@ -579,6 +653,11 @@ void GameScene::ChangeRoom() {
 		UpdateTextBox("Entered Treasure Room");
 	}
 	
+}
+
+Room& GameScene::getCurrentRoom()
+{
+	return *currentRoom;
 }
 
 //Updates the bounding boxes of all Buttons
@@ -628,6 +707,7 @@ void GameScene::LoadTextures()
 	Engine::tm.loadTexture("PlayerAttack", "Sprites/SpriteSheets/PlayerAttack.png");
 	Engine::tm.loadTexture("PlayerHit", "Sprites/SpriteSheets/PlayerHit.png");
 	Engine::tm.loadTexture("PlayerDie", "Sprites/SpriteSheets/PlayerDie.png");
+	Engine::tm.loadTexture("PlayerRun", "Sprites/SpriteSheets/PlayerRun.png");
 	Engine::tm.loadTexture("Alien1Attack", "Sprites/SpriteSheets/Alien1Attack.png");
 	Engine::tm.loadTexture("Alien1Hit", "Sprites/SpriteSheets/Alien1Hit.png");
 	Engine::tm.loadTexture("Alien1Die", "Sprites/SpriteSheets/Alien1Die.png");

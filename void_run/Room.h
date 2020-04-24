@@ -18,5 +18,6 @@ public:
 	std::vector<std::shared_ptr<Entity>> GetEnts();
 	
 	bool isActive();
+	void setInactive();
 	void StatUp();
 };

@@ -39,3 +39,8 @@ bool Room::isActive()
 {
 	return active;
 }
+
+void Room::setInactive()
+{
+	active = false;
+}

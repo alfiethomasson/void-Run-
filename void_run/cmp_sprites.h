@@ -14,13 +14,16 @@ protected:
 	sf::Texture attackSheet;
 	sf::Texture hitSheet;
 	sf::Texture dieSheet;
+	sf::Texture runSheet;
 	std::string attackName;
 	std::string hitName;
 	std::string dieName;
+	std::string runName;
 
 	sf::Vector2f attackSize;
 	sf::Vector2f hitSize;
 	sf::Vector2f dieSize;
+	sf::Vector2f runSize;
 
 	sf::IntRect sheetRect;
 
@@ -29,10 +32,12 @@ protected:
 	int attackSpriteNum;
 	int hitSpriteNum;
 	int dieSpriteNum;
+	int runSpriteNum;
 
 	bool inAttack;
 	bool inHit;
 	bool inDie;
+	bool inRun;
 	float dieDelay;
 
 	sf::Clock animClock;
@@ -54,6 +59,7 @@ public:
 	virtual void playAttack();
 	virtual void playHit();
 	virtual void playDie();
+	virtual void playRun();
 	virtual void ResetAnim();
 
 	void AddIcon(std::string texName, std::string desc, bool leftright);

@@ -3,7 +3,7 @@
 #include "Game.h"
 
 SpriteComponent::SpriteComponent(Entity* p) 
-	: inAttack{ false }, inHit{ false }, inDie{ false }, Component(p) {}
+	: inAttack{ false }, inHit{ false }, inDie{ false }, inRun{ false }, Component(p) {}
 
 void SpriteComponent::load()
 {
@@ -100,6 +100,38 @@ void SpriteComponent::update(double dt)
 			}
 		}
 	}
+	if (inRun)
+	{
+		if (animClock.getElapsedTime().asSeconds() > animDelay)
+		{
+			if (animCounter < runSpriteNum)
+			{
+				if (animRowCounter <= 3)
+				{
+					if (animRowCounter == 3)
+					{
+						sheetRect.top += runSize.y;
+						sheetRect.left = 0;
+						animRowCounter = 0;
+					}
+					else
+					{
+						sheetRect.left += runSize.x;
+						animRowCounter++;
+					}
+				}
+				sprite.setTextureRect(sheetRect);
+				animClock.restart();
+				animCounter++;
+			}
+			else
+			{
+				gameScene.getCurrentRoom().setInactive();
+				ResetAnim();
+			}
+		}
+		sprite.move(sf::Vector2f(-0.5, 0));
+	}
 	if (inDie)
 	{
 		if (hitClock.getElapsedTime().asSeconds() > dieDelay)
@@ -165,11 +197,23 @@ void SpriteComponent::playDie()
 	animDelay = 0.05f;
 }
 
+void SpriteComponent::playRun()
+{
+	inRun = true;
+	hitClock.restart();
+	sheetRect = sf::IntRect(0, 0, runSize.x, runSize.y);
+	sprite = sf::Sprite(runSheet, sheetRect);
+
+	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
+	animDelay = 0.05f;
+}
+
 void SpriteComponent::ResetAnim()
 {
 	inAttack = false;
 	inHit = false;
 	inDie = false;
+	inRun = false;
 	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
 	sprite = sf::Sprite(attackSheet, sheetRect);
 	animRowCounter = 0;

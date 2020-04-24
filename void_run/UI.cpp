@@ -92,11 +92,11 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 	std::cout << "UI SIZE = " << texManager->getButtonMap().size();
 }
 
-sf::IntRect CombatUI::getAttackBox()
+sf::FloatRect& CombatUI::getAttackBox()
 {
 	//std::cout << "attack sprite is at: " << attackSprite.getPosition() << "\n";
-	return attackSprite.getTextureRect();
-	//return attackBox;
+	//return attackSprite.getTextureRect();
+	return attackBox;
 }
 
 sf::FloatRect& CombatUI::getHealBox()

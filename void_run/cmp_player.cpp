@@ -58,7 +58,7 @@ void BasePlayerComponent::update(double dt) {
 
 				if (Mouse::isButtonPressed(Mouse::Left))
 				{
-					if (combatUI.getAttackBox().contains((sf::Vector2i)cursPos) && CheckAP(baseAttackCost))
+					if (combatUI.getAttackBox().contains(cursPos) && CheckAP(baseAttackCost))
 					{
 						attack(_strength, _dexterity);
 					}
@@ -87,7 +87,7 @@ void BasePlayerComponent::update(double dt) {
 
 	if (combatUI.CheckBoxes(cursPos))
 	{
-		if (combatUI.getAttackBox().contains((sf::Vector2i) cursPos))
+		if (combatUI.getAttackBox().contains(cursPos))
 		{
 			//std::cout << "HEY";
 			gameScene.UpdateDesctext("ATTACK ENEMY\nDamage = " + std::to_string((int)_strength), sf::Vector2f(combatUI.getAttackBox().getPosition().x,
@@ -181,7 +181,8 @@ void BasePlayerComponent::load()
 void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)
 {
 	currentEnemy = e;
-	runChance = calcRunChance();
+//runChance = calcRunChance();
+	runChance = 100;
 }
 
 bool BasePlayerComponent::checkEnemyStatus(){
@@ -260,8 +261,8 @@ void BasePlayerComponent::run()
 	int random = rand() % 100;
 	if (random < runChance)
 	{
-		cout << "Player runs! SUCCESS  NEED TO IMPLEMENT STUFF PROPERLY HELLO DEVS!\n";
 		currentEnemy->setfordeletion();
+		spriteManager->playRun();
 	}
 	else
 	{

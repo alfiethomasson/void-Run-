@@ -48,7 +48,7 @@ public:
 
 	void Update(double dt);
 	void turnUpdate();
-	sf::IntRect getAttackBox();
+	sf::FloatRect& getAttackBox();
 	sf::FloatRect& getHealBox();
 	sf::FloatRect& getRechargeBox();
 	sf::FloatRect& getRunBox();
