@@ -6,15 +6,38 @@ MediumEnemy::MediumEnemy(Entity* p, int health, int strength, int dex, float exp
 	: BaseEnemyComponent{ p, health, strength, dex, expReward, specialMove } {}
 	
 bool cursed = false;
+bool hasRegenerated;
 
 void MediumEnemy::update(double dt)
 {
 
 	BaseEnemyComponent::update(dt);
 
+	srand(time(0));
+
+	if (cursed == true)
+	{
+		attackEnemy(5, 10000); //If the alien has used a curse, the player takes 5 damage at the start of each of the alien turns
+	}
+
 	if (isTurn && isFinishedTurn != true)
 	{
-		srand(time(0));
+		if (specialMove == 1 && currentHealth <= 40 && hasRegenerated == false) //If it has Regeneration, and it's at or below 40% it will use this. One time only.
+		{
+			std::cout << "The enemy uses its unique ability: Regeneration! \n";
+			currentHealth += ((_maxHealth - currentHealth) / 2);
+			hasRegenerated = true;
+			EndTurn();
+		}
+		else if (specialMove == 3 && turnCounter % 5 == 1) //If it has Curse, it uses it every fifth turn (1, 6, 11, 16, etc)
+	{
+			std::cout << "The enemy uses its unique attack: Curse! \n";
+			cursed = true;
+			EndTurn();
+	}
+
+	/*if (isTurn && isFinishedTurn != true)
+	{
 		int enemyAI = rand() % 8; //Random number from 0-7. 1-2 is light attack, 3-6 is medium attack, 7-8 is unique ability.
 
 		if (cursed == true) {
@@ -55,7 +78,7 @@ void MediumEnemy::update(double dt)
 				EndTurn();
 			}
 		}
-	}
+	}*/
 }
 
 void MediumEnemy::load()
@@ -80,6 +103,8 @@ void MediumEnemy::load()
 		spriteManager->AddIcon("Curse", "CURSE\nCurses the player, dealing \ndamage every turn", true);
 	}
 	BaseEnemyComponent::load();
+
+	turnCounter = 0;
 }
 
 void MediumEnemy::render()
