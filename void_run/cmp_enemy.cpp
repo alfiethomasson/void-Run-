@@ -34,6 +34,7 @@ void BaseEnemyComponent::load()
 	healthText.setPosition(1120.0f, 40.0f);
 	healthText.setFillColor(sf::Color(220, 20, 60, 255));
 
+	turnCounter = 1;
 }
 
 void BaseEnemyComponent::makeHPBar()
@@ -133,6 +134,7 @@ void BaseEnemyComponent::EndTurn()
 {
 	cout << "Enemy Turn Ends!";
 	isFinishedTurn = true;
+	turnCounter++;
 }
 
 void BaseEnemyComponent::TakeDamage(float damage)

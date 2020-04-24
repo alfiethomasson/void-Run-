@@ -15,6 +15,7 @@ protected:
 	float _maxHealth;
 	float currentHealth;
 	bool inAttack;
+	int turnCounter;
 
 	sf::Clock animClock;
 

@@ -14,12 +14,6 @@ class GameUI;
 
 class BasePlayerComponent : public Component {
 protected:
-	float playerDamage;
-	float _strength;
-	float _dexterity;
-	int _maxHealth;
-	int _level;
-
 	int currentHealth;
 	float playerHealQuantity;
 	float _experience;
@@ -53,6 +47,12 @@ public:
 	int rechargeCost;
 	int runCost;
 	int level;
+
+	float playerDamage;
+	float _strength;
+	float _dexterity;
+	int _maxHealth;
+	int _level;
 
 	explicit BasePlayerComponent(Entity* p, int health, float strength, float dex,
 		float experience, int actionPoints, CombatUI *ui, GameUI *gameUI);
