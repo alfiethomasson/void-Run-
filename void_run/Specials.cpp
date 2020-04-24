@@ -12,6 +12,7 @@ void LaserBurst::update(double dt)
 void LaserBurst::load()
 {
 	texName = "LaserBurst";
+	APCost = 5;
 	//SpecialAbility::load();
 }
 
@@ -37,6 +38,7 @@ void OverloadWeapon::update(double dt)
 void OverloadWeapon::load()
 {
 	texName = "OverloadWeapon";
+	APCost = 4;
 }
 
 void OverloadWeapon::doEffect()

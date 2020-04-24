@@ -2,20 +2,28 @@
 #include "engine.h"
 #include "system_renderer.h"
 #include "cmp_player.h"
+#include "SpecialAbility.h"
 
 class BasePlayerComponent;
+class SpecialAbility;
 
 class CombatUI : UIManager {
 protected:
 	sf::Font font;
 
 	sf::Sprite attackSprite;
-	sf::Sprite specialSprite;
 	sf::Sprite healSprite;
 	sf::Sprite rechargeSprite;
 	sf::Sprite runSprite;
+	sf::Sprite special1Sprite;
+	sf::Sprite special2Sprite;
+	sf::Sprite special3Sprite;
+	sf::Sprite special4Sprite;
 	sf::Texture attackTex;
-	sf::Texture specialTex;
+	sf::Texture special1Tex;
+	sf::Texture special2Tex;
+	sf::Texture special3Tex;
+	sf::Texture special4Tex;
 	sf::Texture healTex;
 	sf::Texture rechargeTex;
 	sf::Texture runTex;
@@ -31,6 +39,7 @@ protected:
 	sf::Text specialControl1;	
 	sf::Text specialControl2;
 	sf::Text specialControl3;
+	sf::Text specialControl4;
 	sf::Text attackCost;
 	sf::Text healCost;
 	sf::Text rechargeCost;
@@ -38,6 +47,7 @@ protected:
 	sf::Text specialCost1;
 	sf::Text specialCost2;
 	sf::Text specialCost3;
+	sf::Text specialCost4;
 
 	const int costOffset = 5;
 
@@ -58,7 +68,7 @@ public:
 	
 	void UpdateControls();
 	void UpdateCosts();
-	void addSpecial(std::string texName);
+	void addSpecial(std::string texName, std::shared_ptr<SpecialAbility> sp);
 	void resetSpecial();
 };
 

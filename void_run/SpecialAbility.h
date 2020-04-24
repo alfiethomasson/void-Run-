@@ -7,6 +7,7 @@ class SpecialAbility
 {
 protected:
 	std::shared_ptr<BasePlayerComponent> player;
+	int APCost;
 public:
 	std::string texName;
 
@@ -15,5 +16,6 @@ public:
 	void update(double dt);
 	virtual void doEffect() {}
 	void updatePlayer(std::shared_ptr<BasePlayerComponent> pl);
+	int getAPCost();
 
 };

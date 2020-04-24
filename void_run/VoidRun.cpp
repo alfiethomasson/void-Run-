@@ -42,6 +42,10 @@ Keyboard::Key healKey;
 Keyboard::Key rechargeKey;
 Keyboard::Key runKey;
 Keyboard::Key pauseKey;
+Keyboard::Key special1Key;
+Keyboard::Key special2Key;
+Keyboard::Key special3Key;
+Keyboard::Key special4Key;
 
 void MenuScene::Update(const double& dt) {
 
@@ -256,11 +260,15 @@ void MenuScene::Load() {
 
 	sceneChangeDelay = 1.0f;
 
-	attackKey = Keyboard::Q;
-	healKey = Keyboard::W;
-	rechargeKey = Keyboard::E;
-	runKey = Keyboard::R;
-	pauseKey = Keyboard::Num2;
+	attackKey = Keyboard::Num1;
+	healKey = Keyboard::Num2;
+	rechargeKey = Keyboard::Num3;
+	runKey = Keyboard::Num4;
+	pauseKey = Keyboard::Tab;
+	special1Key = Keyboard::Q;
+	special2Key = Keyboard::W;
+	special3Key = Keyboard::E;
+	special4Key = Keyboard::R;
 }
 
 //Updates the bounding boxes of buttons
@@ -545,7 +553,6 @@ void GameScene::Update(const double& dt) {
 				if (Engine::getWindowSize().y != 1080)
 				{
 					ResChange.setString("1080p");
-					std::cout << "Hey alfie : " << Engine::tm.getButtonMap().size() << "\n";
 					Engine::ChangeResolution(1920, 1080, GAMEX, GAMEY);
 					UpdateButtons();
 				}

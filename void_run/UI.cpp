@@ -5,10 +5,13 @@
 void CombatUI::Render()
 {
  	Renderer::queue(&attackSprite);
-	Renderer::queue(&specialSprite);
 	Renderer::queue(&healSprite);
 	Renderer::queue(&rechargeSprite);
 	Renderer::queue(&runSprite);
+	Renderer::queue(&special1Sprite);
+	Renderer::queue(&special2Sprite);
+	Renderer::queue(&special3Sprite);
+	Renderer::queue(&special4Sprite);
 	Renderer::queue(&attackControl);
 	Renderer::queue(&healControl);
 	Renderer::queue(&rechargeControl);
@@ -31,42 +34,50 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 
 	attackSprite.setTexture(Engine::tm.getTex("Attack"));
 	attackSprite.setScale(0.3f, 0.3f);
-	attackSprite.setPosition(sf::Vector2f(400.0f, 600.0f));
+	attackSprite.setPosition(sf::Vector2f(400.0f, 550.0f));
 	attackBox = attackSprite.getGlobalBounds();
 	texManager->addButton("attackBox", attackBox);
 
 	healSprite.setTexture(Engine::tm.getTex("Heal"));
 	healSprite.setScale(0.3f, 0.3f);
-	healSprite.setPosition(sf::Vector2f(500.0f, 600.0f));
+	healSprite.setPosition(sf::Vector2f(500.0f, 550.0f));
 	healBox = healSprite.getGlobalBounds();
 
 	rechargeSprite.setTexture(Engine::tm.getTex("Recharge"));
 	rechargeSprite.setScale(0.3f, 0.3f);
-	rechargeSprite.setPosition(sf::Vector2f(600.0f, 600.0f));
+	rechargeSprite.setPosition(sf::Vector2f(600.0f, 550.0f));
 	rechargeBox = rechargeSprite.getGlobalBounds();
 
 	runSprite.setTexture(Engine::tm.getTex("Run"));
 	runSprite.setScale(0.3f, 0.3f);
-	runSprite.setPosition(sf::Vector2f(700.0f, 600.0f));
+	runSprite.setPosition(sf::Vector2f(700.0f, 550.0f));
 	runBox = runSprite.getGlobalBounds();
 
-	specialSprite.setPosition(sf::Vector2f(800.0f, 600.0f));
-	specialBox = specialSprite.getGlobalBounds();
+	special1Sprite.setPosition(sf::Vector2f(400.0f, 650.0f));
 
-	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
-	{
-		std::cout << "couldnt load font combat ui\n";
-	}
+	special2Sprite.setPosition(sf::Vector2f(500.0f, 650.0f));
 
-	attackControl.setFont(font);
-	healControl.setFont(font);
-	rechargeControl.setFont(font);
-	runControl.setFont(font);
+	special3Sprite.setPosition(sf::Vector2f(600.0f, 650.0f));
+
+	special4Sprite.setPosition(sf::Vector2f(700.0f, 650.0f));
+
+	attackControl.setFont(Engine::tm.getFont());
+	healControl.setFont(Engine::tm.getFont());
+	rechargeControl.setFont(Engine::tm.getFont());
+	runControl.setFont(Engine::tm.getFont());
+	specialControl1.setFont(Engine::tm.getFont());
+	specialControl2.setFont(Engine::tm.getFont());
+	specialControl3.setFont(Engine::tm.getFont());
+	specialControl4.setFont(Engine::tm.getFont());
 	
 	attackControl.setCharacterSize(30);
 	healControl.setCharacterSize(30);
 	rechargeControl.setCharacterSize(30);
 	runControl.setCharacterSize(30);
+	specialControl1.setCharacterSize(30);
+	specialControl2.setCharacterSize(30);
+	specialControl3.setCharacterSize(30);
+	specialControl4.setCharacterSize(30);
 
 	UpdateControls();
 
@@ -77,16 +88,26 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 	specialCost1.setFont(font);
 	specialCost2.setFont(font);
 	specialCost3.setFont(font);
+	specialCost4.setFont(font);
 
 	attackCost.setCharacterSize(25);
 	healCost.setCharacterSize(25);
 	rechargeCost.setCharacterSize(25);
 	runCost.setCharacterSize(25);
+	specialCost1.setCharacterSize(25);
+	specialCost2.setCharacterSize(25);
+	specialCost3.setCharacterSize(25);
+	specialCost4.setCharacterSize(25);
 
 	attackCost.setColor(sf::Color(30, 216, 255, 255));
 	healCost.setColor(sf::Color(30, 216, 255, 255));
 	rechargeCost.setColor(sf::Color(30, 216, 255, 255));
 	runCost.setColor(sf::Color(30, 216, 255, 255));
+	specialCost1.setColor(sf::Color(30, 216, 255, 255));
+	specialCost2.setColor(sf::Color(30, 216, 255, 255));
+	specialCost3.setColor(sf::Color(30, 216, 255, 255));
+	specialCost4.setColor(sf::Color(30, 216, 255, 255));
+
 
 	UpdateCosts();
 	std::cout << "UI SIZE = " << texManager->getButtonMap().size();
@@ -127,16 +148,52 @@ bool CombatUI::CheckBoxes(sf::Vector2f curspos)
 	}
 }
 
-void CombatUI::addSpecial(std::string texName)
+void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> sp)
 {
-	specialSprite.setTexture(Engine::tm.getTex(texName));
-	specialSprite.setPosition(sf::Vector2f(600.0f, 600.0f));
-	specialSprite.setScale(0.3f, 0.3f);
+	if (special1Sprite.getTexture() == NULL)
+	{
+		special1Sprite.setTexture(Engine::tm.getTex(texName));
+		special1Sprite.setScale(0.3f, 0.3f);
+		specialCost1.setString(std::to_string(sp->getAPCost()));
+		specialControl1.setString(Engine::keyToString(special1Key));
+		specialControl1.setPosition(special1Sprite.getPosition().x + (special1Sprite.getGlobalBounds().width / 2)
+			- (specialControl1.getGlobalBounds().width / 2), 730.0f);
+	}
+	else if (special2Sprite.getTexture() == NULL)
+	{
+		special2Sprite.setTexture(Engine::tm.getTex(texName));
+		special2Sprite.setScale(0.3f, 0.3f);
+		specialCost2.setString(std::to_string(sp->getAPCost()));
+		specialControl2.setString(Engine::keyToString(special2Key));
+		specialControl2.setPosition(special2Sprite.getPosition().x + (special2Sprite.getGlobalBounds().width / 2)
+			- (specialControl2.getGlobalBounds().width / 2), 730.0f);
+	}
+	else if (special3Sprite.getTexture() == NULL)
+	{
+		special3Sprite.setTexture(Engine::tm.getTex(texName));
+		special3Sprite.setScale(0.3f, 0.3f);
+		specialCost3.setString(std::to_string(sp->getAPCost()));
+		specialControl3.setString(Engine::keyToString(special3Key));
+		specialControl3.setPosition(special3Sprite.getPosition().x + (special3Sprite.getGlobalBounds().width / 2)
+			- (specialControl3.getGlobalBounds().width / 2), 730.0f);
+	}
+	else if (special4Sprite.getTexture() == NULL)
+	{
+		special4Sprite.setTexture(Engine::tm.getTex(texName));
+		special4Sprite.setScale(0.3f, 0.3f);
+		specialCost4.setString(std::to_string(sp->getAPCost()));
+		specialControl4.setString(Engine::keyToString(special4Key));
+		specialControl4.setPosition(special4Sprite.getPosition().x + (special4Sprite.getGlobalBounds().width / 2)
+			- (specialControl4.getGlobalBounds().width / 2), 730.0f);
+	}
 }
 
 void CombatUI::resetSpecial()
 {
-	specialSprite = sf::Sprite();
+	special1Sprite = sf::Sprite();
+	special2Sprite = sf::Sprite();
+	special3Sprite = sf::Sprite();
+	special4Sprite = sf::Sprite();
 }
 
 void CombatUI::UpdateControls()
@@ -147,13 +204,21 @@ void CombatUI::UpdateControls()
 	runControl.setString(Engine::keyToString(runKey));
 
 	attackControl.setPosition(attackSprite.getPosition().x + (attackSprite.getGlobalBounds().width / 2)
-		- (attackControl.getGlobalBounds().width / 2), 680.0f);
+		- (attackControl.getGlobalBounds().width / 2), 630.0f);
 	healControl.setPosition(healSprite.getPosition().x + (healSprite.getGlobalBounds().width / 2)
-		- (healControl.getGlobalBounds().width / 2), 680.0f);
+		- (healControl.getGlobalBounds().width / 2), 630.0f);
 	rechargeControl.setPosition(rechargeSprite.getPosition().x + (rechargeSprite.getGlobalBounds().width / 2)
-		- (rechargeControl.getGlobalBounds().width / 2), 680.0f);
+		- (rechargeControl.getGlobalBounds().width / 2), 630.0f);
 	runControl.setPosition(runSprite.getPosition().x + (runSprite.getGlobalBounds().width / 2)
-		- (runControl.getGlobalBounds().width / 2), 680.0f);
+		- (runControl.getGlobalBounds().width / 2), 630.0f);
+	specialControl1.setPosition(special1Sprite.getPosition().x + (special1Sprite.getGlobalBounds().width / 2)
+		- (specialControl1.getGlobalBounds().width / 2), 730.0f);
+	specialControl2.setPosition(special2Sprite.getPosition().x + (special2Sprite.getGlobalBounds().width / 2)
+		- (specialControl2.getGlobalBounds().width / 2), 730.0f);
+	specialControl3.setPosition(special3Sprite.getPosition().x + (special3Sprite.getGlobalBounds().width / 2)
+		- (specialControl3.getGlobalBounds().width / 2), 730.0f);
+	specialControl4.setPosition(special4Sprite.getPosition().x + (special4Sprite.getGlobalBounds().width / 2)
+		- (specialControl3.getGlobalBounds().width / 2), 730.0f);
 }
 
 void CombatUI::UpdateCosts()
