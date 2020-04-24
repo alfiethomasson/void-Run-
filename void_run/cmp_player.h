@@ -90,6 +90,7 @@ public:
 	void setDexterity(int dexterity);
 	void setCurrentHealth(int health);
 	void setExperience(int experience);
+	void setRunChance(int run);
 
 	void addStats(int strength, int health, int dex);
 

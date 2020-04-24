@@ -375,3 +375,8 @@ void BasePlayerComponent::takeDamage(float dmgRecieved)
 		spriteManager->playHit();
 	}
 }
+
+void BasePlayerComponent::setRunChance(int run)
+{
+	runChance = run;
+}

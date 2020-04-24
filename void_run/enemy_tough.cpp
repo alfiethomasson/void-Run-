@@ -38,6 +38,41 @@ void ToughEnemy::update(double dt)
 				EndTurn();
 			}
 		}
+		else if (charging == true)
+		{
+			std::cout << "The enemy unleashes a powerful charged attack! \n";
+			attackEnemy(_strength + 10, _dexterity + 30);
+			charging = false;
+			EndTurn();
+		}
+		else if (specialMove == 0 && turnCounter == 1)
+		{
+			std::cout << "The enemy uses its unique attack: Excruciate! \n";
+			currentEnemy->setRunChance(5);
+			EndTurn();
+		}
+		else if (specialMove == 1 && turnCounter != 1 && (currentEnemy->getStrength < currentHealth))
+		{
+			std::cout << "The enemy uses is charging a powerful charged shot!";
+			charging = true;
+			EndTurn();
+		}
+		else //If none of the conditions for a special attack are met, then we use a random chance for the last two options
+		{
+			int enemyAI = rand() % 5; //Random number from 0-4. 0-2 is medium attack, 3-4 is a heavy attack.
+
+			if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2) {
+				std::cout << "The enemy makes a medium attack! \n";
+				attackEnemy(_strength + 5, _dexterity);
+				EndTurn();
+			}
+			else if (enemyAI == 4) {
+				std::cout << "The enemy makes a strong attack! \n";
+				attackEnemy(_strength * 2, _dexterity);
+				EndTurn();
+			}
+		}
+
 		/*int enemyAI = rand() % 6; //Random number from 0-5. 1-2 is medium attack, 3-4 is unique ability, 5 is a heavy attack.
 		if (charging == true) {
 			enemyAI = 6; //6 means that it's unleasing a charged shot.
