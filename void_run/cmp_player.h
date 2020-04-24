@@ -35,7 +35,11 @@ protected:
 	sf::RectangleShape healthBar;
 	sf::Text healthText;
 
-public:
+	sf::Text StrengthText;
+	sf::Text HPText;
+	sf::Text DexterityText;
+
+public: 
 	bool isTurn;
 	bool isFinishedTurn;
 	bool expGained;
@@ -83,6 +87,7 @@ public:
 	void setExperience(int experience);
 
 	void addStats(int strength, int health, int dex);
+	void UpdateStats();
 
 	void takeDamage(float dmgRecieved);
 	bool calculateHit(float enemyDex);

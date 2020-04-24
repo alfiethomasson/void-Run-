@@ -165,7 +165,7 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 		specialCost1.setString(std::to_string(sp->getAPCost()));
 		specialControl1.setString(Engine::keyToString(special1Key));
 		specialControl1.setPosition(special1Sprite.getPosition().x + (special1Sprite.getGlobalBounds().width / 2)
-			- (specialControl1.getGlobalBounds().width / 2), 680.0f);
+			- (specialControl1.getGlobalBounds().width / 2), 1000.0f);
 	}
 	else if (special2Sprite.getTexture() == NULL)
 	{
@@ -174,7 +174,7 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 		specialCost2.setString(std::to_string(sp->getAPCost()));
 		specialControl2.setString(Engine::keyToString(special2Key));
 		specialControl2.setPosition(special2Sprite.getPosition().x + (special2Sprite.getGlobalBounds().width / 2)
-			- (specialControl2.getGlobalBounds().width / 2), 680.0f);
+			- (specialControl2.getGlobalBounds().width / 2), 1000.0f);
 	}
 	else if (special3Sprite.getTexture() == NULL)
 	{
@@ -183,7 +183,7 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 		specialCost3.setString(std::to_string(sp->getAPCost()));
 		specialControl3.setString(Engine::keyToString(special3Key));
 		specialControl3.setPosition(special3Sprite.getPosition().x + (special3Sprite.getGlobalBounds().width / 2)
-			- (specialControl3.getGlobalBounds().width / 2), 680.0f);
+			- (specialControl3.getGlobalBounds().width / 2), 1000.0f);
 	}
 	else if (special4Sprite.getTexture() == NULL)
 	{
@@ -192,7 +192,7 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 		specialCost4.setString(std::to_string(sp->getAPCost()));
 		specialControl4.setString(Engine::keyToString(special4Key));
 		specialControl4.setPosition(special4Sprite.getPosition().x + (special4Sprite.getGlobalBounds().width / 2)
-			- (specialControl4.getGlobalBounds().width / 2), 680.0f);
+			- (specialControl4.getGlobalBounds().width / 2), 1000.0f);
 	}
 }
 

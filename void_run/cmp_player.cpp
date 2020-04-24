@@ -19,6 +19,9 @@ void BasePlayerComponent::render()
 {
 	Renderer::queue(&healthBar);
 	Renderer::queue(&healthText);
+	Renderer::queue(&StrengthText);
+	Renderer::queue(&HPText);
+	Renderer::queue(&DexterityText);
 }
 
 void BasePlayerComponent::update(double dt) {
@@ -176,6 +179,23 @@ void BasePlayerComponent::load()
 	healthText.setString(currentHealth + " / " + _maxHealth);
 	healthText.setPosition(200.0f, 40.0f);
 	healthText.setFillColor(sf::Color(220, 20, 60, 255));
+
+	HPText.setFont(Engine::tm.getFont());
+	HPText.setCharacterSize(40);
+	HPText.setFillColor(sf::Color(220, 20, 60, 255));
+	HPText.setPosition(sf::Vector2f(300.0f, 850.0f));
+
+	StrengthText.setFont(Engine::tm.getFont());
+	StrengthText.setCharacterSize(40);
+	StrengthText.setFillColor(sf::Color(0, 0, 205, 255));
+	StrengthText.setPosition(sf::Vector2f(300.0f, 900.0f));
+
+	DexterityText.setFont(Engine::tm.getFont());
+	DexterityText.setCharacterSize(40);
+	DexterityText.setFillColor(sf::Color(0, 255, 127, 255));
+	DexterityText.setPosition(sf::Vector2f(300.0f, 950.0f));
+
+	UpdateStats();
 }
 
 void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)
@@ -347,6 +367,14 @@ void BasePlayerComponent::addStats(int strength, int health, int dex)
 		currentHealth += health;
 	}
 	_dexterity += dex;
+	UpdateStats();
+}
+
+void BasePlayerComponent::UpdateStats()
+{
+	HPText.setString("HP: " + std::to_string(currentHealth) + " / " + std::to_string(_maxHealth));
+	StrengthText.setString("Strength:  " + std::to_string((int)_strength));
+	DexterityText.setString("Dexterity:  " + std::to_string((int)_dexterity));
 }
 
 void BasePlayerComponent::setExperience(int experience)

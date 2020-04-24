@@ -31,7 +31,7 @@ void BaseEnemyComponent::load()
 	healthText.setFont(Engine::tm.getFont());
 	healthText.setString(std::to_string((int)currentHealth) + " / " + std::to_string((int)_maxHealth));
 	healthText.setCharacterSize(30);
-	healthText.setPosition(1120.0f, 40.0f);
+	healthText.setPosition(1600, 40.0f);
 	healthText.setFillColor(sf::Color(220, 20, 60, 255));
 
 }
@@ -39,7 +39,7 @@ void BaseEnemyComponent::load()
 void BaseEnemyComponent::makeHPBar()
 {
 	sf::RectangleShape healthBar;
-	healthBar.setPosition(1100.0f, 50.0f + barheight);
+	healthBar.setPosition(1500, 50.0f + barheight);
 	if (hpbars.size() != 0)
 	{
 		int barvalue = currentHealth - (150 * hpbars.size());
