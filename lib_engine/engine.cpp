@@ -107,11 +107,6 @@ void Engine::Start(unsigned int width, unsigned int height,
 			if (event.type == Event::Closed) {
 				window.close();
 			}
-			if (event.type == Event::Resized)
-			{
-				std::cout << "resized\n width = " << event.size.width << "\n";
-				ChangeResolution(event.size.width, event.size.height, 1280, 720);
-			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
 			window.close();
@@ -136,8 +131,8 @@ void Engine::ChangeResolution(int x, int y, int GAMEX, int GAMEY)
 {
 	std::cout << "Should change Res\n";
 
-	//int oldX = Engine::getWindowSize().x;
-	//int oldY = Engine::getWindowSize().y;
+	int oldX = Engine::getWindowSize().x;
+	int oldY = Engine::getWindowSize().y;
 
 	// All together now in a reusable solution.
 	const sf::Vector2u screensize(x, y);

@@ -11,8 +11,8 @@
 #include "TreasureRoom.h"
 #include <fstream>
 
-#define GAMEX 1280
-#define GAMEY 720
+#define GAMEX 1920
+#define GAMEY 1080
 
 using namespace sf;
 using namespace std;
@@ -233,7 +233,7 @@ void MenuScene::Load() {
 	OptionsButton.setCharacterSize(60);
 	OptionsButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (OptionsButton.getGlobalBounds().width / 2), (GAMEY / 5.0f) + 250.0f));
 	OptionsButtonBox = OptionsButton.getGlobalBounds(); //Options Boundaries
-	ResChange.setString("720p"); //Starts at 720p
+	ResChange.setString("1080p"); //Starts at 720p
 	ResChange.setCharacterSize(60);
 	ResChange.setPosition(sf::Vector2f(GAMEX / 2.0f - (ResChange.getGlobalBounds().width / 2), GAMEY / 2.0f - (ResChange.getGlobalBounds().height / 2)));
 	ResText.setString("Resolution: ");
@@ -485,12 +485,11 @@ void GameScene::Update(const double& dt) {
 		gameUI.Update(dt);
 
 		//Adds random special item to inventory
-		if (Keyboard::isKeyPressed(Keyboard::Num3) && scene_delay.asSeconds() >= sceneChangeDelay)
+		if (Keyboard::isKeyPressed(Keyboard::I) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
-			playerSprite->playRun();
-		/*	auto tempItem = itemDB.randomSpecialItem();
+			auto tempItem = itemDB.randomSpecialItem();
 			UpdateTextBox(tempItem->description);
-			inv->add(tempItem);*/
+			inv->add(tempItem);
 			scene_clock.restart();
 			//std::cout << "\nshould play attack\n";
 			std::cout << "MouseX: " << Mouse::getPosition().x << " MouseY: " << Mouse::getPosition().y << "\n";
