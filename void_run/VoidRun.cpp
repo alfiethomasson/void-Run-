@@ -287,7 +287,7 @@ void GameScene::Load() {
 
 	//Loads the settings icon stuff
 	SettingSprite.setTexture(Engine::tm.getTex("Settings"));
-	SettingSprite.setPosition(1200.0f, 630.0f);
+	SettingSprite.setPosition(1800, 900.0f);
 	SettingSprite.setScale(0.3f, 0.3f);
 	SettingBox = SettingSprite.getGlobalBounds();
 
@@ -415,11 +415,11 @@ void GameScene::Load() {
 
 	textBox.setTexture(Engine::tm.getTex("TextBox"));
 	textBox.setScale(sf::Vector2f(0.7f, 0.5f));
-	textBox.setPosition(sf::Vector2f((GAMEX / 2) - (textBox.getGlobalBounds().width / 2), 50.0f));
+	textBox.setPosition(sf::Vector2f((GAMEX / 2) - (textBox.getGlobalBounds().width / 2), 100.0f));
 	//ui.list.push_back(textBox);
 	screenText.setFont(font);
 	screenText.setString("Welcome to Void Run!");
-	screenText.setCharacterSize(30);
+	screenText.setCharacterSize(50);
 	screenText.setFillColor(Color(255, 255, 255, 255));
 	screenText.setPosition((textBox.getPosition().x + textBox.getGlobalBounds().width / 2) - (screenText.getGlobalBounds().width / 2),
 		(textBox.getPosition().y + textBox.getGlobalBounds().height /2)- (screenText.getGlobalBounds().height));
@@ -505,7 +505,7 @@ void GameScene::Update(const double& dt) {
 		}
 
 		//Adds random common item
-		if (Keyboard::isKeyPressed(Keyboard::Num4) && scene_delay.asSeconds() >= sceneChangeDelay)
+		if (Keyboard::isKeyPressed(Keyboard::U) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
 			scene_clock.restart();
 			auto randItem = itemDB.randomCommonItem();
@@ -520,7 +520,7 @@ void GameScene::Update(const double& dt) {
 			ChangeRoom();
 		}
 
-		if (Keyboard::isKeyPressed(Keyboard::Num2) && pause_delay.asSeconds() >= pauseDelay)
+		if (Keyboard::isKeyPressed(pauseKey) && pause_delay.asSeconds() >= pauseDelay)
 		{
 			pauseClock.restart();
 			isPaused = true;

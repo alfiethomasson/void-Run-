@@ -130,7 +130,7 @@ void SpriteComponent::update(double dt)
 				ResetAnim();
 			}
 		}
-		sprite.move(sf::Vector2f(-0.5, 0));
+		sprite.move(sf::Vector2f(-1, 0));
 	}
 	if (inDie)
 	{

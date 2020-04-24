@@ -42,32 +42,32 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 
 	attackSprite.setTexture(Engine::tm.getTex("Attack"));
 	attackSprite.setScale(0.3f, 0.3f);
-	attackSprite.setPosition(sf::Vector2f(400.0f, 500.0f));
+	attackSprite.setPosition(sf::Vector2f(800.0f, 800.0f));
 	attackBox = attackSprite.getGlobalBounds();
 	texManager->addButton("attackBox", attackBox);
 
 	healSprite.setTexture(Engine::tm.getTex("Heal"));
 	healSprite.setScale(0.3f, 0.3f);
-	healSprite.setPosition(sf::Vector2f(500.0f, 500.0f));
+	healSprite.setPosition(sf::Vector2f(900.0f, 800.0f));
 	healBox = healSprite.getGlobalBounds();
 
 	rechargeSprite.setTexture(Engine::tm.getTex("Recharge"));
 	rechargeSprite.setScale(0.3f, 0.3f);
-	rechargeSprite.setPosition(sf::Vector2f(600.0f, 500.0f));
+	rechargeSprite.setPosition(sf::Vector2f(1000.0f, 800.0f));
 	rechargeBox = rechargeSprite.getGlobalBounds();
 
 	runSprite.setTexture(Engine::tm.getTex("Run"));
 	runSprite.setScale(0.3f, 0.3f);
-	runSprite.setPosition(sf::Vector2f(700.0f, 500.0f));
+	runSprite.setPosition(sf::Vector2f(1100.0f, 800.0f));
 	runBox = runSprite.getGlobalBounds();
 
-	special1Sprite.setPosition(sf::Vector2f(400.0f, 600.0f));
+	special1Sprite.setPosition(sf::Vector2f(800.0f, 900.0f));
 
-	special2Sprite.setPosition(sf::Vector2f(500.0f, 600.0f));
+	special2Sprite.setPosition(sf::Vector2f(900.0f, 900.0f));
 
-	special3Sprite.setPosition(sf::Vector2f(600.0f, 600.0f));
+	special3Sprite.setPosition(sf::Vector2f(1000.0f, 900.0f));
 
-	special4Sprite.setPosition(sf::Vector2f(700.0f, 600.0f));
+	special4Sprite.setPosition(sf::Vector2f(1100.0f, 900.0f));
 
 	attackControl.setFont(Engine::tm.getFont());
 	healControl.setFont(Engine::tm.getFont());
@@ -89,14 +89,14 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 
 	UpdateControls();
 
-	attackCost.setFont(font);
-	healCost.setFont(font);
-	rechargeCost.setFont(font);
-	runCost.setFont(font);
-	specialCost1.setFont(font);
-	specialCost2.setFont(font);
-	specialCost3.setFont(font);
-	specialCost4.setFont(font);
+	attackCost.setFont(Engine::tm.getFont());
+	healCost.setFont(Engine::tm.getFont());
+	rechargeCost.setFont(Engine::tm.getFont());
+	runCost.setFont(Engine::tm.getFont());
+	specialCost1.setFont(Engine::tm.getFont());
+	specialCost2.setFont(Engine::tm.getFont());
+	specialCost3.setFont(Engine::tm.getFont());
+	specialCost4.setFont(Engine::tm.getFont());
 
 	attackCost.setCharacterSize(25);
 	healCost.setCharacterSize(25);
@@ -212,21 +212,21 @@ void CombatUI::UpdateControls()
 	runControl.setString(Engine::keyToString(runKey));
 
 	attackControl.setPosition(attackSprite.getPosition().x + (attackSprite.getGlobalBounds().width / 2)
-		- (attackControl.getGlobalBounds().width / 2), 580.0f);
+		- (attackControl.getGlobalBounds().width / 2), 900.0f);
 	healControl.setPosition(healSprite.getPosition().x + (healSprite.getGlobalBounds().width / 2)
-		- (healControl.getGlobalBounds().width / 2), 580.0f);
+		- (healControl.getGlobalBounds().width / 2), 900.0f);
 	rechargeControl.setPosition(rechargeSprite.getPosition().x + (rechargeSprite.getGlobalBounds().width / 2)
-		- (rechargeControl.getGlobalBounds().width / 2), 580.0f);
+		- (rechargeControl.getGlobalBounds().width / 2), 900.0f);
 	runControl.setPosition(runSprite.getPosition().x + (runSprite.getGlobalBounds().width / 2)
-		- (runControl.getGlobalBounds().width / 2), 580.0f);
+		- (runControl.getGlobalBounds().width / 2), 900.0f);
 	specialControl1.setPosition(special1Sprite.getPosition().x + (special1Sprite.getGlobalBounds().width / 2)
-		- (specialControl1.getGlobalBounds().width / 2), 680.0f);
+		- (specialControl1.getGlobalBounds().width / 2), 1000.0f);
 	specialControl2.setPosition(special2Sprite.getPosition().x + (special2Sprite.getGlobalBounds().width / 2)
-		- (specialControl2.getGlobalBounds().width / 2), 680.0f);
+		- (specialControl2.getGlobalBounds().width / 2), 1000.0f);
 	specialControl3.setPosition(special3Sprite.getPosition().x + (special3Sprite.getGlobalBounds().width / 2)
-		- (specialControl3.getGlobalBounds().width / 2), 680.0f);
+		- (specialControl3.getGlobalBounds().width / 2), 1000.0f);
 	specialControl4.setPosition(special4Sprite.getPosition().x + (special4Sprite.getGlobalBounds().width / 2)
-		- (specialControl3.getGlobalBounds().width / 2), 680.0f);
+		- (specialControl3.getGlobalBounds().width / 2), 1000.0f);
 }
 
 void CombatUI::UpdateCosts()
@@ -334,7 +334,7 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 
 	playerIcon.setTexture(Engine::tm.getTex("Player"));
 	playerIcon.setScale(0.5f, 0.5f);
-	playerIcon.setPosition(0.0f, 500.0f);
+	playerIcon.setPosition(0.0f, 800.0f);
 
 	stat1.setTexture(Engine::tm.getTex("StatUp"));
 	stat2.setTexture(Engine::tm.getTex("StatUp"));
@@ -345,9 +345,9 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	stat1.setRotation(90);
 	stat2.setRotation(90);
 	stat3.setRotation(90);
-	stat1.setPosition(500.0f, 400.0f);
-	stat2.setPosition(700.0f, 400.0f);
-	stat3.setPosition(900.0f, 400.0f);
+	stat1.setPosition(900.0f, 500.0f);
+	stat2.setPosition(1000.0f, 500.0f);
+	stat3.setPosition(1100.0f, 500.0f);
 
 	stat1Box = stat1.getGlobalBounds();
 	stat2Box = stat2.getGlobalBounds();
@@ -380,7 +380,7 @@ sf::Sprite GameUI::getNewCell()
 	cell.setTexture(Engine::tm.getTex("Charge"));
 	cell.setScale(0.05f, 0.15f);
 	height += 20;
-	cell.setPosition(sf::Vector2f(550.0f + height, 500.0f));
+	cell.setPosition(sf::Vector2f(800.0f + height, 750.0f));
 	cell.setRotation(90);
 	return cell;
 }

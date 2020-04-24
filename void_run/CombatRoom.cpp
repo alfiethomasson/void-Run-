@@ -90,6 +90,7 @@ void CombatRoom::Load() {
 	//auto s = enemy1->addComponent<ShapeComponent>();
 	srand(time(0));
 	int enemyType = rand() % 5; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
+	enemyType = 0;
 	if (enemyType < 3)
 	{
 		enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5, 5, (rand() % 3)); //Random number from 0-2. 0 is Debuff, 1 is Enrage, 2 is Double-Slice.
