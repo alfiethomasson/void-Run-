@@ -42,7 +42,7 @@ public:
 	bool calculateHit(float dex);
 	void makeHPBar();
 
-	void attackEnemy(float str, float dex);
+	bool attackEnemy(float str, float dex);
 	void heal(float healamount);
 	void EndTurn();
 

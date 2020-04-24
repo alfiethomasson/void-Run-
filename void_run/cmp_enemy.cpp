@@ -81,16 +81,18 @@ void BaseEnemyComponent::updateEnemy(std::shared_ptr<BasePlayerComponent> player
 	currentEnemy = player;
 }
 
-void BaseEnemyComponent::attackEnemy(float str, float dex)
+bool BaseEnemyComponent::attackEnemy(float str, float dex)
 {
 	if (calculateHit(dex))
 	{
 		animClock.restart();
 		spriteManager->playAttack();
 		currentEnemy->takeDamage(str);
+		return true;
 	}
 	else {
 		gameScene.UpdateTextBox("The stupid dumb idiot enemy missed!");
+		return false;
 	}
 }
 
