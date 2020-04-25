@@ -5,7 +5,7 @@
 using namespace sf;
 using namespace std;
 
-void Room::Update(const double& dt) {
+void Room::Update(const double& dt, sf::Vector2f cursPos) {
 	if (!isPaused)
 	{
 		//Changes scene to Menu ****TO REMOVE****

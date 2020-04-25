@@ -3,7 +3,7 @@
 StatRoom::StatRoom(std::shared_ptr<Entity> p)
 	: Room(p) {};
 
-void StatRoom::Update(const double& dt)
+void StatRoom::Update(const double& dt, sf::Vector2f cursPos)
 {
 
 }
@@ -22,17 +22,9 @@ void StatRoom::Render()
 void StatRoom::Load()
 {
 	Room::Load();
-	if (!statUPTex.loadFromFile("res/Icons/Arrow.png"))
-	{
-		std::cout << "Couldnt load up arrow in stat room\n";
-	}
-	if (!font.loadFromFile("res/fonts/mandalore.ttf"))
-	{
-		std::cout << "Couldnt load mandalore font in statroom\n";
-	}
-	stat1.setTexture(statUPTex);
-	stat2.setTexture(statUPTex);
-	stat3.setTexture(statUPTex);
+	stat1.setTexture(Engine::tm.getTex("StatUp"));
+	stat2.setTexture(Engine::tm.getTex("StatUp"));
+	stat3.setTexture(Engine::tm.getTex("StatUp"));
 	stat1.setScale(0.3f, 0.3f);
 	stat2.setScale(0.3f, 0.3f);
 	stat3.setScale(0.3f, 0.3f);
@@ -43,10 +35,10 @@ void StatRoom::Load()
 	stat2.setPosition(500.0f, 400.0f);
 	stat3.setPosition(700.0f, 400.0f);
 
-	RewardsText.setFont(font);
-	StrengthText.setFont(font);
-	HealthText.setFont(font);
-	DexterityText.setFont(font);
+	RewardsText.setFont(Engine::tm.getFont());
+	StrengthText.setFont(Engine::tm.getFont());
+	HealthText.setFont(Engine::tm.getFont());
+	DexterityText.setFont(Engine::tm.getFont());
 	RewardsText.setCharacterSize(60);
 	StrengthText.setCharacterSize(30);
 	HealthText.setCharacterSize(30);

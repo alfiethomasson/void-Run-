@@ -92,36 +92,6 @@ void BasePlayerComponent::update(double dt) {
 			}
 		}
 	}
-
-	if (combatUI.CheckBoxes(cursPos))
-	{
-		if (combatUI.getAttackBox().contains(cursPos))
-		{
-			//std::cout << "HEY";
-			gameScene.UpdateDesctext("ATTACK ENEMY\nDamage = " + std::to_string((int)_strength), sf::Vector2f(combatUI.getAttackBox().getPosition().x,
-				combatUI.getAttackBox().getPosition().y - 75.0f));
-		}
-		if (combatUI.getHealBox().contains(cursPos))
-		{
-			gameScene.UpdateDesctext("HEAL\nAmount = " + std::to_string(30), sf::Vector2f(combatUI.getHealBox().getPosition().x,
-				combatUI.getHealBox().getPosition().y - 75.0f));
-		}
-		if (combatUI.getRechargeBox().contains(cursPos))
-		{
-			gameScene.UpdateDesctext("RECHARGE ENERGY\nAmount = " + std::to_string(6), sf::Vector2f(combatUI.getRechargeBox().getPosition().x,
-				combatUI.getRechargeBox().getPosition().y - 75.0f));
-
-		}
-		if (combatUI.getRunBox().contains(cursPos))
-		{
-			gameScene.UpdateDesctext("RUN FROM ENEMY\nChance = " + std::to_string(runChance), sf::Vector2f(combatUI.getRunBox().getPosition().x,
-				combatUI.getRunBox().getPosition().y - 75.0f));
-		}
-	}
-	else
-	{
-		gameScene.ResetDescText();
-	}
 }
 
 void BasePlayerComponent::makeHPBar()
@@ -378,6 +348,11 @@ void BasePlayerComponent::EndTurn()
 {
 	cout << "Player Turn Ends!";
 	isFinishedTurn = true;
+}
+
+int BasePlayerComponent::getRunChance()
+{
+	return runChance;
 }
 
 int BasePlayerComponent::getStrength() {

@@ -33,6 +33,7 @@ public:
 
 protected:
 	void setLoaded(bool);
+	sf::Sound sound;
 private:
 	mutable bool _loaded;
 	mutable std::future<void> _loaded_future;

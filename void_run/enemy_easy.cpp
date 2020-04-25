@@ -26,7 +26,7 @@ void EasyEnemy::update(double dt)
 
 	if (isTurn && isFinishedTurn != true)
 	{
-		if (specialMove == 0 && (currentEnemy->_dexterity < _dexterity) && turnCounter == 1) { //If the enemy's special attack is Swift Foot and they have better dexterity, they use it on the first round of combat
+		if (specialMove == 0 && (currentEnemy->getDexterity() < _dexterity) && turnCounter == 1) { //If the enemy's special attack is Swift Foot and they have better dexterity, they use it on the first round of combat
 			std::cout << "The enemy uses its unique ability: Swift Foot! \n";
 			_dexterity += 5; //The monster gains +5 to dexterity
 			usedSwiftFoot = true;

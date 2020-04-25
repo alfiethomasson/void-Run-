@@ -34,7 +34,7 @@ public:
 	LevelUpRoom(std::shared_ptr<Entity> p);
 	~LevelUpRoom() override = default;
 	//explicit CombatRoom(Entity* p);
-	void Update(const double& dt) override;
+	void Update(const double& dt, sf::Vector2f cursPos) override;
 	void Render() override;
 	void Load() override;
 };

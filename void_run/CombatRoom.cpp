@@ -21,13 +21,14 @@ sf::Time turn_delay;
 sf::Clock turn_clock;
 float turnDelayValue;
 
-CombatRoom::CombatRoom(std::shared_ptr <Entity> p)
-	: Room(p) {};
+CombatRoom::CombatRoom(std::shared_ptr <Entity> p, CombatUI *combUI)
+	: combatUI{ *combUI }, Room(p) {};
 
-void CombatRoom::Update(const double& dt) {
+void CombatRoom::Update(const double& dt, sf::Vector2f cursPos) {
 
 	turn_delay = turn_clock.getElapsedTime();
 	enemy->update(dt);
+	combatUI.Update(dt, cursPos);
 
 	if (enemy->getCurrentHealth() != 0)
 	{
@@ -72,11 +73,11 @@ void CombatRoom::Update(const double& dt) {
 		p->expGet();
 	}
 
-	Room::Update(dt);
+	Room::Update(dt, cursPos);
 }
 
 void CombatRoom::Render() {
-	gameScene.combatUI.Render();
+	combatUI.Render();
 	Renderer::queue(&experienceCounter);
 	enemy->render();
 

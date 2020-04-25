@@ -57,10 +57,6 @@ public:
 	int runCost;
 	int level;
 
-	float playerDamage;
-	float _strength;
-	float _dexterity;
-	int _maxHealth;
 	int _level;
 
 	explicit BasePlayerComponent(Entity* p, float maxhealth, float currenthealth, float strength, float dex,
@@ -92,6 +88,7 @@ public:
 	int getDexterity();
 	int getCurrentHealth();
 	int getExperience();
+	int getRunChance();
 
 	void setMaxAP(int maxAP);
 	void setStrength(int strength);

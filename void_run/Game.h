@@ -24,3 +24,7 @@ extern Keyboard::Key special2Key;
 extern Keyboard::Key special3Key;
 extern Keyboard::Key special4Key;
 extern Keyboard::Key pauseKey;
+
+extern int masterVolume;
+extern int musicVolume;
+extern int soundVolume;

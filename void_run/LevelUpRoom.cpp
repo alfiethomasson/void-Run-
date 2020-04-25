@@ -51,10 +51,7 @@ void LevelUpRoom::Load() {
 	ability1Box = ability1.getGlobalBounds();
 }	
 
-void LevelUpRoom::Update(const double& dt) {
-
-	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
-	sf::Vector2f cursPos = sf::Vector2f(tempPos);
+void LevelUpRoom::Update(const double& dt, sf::Vector2f cursPos) {
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{

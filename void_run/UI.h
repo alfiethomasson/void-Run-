@@ -56,7 +56,7 @@ protected:
 	TextureManager* texManager;
 public:
 
-	void Update(double dt);
+	void Update(double dt, const sf::Vector2f cursPos);
 	void turnUpdate();
 	sf::FloatRect& getAttackBox();
 	sf::FloatRect& getHealBox();
@@ -141,6 +141,15 @@ private:
 	sf::Text ResButton;
 	sf::Text ResChange;
 	sf::Text ResText;
+	sf::Text MasterText;
+	sf::Text MusicText;
+	sf::Text FXText;
+	sf::Text MasterTextVolume;
+	sf::Text MusicTextVolume;
+	sf::Text FXTextVolume;
+	sf::Text MasterLeft, MasterRight;
+	sf::Text MusicLeft, MusicRight;
+	sf::Text FXLeft, FXRight;
 	sf::Text AttackText;
 	sf::Text HealText;
 	sf::Text RechargeText;
@@ -164,6 +173,12 @@ private:
 	sf::Text HowToText;
 
 	sf::FloatRect ResButtonBox;
+	sf::FloatRect MasterLeftBox;
+	sf::FloatRect MasterRightBox;
+	sf::FloatRect MusicLeftBox;
+	sf::FloatRect MusicRightBox;
+	sf::FloatRect FXLeftBox;
+	sf::FloatRect FXRightBox;
 	sf::FloatRect BackBox;
 	sf::FloatRect AttackBox;
 	sf::FloatRect HealBox;
@@ -179,6 +194,9 @@ private:
 	sf::Clock delayClock;
 	float delayTime;
 	const float delayAmount = 0.5f;
+	const float volumeDelayAmount = 0.05f;
+
+	sf::Sound sound;
 
 public:
 	SettingUI() = default;

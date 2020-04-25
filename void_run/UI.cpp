@@ -35,9 +35,37 @@ void CombatUI::Render()
 	Renderer::queue(&specialCost4);
 }
 
-void CombatUI::turnUpdate()
+void CombatUI::Update(double dt, sf::Vector2f cursPos)
 {
+	if (CheckBoxes(cursPos))
+	{
+		if (getAttackBox().contains(cursPos))
+		{
+			//std::cout << "HEY";
+			gameScene.UpdateDesctext("ATTACK ENEMY\nDamage = " + std::to_string(player->getStrength()), sf::Vector2f(attackBox.getPosition().x,
+				attackBox.getPosition().y - 75.0f));
+		}
+		if (healBox.contains(cursPos))
+		{
+			gameScene.UpdateDesctext("HEAL\nAmount = " + std::to_string(30), sf::Vector2f(healBox.getPosition().x,
+				healBox.getPosition().y - 75.0f));
+		}
+		if (rechargeBox.contains(cursPos))
+		{
+			gameScene.UpdateDesctext("RECHARGE ENERGY\nAmount = " + std::to_string(6), sf::Vector2f(rechargeBox.getPosition().x,
+				rechargeBox.getPosition().y - 75.0f));
 
+		}
+		if (runBox.contains(cursPos))
+		{
+			gameScene.UpdateDesctext("RUN FROM ENEMY\nChance = " + std::to_string(player->getRunChance()), sf::Vector2f(runBox.getPosition().x,
+				runBox.getPosition().y - 75.0f));
+		}
+	}
+	else
+	{
+		gameScene.ResetDescText();
+	}
 }
 
 void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
@@ -284,7 +312,7 @@ bool GameUI::updateStatOptions()
 			{
 				player->addStats(5, 0, 0);
 				sound.setBuffer(Engine::tm.getSound("StatUp"));
-				sound.setVolume(50);
+				sound.setVolume(50 * soundVolume / 100 * masterVolume / 100);
 				sound.play();
 				inStatUp = false;
 				return false;
@@ -293,7 +321,7 @@ bool GameUI::updateStatOptions()
 			{
 				player->addStats(0, 10, 0);
 				sound.setBuffer(Engine::tm.getSound("StatUp"));
-				sound.setVolume(50);
+				sound.setVolume(50 * soundVolume / 100 * masterVolume / 100);
 				sound.play();
 				inStatUp = false;
 				return false;
@@ -302,7 +330,7 @@ bool GameUI::updateStatOptions()
 			{
 				player->addStats(0, 0, 5);
 				sound.setBuffer(Engine::tm.getSound("StatUp"));
-				sound.setVolume(50);
+				sound.setVolume(50 * soundVolume/100 * masterVolume/100);
 				sound.play();
 				inStatUp = false;
 				return false;
@@ -499,7 +527,7 @@ void GameUI::UpdateDescPos(sf::Vector2f pos)
 void GameUI::playSound(const std::string& name, int volume)
 {
 	sound.setBuffer(Engine::tm.getSound(name));
-	sound.setVolume(volume);
+	sound.setVolume(volume * soundVolume/100 * masterVolume/100);
 	sound.play();
 }
 
@@ -509,9 +537,11 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 
 	if (ResButtonBox.contains(cursPos))
 	{
-		ResButton.setColor(sf::Color(0, 255, 0, 255));
+		ResButton.setColor(Green);
 		if (Mouse::isButtonPressed(Mouse::Left) && delayTime >= delayAmount)
 		{
+			sound.setVolume(soundVolume * masterVolume / 100);
+			sound.play();
 			delayClock.restart();
 			if (Engine::getWindowSize().y == 1080)
 			{
@@ -535,11 +565,128 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 	}
 	else
 	{
-		ResButton.setColor(sf::Color(255, 255, 255, 255));
+		ResButton.setColor(White);
+	}
+
+	if (MasterLeftBox.contains(cursPos))
+	{
+		MasterLeft.setFillColor(Green);
+		if (Mouse::isButtonPressed(Mouse::Left) && delayTime >= volumeDelayAmount)
+		{
+			delayClock.restart();
+			if (masterVolume > 0)
+			{
+				sound.setVolume(soundVolume * masterVolume / 100);
+				sound.play();
+				masterVolume -= 1;
+			}
+			MasterText.setString("Master Volume: " + std::to_string(masterVolume));
+		}
+	}
+	else
+	{
+		MasterLeft.setFillColor(White);
+	}
+	if (MasterRightBox.contains(cursPos))
+	{
+		MasterRight.setFillColor(Green);
+		if(Mouse::isButtonPressed(Mouse::Left) && delayTime >= volumeDelayAmount)
+		{
+			delayClock.restart();
+			if (masterVolume < 100)
+			{
+				sound.setVolume(soundVolume * masterVolume / 100);
+				sound.play();
+				masterVolume += 1;
+			}
+			MasterText.setString("Master Volume: " + std::to_string(masterVolume));
+		}
+	}
+	else
+	{
+		MasterRight.setFillColor(White);
+	}
+	if (MusicLeftBox.contains(cursPos))
+	{
+		MusicLeft.setFillColor(Green);
+		if (Mouse::isButtonPressed(Mouse::Left) && delayTime >= volumeDelayAmount)
+		{
+			delayClock.restart();
+			if (musicVolume > 0)
+			{
+				sound.setVolume(soundVolume * masterVolume / 100);
+				sound.play();
+				musicVolume -= 1;
+			}
+			MusicText.setString("Music Volume: " + std::to_string(musicVolume));
+		}
+	}
+	else
+	{
+		MusicLeft.setFillColor(White);
+	}
+	if (MusicRightBox.contains(cursPos))
+	{
+		MusicRight.setFillColor(Green);
+		if (Mouse::isButtonPressed(Mouse::Left) && delayTime >= volumeDelayAmount)
+		{
+			delayClock.restart();
+			if (musicVolume < 100)
+			{
+				sound.setVolume(soundVolume * masterVolume / 100);
+				sound.play();
+				musicVolume += 1;
+			}
+			MusicText.setString("Music Volume: " + std::to_string(musicVolume));
+		}
+	}
+	else
+	{
+		MusicRight.setFillColor(White);
+	}
+	if (FXLeftBox.contains(cursPos))
+	{
+		FXLeft.setFillColor(Green);
+		if (Mouse::isButtonPressed(Mouse::Left) && delayTime >= volumeDelayAmount)
+		{
+			delayClock.restart();
+			if (soundVolume > 0)
+			{
+				sound.setVolume(soundVolume* masterVolume / 100);
+				sound.play();
+				soundVolume -= 1;
+			}
+			FXText.setString("FX Volume: " + std::to_string(soundVolume));
+		}
+	}
+	else
+	{
+		FXLeft.setFillColor(White);
+	}
+	if (FXRightBox.contains(cursPos))
+	{
+		FXRight.setFillColor(Green);
+		if (Mouse::isButtonPressed(Mouse::Left) && delayTime >= volumeDelayAmount)
+		{
+			delayClock.restart();
+			if (soundVolume < 100)
+			{
+				sound.setVolume(soundVolume* masterVolume / 100);
+				sound.play();
+				soundVolume += 1;
+			}
+			FXText.setString("FX Volume: " + std::to_string(soundVolume));
+		}
+	}
+	else
+	{
+		FXRight.setFillColor(White);
 	}
 
 	if (Keyboard::isKeyPressed(Keyboard::Right) && delayTime >= delayAmount)
 	{
+		sound.setVolume(soundVolume* masterVolume / 100);
+		sound.play();
 		delayClock.restart();
 		if (Engine::getWindowSize().y != 1080)
 		{
@@ -592,33 +739,39 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 	
 	if (ResetBox.contains(cursPos))
 	{
-		ResetControls.setColor(sf::Color(0, 255, 0, 255));
+		ResetControls.setColor(Green);
 		if (Mouse::isButtonPressed(Mouse::Left))
 		{
+			sound.setVolume(soundVolume* masterVolume / 100);
+			sound.play();
 			ResetKeys();
 		}
 	}
 	else
 	{
-		ResetControls.setColor(sf::Color(255, 255, 255, 255));
+		ResetControls.setColor(White);
 	}
 
 	if (BackBox.contains(cursPos))
 	{
-		BackButton.setColor(sf::Color(0, 255, 0, 255));
+		BackButton.setColor(Green);
 		if (Mouse::isButtonPressed(Mouse::Left))
 		{
+			sound.setVolume(soundVolume* masterVolume / 100);
+			sound.play();
 			menuScene.setSettings(false);
 			gameScene.setPause(false);
 		}
 	}
 	else
 	{
-		BackButton.setColor(sf::Color(255, 255, 255, 255));
+		BackButton.setColor(White);
 	}
 
 	if (Keyboard::isKeyPressed(Keyboard::BackSpace))
 	{
+		sound.setVolume(soundVolume* masterVolume / 100);
+		sound.play();
 		menuScene.setSettings(false);
 		gameScene.setPause(false);
 	}
@@ -627,9 +780,23 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 
 void SettingUI::Load()
 {
+	sound.setBuffer(Engine::tm.getSound("ButtonPress"));
+
 	ResChange.setFont(Engine::tm.getFont());
 	ResText.setFont(Engine::tm.getFont());
 	ResButton.setFont(Engine::tm.getFont());
+	MasterText.setFont(Engine::tm.getFont());
+	MusicText.setFont(Engine::tm.getFont());
+	FXText.setFont(Engine::tm.getFont());
+	//MasterTextVolume.setFont(Engine::tm.getFont());
+	//MusicTextVolume.setFont(Engine::tm.getFont());
+	//FXTextVolume.setFont(Engine::tm.getFont());
+	MasterLeft.setFont(Engine::tm.getFont());
+	MasterRight.setFont(Engine::tm.getFont());
+	MusicLeft.setFont(Engine::tm.getFont());
+	MusicRight.setFont(Engine::tm.getFont());
+	FXLeft.setFont(Engine::tm.getFont());
+	FXRight.setFont(Engine::tm.getFont());
 	BackButton.setFont(Engine::tm.getFont());
 	AttackText.setFont(Engine::tm.getFont());
 	HealText.setFont(Engine::tm.getFont());
@@ -659,14 +826,71 @@ void SettingUI::Load()
 
 	ResChange.setString("1080p"); //Starts at 720p
 	ResChange.setCharacterSize(60);
-	ResChange.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f + 100.0f, 200.0f));
+	ResChange.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f + 100.0f, 50.0f));
 	ResText.setString("Resolution: ");
 	ResText.setCharacterSize(60);
-	ResText.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - 500.0f, 200.0f));
+	ResText.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - 500.0f, 50.0f));
 	ResButton.setString(" > ");
 	ResButton.setCharacterSize(100);
-	ResButton.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f + 380.0f, 170.0f));
+	ResButton.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f + 380.0f, 20.0f));
 	ResButtonBox = ResButton.getGlobalBounds();
+
+	MasterText.setString("Master Volume: " + std::to_string(masterVolume));
+	MasterText.setCharacterSize(40);
+	MasterText.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2 - 350.0f, 150.0f));
+	MusicText.setString("Music Volume: " + std::to_string(musicVolume));
+	MusicText.setCharacterSize(40);
+	MusicText.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2 - 350.0f, 200.0f));
+	FXText.setString("FX Volume: " + std::to_string(soundVolume));
+	FXText.setCharacterSize(40);
+	FXText.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2 - 300.0f, 250.0f));
+
+	/*MasterTextVolume.setString(std::to_string(masterVolume));
+	MasterTextVolume.setCharacterSize(40);
+	MasterTextVolume.setPosition(MasterText.getPosition().x + MasterText.getGlobalBounds().width
+	+ 50.0f, MasterText.getPosition().y);
+	MasterVolumeBox = MasterTextVolume.getGlobalBounds();
+	MusicTextVolume.setString(std::to_string(musicVolume));
+	MusicTextVolume.setCharacterSize(40);
+	MusicTextVolume.setPosition(MusicText.getPosition().x + MasterText.getGlobalBounds().width
+		+ 50.0f, MusicText.getPosition().y);
+	MusicVolumeBox = MusicTextVolume.getGlobalBounds();
+	FXTextVolume.setString(std::to_string(soundVolume));
+	FXTextVolume.setCharacterSize(40);
+	FXTextVolume.setPosition(FXText.getPosition().x + MasterText.getGlobalBounds().width
+		+ 50.0f, FXText.getPosition().y);
+	FXVolumeBox = FXTextVolume.getGlobalBounds();*/
+
+	MasterLeft.setString("<");
+	MasterRight.setString(">");
+	MasterLeft.setCharacterSize(40);
+	MasterRight.setCharacterSize(40);
+	MasterLeft.setPosition(MasterText.getPosition().x + MasterText.getGlobalBounds().width + 50.0f, MasterText.getPosition().y);
+	MasterRight.setPosition(MasterText.getPosition().x + MasterText.getGlobalBounds().width + 100.0f, MasterText.getPosition().y);
+	MasterLeftBox = MasterLeft.getGlobalBounds();
+	MasterRightBox = MasterRight.getGlobalBounds();
+
+	MusicLeft.setString("<");
+	MusicRight.setString(">");
+	MusicLeft.setCharacterSize(40);
+	MusicRight.setCharacterSize(40);
+	MusicLeft.setPosition(MusicText.getPosition().x + MusicText.getGlobalBounds().width + 50.0f, MusicText.getPosition().y);
+	MusicRight.setPosition(MusicText.getPosition().x + MusicText.getGlobalBounds().width + 100.0f, MusicText.getPosition().y);
+	MusicLeftBox = MusicLeft.getGlobalBounds();
+	MusicRightBox = MusicRight.getGlobalBounds();
+
+	FXLeft.setString("<");
+	FXRight.setString(">");
+	FXLeft.setCharacterSize(40);
+	FXRight.setCharacterSize(40);
+	FXLeft.setPosition(FXText.getPosition().x + FXText.getGlobalBounds().width + 50.0f, FXText.getPosition().y);
+	FXRight.setPosition(FXText.getPosition().x + FXText.getGlobalBounds().width + 100.0f, FXText.getPosition().y);
+	FXLeftBox = FXLeft.getGlobalBounds();
+	FXRightBox = FXRight.getGlobalBounds();
+
+	//FXText.setString("FX Volume: ");
+	//FXText.setCharacterSize(40);
+	//FXText.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2 - 300.0f, 200.0f));
 
 	AttackText.setString("Attack Key: ");
 	AttackText.setCharacterSize(40);
@@ -757,6 +981,15 @@ void SettingUI::Render()
 	Renderer::queue(&ResButton);
 	Renderer::queue(&ResChange);
 	Renderer::queue(&ResText);
+	Renderer::queue(&MasterText);
+	Renderer::queue(&MusicText);
+	Renderer::queue(&FXText);
+	Renderer::queue(&MasterLeft);
+	Renderer::queue(&MasterRight);
+	Renderer::queue(&MusicLeft);
+	Renderer::queue(&MusicRight);
+	Renderer::queue(&FXLeft);
+	Renderer::queue(&FXRight);
 	Renderer::queue(&AttackText);
 	Renderer::queue(&HealText);
 	Renderer::queue(&RechargeText);
@@ -810,6 +1043,8 @@ void SettingUI::CheckKeyPress(sf::Text& changeText, sf::FloatRect& box, sf::Keyb
 	{
 		if (Event.type == sf::Event::KeyPressed)
 		{
+			sound.setVolume(soundVolume * masterVolume / 100);
+			sound.play();
 			key = Event.key.code;
 			changeText.setString(Engine::keyToString(Event.key.code));
 			box = changeText.getGlobalBounds();
@@ -847,4 +1082,8 @@ void SettingUI::UpdateSettings()
 	Special3Box = Special3KeyText.getGlobalBounds();
 	Special4Box = Special4KeyText.getGlobalBounds();
 	PauseBox = PauseKeyText.getGlobalBounds();
+
+	MasterText.setString("Master Volume: " + std::to_string(masterVolume));
+	MusicText.setString("Music Volume: " + std::to_string(musicVolume));
+	FXText.setString("FX Volume: " + std::to_string(soundVolume));
 }

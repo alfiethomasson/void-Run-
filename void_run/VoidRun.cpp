@@ -12,9 +12,6 @@
 #include <fstream>
 #include "LevelUpRoom.h"
 
-#define GAMEX 1280
-#define GAMEY 720
-
 using namespace sf;
 using namespace std;
 ItemDB itemDB;
@@ -48,6 +45,10 @@ Keyboard::Key special2Key;
 Keyboard::Key special3Key;
 Keyboard::Key special4Key;
 
+int masterVolume = 100;
+int musicVolume = 100;
+int soundVolume = 100;
+
 void MenuScene::Update(const double& dt) {
 
 	//Gets Mouse position in an int format
@@ -55,6 +56,8 @@ void MenuScene::Update(const double& dt) {
 	Vector2f cursPos = sf::Vector2f(tempPos);
 	cursPos.x /= Engine::xMultiply;
 	cursPos.y /= Engine::yMultiply;
+
+	titleMusic.setVolume(musicVolume * masterVolume/100);
 
 	scene_delay = scene_clock.getElapsedTime();
 
@@ -64,23 +67,27 @@ void MenuScene::Update(const double& dt) {
 		{
 			if (NewGameButtonBox.contains(cursPos))
 			{
+				sound.play();
 				titleMusic.stop();
 				Engine::ChangeScene(&gameScene);
 				gameScene.setLoadFromSave(false);
 			}
 			else if (LoadGameButtonBox.contains(cursPos) && LoadGameButton.getColor().a == 255)
 			{
+				sound.play();
 				titleMusic.stop();
 				Engine::ChangeScene(&gameScene);
 				gameScene.setLoadFromSave(true);
 			}
 			else if (OptionsButtonBox.contains(cursPos))
 			{
+				sound.play();
 				inOptions = true;
 				scene_clock.restart();
 			}
 			else if (ExitButtonBox.contains(cursPos))
 			{
+				sound.play();
 				Engine::GetWindow().close();
 			}
 		}
@@ -88,23 +95,27 @@ void MenuScene::Update(const double& dt) {
 
 		if (Keyboard::isKeyPressed(Keyboard::Num1))
 		{
+			sound.play();
 			titleMusic.stop();
 			Engine::ChangeScene(&gameScene);
 			gameScene.setLoadFromSave(false);
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Num2) && LoadGameButton.getColor().a == 255)
 		{
+			sound.play();
 			titleMusic.stop();
 			Engine::ChangeScene(&gameScene);
 			gameScene.setLoadFromSave(true);
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Num3) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
+			sound.play();
 			inOptions = true;
 			scene_clock.restart();
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
+			sound.play();
 			titleMusic.stop();
 			Engine::GetWindow().close();
 		}
@@ -176,9 +187,14 @@ void MenuScene::Render() {
 }
 
 void MenuScene::Load() {
+
 	//Loads font
 	Engine::tm.loadFont("venusrising.ttf");
 	font = Engine::tm.getFont();
+
+	Engine::tm.loadSound("ButtonPress", "Sounds/FX/ButtonPress.wav");
+	sound.setBuffer(Engine::tm.getSound("ButtonPress"));
+	sound.setVolume(soundVolume);
 
 	//Loads music
 	if (!titleMusic.openFromFile("res/Sounds/Music/TitleMusic.wav"))
@@ -224,20 +240,20 @@ void MenuScene::Load() {
 	GameName.setCharacterSize(100);
 	GameName.setPosition(sf::Vector2f(GAMEX / 2.0f - (GameName.getGlobalBounds().width / 2), 100.0f));
 	NewGameButton.setString("NEW GAME - 1");
-	NewGameButton.setCharacterSize(60);
+	NewGameButton.setCharacterSize(80);
 	NewGameButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (NewGameButton.getGlobalBounds().width / 2), 300.0f));
 	NewGameButtonBox = NewGameButton.getGlobalBounds(); //Creates the button boundaries
 	LoadGameButton.setString("LOAD GAME - 2");
-	LoadGameButton.setCharacterSize(60);
-	LoadGameButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (LoadGameButton.getGlobalBounds().width / 2), 400.0f));
+	LoadGameButton.setCharacterSize(80);
+	LoadGameButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (LoadGameButton.getGlobalBounds().width / 2), 450.0f));
 	LoadGameButtonBox = LoadGameButton.getGlobalBounds(); //Creates the button boundaries
 	OptionsButton.setString("OPTIONS - 3");
-	OptionsButton.setCharacterSize(60);
-	OptionsButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (OptionsButton.getGlobalBounds().width / 2), 500.0f));
+	OptionsButton.setCharacterSize(80);
+	OptionsButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (OptionsButton.getGlobalBounds().width / 2), 600.0f));
 	OptionsButtonBox = OptionsButton.getGlobalBounds(); //Options Boundaries
 	ExitButton.setString("EXIT - ESC");
-	ExitButton.setCharacterSize(60);
-	ExitButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (ExitButton.getGlobalBounds().width / 2), 600.0f));
+	ExitButton.setCharacterSize(80);
+	ExitButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (ExitButton.getGlobalBounds().width / 2), 750.0f));
 	ExitButtonBox = ExitButton.getGlobalBounds(); //Button Boundaries
 	ResChange.setString("1080p"); //Starts at 720p
 	ResChange.setCharacterSize(60);
@@ -292,6 +308,14 @@ void GameScene::setPause(bool tf)
 {
 	Settings.UpdateSettings();
 	isPaused = tf;
+	if (tf)
+	{
+		gameMusic.pause();
+	}
+	else
+	{
+		gameMusic.play();
+	}
 }
 
 void GameScene::Load() {
@@ -406,7 +430,7 @@ void GameScene::Load() {
 		pl = make_shared<Entity>();
 		player = pl->addComponent<BasePlayerComponent>(HPMax, currentHP, strength, dex, exp, 10, &combatUI, &gameUI);
 		am = pl->addComponent<AbilityManager>(3);
-		inv = pl->addComponent<Inventory>(2, &gameUI);
+		inv = pl->addComponent<Inventory>(6, &gameUI);
 		inv->Load();
 		playerSprite = pl->addComponent<PlayerSprite>();
 		playerSprite->load();
@@ -438,7 +462,7 @@ void GameScene::Load() {
 		pl = make_shared<Entity>();
 		player = pl->addComponent<BasePlayerComponent>(100.0f, 100.0f, 20.0f, 10.0f, 0.0f, 10, &combatUI, &gameUI);
 		am = pl->addComponent<AbilityManager>(3);
-		inv = pl->addComponent<Inventory>(2, &gameUI);
+		inv = pl->addComponent<Inventory>(6, &gameUI);
 		inv->Load();
 		playerSprite = pl->addComponent<PlayerSprite>();
 		playerSprite->load();
@@ -501,6 +525,9 @@ void GameScene::Update(const double& dt) {
 	Vector2f cursPos = sf::Vector2f(tempPos);
 	cursPos.x /= Engine::xMultiply;
 	cursPos.y /= Engine::yMultiply;
+
+	gameMusic.setVolume(musicVolume * masterVolume/100);
+
 	scene_delay = scene_clock.getElapsedTime();
 	pause_delay = pauseClock.getElapsedTime();
 
@@ -515,7 +542,7 @@ void GameScene::Update(const double& dt) {
 	{
 		if(currentRoom->isActive())
 		{
-			currentRoom->Update(dt);
+			currentRoom->Update(dt, cursPos);
 		}
 		else
 		{
@@ -563,7 +590,7 @@ void GameScene::Update(const double& dt) {
 		if (Keyboard::isKeyPressed(pauseKey) && pause_delay.asSeconds() >= pauseDelay)
 		{
 			pauseClock.restart();
-			isPaused = true;
+			setPause(true);
 		}
 
 		//Checks if user clicks settings button
@@ -573,7 +600,7 @@ void GameScene::Update(const double& dt) {
 			if (Mouse::isButtonPressed(Mouse::Left) && pause_delay.asSeconds() >= pauseDelay)
 			{
 				pauseClock.restart();
-				isPaused = true;
+				setPause(true);
 			}
 		}
 		else
@@ -647,7 +674,7 @@ void GameScene::ChangeRoom() {
 	{
 		UpdateTextBox("Entered Combat Room");
 		//Makes new combat Room
-		std::shared_ptr<CombatRoom> newRoom = make_shared<CombatRoom>(pl);
+		std::shared_ptr<CombatRoom> newRoom = make_shared<CombatRoom>(pl, &combatUI);
 		//Calls load function of the new room 
 		newRoom->Load();
 		//Adds room to rooms vector
@@ -716,6 +743,9 @@ void GameScene::LoadTextures()
 	Engine::tm.loadTexture("Charge", "Icons/Charge.png");
 	Engine::tm.loadTexture("StatUp", "Icons/Arrow.png");
 	Engine::tm.loadTexture("Player", "Sprites/Player.png");
+	Engine::tm.loadTexture("ChestClosed", "Sprites/ChestClosed.png");
+	Engine::tm.loadTexture("ChestOpen", "Sprites/ChestOpen.png");
+	Engine::tm.loadTexture("QuestionMark", "Icons/QuestionMark.png");
 	Engine::tm.loadTexture("Background1", "Sprites/BGspace1.jpg");
 	Engine::tm.loadTexture("Pointy", "Icons/Pointy.png");
 	Engine::tm.loadTexture("ExtraPadding", "Icons/ExtraPadding.png");
