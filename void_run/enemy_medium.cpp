@@ -18,10 +18,10 @@ void MediumEnemy::update(double dt)
 
 	if (isTurn && isFinishedTurn != true)
 	{
-		//if (cursed == true)
-		//{
-		//	attackEnemy(5, 10000); //If the alien has used a curse, the player takes 5 damage at the start of each of the alien turns
-		//}
+		if (cursed == true)
+		{
+			attackEnemy(5, 10000); //If the alien has used a curse, the player takes 5 damage at the start of each of the alien turns
+		}
 
 		if (specialMove == 1 && currentHealth <= 40 && hasRegenerated == false) //If it has Regeneration, and it's at or below 40% it will use this. One time only.
 		{
@@ -96,7 +96,7 @@ void MediumEnemy::update(double dt)
 			else if (enemyAI == 1)
 			{
 				std::cout << "The enemy makes a medium attack! \n";
-				if (!attackEnemy(_strength + 5, _dexterity))
+				attackEnemy(_strength + 5, _dexterity);
 				EndTurn();
 			}
 		}
