@@ -32,7 +32,7 @@ void EasyEnemy::update(double dt)
 			usedSwiftFoot = true;
 			EndTurn();
 		}
-		else if (usedSwiftFoot == false) //Whenever the enemy misses an attack (Or on the second round of combat, if it didn't use it turn one), it will follow up by using Swift Foot, as it tries to have a greater accuracy before attacking again
+		else if (specialMove == 0 && usedSwiftFoot == false) //Whenever the enemy misses an attack (Or on the second round of combat, if it didn't use it turn one), it will follow up by using Swift Foot, as it tries to have a greater accuracy before attacking again
 		{
 			std::cout << "The enemy uses its unique ability: Swift Foot! \n";
 			_dexterity += 5; //The monster gains +5 to dexterity

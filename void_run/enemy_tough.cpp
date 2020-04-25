@@ -21,6 +21,7 @@ void ToughEnemy::update(double dt)
 			if (turnCounter == 1) //Turn one, it will start a suicide charge
 			{
 				std::cout << "The enemy uses its unique ability: Suicide Charge! \n";
+				currentHealth -= 100;
 				_strength = _strength * 2;
 				_dexterity = _dexterity * 2;
 				EndTurn();
@@ -51,7 +52,7 @@ void ToughEnemy::update(double dt)
 			currentEnemy->setRunChance(5);
 			EndTurn();
 		}
-		else if (specialMove == 1 && turnCounter != 1 && (currentEnemy->getStrength < currentHealth))
+		else if (specialMove == 1 && turnCounter != 1 && (currentEnemy->getStrength() < currentHealth))
 		{
 			std::cout << "The enemy uses is charging a powerful charged shot!";
 			charging = true;
