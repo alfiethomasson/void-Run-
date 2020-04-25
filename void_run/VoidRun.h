@@ -20,6 +20,26 @@ private:
 	sf::Text ResButton;
 	sf::Text ResChange;
 	sf::Text ResText;
+	sf::Text ToControlText;
+	sf::Text AttackText;
+	sf::Text HealText;
+	sf::Text RechargeText;
+	sf::Text RunText;
+	sf::Text PauseText;
+	sf::Text Special1Text;
+	sf::Text Special2Text;
+	sf::Text Special3Text;
+	sf::Text Special4Text;
+	sf::Text AttackKeyText;
+	sf::Text HealKeyText;
+	sf::Text RechargeKeyText;
+	sf::Text RunKeyText;
+	sf::Text PauseKeyText;
+	sf::Text Special1KeyText;
+	sf::Text Special2KeyText;
+	sf::Text Special3KeyText;
+	sf::Text Special4KeyText;
+	sf::Text ResetControls;
 	sf::Text BackButton;
 	sf::Text toChangeControls;
 	sf::Font font;
@@ -33,6 +53,9 @@ private:
 	sf::Music titleMusic;
 	
 	bool inOptions;
+	bool inControls;
+
+	SettingUI Settings;
 
 public:
 	MenuScene() = default;
@@ -42,6 +65,7 @@ public:
 	void Load() override;
 	void ChangeControls();
 	void UpdateButtons();
+	void setSettings(bool tf);
 };
 
 class GameScene : public Scene {
@@ -83,6 +107,8 @@ private:
 
 	sf::Music gameMusic;
 
+	SettingUI Settings;
+
 public:
 	sf::Text screenText;
 	CombatUI combatUI;
@@ -105,6 +131,8 @@ public:
 	void UpdateDesctext(std::string, sf::Vector2f pos);
 	void ResetDescText();
 	void setLoadFromSave(bool tf);
+
+	void setPause(bool tf);
 
 	void SaveGame();
 

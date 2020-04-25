@@ -23,6 +23,7 @@ float Engine::yMultiply;
 TextureManager Engine::tm;
 float Engine::oldWinX;
 float Engine::oldWinY;
+bool Engine::isFullscreen;
 
 void Loading_update(float dt, const Scene* const scn) {
 	//  cout << "Eng: Loading Screen\n";
@@ -101,6 +102,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 	oldWinY = getWindowSize().y;
 	xMultiply = 1.0f;
 	yMultiply = 1.0f;
+	isFullscreen = false;
 	while (window.isOpen()) {
 		Event event;
 		while (window.pollEvent(event)) {
@@ -230,6 +232,25 @@ sf::FloatRect Engine::CalculateViewport(const sf::Vector2u& screensize,
 	const float heightPercent = (scaledHeight / screensf.y);
 
 	return sf::FloatRect(0, 0, widthPercent, heightPercent);
+}
+
+void Engine::SetFullScreen(sf::RenderWindow& window, bool tf)
+{
+	if (tf)
+	{
+		isFullscreen = true;
+		window.create(VideoMode(1920, 1080), "Void Run", sf::Style::Fullscreen);
+	}
+	else
+	{
+		isFullscreen = false;
+		window.create(VideoMode(1920, 1080), "Void Run", sf::Style::Titlebar);
+	}
+}
+
+bool Engine::getFullscreen()
+{
+	return isFullscreen;
 }
 
 void Engine::UpdateButton(sf::FloatRect& button)
@@ -525,43 +546,43 @@ std::string Engine::keyToString(const sf::Keyboard::Key& key) {
 		break;
 	case sf::Keyboard::Num0:
 
-		ret = "Num0";
+		ret = "0";
 		break;
 	case sf::Keyboard::Num1:
 
-		ret = "Num1";
+		ret = "1";
 		break;
 	case sf::Keyboard::Num2:
 
-		ret = "Num2";
+		ret = "2";
 		break;
 	case sf::Keyboard::Num3:
 
-		ret = "Num3";
+		ret = "3";
 		break;
 	case sf::Keyboard::Num4:
 
-		ret = "Num4";
+		ret = "4";
 		break;
 	case sf::Keyboard::Num5:
 
-		ret = "Num5";
+		ret = "5";
 		break;
 	case sf::Keyboard::Num6:
 
-		ret = "Num6";
+		ret = "6";
 		break;
 	case sf::Keyboard::Num7:
 
-		ret = "Num7";
+		ret = "7";
 		break;
 	case sf::Keyboard::Num8:
 
-		ret = "Num8";
+		ret = "8";
 		break;
 	case sf::Keyboard::Num9:
 
-		ret = "Num9";
+		ret = "9";
 		break;
 	case sf::Keyboard::Escape:
 

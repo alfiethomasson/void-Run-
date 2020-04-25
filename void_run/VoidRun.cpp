@@ -11,9 +11,6 @@
 #include "TreasureRoom.h"
 #include <fstream>
 
-#define GAMEX 1920
-#define GAMEY 1080
-
 using namespace sf;
 using namespace std;
 ItemDB itemDB;
@@ -150,47 +147,7 @@ void MenuScene::Update(const double& dt) {
 	}
 	else
 	{
-		if ((Keyboard::isKeyPressed(sf::Keyboard::Right) || (Mouse::isButtonPressed(sf::Mouse::Left) && ResButtonBox.contains(cursPos)))
-			&& scene_delay.asSeconds() >= sceneChangeDelay)
-		{
-			scene_clock.restart();
-
-			if (Engine::getWindowSize().y != 1080)
-			{
-				ResChange.setString("1080p");
-				Engine::ChangeResolution(1920, 1080, GAMEX, GAMEY);
-				UpdateButtons();
-			}
-			else
-			{
-				ResChange.setString("720p");
-				Engine::ChangeResolution(1280, 720, GAMEX, GAMEY);
-				UpdateButtons();
-			}
-		}
-		if ((Keyboard::isKeyPressed(sf::Keyboard::Num2) || (Mouse::isButtonPressed(sf::Mouse::Left) && BackButtonBox.contains(cursPos)))
-			&& scene_delay.asSeconds() >= sceneChangeDelay)
-		{
-			scene_clock.restart();
-			inOptions = false;
-		}
-
-	if (ResButtonBox.contains(cursPos))
-	{
-		ResButton.setFillColor(green);
-	}
-	else
-	{
-		ResButton.setFillColor(white);
-	}
-	if (BackButtonBox.contains(cursPos))
-	{
-		BackButton.setFillColor(green);
-	}
-	else
-	{
-		BackButton.setFillColor(white);
-	}
+		Settings.Update(dt, cursPos);
 }
 	Scene::Update(dt);
 	
@@ -209,20 +166,15 @@ void MenuScene::Render() {
 	}
 	else
 	{
-		Renderer::queue(&ResChange);
-		Renderer::queue(&ResText);
-		Renderer::queue(&ResButton);
-		Renderer::queue(&BackButton);
+		Settings.Render();
 	}
 	Scene::Render();
 }
 
 void MenuScene::Load() {
 	//Loads font
-	if (!font.loadFromFile("res/Fonts/venusrising.ttf"))
-	{
-		cout << "failed to load font";
-	}
+	Engine::tm.loadFont("venusrising.ttf");
+	font = Engine::tm.getFont();
 
 	//Loads music
 	if (!titleMusic.openFromFile("res/Sounds/Music/TitleMusic.wav"))
@@ -245,6 +197,23 @@ void MenuScene::Load() {
 	ResText.setFont(font);
 	OptionsButton.setFont(font);
 	BackButton.setFont(font);
+	AttackText.setFont(font);
+	HealText.setFont(font);
+	RechargeText.setFont(font);
+	RunText.setFont(font);
+	Special1Text.setFont(font);
+	Special2Text.setFont(font);
+	Special3Text.setFont(font);
+	Special4Text.setFont(font);
+	AttackKeyText.setFont(font);
+	HealKeyText.setFont(font);
+	RechargeKeyText.setFont(font);
+	RunKeyText.setFont(font);
+	Special1KeyText.setFont(font);
+	Special2KeyText.setFont(font);
+	Special3KeyText.setFont(font);
+	Special4KeyText.setFont(font);
+	ResetControls.setFont(font);
 
 	//Sets values for text
 	GameName.setString("Void Run()");
@@ -305,16 +274,20 @@ void MenuScene::Load() {
 	special2Key = Keyboard::W;
 	special3Key = Keyboard::E;
 	special4Key = Keyboard::R;
+
+	Settings.Load();
 }
 
-//Updates the bounding boxes of buttons
-void MenuScene::UpdateButtons()
+void MenuScene::setSettings(bool tf)
 {
-	//Engine::UpdateButton(PlayButtonBox);
-	//Engine::UpdateButton(ExitButtonBox);
-	//Engine::UpdateButton(ResButtonBox);
-	//Engine::UpdateButton(OptionsButtonBox);
-	//Engine::UpdateButton(BackButtonBox);
+	Settings.UpdateSettings();
+	inOptions = tf;
+}
+
+void GameScene::setPause(bool tf)
+{
+	Settings.UpdateSettings();
+	isPaused = tf;
 }
 
 void GameScene::Load() {
@@ -346,25 +319,6 @@ void GameScene::Load() {
 	ResChange.setFont(font);
 	ResButton.setFont(font);
 	BackButton.setFont(font);
-	PauseText.setString("PAUSED");
-	PauseText.setCharacterSize(100);
-	PauseText.setPosition(sf::Vector2f(GAMEX / 2 - (PauseText.getGlobalBounds().width / 2), 200.0f));
-
-	cout << Engine::getWindowSize().y << "\n";
-	ResChange.setString(to_string(Engine::getWindowSize().y) + "p"); //Starts at 720p
-	ResChange.setCharacterSize(60);
-	ResChange.setPosition(sf::Vector2f(GAMEX / 2.0f - (ResChange.getGlobalBounds().width / 2), GAMEY / 2.0f - (ResChange.getGlobalBounds().height / 2)));
-	ResText.setString("Resolution: ");
-	ResText.setCharacterSize(60);
-	ResText.setPosition(sf::Vector2f(GAMEX / 2.0f - 300.0f, GAMEY / 2.0f - (ResText.getGlobalBounds().height / 2)));
-	ResButton.setString(" > ");
-	ResButton.setCharacterSize(60);
-	ResButton.setPosition(sf::Vector2f(GAMEX / 2.0f + 80.0f, GAMEY / 2.0f - (ResButton.getGlobalBounds().height / 2)));
-	ResButtonBox = ResButton.getGlobalBounds();
-	BackButton.setString("BACK - 2");
-	BackButton.setCharacterSize(60);
-	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (BackButton.getGlobalBounds().width / 2), GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 100.0f));
-	BackButtonBox = BackButton.getGlobalBounds();
 
 	itemDB.PopulateDB();
 ;
@@ -446,7 +400,7 @@ void GameScene::Load() {
 		}
 		//Creates Player and adds components
 		pl = make_shared<Entity>();
-		player = pl->addComponent<BasePlayerComponent>(HPMax, strength, dex, exp, 10, &combatUI, &gameUI);
+		player = pl->addComponent<BasePlayerComponent>(HPMax, currentHP, strength, dex, exp, 10, &combatUI, &gameUI);
 		am = pl->addComponent<AbilityManager>(3);
 		inv = pl->addComponent<Inventory>(2, &gameUI);
 		inv->Load();
@@ -478,7 +432,7 @@ void GameScene::Load() {
 
 		//Creates Player and adds components
 		pl = make_shared<Entity>();
-		player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f, 10, &combatUI, &gameUI);
+		player = pl->addComponent<BasePlayerComponent>(100.0f, 100.0f, 20.0f, 10.0f, 0.0f, 10, &combatUI, &gameUI);
 		am = pl->addComponent<AbilityManager>(3);
 		inv = pl->addComponent<Inventory>(2, &gameUI);
 		inv->Load();
@@ -521,6 +475,8 @@ void GameScene::Load() {
 	gameMusic.play();
 	gameMusic.setVolume(50.0f);
 	gameMusic.setLoop(true);
+
+	Settings.Load();
 
 	//Calls ChangeRoom to start the game with a random room
 	ChangeRoom();
@@ -638,65 +594,7 @@ void GameScene::Update(const double& dt) {
 	}
 	else
 	{
-		if (Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			if (ResButtonBox.contains(cursPos))
-			{
-				if (Engine::getWindowSize().y != 1080)
-				{
-					ResChange.setString("1080p");
-					Engine::ChangeResolution(1920, 1080, GAMEX, GAMEY);
-					UpdateButtons();
-				}
-				else
-				{
-					ResChange.setString("720p");
-					Engine::ChangeResolution(1280, 720, GAMEX, GAMEY);
-					UpdateButtons();
-				}
-			}
-			if (BackButtonBox.contains(cursPos))
-			{
-				isPaused = false;
-			}
-		}
-		if (Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-			if (Engine::getWindowSize().y != 1080)
-			{
-				ResChange.setString("1080p");
-				Engine::ChangeResolution(1920, 1080, GAMEX, GAMEY);
-				UpdateButtons();
-			}
-			else
-			{
-				ResChange.setString("720p");
-				Engine::ChangeResolution(1280, 720, GAMEX, GAMEY);
-				UpdateButtons();
-			}
-		}
-		if (Keyboard::isKeyPressed(sf::Keyboard::Num2) && pause_delay.asSeconds() >= pauseDelay)
-		{
-			pauseClock.restart();
-			isPaused = false;
-		}
-
-		if (BackButtonBox.contains(cursPos))
-		{
-			BackButton.setFillColor(green);
-		}
-		else
-		{
-			BackButton.setFillColor(white);
-		}
-		if (ResButtonBox.contains(cursPos))
-		{
-			ResButton.setFillColor(green);
-		}
-		else
-		{
-			ResButton.setFillColor(white);
-		}
+		Settings.Update(dt, cursPos);
 	}
 
 	//Update from base class
@@ -718,11 +616,7 @@ void GameScene::Render() {
 	}
 	else // if paused
 	{
-		Renderer::queue(&PauseText);
-		Renderer::queue(&ResButton);
-		Renderer::queue(&ResChange);
-		Renderer::queue(&ResText);
-		Renderer::queue(&BackButton);
+		Settings.Render();
 	}
 }
 
@@ -757,7 +651,7 @@ void GameScene::ChangeRoom() {
 	}
 	else if(roomType == 1) //Treasure Room
 	{
-		std::shared_ptr<TreasureRoom> newRoom = make_shared<TreasureRoom>(pl);
+		std::shared_ptr<TreasureRoom> newRoom = make_shared<TreasureRoom>(pl, itemDB);
 		newRoom->Load();
 		rooms.push_back(newRoom);
 		currentRoom = newRoom;
@@ -791,7 +685,7 @@ void GameScene::UpdateTextBox(sf::String newText)
 
 void GameScene::LoadTextures()
 {
-	Engine::tm.loadFont("venusrising.ttf");
+	//Engine::tm.loadFont("venusrising.ttf");
 
 	Engine::tm.loadTexture("Settings", "Icons/Settings.png");
 	Engine::tm.loadTexture("Save", "Icons/Save.png");

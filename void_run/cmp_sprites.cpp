@@ -229,11 +229,11 @@ void SpriteComponent::AddIcon(std::string texName, std::string desc, bool leftri
 	tempIcon.sprite.setScale(0.15f, 0.15f);
 	if (leftright)
 	{
-		tempIcon.sprite.setPosition(1150, 100.0f);
+		tempIcon.sprite.setPosition(1700.0f, 200.0f);
 	}
 	else
 	{
-		tempIcon.sprite.setPosition(800.0f, 300.0f);
+		tempIcon.sprite.setPosition(300.f, 350.0f);
 	}
 	tempIcon.box = tempIcon.sprite.getGlobalBounds();
 	tempIcon.description = desc;

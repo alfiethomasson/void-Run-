@@ -1,6 +1,9 @@
 #pragma once
 #include "VoidRun.h"
 
+#define GAMEX 1920
+#define GAMEY 1080
+
 using namespace sf;
 using namespace std;
 

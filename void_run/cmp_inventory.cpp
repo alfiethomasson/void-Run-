@@ -48,15 +48,15 @@ bool Inventory::checkEmptySlot()
 
 void Inventory::Load()
 {
-	positions[0] = sf::Vector2f(1400.0f, 700.0f);
-	positions[1] = sf::Vector2f(1500.0f, 700.0f);
-	positions[2] = sf::Vector2f(1600.0f, 700.0f);
-	positions[3] = sf::Vector2f(1400.0f, 800.0f);
-	positions[4] = sf::Vector2f(1500.0f, 800.0f);
-	positions[5] = sf::Vector2f(1600.0f, 800.0f);
-	positions[6] = sf::Vector2f(1400.0f, 900.0f);
-	positions[7] = sf::Vector2f(1500.0f, 900.0f);
-	positions[8] = sf::Vector2f(1600.0f, 900.0f);
+	positions[0] = sf::Vector2f(1400.0f, 800.0f);
+	positions[1] = sf::Vector2f(1500.0f, 800.0f);
+	positions[2] = sf::Vector2f(1600.0f, 800.0f);
+	positions[3] = sf::Vector2f(1400.0f, 900.0f);
+	positions[4] = sf::Vector2f(1500.0f, 900.0f);
+	positions[5] = sf::Vector2f(1600.0f, 900.0f);
+	positions[6] = sf::Vector2f(1400.0f, 1000.0f);
+	positions[7] = sf::Vector2f(1500.0f, 1000.0f);
+	positions[8] = sf::Vector2f(1600.0f, 1000.0f);
 }
 
 std::vector<std::shared_ptr<Item>> Inventory::getItems()

@@ -50,9 +50,11 @@ public:
 	static void setVsync(bool b);
 	static std::string keyToString(const sf::Keyboard::Key& key);
 	static void ChangeResolution(int x, int y, int GAMEX, int GAMEY);
+	static void SetFullScreen(sf::RenderWindow& window, bool tf);
 	static sf::FloatRect CalculateViewport(const sf::Vector2u& screensize,
 		const sf::Vector2u& gamesize);
 	static void UpdateButton(sf::FloatRect& button);
+	static bool getFullscreen();
 
 	static TextureManager tm;
 	static float xMultiply;
@@ -65,6 +67,7 @@ private:
 	static void Render(sf::RenderWindow& window);
 	static float oldWinX;
 	static float oldWinY;
+	static bool isFullscreen;
 };
 
 namespace timing {

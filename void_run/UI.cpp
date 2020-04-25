@@ -470,3 +470,349 @@ void GameUI::playSound(const std::string& name, int volume)
 	sound.setVolume(volume);
 	sound.play();
 }
+
+void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
+{
+	delayTime = delayClock.getElapsedTime().asSeconds();
+
+	if (ResButtonBox.contains(cursPos))
+	{
+		ResButton.setColor(sf::Color(0, 255, 0, 255));
+		if (Mouse::isButtonPressed(Mouse::Left) && delayTime >= delayAmount)
+		{
+			delayClock.restart();
+			if (Engine::getWindowSize().y == 1080)
+			{
+				if (!Engine::getFullscreen())
+				{
+					ResChange.setString("FS");
+					Engine::SetFullScreen(Engine::GetWindow(), true);
+				}
+				else
+				{
+					ResChange.setString("720p");
+					Engine::SetFullScreen(Engine::GetWindow(), false);
+					Engine::ChangeResolution(1280, 720, GAMEX, GAMEY);
+				}
+			}
+			else
+			{
+				Engine::ChangeResolution(1920, 1080, GAMEX, GAMEY);
+			}
+		}
+	}
+	else
+	{
+		ResButton.setColor(sf::Color(255, 255, 255, 255));
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::Right) && delayTime >= delayAmount)
+	{
+		delayClock.restart();
+		if (Engine::getWindowSize().y != 1080)
+		{
+			ResChange.setString("1080p");
+			Engine::ChangeResolution(1920, 1080, GAMEX, GAMEY);
+		}
+		else
+		{
+			ResChange.setString("720p");
+			Engine::ChangeResolution(1280, 720, GAMEX, GAMEY);
+		}
+	}
+
+	if(AttackBox.contains(cursPos))
+	{
+		CheckKeyPress(AttackKeyText, AttackBox, attackKey);
+	}
+	else if (HealBox.contains(cursPos))
+	{
+		CheckKeyPress(HealKeyText, HealBox, healKey);
+	}
+	else if (RechargeBox.contains(cursPos))
+	{
+		CheckKeyPress(RechargeKeyText, RechargeBox, rechargeKey);
+	}
+	else if (RunBox.contains(cursPos))
+	{
+		CheckKeyPress(RunKeyText, RunBox, runKey);
+	}
+	else if (Special1Box.contains(cursPos))
+	{
+		CheckKeyPress(Special1KeyText, Special1Box, special1Key);
+	}
+	else if (Special2Box.contains(cursPos))
+	{
+		CheckKeyPress(Special2KeyText, Special2Box, special2Key);
+	}
+	else if (Special3Box.contains(cursPos))
+	{
+		CheckKeyPress(Special3KeyText, Special3Box, special3Key);
+	}
+	else if (Special4Box.contains(cursPos))
+	{
+		CheckKeyPress(Special4KeyText, Special4Box, special4Key);
+	}
+	else if (PauseBox.contains(cursPos))
+	{
+		CheckKeyPress(PauseKeyText, PauseBox, pauseKey);
+	}
+	
+	if (ResetBox.contains(cursPos))
+	{
+		ResetControls.setColor(sf::Color(0, 255, 0, 255));
+		if (Mouse::isButtonPressed(Mouse::Left))
+		{
+			ResetKeys();
+		}
+	}
+	else
+	{
+		ResetControls.setColor(sf::Color(255, 255, 255, 255));
+	}
+
+	if (BackBox.contains(cursPos))
+	{
+		BackButton.setColor(sf::Color(0, 255, 0, 255));
+		if (Mouse::isButtonPressed(Mouse::Left))
+		{
+			menuScene.setSettings(false);
+			gameScene.setPause(false);
+		}
+	}
+	else
+	{
+		BackButton.setColor(sf::Color(255, 255, 255, 255));
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::BackSpace))
+	{
+		menuScene.setSettings(false);
+		gameScene.setPause(false);
+	}
+
+}
+
+void SettingUI::Load()
+{
+	ResChange.setFont(Engine::tm.getFont());
+	ResText.setFont(Engine::tm.getFont());
+	ResButton.setFont(Engine::tm.getFont());
+	BackButton.setFont(Engine::tm.getFont());
+	AttackText.setFont(Engine::tm.getFont());
+	HealText.setFont(Engine::tm.getFont());
+	RechargeText.setFont(Engine::tm.getFont());
+	RunText.setFont(Engine::tm.getFont());
+	Special1Text.setFont(Engine::tm.getFont());
+	Special2Text.setFont(Engine::tm.getFont());
+	Special3Text.setFont(Engine::tm.getFont());
+	Special4Text.setFont(Engine::tm.getFont());
+	PauseText.setFont(Engine::tm.getFont());
+	AttackKeyText.setFont(Engine::tm.getFont());
+	HealKeyText.setFont(Engine::tm.getFont());
+	RechargeKeyText.setFont(Engine::tm.getFont());
+	RunKeyText.setFont(Engine::tm.getFont());
+	Special1KeyText.setFont(Engine::tm.getFont());
+	Special2KeyText.setFont(Engine::tm.getFont());
+	Special3KeyText.setFont(Engine::tm.getFont());
+	Special4KeyText.setFont(Engine::tm.getFont());
+	PauseKeyText.setFont(Engine::tm.getFont());
+	ResetControls.setFont(Engine::tm.getFont());
+	HowToText.setFont(Engine::tm.getFont());
+
+	BackButton.setString("BACK - BACKSPACE");
+	BackButton.setCharacterSize(40);
+	BackButton.setPosition(sf::Vector2f(1300.0f, 975.0f));
+	BackBox = BackButton.getGlobalBounds();
+
+	ResChange.setString("1080p"); //Starts at 720p
+	ResChange.setCharacterSize(60);
+	ResChange.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f + 100.0f, 200.0f));
+	ResText.setString("Resolution: ");
+	ResText.setCharacterSize(60);
+	ResText.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - 500.0f, 200.0f));
+	ResButton.setString(" > ");
+	ResButton.setCharacterSize(100);
+	ResButton.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f + 380.0f, 170.0f));
+	ResButtonBox = ResButton.getGlobalBounds();
+
+	AttackText.setString("Attack Key: ");
+	AttackText.setCharacterSize(40);
+	AttackText.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+		- AttackText.getGlobalBounds().width, 300.0f));
+	HealText.setString("Heal Key  ");
+	HealText.setCharacterSize(40);
+	HealText.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+		- HealText.getGlobalBounds().width, 350.0f));
+	RechargeText.setString("Recharge Key: ");
+	RechargeText.setCharacterSize(40);
+	RechargeText.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+		- RechargeText.getGlobalBounds().width, 400.0f));
+	RunText.setString("Run Key: ");
+	RunText.setCharacterSize(40);
+	RunText.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+		- RunText.getGlobalBounds().width, 450.0f));
+	Special1Text.setString("Special 1 Key: ");
+	Special1Text.setCharacterSize(40);
+	Special1Text.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+		- Special1Text.getGlobalBounds().width, 500.0f));
+	Special2Text.setString("Special 2 Key: ");
+	Special2Text.setCharacterSize(40);
+	Special2Text.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+		- Special2Text.getGlobalBounds().width, 550.0f));
+	Special3Text.setString("Special 3 Key: ");
+	Special3Text.setCharacterSize(40);
+	Special3Text.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+		- Special3Text.getGlobalBounds().width, 600.0f));
+	Special4Text.setString("Special 4 Key: ");
+	Special4Text.setCharacterSize(40);
+	Special4Text.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+		- Special4Text.getGlobalBounds().width, 650.0f));
+	PauseText.setString("Pause Key: ");
+	PauseText.setCharacterSize(40);
+	PauseText.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+		- PauseText.getGlobalBounds().width, 700.0f));
+
+	AttackKeyText.setString(Engine::keyToString(attackKey));
+	AttackKeyText.setCharacterSize(40);
+	AttackKeyText.setPosition(AttackText.getPosition().x + AttackText.getGlobalBounds().width + 75.0f, AttackText.getPosition().y);
+	AttackBox = AttackKeyText.getGlobalBounds();
+	HealKeyText.setString(Engine::keyToString(healKey));
+	HealKeyText.setCharacterSize(40);
+	HealKeyText.setPosition(HealText.getPosition().x + HealText.getGlobalBounds().width + 75.0f, HealText.getPosition().y);
+	HealBox = HealKeyText.getGlobalBounds();
+	RechargeKeyText.setString(Engine::keyToString(rechargeKey));
+	RechargeKeyText.setCharacterSize(40);
+	RechargeKeyText.setPosition(RechargeText.getPosition().x + RechargeText.getGlobalBounds().width + 75.0f, RechargeText.getPosition().y);
+	RechargeBox = RechargeKeyText.getGlobalBounds();
+	RunKeyText.setString(Engine::keyToString(runKey));
+	RunKeyText.setCharacterSize(40);
+	RunKeyText.setPosition(RunText.getPosition().x + RunText.getGlobalBounds().width + 75.0f, RunText.getPosition().y);
+	RunBox = RunKeyText.getGlobalBounds();
+	Special1KeyText.setString(Engine::keyToString(special1Key));
+	Special1KeyText.setCharacterSize(40);
+	Special1KeyText.setPosition(Special1Text.getPosition().x + Special1Text.getGlobalBounds().width + 75.0f, Special1Text.getPosition().y);
+	Special1Box = Special1KeyText.getGlobalBounds();
+	Special2KeyText.setString(Engine::keyToString(special2Key));
+	Special2KeyText.setCharacterSize(40);
+	Special2KeyText.setPosition(Special2Text.getPosition().x + Special2Text.getGlobalBounds().width + 75.0f, Special2Text.getPosition().y);
+	Special2Box = Special2KeyText.getGlobalBounds();
+	Special3KeyText.setString(Engine::keyToString(special3Key));
+	Special3KeyText.setCharacterSize(40);
+	Special3KeyText.setPosition(Special3Text.getPosition().x + Special3Text.getGlobalBounds().width + 75.0f, Special3Text.getPosition().y);
+	Special3Box = Special3KeyText.getGlobalBounds();
+	Special4KeyText.setString(Engine::keyToString(special4Key));
+	Special4KeyText.setCharacterSize(40);
+	Special4KeyText.setPosition(Special4Text.getPosition().x + Special4Text.getGlobalBounds().width + 75.0f, Special4Text.getPosition().y);
+	Special4Box = Special4KeyText.getGlobalBounds();
+	PauseKeyText.setString(Engine::keyToString(pauseKey));
+	PauseKeyText.setCharacterSize(40);
+	PauseKeyText.setPosition(PauseText.getPosition().x + PauseText.getGlobalBounds().width + 75.0f, PauseText.getPosition().y);
+	PauseBox = PauseKeyText.getGlobalBounds();
+
+	ResetControls.setString("Reset Controls  ");
+	ResetControls.setCharacterSize(50);
+	ResetControls.setPosition((Engine::getWindowSize().x / 2) - (ResetControls.getGlobalBounds().width / 2), 800.0f);
+	ResetBox = ResetControls.getGlobalBounds();
+
+	HowToText.setString("To change controls hover\nmouse over key and hold down\n new key on keyboard");
+	HowToText.setCharacterSize(25);
+	HowToText.setPosition(1200.0f, 400.0f);
+}
+
+void SettingUI::Render()
+{
+	Renderer::queue(&ResButton);
+	Renderer::queue(&ResChange);
+	Renderer::queue(&ResText);
+	Renderer::queue(&AttackText);
+	Renderer::queue(&HealText);
+	Renderer::queue(&RechargeText);
+	Renderer::queue(&RunText);
+	Renderer::queue(&PauseText);
+	Renderer::queue(&Special1Text);
+	Renderer::queue(&Special2Text);
+	Renderer::queue(&Special3Text);
+	Renderer::queue(&Special4Text);
+	Renderer::queue(&AttackKeyText);
+	Renderer::queue(&HealKeyText);
+	Renderer::queue(&RechargeKeyText);
+	Renderer::queue(&RunKeyText);
+	Renderer::queue(&PauseKeyText);
+	Renderer::queue(&Special1KeyText);
+	Renderer::queue(&Special2KeyText);
+	Renderer::queue(&Special3KeyText);
+	Renderer::queue(&Special4KeyText);
+	Renderer::queue(&ResetControls);
+	Renderer::queue(&BackButton);
+	Renderer::queue(&HowToText);
+}
+
+void SettingUI::ResetKeys()
+{
+	AttackKeyText.setString("1");
+	HealKeyText.setString("2");
+	RechargeKeyText.setString("3");
+	RunKeyText.setString("4");
+	Special1KeyText.setString("Q");
+	Special2KeyText.setString("W");
+	Special3KeyText.setString("E");
+	Special4KeyText.setString("R");
+	PauseKeyText.setString("Tab");
+
+	AttackBox = AttackKeyText.getGlobalBounds();
+	HealBox = AttackKeyText.getGlobalBounds();
+	RechargeBox = AttackKeyText.getGlobalBounds();
+	RunBox = AttackKeyText.getGlobalBounds();
+	Special1Box = Special1KeyText.getGlobalBounds();
+	Special2Box = Special2KeyText.getGlobalBounds();
+	Special3Box = Special3KeyText.getGlobalBounds();
+	Special4Box = Special4KeyText.getGlobalBounds();
+	PauseBox = PauseKeyText.getGlobalBounds();
+}
+
+void SettingUI::CheckKeyPress(sf::Text& changeText, sf::FloatRect& box, sf::Keyboard::Key& key)
+{
+	sf::Event Event;
+	while (Engine::GetWindow().pollEvent(Event))
+	{
+		if (Event.type == sf::Event::KeyPressed)
+		{
+			key = Event.key.code;
+			changeText.setString(Engine::keyToString(Event.key.code));
+			box = changeText.getGlobalBounds();
+		}
+	}
+}
+
+void SettingUI::UpdateSettings()
+{
+	if (!Engine::getFullscreen())
+	{
+		ResChange.setString(std::to_string(Engine::getWindowSize().y) + "p");
+	}
+	else
+	{
+		ResChange.setString("FS");
+	}
+
+	AttackKeyText.setString(Engine::keyToString(attackKey));
+	HealKeyText.setString(Engine::keyToString(healKey));
+	RechargeKeyText.setString(Engine::keyToString(rechargeKey));
+	RunKeyText.setString(Engine::keyToString(runKey));
+	Special1KeyText.setString(Engine::keyToString(special1Key));
+	Special2KeyText.setString(Engine::keyToString(special2Key));
+	Special3KeyText.setString(Engine::keyToString(special3Key));
+	Special4KeyText.setString(Engine::keyToString(special4Key));
+	PauseKeyText.setString(Engine::keyToString(pauseKey));
+
+	AttackBox = AttackKeyText.getGlobalBounds();
+	HealBox = AttackKeyText.getGlobalBounds();
+	RechargeBox = AttackKeyText.getGlobalBounds();
+	RunBox = AttackKeyText.getGlobalBounds();
+	Special1Box = Special1KeyText.getGlobalBounds();
+	Special2Box = Special2KeyText.getGlobalBounds();
+	Special3Box = Special3KeyText.getGlobalBounds();
+	Special4Box = Special4KeyText.getGlobalBounds();
+	PauseBox = PauseKeyText.getGlobalBounds();
+}

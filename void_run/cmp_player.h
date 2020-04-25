@@ -12,12 +12,12 @@ class CombatUI;
 class GameUI;
 
 class BasePlayerComponent : public Component {
-protected:
+private:
 	float playerDamage;
 	float _strength;
 	float _dexterity;
-	int _maxHealth;
-	int currentHealth;
+	float _maxHealth;
+	float currentHealth;
 	float playerHealQuantity;
 	float _experience;
 	int actionPoints;
@@ -32,7 +32,8 @@ protected:
 	GameUI& gameUI;
 
 	int healthSize;
-	sf::RectangleShape healthBar;
+	std::vector<sf::RectangleShape> hpbars;
+	int barheight;
 	sf::Text healthText;
 
 	sf::Text StrengthText;
@@ -50,7 +51,7 @@ public:
 	int rechargeCost;
 	int runCost;
 
-	explicit BasePlayerComponent(Entity* p, int health, float strength, float dex,
+	explicit BasePlayerComponent(Entity* p, float maxhealth, float currenthealth, float strength, float dex,
 		float experience, int actionPoints, CombatUI *ui, GameUI *gameUI);
 	BasePlayerComponent() = delete;
 
@@ -88,6 +89,8 @@ public:
 
 	void addStats(int strength, int health, int dex);
 	void UpdateStats();
+
+	void makeHPBar();
 
 	void takeDamage(float dmgRecieved);
 	bool calculateHit(float enemyDex);

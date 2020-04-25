@@ -109,8 +109,7 @@ protected:
 
 	bool inStatUp;
 	sf::Sound sound;
-
-	//TextureManager& texManager;
+		
 public:
 	GameUI() = default;
 	~GameUI() = default;
@@ -133,4 +132,60 @@ public:
 	bool updateStatOptions();
 
 	void playSound(const std::string& name, int volume);
+};
+
+class SettingUI : UIManager {
+private:
+	sf::Text ResButton;
+	sf::Text ResChange;
+	sf::Text ResText;
+	sf::Text AttackText;
+	sf::Text HealText;
+	sf::Text RechargeText;
+	sf::Text RunText;
+	sf::Text PauseText;
+	sf::Text Special1Text;
+	sf::Text Special2Text;
+	sf::Text Special3Text;
+	sf::Text Special4Text;
+	sf::Text AttackKeyText;
+	sf::Text HealKeyText;
+	sf::Text RechargeKeyText;
+	sf::Text RunKeyText;
+	sf::Text PauseKeyText;
+	sf::Text Special1KeyText;
+	sf::Text Special2KeyText;
+	sf::Text Special3KeyText;
+	sf::Text Special4KeyText;
+	sf::Text ResetControls;
+	sf::Text BackButton;
+	sf::Text HowToText;
+
+	sf::FloatRect ResButtonBox;
+	sf::FloatRect BackBox;
+	sf::FloatRect AttackBox;
+	sf::FloatRect HealBox;
+	sf::FloatRect RechargeBox;
+	sf::FloatRect RunBox;
+	sf::FloatRect Special1Box;
+	sf::FloatRect Special2Box;
+	sf::FloatRect Special3Box;
+	sf::FloatRect Special4Box;
+	sf::FloatRect PauseBox;
+	sf::FloatRect ResetBox;
+
+	sf::Clock delayClock;
+	float delayTime;
+	const float delayAmount = 0.5f;
+
+public:
+	SettingUI() = default;
+	~SettingUI() = default;
+	void Update(const double& dt, sf::Vector2f cursPos);
+	void Render();
+	void Load();
+
+	void CheckKeyPress(sf::Text& changeText, sf::FloatRect& box, sf::Keyboard::Key&);
+	void UpdateSettings();
+	void ResetKeys();
 };

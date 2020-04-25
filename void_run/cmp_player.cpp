@@ -10,25 +10,28 @@ std::vector<std::shared_ptr<BasePlayerComponent>> playerInfo;
 
 //Clock clock;
 
-BasePlayerComponent::BasePlayerComponent(Entity* p, int health, float strength, float dex,
+BasePlayerComponent::BasePlayerComponent(Entity* p, float maxhealth, float currenthealth, float strength, float dex,
 	float experience, int actionPoints, CombatUI *ui, GameUI *gui)
-	: _maxHealth{ health }, currentHealth{ health }, _strength{ strength }, _dexterity{ dex }, 
+	: _maxHealth{ maxhealth }, currentHealth{ currenthealth }, _strength{ strength }, _dexterity{ dex }, 
 	_experience{ experience }, _actionPointsMax{ actionPoints }, combatUI{ *ui }, gameUI{ *gui }, Component(p) {}
 
 void BasePlayerComponent::render()
 {
-	Renderer::queue(&healthBar);
 	Renderer::queue(&healthText);
 	Renderer::queue(&StrengthText);
 	Renderer::queue(&HPText);
 	Renderer::queue(&DexterityText);
+	for (auto& b : hpbars)
+	{
+		Renderer::queue(&b);
+	}
 }
 
 void BasePlayerComponent::update(double dt) {
 
 	healthSize = currentHealth;
-	healthBar.setSize(sf::Vector2f(healthSize * 1.5, 20.0f));
-	healthText.setString(std::to_string(currentHealth) + " / " + std::to_string(_maxHealth));
+	//healthBar.setSize(sf::Vector2f(healthSize * 1.5, 20.0f));
+	healthText.setString(std::to_string((int)currentHealth) + " / " + std::to_string((int)_maxHealth));
 
 	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	sf::Vector2f cursPos = sf::Vector2f(tempPos);
@@ -119,6 +122,40 @@ void BasePlayerComponent::update(double dt) {
 	}
 }
 
+void BasePlayerComponent::makeHPBar()
+{
+	sf::RectangleShape healthBar;
+	healthBar.setPosition(300.0f, 130.0f + barheight);
+	if (hpbars.size() != 0)
+	{
+		int barvalue = currentHealth - (150 * hpbars.size());
+		if (barvalue > 150)
+		{
+			barvalue = 150;
+		}
+		barvalue = std::abs(barvalue);
+		healthBar.setSize(sf::Vector2f(barvalue * 1.5, 20.0f));
+		healthBar.setFillColor(sf::Color(220, 20, 60, 255));
+		hpbars.push_back(healthBar);
+	}
+	else
+	{
+		if (currentHealth > 150)
+		{
+			healthBar.setSize(sf::Vector2f(150 * 1.5, 20.0f));
+			healthBar.setFillColor(sf::Color(220, 20, 60, 255));
+			hpbars.push_back(healthBar);
+		}
+		else
+		{
+			healthBar.setSize(sf::Vector2f(currentHealth * 1.5, 20.0f));
+			healthBar.setFillColor(sf::Color(220, 20, 60, 255));
+			hpbars.push_back(healthBar);
+		}
+	}
+	barheight += -30.0f;
+}
+
 bool BasePlayerComponent::CheckAP(int ap)
 {
 	if (actionPoints >= ap)
@@ -169,15 +206,19 @@ void BasePlayerComponent::load()
 	rechargeCost = 0;
 	runCost = 5;
 
-	healthBar.setPosition(300.0f, 50.0f);
-	healthSize = _maxHealth;
-	healthBar.setSize(sf::Vector2f(healthSize * 1.5, 20.0f));
-	healthBar.setFillColor(sf::Color(220, 20, 60, 255));
+	barheight = 0;
+	std::cout << "making bar, ceiling value = " << std::ceil(currentHealth / 150) << "\n"; 
+	while (std::ceil(currentHealth / 150) > hpbars.size())
+	{
+	/*	std::cout << "current hp / 150 " << std::to_string(currentHealth / 150) << "\n";
+		std::cout << "making bar, ceiling value = " << std::ceil(currentHealth / 150) << "\n";*/
+		makeHPBar();
+	}
 
 	healthText.setFont(Engine::tm.getFont());
-	healthText.setCharacterSize(30);
-	healthText.setString(currentHealth + " / " + _maxHealth);
-	healthText.setPosition(200.0f, 40.0f);
+	healthText.setCharacterSize(25);
+	healthText.setString(std::to_string((int)currentHealth) + " / " + std::to_string((int)_maxHealth));
+	healthText.setPosition(70.0f, 120.0f);
 	healthText.setFillColor(sf::Color(220, 20, 60, 255));
 
 	HPText.setFont(Engine::tm.getFont());
@@ -265,6 +306,13 @@ void BasePlayerComponent::heal(float healBy)
 	{
 		currentHealth += healBy;
 	}
+	if (std::ceil(currentHealth / 150) > hpbars.size())
+	{
+		makeHPBar();
+	}
+	int minusvalue = currentHealth - (150 * hpbars.size());
+	int barvalue = 150 - (abs(minusvalue));
+	hpbars.back().setSize(sf::Vector2f(barvalue * 1.5, 20.0f));
 	EndTurn();
 }
 
@@ -372,7 +420,7 @@ void BasePlayerComponent::addStats(int strength, int health, int dex)
 
 void BasePlayerComponent::UpdateStats()
 {
-	HPText.setString("HP: " + std::to_string(currentHealth) + " / " + std::to_string(_maxHealth));
+	HPText.setString("HP: " + std::to_string((int)currentHealth) + " / " + std::to_string((int)_maxHealth));
 	StrengthText.setString("Strength:  " + std::to_string((int)_strength));
 	DexterityText.setString("Dexterity:  " + std::to_string((int)_dexterity));
 }
@@ -389,11 +437,20 @@ void BasePlayerComponent::takeDamage(float dmgRecieved)
 	if (currentHealth <= 0)
 	{
 		currentHealth = 0;
+		hpbars.clear();
 		_parent->setAlive(false);
 		spriteManager->playDie();
 	}
 	else
 	{
 		spriteManager->playHit();
+		if (std::ceil(currentHealth / 150) < hpbars.size())
+		{
+			hpbars.pop_back();
+			barheight += 30.0f;
+		}
+		int minusvalue = currentHealth - (150 * hpbars.size());
+		int barvalue = 150 - (abs(minusvalue));
+		hpbars.back().setSize(sf::Vector2f(barvalue * 1.5, 20.0f));
 	}
 }
