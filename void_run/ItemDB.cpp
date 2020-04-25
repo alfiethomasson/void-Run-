@@ -5,19 +5,19 @@
 void ItemDB::PopulateDB()
 {
 	//Common Items
-	commonItems["BlasterUpgrade"] = Item(5, 5, 0, "Blaster Upgrade", "Pointy");
-	commonItems["ExtraPadding"] = Item(0, 10, 0, "Extra Padding", "ExtraPadding");
-	commonItems["Stimulant"] = Item(0, 5, 5, "Stimulant", "Stimulant");
+	commonItems["BlasterUpgrade"] = Item(5, 5, 0, "BlasterUpgrade", "Blaster Upgrade", "Pointy");
+	commonItems["ExtraPadding"] = Item(0, 10, 0, "ExtraPadding", "Extra Padding", "ExtraPadding");
+	commonItems["Stimulant"] = Item(0, 5, 5, "Stimulant", "Stimulant", "Stimulant");
 
 	//Rare Items
-	rareItems["PrecisionWatch"] = Item(15, 0, 0, "Precision Watch", "SpaceWatch");
-	rareItems["WristGuard"] = Item(0, 30, 0, "Wrist Guard", "WristGuard");
-	rareItems["Mask"] = Item(0, 0, 15, "Mask", "FaceMask");
+	rareItems["PrecisionWatch"] = Item(15, 0, 0, "PrecisionWatch", "Precision Watch", "SpaceWatch");
+	rareItems["WristGuard"] = Item(0, 30, 0, "WristGuard", "Wrist Guard", "WristGuard");
+	rareItems["Mask"] = Item(0, 0, 15, "Mask", "Mask", "FaceMask");
 
 	auto lb = std::make_shared<LaserBurst>();
 	lb->load();
-	specialItems["TargetingDevice"] =
-		SpecialItem(5, 50, 5, "Targeting Device", "SpaceWatch", lb);
+	specialItems["*TargetingDevice"] =
+		SpecialItem(5, 50, 5, "*TargetingDevice", "Targeting Device", "SpaceWatch", lb);
 }
 
 //Gets a random common item from list
@@ -97,4 +97,27 @@ std::shared_ptr<SpecialItem> ItemDB::getSpecialItem(std::string& name)
 {
 	std::shared_ptr<SpecialItem> item = std::make_shared<SpecialItem>(specialItems[name]);
 	return item;
+}
+
+std::shared_ptr<Item> ItemDB::getItem(std::string& name)
+{
+	if (commonItems.count(name) > 0)
+	{
+		std::shared_ptr<Item> item = std::make_shared<Item>(commonItems[name]);
+		return item;
+	}
+	else if (rareItems.count(name) > 0)
+	{
+		std::shared_ptr<Item> item = std::make_shared<Item>(rareItems[name]);
+		return item;
+	}
+	//else if (specialItems.count(name) > 0)
+	//{
+	//	std::shared_ptr<SpecialItem> item = std::make_shared<SpecialItem>(rareItems[name]);
+	//	return item;
+	//}
+	else
+	{
+		std::cout << "Couldn't find item: " << name << "\n";
+	}
 }

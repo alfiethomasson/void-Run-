@@ -22,6 +22,8 @@ public:
 	std::shared_ptr<Item> getRareItem(std::string& name);
 	std::shared_ptr<SpecialItem> getSpecialItem(std::string& name);
 
+	std::shared_ptr<Item> getItem(std::string& name);
+
 	//template <class T>
 	//std::shared_ptr<T> createClass()
 	//{

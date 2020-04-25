@@ -103,6 +103,10 @@ protected:
 	sf::Sprite background;
 	sf::Texture backgroundTex;
 
+	int strengthUp;
+	int hpUp;
+	int dexUp;
+
 	bool inStatUp;
 	sf::Sound sound;
 

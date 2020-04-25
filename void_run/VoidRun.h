@@ -13,7 +13,8 @@ class PlayerSprite;
 class MenuScene : public Scene {
 private:
 	sf::Text GameName;
-	sf::Text PlayButton;
+	sf::Text NewGameButton;
+	sf::Text LoadGameButton;
 	sf::Text ExitButton;
 	sf::Text OptionsButton;
 	sf::Text ResButton;
@@ -22,7 +23,8 @@ private:
 	sf::Text BackButton;
 	sf::Text toChangeControls;
 	sf::Font font;
-	sf::FloatRect PlayButtonBox;
+	sf::FloatRect NewGameButtonBox;
+	sf::FloatRect LoadGameButtonBox;
 	sf::FloatRect ExitButtonBox;
 	sf::FloatRect ResButtonBox;
 	sf::FloatRect OptionsButtonBox;
@@ -57,6 +59,10 @@ private:
 	sf::FloatRect SettingBox;
 	sf::Texture SettingIcon;
 	sf::Sprite SettingSprite;
+
+	sf::FloatRect SaveBox;
+	sf::Texture SaveIcon;
+	sf::Sprite SaveSprite;
 
 	std::vector<std::shared_ptr<Room>> rooms;
 	std::shared_ptr<Room> currentRoom;
@@ -99,5 +105,8 @@ public:
 	void UpdateDesctext(std::string, sf::Vector2f pos);
 	void ResetDescText();
 	void setLoadFromSave(bool tf);
+
+	void SaveGame();
+
 	Room& getCurrentRoom();
 };

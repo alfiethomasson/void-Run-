@@ -263,7 +263,7 @@ bool GameUI::updateStatOptions()
 		{
 			if (stat1Box.contains(cursPos))
 			{
-				player->addStats(10, 0, 0);
+				player->addStats(5, 0, 0);
 				sound.setBuffer(Engine::tm.getSound("StatUp"));
 				sound.setVolume(50);
 				sound.play();
@@ -272,7 +272,7 @@ bool GameUI::updateStatOptions()
 			}
 			if (stat2Box.contains(cursPos))
 			{
-				player->addStats(0, 20, 0);
+				player->addStats(0, 10, 0);
 				sound.setBuffer(Engine::tm.getSound("StatUp"));
 				sound.setVolume(50);
 				sound.play();
@@ -281,7 +281,7 @@ bool GameUI::updateStatOptions()
 			}
 			if (stat3Box.contains(cursPos))
 			{
-				player->addStats(0, 0, 10);
+				player->addStats(0, 0, 5);
 				sound.setBuffer(Engine::tm.getSound("StatUp"));
 				sound.setVolume(50);
 				sound.play();
@@ -324,11 +324,7 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	height = 0;
 
 	gainAP(MaxAP);
-	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
-	{
-		std::cout << "failed to load mandalore font in game ui\n";
-	}
-	descText.setFont(font);
+	descText.setFont(Engine::tm.getFont());
 	descText.setCharacterSize(30);
 	descText.setString("");
 
@@ -345,30 +341,39 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	stat1.setRotation(90);
 	stat2.setRotation(90);
 	stat3.setRotation(90);
-	stat1.setPosition(900.0f, 500.0f);
-	stat2.setPosition(1000.0f, 500.0f);
-	stat3.setPosition(1100.0f, 500.0f);
+	stat1.setPosition((Engine::getWindowSize().x / 2) - 275.0f, 500.0f);
+	stat2.setPosition(Engine::getWindowSize().x / 2 , 500.0f);
+	stat3.setPosition((Engine::getWindowSize().x / 2) + 275.0f, 500.0f);
+	std::cout << "WINDOW 1 POS" << Engine::getWindowSize().x << "\n";
 
 	stat1Box = stat1.getGlobalBounds();
 	stat2Box = stat2.getGlobalBounds();
 	stat3Box = stat3.getGlobalBounds();
 
-	RewardsText.setFont(font);
-	StrengthText.setFont(font);
-	HealthText.setFont(font);
-	DexterityText.setFont(font);
+	strengthUp = 5;
+	hpUp = 10;
+	dexUp = 5;
+
+	RewardsText.setFont(Engine::tm.getFont());
+	StrengthText.setFont(Engine::tm.getFont());
+	HealthText.setFont(Engine::tm.getFont());
+	DexterityText.setFont(Engine::tm.getFont());
 	RewardsText.setCharacterSize(60);
-	StrengthText.setCharacterSize(30);
-	HealthText.setCharacterSize(30);
-	DexterityText.setCharacterSize(30);
+	StrengthText.setCharacterSize(25);
+	HealthText.setCharacterSize(25);
+	DexterityText.setCharacterSize(25);
 	RewardsText.setString("REWARDS");
-	StrengthText.setString("Strength - " + std::to_string(player->getStrength()));
-	HealthText.setString("Max Health - " + std::to_string(player->getMaxHealth()));
-	DexterityText.setString("Dexterity - " + std::to_string(player->getDexterity()));
+	//std::string strengthstr = "Max HP \n +10";
+	StrengthText.setString("Max HP + 10");
+	HealthText.setString("Strength +5 ");
+	DexterityText.setString("Dexterity +5 ");
 	RewardsText.setPosition((Engine::getWindowSize().x / 2) - (RewardsText.getLocalBounds().width / 2), 100.0f);
-	StrengthText.setPosition(stat1.getPosition().x - StrengthText.getLocalBounds().width, 300.0f);
-	HealthText.setPosition(stat2.getPosition().x - HealthText.getLocalBounds().width, 300.0f);
-	DexterityText.setPosition(stat3.getPosition().x - DexterityText.getLocalBounds().width, 300.0f);
+	StrengthText.setPosition(stat1.getPosition().x - (StrengthText.getGlobalBounds().width / 2), 400.0f);
+	HealthText.setPosition(stat2.getPosition().x - (HealthText.getLocalBounds().width / 2), 400.0f);
+	DexterityText.setPosition(stat3.getPosition().x - (DexterityText.getLocalBounds().width / 2), 400.0f);
+	HealthText.setFillColor(sf::Color(220, 20, 60, 255));
+	StrengthText.setFillColor(sf::Color(0, 0, 205, 255));
+	DexterityText.setFillColor(sf::Color(0, 255, 127, 255));
 
 	background.setTexture(Engine::tm.getTex("Background1"));
 	background.setScale(Engine::getWindowSize().x / background.getGlobalBounds().width, 0.7f);
@@ -388,9 +393,9 @@ sf::Sprite GameUI::getNewCell()
 void GameUI::statUp()
 {
 	inStatUp = true;
-	StrengthText.setString("Strength + 10");
-	HealthText.setString("Max Health + 20 ");
-	DexterityText.setString("Current Dex + 10 ");
+	HealthText.setString("Max Health\n    + " + std::to_string(hpUp));
+	StrengthText.setString("Strength\n    + " + std::to_string(strengthUp));
+	DexterityText.setString("Dexterity\n  + " + std::to_string(dexUp));
 }
 
 void GameUI::useAP(int amount)

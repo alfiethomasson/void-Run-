@@ -19,7 +19,7 @@ public:
 	void render() override;
 	void Load();
 
-	bool add(std::shared_ptr<Item> item);
+	bool add(std::shared_ptr<Item> item, bool addStat);
 	void remove(int position);
 
 	std::vector<std::shared_ptr<Item>> getItems();

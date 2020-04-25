@@ -48,7 +48,7 @@ void AlienSprite1::playAttack()
 	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
 	sprite = sf::Sprite(attackSheet, sheetRect);
 	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
-	sprite.setPosition(1450.0f, 240.0f);
+	sprite.setPosition(1450.0f, 140.0f);
 	sprite.setScale(0.8f, 0.8f);
 }
 

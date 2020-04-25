@@ -3,12 +3,12 @@
 Inventory::Inventory(Entity* p, float inventorySize, GameUI *gui)
 	: inventorySize{ inventorySize }, gameUI{ *gui }, Component(p) {}
 
-bool Inventory::add(std::shared_ptr<Item> item)
+bool Inventory::add(std::shared_ptr<Item> item, bool addStat)
 {
 	if (checkEmptySlot())
 	{
 		std::cout << "Adding item to inventory! \n";
-		item->Equip(*_parent);
+		item->Equip(*_parent, addStat);
 		//item->getSprite().set
 		item->getSprite().setPosition(positions[items.size()]);
 		sf::FloatRect tempBox = item->getSprite().getGlobalBounds();
@@ -48,15 +48,15 @@ bool Inventory::checkEmptySlot()
 
 void Inventory::Load()
 {
-	positions[0] = sf::Vector2f(900.0f, 600.0f);
-	positions[1] = sf::Vector2f(1000.0f, 600.0f);
-	positions[2] = sf::Vector2f(1100.0f, 600.0f);
-	positions[3] = sf::Vector2f(100.0f, 650.0f);
-	positions[4] = sf::Vector2f(200.0f, 650.0f);
-	positions[5] = sf::Vector2f(300.0f, 650.0f);
-	positions[6] = sf::Vector2f(100.0f, 700.0f);
-	positions[7] = sf::Vector2f(200.0f, 700.0f);
-	positions[8] = sf::Vector2f(300.0f, 700.0f);
+	positions[0] = sf::Vector2f(1400.0f, 700.0f);
+	positions[1] = sf::Vector2f(1500.0f, 700.0f);
+	positions[2] = sf::Vector2f(1600.0f, 700.0f);
+	positions[3] = sf::Vector2f(1400.0f, 800.0f);
+	positions[4] = sf::Vector2f(1500.0f, 800.0f);
+	positions[5] = sf::Vector2f(1600.0f, 800.0f);
+	positions[6] = sf::Vector2f(1400.0f, 900.0f);
+	positions[7] = sf::Vector2f(1500.0f, 900.0f);
+	positions[8] = sf::Vector2f(1600.0f, 900.0f);
 }
 
 std::vector<std::shared_ptr<Item>> Inventory::getItems()

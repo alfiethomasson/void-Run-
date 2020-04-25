@@ -20,4 +20,6 @@ public:
 	bool addAbility(std::shared_ptr<SpecialAbility> ability);
 	void removeAbility(int position);
 
+	std::vector<std::shared_ptr<SpecialAbility>> getSpecials();
+
 };

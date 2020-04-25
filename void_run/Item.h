@@ -9,18 +9,19 @@ class Item {
 protected:
 	Entity user;
 	sf::Texture tex;
-	sf::Sprite sprite;
 	std::string texName;
+	sf::Sprite sprite;
 	std::shared_ptr<BasePlayerComponent> player;
 public:
 	int strengthMod;
 	int healthMod;
 	int dexMod;
 	std::string description;
+	std::string name;
 
-	Item(int strength, int health, int dexterity, std::string desc, std::string texName);
+	Item(int strength, int health, int dexterity, std::string name, std::string desc, std::string texName);
 	Item() = default;
-	virtual void Equip(Entity newUser);
+	virtual void Equip(Entity newUser, bool addStat);
 	virtual void Unequip(int position);
 	void Load();
 
@@ -32,11 +33,11 @@ class SpecialItem : public Item {
 protected:
 	std::shared_ptr<SpecialAbility> special;
 public:
-	SpecialItem(int strength, int health, int dexterity, 
+	SpecialItem(int strength, int health, int dexterity, std::string name,
 		std::string desc, std::string texName, std::shared_ptr<SpecialAbility> sp);
 	SpecialItem() = default;
 
-	void Equip(Entity newUser);
+	void Equip(Entity newUser, bool addStat);
 	void Unequip(int position);
 	void Load();
 

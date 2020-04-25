@@ -52,6 +52,8 @@ void MenuScene::Update(const double& dt) {
 	//Gets Mouse position in an int format
 	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	Vector2f cursPos = sf::Vector2f(tempPos);
+	cursPos.x /= Engine::xMultiply;
+	cursPos.y /= Engine::yMultiply;
 
 	scene_delay = scene_clock.getElapsedTime();
 
@@ -59,17 +61,24 @@ void MenuScene::Update(const double& dt) {
 	{
 		if (Mouse::isButtonPressed(sf::Mouse::Left) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
-			if (PlayButtonBox.contains(cursPos))
+			if (NewGameButtonBox.contains(cursPos))
 			{
 				titleMusic.stop();
 				Engine::ChangeScene(&gameScene);
+				gameScene.setLoadFromSave(false);
 			}
-			if (OptionsButtonBox.contains(cursPos))
+			else if (LoadGameButtonBox.contains(cursPos) && LoadGameButton.getColor().a == 255)
+			{
+				titleMusic.stop();
+				Engine::ChangeScene(&gameScene);
+				gameScene.setLoadFromSave(true);
+			}
+			else if (OptionsButtonBox.contains(cursPos))
 			{
 				inOptions = true;
 				scene_clock.restart();
 			}
-			if (ExitButtonBox.contains(cursPos))
+			else if (ExitButtonBox.contains(cursPos))
 			{
 				Engine::GetWindow().close();
 			}
@@ -80,25 +89,45 @@ void MenuScene::Update(const double& dt) {
 		{
 			titleMusic.stop();
 			Engine::ChangeScene(&gameScene);
+			gameScene.setLoadFromSave(false);
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Num3))
+		if (Keyboard::isKeyPressed(Keyboard::Num2) && LoadGameButton.getColor().a == 255)
 		{
-			Engine::GetWindow().close();
+			titleMusic.stop();
+			Engine::ChangeScene(&gameScene);
+			gameScene.setLoadFromSave(true);
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Num2) && scene_delay.asSeconds() >= sceneChangeDelay)
+		if (Keyboard::isKeyPressed(Keyboard::Num3) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
 			inOptions = true;
 			scene_clock.restart();
 		}
+		if (Keyboard::isKeyPressed(Keyboard::Escape))
+		{
+			titleMusic.stop();
+			Engine::GetWindow().close();
+		}
 
 		//Checks if button box's contain mouse, and makes text green if so
-		if (PlayButtonBox.contains(cursPos))
+		if (NewGameButtonBox.contains(cursPos))
 		{
-			PlayButton.setFillColor(green);
+			NewGameButton.setFillColor(green);
 		}
 		else
 		{
-			PlayButton.setFillColor(white);
+			NewGameButton.setFillColor(white);
+		}
+
+		if (LoadGameButton.getColor().a == 255)
+		{
+			if (LoadGameButtonBox.contains(cursPos))
+			{
+				LoadGameButton.setFillColor(green);
+			}
+			else
+			{
+				LoadGameButton.setFillColor(white);
+			}
 		}
 
 		if (ExitButtonBox.contains(cursPos))
@@ -173,7 +202,8 @@ void MenuScene::Render() {
 	if (!inOptions)
 	{
 		Renderer::queue(&GameName);
-		Renderer::queue(&PlayButton);
+		Renderer::queue(&NewGameButton);
+		Renderer::queue(&LoadGameButton);
 		Renderer::queue(&ExitButton);
 		Renderer::queue(&OptionsButton);
 	}
@@ -189,7 +219,7 @@ void MenuScene::Render() {
 
 void MenuScene::Load() {
 	//Loads font
-	if (!font.loadFromFile("res/Fonts/mandalore.ttf"))
+	if (!font.loadFromFile("res/Fonts/venusrising.ttf"))
 	{
 		cout << "failed to load font";
 	}
@@ -204,12 +234,11 @@ void MenuScene::Load() {
 	titleMusic.play();
 	titleMusic.setVolume(50.0f);
 	titleMusic.setLoop(true);
-	//const string& fontName = "Mandalore";
-	//Resources::load(fontName);
 
 	//Assigns Font to Text
 	GameName.setFont(font);
-	PlayButton.setFont(font);
+	NewGameButton.setFont(font);
+	LoadGameButton.setFont(font);
 	ExitButton.setFont(font);
 	ResChange.setFont(font);
 	ResButton.setFont(font);
@@ -220,19 +249,23 @@ void MenuScene::Load() {
 	//Sets values for text
 	GameName.setString("Void Run()");
 	GameName.setCharacterSize(100);
-	GameName.setPosition(sf::Vector2f(GAMEX / 2.0f - (GameName.getGlobalBounds().width / 2), GAMEY / 5.0f));
-	PlayButton.setString("PLAY - 1");
-	PlayButton.setCharacterSize(60);
-	PlayButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (PlayButton.getGlobalBounds().width / 2), (GAMEY / 5.0f) + 150.0f));
-	PlayButtonBox = PlayButton.getGlobalBounds(); //Creates the button boundaries
+	GameName.setPosition(sf::Vector2f(GAMEX / 2.0f - (GameName.getGlobalBounds().width / 2), 100.0f));
+	NewGameButton.setString("NEW GAME - 1");
+	NewGameButton.setCharacterSize(60);
+	NewGameButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (NewGameButton.getGlobalBounds().width / 2), 300.0f));
+	NewGameButtonBox = NewGameButton.getGlobalBounds(); //Creates the button boundaries
+	LoadGameButton.setString("LOAD GAME - 2");
+	LoadGameButton.setCharacterSize(60);
+	LoadGameButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (LoadGameButton.getGlobalBounds().width / 2), 400.0f));
+	LoadGameButtonBox = LoadGameButton.getGlobalBounds(); //Creates the button boundaries
+	OptionsButton.setString("OPTIONS - 3");
+	OptionsButton.setCharacterSize(60);
+	OptionsButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (OptionsButton.getGlobalBounds().width / 2), 500.0f));
+	OptionsButtonBox = OptionsButton.getGlobalBounds(); //Options Boundaries
 	ExitButton.setString("EXIT - ESC");
 	ExitButton.setCharacterSize(60);
-	ExitButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (ExitButton.getGlobalBounds().width / 2), (GAMEY / 5.0f) + 350.0f));
+	ExitButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (ExitButton.getGlobalBounds().width / 2), 600.0f));
 	ExitButtonBox = ExitButton.getGlobalBounds(); //Button Boundaries
-	OptionsButton.setString("OPTIONS - 2");
-	OptionsButton.setCharacterSize(60);
-	OptionsButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (OptionsButton.getGlobalBounds().width / 2), (GAMEY / 5.0f) + 250.0f));
-	OptionsButtonBox = OptionsButton.getGlobalBounds(); //Options Boundaries
 	ResChange.setString("1080p"); //Starts at 720p
 	ResChange.setCharacterSize(60);
 	ResChange.setPosition(sf::Vector2f(GAMEX / 2.0f - (ResChange.getGlobalBounds().width / 2), GAMEY / 2.0f - (ResChange.getGlobalBounds().height / 2)));
@@ -248,14 +281,17 @@ void MenuScene::Load() {
 	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - 300.0f, GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 50.0f));
 	BackButtonBox = BackButton.getGlobalBounds();
 
-	//buttons.push_back(PlayButtonBox);
-//	buttons.push_back(ExitButtonBox);
-	buttons.push_back(ResButtonBox);
-	//buttons.push_back(OptionsButtonBox);
-	//buttons.push_back(BackButtonBox);
+	if (FILE* file = fopen("SaveStats.txt", "r"))
+	{
+		fclose(file);
+		std::cout << "\nFOUND SAVE FILE\n";
+	}
+	else
+	{
+		LoadGameButton.setColor(sf::Color(255, 255, 255, 100));
+		std::cout << "\NO SAVE FILE :((((((\n";
+	}
 
-	xMultiply = 1.0f; //Initial values for variables
-	yMultiply = 1.0f;
 	inOptions = false;
 
 	sceneChangeDelay = 1.0f;
@@ -274,11 +310,11 @@ void MenuScene::Load() {
 //Updates the bounding boxes of buttons
 void MenuScene::UpdateButtons()
 {
-	Engine::UpdateButton(PlayButtonBox);
-	Engine::UpdateButton(ExitButtonBox);
-	Engine::UpdateButton(ResButtonBox);
-	Engine::UpdateButton(OptionsButtonBox);
-	Engine::UpdateButton(BackButtonBox);
+	//Engine::UpdateButton(PlayButtonBox);
+	//Engine::UpdateButton(ExitButtonBox);
+	//Engine::UpdateButton(ResButtonBox);
+	//Engine::UpdateButton(OptionsButtonBox);
+	//Engine::UpdateButton(BackButtonBox);
 }
 
 void GameScene::Load() {
@@ -290,6 +326,13 @@ void GameScene::Load() {
 	SettingSprite.setPosition(1800, 900.0f);
 	SettingSprite.setScale(0.3f, 0.3f);
 	SettingBox = SettingSprite.getGlobalBounds();
+
+	//Loads the Save icon stuff
+	SaveSprite.setTexture(Engine::tm.getTex("Save"));
+	SaveSprite.setPosition(1700, 900.0f);
+	SaveSprite.setScale(1.1f, 1.1f);
+	SaveSprite.setColor(sf::Color(105, 105, 105, 255));
+	SaveBox = SaveSprite.getGlobalBounds();
 
 	font = Engine::tm.getFont();
 
@@ -323,14 +366,14 @@ void GameScene::Load() {
 	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (BackButton.getGlobalBounds().width / 2), GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 100.0f));
 	BackButtonBox = BackButton.getGlobalBounds();
 
-	loadFromSave = true;
+	itemDB.PopulateDB();
+;
 	if (loadFromSave)
 	{
 		std::string line;
 		std::ifstream file;
 
-		std::vector<sf::Text> textList;
-		file.open("res/Saves/Save.txt");
+		file.open("SaveStats.txt");
 		int test = 0;
 		int linenumber = 0 ;
 		std::string string;
@@ -340,8 +383,8 @@ void GameScene::Load() {
 		{
 			std::cout << "couldnt load file\n";
 		}
-
 		float HPMax = 0;
+		float currentHP = 0;
 		float strength = 0;
 		float dex = 0;
 		float exp = 0;
@@ -357,34 +400,77 @@ void GameScene::Load() {
 				}
 				else if (linenumber == 1)
 				{
-					strength = x;
+					currentHP = x;
 				}
 				else if (linenumber == 2)
 				{
-					dex = x;
+					strength = x;
 				}
 				else if (linenumber == 3)
+				{
+					dex = x;
+				}
+				else if (linenumber == 4)
 				{
 					exp = x;
 				}
 				linenumber++;
 				//test += x;
 			}
-			std::cout << "TEST LINE = " << dex << "\n";
+		}
+
+		std::ifstream itemfile("SaveItems.txt");
+		std::vector<std::string> items;
+		std::vector<std::string> abilities;;
+		bool inItem = true;
+		if (itemfile.is_open())
+		{
+			while (std::getline(itemfile, line))
+			{
+				if (line == "END")
+				{
+					inItem = false;
+				}
+				else
+				{
+					if (inItem)
+					{
+						items.push_back(line);
+					}
+					else
+					{
+						abilities.push_back(line);
+					}
+				}
+			}
 		}
 		//Creates Player and adds components
 		pl = make_shared<Entity>();
-		//auto s = pl->addComponent<ShapeComponent>();
-		//pl->addComponent<PlayerMovementComponent>();
 		player = pl->addComponent<BasePlayerComponent>(HPMax, strength, dex, exp, 10, &combatUI, &gameUI);
 		am = pl->addComponent<AbilityManager>(3);
 		inv = pl->addComponent<Inventory>(2, &gameUI);
 		inv->Load();
 		playerSprite = pl->addComponent<PlayerSprite>();
 		playerSprite->load();
-		//s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
-		//s->getShape().setFillColor(Color::Yellow);
-		//s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
+
+		player->load();
+
+		//Calls load function of the UIs
+		combatUI.Load(player, &Engine::tm);
+		gameUI.Load(10, player);
+
+		for (auto &s : items)
+		{
+			if (s.at(0) == '*')
+			{
+				inv->add(itemDB.getSpecialItem(s), false);
+			}
+			else
+			{
+				inv->add(itemDB.getItem(s), false);
+			}
+		}
+
 		ents.list.push_back(pl);
 	}
 	else
@@ -392,26 +478,20 @@ void GameScene::Load() {
 
 		//Creates Player and adds components
 		pl = make_shared<Entity>();
-		//auto s = pl->addComponent<ShapeComponent>();
-		//pl->addComponent<PlayerMovementComponent>();
 		player = pl->addComponent<BasePlayerComponent>(100.0f, 20.0f, 10.0f, 0.0f, 10, &combatUI, &gameUI);
 		am = pl->addComponent<AbilityManager>(3);
 		inv = pl->addComponent<Inventory>(2, &gameUI);
 		inv->Load();
 		playerSprite = pl->addComponent<PlayerSprite>();
 		playerSprite->load();
-		//s->setShape<sf::RectangleShape>(sf::Vector2f(75.0f, 200.0f));
-		//s->getShape().setFillColor(Color::Yellow);
-		//s->getShape().setOrigin(Vector2f(-200.0f, -200.0f));
 		ents.list.push_back(pl);
-	}
-	//Populates the item database with pre defined items
-	itemDB.PopulateDB();
-	player->load();
 
-	//Calls load function of the UIs
-	combatUI.Load(player, &Engine::tm);
-	gameUI.Load(10, player);
+		player->load();
+
+		//Calls load function of the UIs
+		combatUI.Load(player, &Engine::tm);
+		gameUI.Load(10, player);
+	}
 
 	textBox.setTexture(Engine::tm.getTex("TextBox"));
 	textBox.setScale(sf::Vector2f(0.7f, 0.5f));
@@ -489,7 +569,7 @@ void GameScene::Update(const double& dt) {
 		{
 			auto tempItem = itemDB.randomSpecialItem();
 			UpdateTextBox(tempItem->description);
-			inv->add(tempItem);
+			inv->add(tempItem, true);
 			scene_clock.restart();
 			//std::cout << "\nshould play attack\n";
 			std::cout << "MouseX: " << Mouse::getPosition().x << " MouseY: " << Mouse::getPosition().y << "\n";
@@ -510,7 +590,7 @@ void GameScene::Update(const double& dt) {
 			scene_clock.restart();
 			auto randItem = itemDB.randomCommonItem();
 			UpdateTextBox(randItem->description);
-			inv->add(randItem);
+			inv->add(randItem, true);
 		}
 
 		//Changes to a new room
@@ -539,6 +619,19 @@ void GameScene::Update(const double& dt) {
 		else
 		{
 			SettingSprite.setColor(white);
+		}
+		if (SaveBox.contains(cursPos))
+		{
+			SaveSprite.setColor(green);
+			if (Mouse::isButtonPressed(Mouse::Left) && pause_delay.asSeconds() >= pauseDelay)
+			{
+				pauseClock.restart();
+				SaveGame();
+			}
+		}
+		else
+		{
+			SaveSprite.setColor(white);
 		}
 		//Update from base class
 		Scene::Update(dt);
@@ -619,6 +712,7 @@ void GameScene::Render() {
 		Scene::Render();
 		Renderer::queue(&screenText);
 		Renderer::queue(&SettingSprite);
+		Renderer::queue(&SaveSprite);
 		Renderer::queue(&descRect);
 		Renderer::queue(&descText);
 	}
@@ -697,9 +791,10 @@ void GameScene::UpdateTextBox(sf::String newText)
 
 void GameScene::LoadTextures()
 {
-	Engine::tm.loadFont("mandalore.ttf");
+	Engine::tm.loadFont("venusrising.ttf");
 
 	Engine::tm.loadTexture("Settings", "Icons/Settings.png");
+	Engine::tm.loadTexture("Save", "Icons/Save.png");
 	Engine::tm.loadTexture("TextBox", "Sprites/TextBox.png");
 	Engine::tm.loadTexture("Attack", "Icons/Attack.png");
 	Engine::tm.loadTexture("Heal", "Icons/Heal.png");
@@ -709,6 +804,13 @@ void GameScene::LoadTextures()
 	Engine::tm.loadTexture("StatUp", "Icons/Arrow.png");
 	Engine::tm.loadTexture("Player", "Sprites/Player.png");
 	Engine::tm.loadTexture("Background1", "Sprites/BGspace1.jpg");
+	Engine::tm.loadTexture("Pointy", "Icons/Pointy.png");
+	Engine::tm.loadTexture("ExtraPadding", "Icons/ExtraPadding.png");
+	Engine::tm.loadTexture("Stimulant", "Icons/Stimulant.png");
+	Engine::tm.loadTexture("SpaceWatch", "Icons/SpaceWatch.png");
+	Engine::tm.loadTexture("WristGuard", "Icons/WristGuard.png");
+	Engine::tm.loadTexture("FaceMask", "Icons/FaceMask.png");
+//	Engine::tm.loadTexture("Targeting Device", "Icons/SpaceWatch.png");
 	Engine::tm.loadTexture("LaserBurst", "Icons/LaserBurst.png");
 	Engine::tm.loadTexture("ChargedAttack", "Icons/ChargedAttack.png");
 	Engine::tm.loadTexture("Curse", "Icons/Curse.png");
@@ -759,4 +861,52 @@ void GameScene::ResetDescText()
 {
 	descText.setString("");
 	descRect.setFillColor(sf::Color(0.0f, 0.0f, 0.0f, 0.0f));
+}
+
+void GameScene::SaveGame()
+{
+	//if (FILE* file = fopen("res/Saves/Save.txt", "r"))
+	//{
+	//	fclose(file);
+	//	if (std::remove("res/Saves/Save.txt") != 0)
+	//	{
+	//	std::cout << "Couldnt delete save\n";
+	//	}
+	//	else
+	//	{
+	//		std::cout << "deletedsave save\n";
+	//	}
+	//}
+	std::ofstream savefile("SaveStats.txt");
+	if (savefile.is_open())
+	{
+		savefile << player->getCurrentHealth() << std::endl;
+		savefile << player->getMaxHealth() << std::endl;
+		savefile << player->getStrength() << std::endl;
+		savefile << player->getDexterity() << std::endl;
+		savefile << player->getExperience() << std::endl;
+	}
+	else
+	{
+		std::cout << "Couldn't open savefile to save\n";	
+	}
+
+	std::ofstream iafile("SaveItems.txt");
+	if (iafile.is_open())
+	{
+		for (auto i : inv->getItems())
+		{
+			iafile << i->name << std::endl;
+		}
+		iafile << "END" << std::endl;
+		for (auto a : am->getSpecials())
+		{
+			iafile << a->texName << std::endl;
+		}
+	}
+	else
+	{
+		std::cout << "Couldn't open item and ability file to save\n";
+	}
+
 }

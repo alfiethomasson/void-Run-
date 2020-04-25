@@ -26,8 +26,6 @@ public:
 	virtual void LoadTextures() {};
 	bool isLoaded() const;
 	std::shared_ptr<Entity> makeEntity();
-	float xMultiply;
-	float yMultiply;
 
 	EntityManager ents;
 	UIManager ui;

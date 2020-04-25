@@ -181,17 +181,17 @@ void BasePlayerComponent::load()
 	healthText.setFillColor(sf::Color(220, 20, 60, 255));
 
 	HPText.setFont(Engine::tm.getFont());
-	HPText.setCharacterSize(40);
+	HPText.setCharacterSize(30);
 	HPText.setFillColor(sf::Color(220, 20, 60, 255));
 	HPText.setPosition(sf::Vector2f(300.0f, 850.0f));
 
 	StrengthText.setFont(Engine::tm.getFont());
-	StrengthText.setCharacterSize(40);
+	StrengthText.setCharacterSize(30);
 	StrengthText.setFillColor(sf::Color(0, 0, 205, 255));
 	StrengthText.setPosition(sf::Vector2f(300.0f, 900.0f));
 
 	DexterityText.setFont(Engine::tm.getFont());
-	DexterityText.setCharacterSize(40);
+	DexterityText.setCharacterSize(30);
 	DexterityText.setFillColor(sf::Color(0, 255, 127, 255));
 	DexterityText.setPosition(sf::Vector2f(300.0f, 950.0f));
 

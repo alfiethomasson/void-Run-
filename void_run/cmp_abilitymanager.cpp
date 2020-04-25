@@ -40,3 +40,8 @@ void AbilityManager::removeAbility(int position)
 {
 	specials.erase(specials.begin() + position);
 }
+
+std::vector<std::shared_ptr<SpecialAbility>> AbilityManager::getSpecials()
+{
+	return specials;
+}
