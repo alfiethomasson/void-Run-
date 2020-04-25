@@ -7,6 +7,12 @@
 #include "Room.h"
 #include "cmp_inventory.h"
 #include "PlayerSprite.h"
+#include "LevelUpRoom.h"
+#include "cmp_enemy.h"
+#include "cmp_sprite.h"
+#include "cmp_abilitymanager.h"
+#include "TreasureRoom.h"
+#include <time.h>
 
 class PlayerSprite;
 

@@ -8,6 +8,11 @@ using namespace std;
 std::shared_ptr<BaseEnemyComponent> enemyInfo;
 std::vector<std::shared_ptr<BasePlayerComponent>> playerInfo;
 
+#define GAMEX 1280
+#define GAMEY 720
+
+int level;
+
 //Clock clock;
 
 BasePlayerComponent::BasePlayerComponent(Entity* p, float maxhealth, float currenthealth, float strength, float dex,
@@ -41,7 +46,7 @@ void BasePlayerComponent::update(double dt) {
 
 	if (isTurn && !isPaused)
 	{
-		if (checkEnemyStatus())
+		if (checkEnemyStatus() && getCurrentHealth() != 0)
 		{
 			if (isFinishedTurn != true)
 			{
@@ -85,9 +90,6 @@ void BasePlayerComponent::update(double dt) {
 				abilityManager->combatCheck();
 				//	gameScene.combatUI.turnUpdate();
 			}
-		}
-		else {
-			expGet();
 		}
 	}
 
@@ -194,6 +196,8 @@ void BasePlayerComponent::gainAP(int amount)
 
 void BasePlayerComponent::load()
 {
+	level = 1;
+
 	auto am = _parent->GetCompatibleComponent<AbilityManager>();
 	abilityManager = am[0];
 	auto sm = _parent->GetCompatibleComponent <SpriteComponent>();
@@ -260,6 +264,17 @@ void BasePlayerComponent::expGet() {
 		cout << "The enemy has become die.";
 		_experience += currentEnemy->expReward;
 		expGained = true;
+	}
+}
+
+bool BasePlayerComponent::checkLevelUp () {
+	if (_experience >= 30 && level < 5) {
+		_experience -= 30;
+		level++;
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 
@@ -439,6 +454,7 @@ void BasePlayerComponent::takeDamage(float dmgRecieved)
 		currentHealth = 0;
 		hpbars.clear();
 		_parent->setAlive(false);
+		gameScene.UpdateTextBox("You fucking idiot, you're dead.");
 		spriteManager->playDie();
 	}
 	else
@@ -453,4 +469,9 @@ void BasePlayerComponent::takeDamage(float dmgRecieved)
 		int barvalue = 150 - (abs(minusvalue));
 		hpbars.back().setSize(sf::Vector2f(barvalue * 1.5, 20.0f));
 	}
+}
+
+void BasePlayerComponent::setRunChance(int run)
+{
+	runChance = run;
 }

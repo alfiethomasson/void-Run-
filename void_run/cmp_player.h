@@ -4,6 +4,7 @@
 #include "cmp_abilitymanager.h"
 #include "cmp_sprites.h"
 #include "UI.h"
+#include "system_renderer.h"
 
 class BaseEnemyComponent;
 class SpecialItem;
@@ -31,6 +32,10 @@ private:
 	CombatUI& combatUI;
 	GameUI& gameUI;
 
+private:
+	sf::Font font;
+	sf::Text GameOverButton;
+	sf::FloatRect GameOverButtonBox;
 	int healthSize;
 	std::vector<sf::RectangleShape> hpbars;
 	int barheight;
@@ -50,6 +55,13 @@ public:
 	int healCost;
 	int rechargeCost;
 	int runCost;
+	int level;
+
+	float playerDamage;
+	float _strength;
+	float _dexterity;
+	int _maxHealth;
+	int _level;
 
 	explicit BasePlayerComponent(Entity* p, float maxhealth, float currenthealth, float strength, float dex,
 		float experience, int actionPoints, CombatUI *ui, GameUI *gameUI);
@@ -61,6 +73,7 @@ public:
 
 	void updateEnemy(std::shared_ptr<BaseEnemyComponent> e);
 	bool checkEnemyStatus();
+	bool checkLevelUp();
 
 	void attack(float damage, float dex);
 	void heal(float healBy);
@@ -86,6 +99,7 @@ public:
 	void setDexterity(int dexterity);
 	void setCurrentHealth(int health);
 	void setExperience(int experience);
+	void setRunChance(int run);
 
 	void addStats(int strength, int health, int dex);
 	void UpdateStats();

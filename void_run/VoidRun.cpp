@@ -10,6 +10,10 @@
 #include "cmp_abilitymanager.h"
 #include "TreasureRoom.h"
 #include <fstream>
+#include "LevelUpRoom.h"
+
+#define GAMEX 1280
+#define GAMEY 720
 
 using namespace sf;
 using namespace std;
@@ -624,13 +628,21 @@ void GameScene::Render() {
 void GameScene::ChangeRoom() {
 	player->expGained = false;
 
-	if(ents.list.size() > 1)
+	if (ents.list.size() > 1)
 	{
 		ents.list[ents.list.size() - 1]->setForDelete();
 	}
 	//srand to ensure the random number is actually random
 	srand(time(0));
 	int roomType = rand() % 2;
+	//TODO: Make it so that if the player's EXP is enough to level up, then the room automatically sets to 2, otherwise it is set to 0 or 1 aat random.
+	if (player->checkLevelUp()) {
+		roomType = 2;
+	}
+	if (player->level >= 5) {
+		roomType = 0; //Once hitting level 5, the player will always go into a fight next.
+	}
+
 	if (roomType == 0) //Combat Room
 	{
 		UpdateTextBox("Entered Combat Room");
@@ -649,7 +661,7 @@ void GameScene::ChangeRoom() {
 		//Set's current room to be the newly created room
 		currentRoom = newRoom;
 	}
-	else if(roomType == 1) //Treasure Room
+	else if (roomType == 1) //Treasure Room
 	{
 		std::shared_ptr<TreasureRoom> newRoom = make_shared<TreasureRoom>(pl, itemDB);
 		newRoom->Load();
@@ -657,7 +669,14 @@ void GameScene::ChangeRoom() {
 		currentRoom = newRoom;
 		UpdateTextBox("Entered Treasure Room");
 	}
-	
+	else if (roomType == 2)
+	{
+		std::shared_ptr<LevelUpRoom> newRoom = make_shared<LevelUpRoom>(pl);
+		newRoom->Load();
+		rooms.push_back(newRoom);
+		currentRoom = newRoom;
+		UpdateTextBox("Level Up!");
+	}
 }
 
 Room& GameScene::getCurrentRoom()

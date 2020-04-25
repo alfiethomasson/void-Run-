@@ -1,5 +1,10 @@
 #include "UI.h"
 #include "cmp_player.h"
+#include "system_renderer.h"
+#include "game.h"
+
+sf::Color Green(0, 255, 0, 255);
+sf::Color White(255, 255, 255, 255);
 #include "Game.h"
 
 void CombatUI::Render()
@@ -249,7 +254,21 @@ void CombatUI::UpdateCosts()
 
 void GameUI::Update(double dt)
 {
+	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
+	sf::Vector2f cursPos = sf::Vector2f(tempPos);
 
+	if (GameOverButtonBox.contains(cursPos))
+	{
+		GameOverButton.setColor(Green);
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			Engine::ChangeScene(&menuScene);
+		}
+	}
+	else
+	{
+		GameOverButton.setColor(White);
+	}
 }
 
 bool GameUI::updateStatOptions()
@@ -301,6 +320,7 @@ void GameUI::Render()
 	{
 		Renderer::queue(&e);
 	}
+
 	Renderer::queue(&playerIcon);
 	if (inStatUp)
 	{
@@ -311,6 +331,11 @@ void GameUI::Render()
 		Renderer::queue(&DexterityText);
 		Renderer::queue(&HealthText);
 		Renderer::queue(&StrengthText);
+	}
+
+	if (player->getCurrentHealth() == 0)
+	{
+		Renderer::queue(&GameOverButton);
 	}
 }
 
@@ -377,6 +402,13 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 
 	background.setTexture(Engine::tm.getTex("Background1"));
 	background.setScale(Engine::getWindowSize().x / background.getGlobalBounds().width, 0.7f);
+
+	GameOverButton.setFont(font);
+	GameOverButton.setString("Gg idiot");
+	GameOverButton.setCharacterSize(60);
+	GameOverButton.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - (GameOverButton.getGlobalBounds().width / 2),
+		Engine::getWindowSize().y / 2.0f - (GameOverButton.getGlobalBounds().height / 2) + 100.0f));
+	GameOverButtonBox = GameOverButton.getGlobalBounds();
 }
 
 sf::Sprite GameUI::getNewCell()
