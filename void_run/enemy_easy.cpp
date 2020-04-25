@@ -117,11 +117,11 @@ void EasyEnemy::load()
 	{
 		spriteManager->AddIcon("Dodge", "SWIFT FEET\nHigher chance to dodge", true);
 	}
-	if (specialMove == 1)
+	if (specialMove == 2)
 	{
 		spriteManager->AddIcon("Enrage", "ENRAGE\nEnrages for one turn to heal and\nhit hard next turn", true);
 	}
-	if (specialMove == 2)
+	if (specialMove == 1)
 	{
 		spriteManager->AddIcon("DoubleSlice", "DOUBLE SLICE\nMakes two attacks in one turn", true);
 	}
