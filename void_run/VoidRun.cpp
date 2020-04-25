@@ -9,6 +9,7 @@
 #include "cmp_enemy.h"
 #include "cmp_abilitymanager.h"
 #include "TreasureRoom.h"
+#include "LevelUpRoom.h"
 
 #define GAMEX 1280
 #define GAMEY 720
@@ -547,10 +548,12 @@ void GameScene::ChangeRoom() {
 	//srand to ensure the random number is actually random
 	srand(time(0));
 	int roomType = rand() % 2;
-
 	//TODO: Make it so that if the player's EXP is enough to level up, then the room automatically sets to 2, otherwise it is set to 0 or 1 aat random.
 	if (player->checkLevelUp()) {
 		roomType = 2;
+	}
+	if (player->level >= 5) {
+		roomType = 0; //Once hitting level 5, the player will always go into a fight next.
 	}
 
 	if (roomType == 0) //Combat Room

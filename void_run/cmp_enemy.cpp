@@ -34,6 +34,7 @@ void BaseEnemyComponent::load()
 	healthText.setPosition(1120.0f, 40.0f);
 	healthText.setFillColor(sf::Color(220, 20, 60, 255));
 
+	turnCounter = 1;
 }
 
 void BaseEnemyComponent::makeHPBar()
@@ -80,16 +81,18 @@ void BaseEnemyComponent::updateEnemy(std::shared_ptr<BasePlayerComponent> player
 	currentEnemy = player;
 }
 
-void BaseEnemyComponent::attackEnemy(float str, float dex)
+bool BaseEnemyComponent::attackEnemy(float str, float dex)
 {
 	if (calculateHit(dex))
 	{
 		animClock.restart();
 		spriteManager->playAttack();
 		currentEnemy->takeDamage(str);
+		return true;
 	}
 	else {
 		gameScene.UpdateTextBox("The stupid dumb idiot enemy missed!");
+		return false;
 	}
 }
 
@@ -133,6 +136,7 @@ void BaseEnemyComponent::EndTurn()
 {
 	cout << "Enemy Turn Ends!";
 	isFinishedTurn = true;
+	turnCounter++;
 }
 
 void BaseEnemyComponent::TakeDamage(float damage)

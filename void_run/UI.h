@@ -83,6 +83,8 @@ protected:
 	sf::Text StrengthText;
 	sf::Text HealthText;
 	sf::Text DexterityText;
+	sf::Text GameOverButton;
+	sf::FloatRect GameOverButtonBox;
 	sf::FloatRect stat1Box;
 	sf::FloatRect stat2Box;
 	sf::FloatRect stat3Box;

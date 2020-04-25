@@ -7,6 +7,7 @@
 #include "enemy_easy.h"
 #include "enemy_medium.h"
 #include "enemy_tough.h"
+#include "enemy_boss.h"
 #include "VoidRun.h"
 
 #define GAMEX 1280
@@ -68,7 +69,7 @@ void CombatRoom::Update(const double& dt) {
 		{
 			active = false;
 		}
-
+		p->expGet();
 	}
 
 	Room::Update(dt);
@@ -91,22 +92,35 @@ void CombatRoom::Load() {
 	//auto s = enemy1->addComponent<ShapeComponent>();
 	srand(time(0));
 	int enemyType = rand() % 3; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
-	enemyType = 2;
+	if(p->level >= 5)
+	{
+		enemyType = 10;
+	}
+
 	if (enemyType == 0)
-	{	enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5, 5, (rand() % 3)); //Random number from 0-2. 0 is Debuff, 1 is Enrage, 2 is Double-Slice.
+	{
+		enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5, 5, (rand() % 3)); //Random number from 0-2. 0 is Debuff, 1 is Enrage, 2 is Double-Slice.
 		auto sm = enemy1->addComponent<AlienSprite1>();
 		sm->load();
 	}
 	else if (enemyType == 1)
-	{	enemy = enemy1->addComponent<MediumEnemy>(180, 15, 15, 15, (rand() % 4));
+	{
+		enemy = enemy1->addComponent<MediumEnemy>(180, 15, 15, 15, (rand() % 4));
 		auto sm = enemy1->addComponent<AlienSprite3>();
 		sm->load();
 	} //Random number from 0-3. 0 is Pain Share, 1 is Regeneration, 2 is Orbital Attack, 3 is Curse.
-	else if (enemyType == 2)
-	{	enemy = enemy1->addComponent<ToughEnemy>(250, 20, 20, 20, (rand() % 3));
+	else if (enemyType == 2)//Random number from 0-2. 0 is Excruciate, 1 is Charged Shot, 2 is Suicide Charge.
+	{
+		enemy = enemy1->addComponent<ToughEnemy>(250, 20, 20, 20, (rand() % 3));
 		auto sm = enemy1->addComponent<AlienSprite2>();
 		sm->load();
 	} //Random number from 0-2. 0 is Excruciate, 1 is Charged Shot, 2 is Suicide Shot.
+	else if (enemyType == 10)
+	{
+		enemy = enemy1->addComponent<BossEnemy>(500, 30, 30, 69, 0);
+		auto sm = enemy1->addComponent<AlienSprite2>();
+		sm->load();
+	}
 	enemy->load();
 
 	ents.list.push_back(enemy1);
