@@ -195,7 +195,7 @@ void BossEnemy::load()
 	spriteManager = sm[0];
 
 	BaseEnemyComponent::load();
-	currentEnemy->setRunChance(0); //No escape. This is it. Battle to the death.
+	//currentEnemy->setRunChance(1); //No escape. This is it. Battle to the death.
 }
 
 void BossEnemy::render()

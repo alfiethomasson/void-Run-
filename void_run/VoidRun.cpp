@@ -881,6 +881,12 @@ void VictoryScene::Load()
 	menuButton.setFont(font);
 	menuButton.setCharacterSize(10);
 	menuButton.setString("Main Menu");
+
+	storyMessage.setPosition(1800, 950.0f);
+	thankYou.setPosition(1800, 700.0f);
+	credits.setPosition(1800, 500.0f);
+	menuButton.setPosition(1800, 300.0f);
+
 	menuButtonBox = menuButton.getGlobalBounds(); //Creates the button boundaries
 
 }
