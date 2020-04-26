@@ -69,7 +69,6 @@ public:
 	void Update(const double& dt) override;
 	void Render() override;
 	void Load() override;
-	void UnLoad() override;
 	void ChangeControls();
 	void UpdateButtons();
 	void setSettings(bool tf);
