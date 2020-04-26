@@ -48,6 +48,8 @@ protected:
 	int animRowCounter;
 
 	std::vector<Icon> icons;
+	sf::Vector2f positions[6];
+
 public:
 	SpriteComponent() = delete;
 	explicit SpriteComponent(Entity* p);

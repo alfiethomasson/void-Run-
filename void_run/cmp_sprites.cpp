@@ -9,6 +9,12 @@ void SpriteComponent::load()
 {
 	animCounter = 0;
 	animRowCounter = 0;
+	positions[0] = sf::Vector2f(1700.0f, 200.0f);
+	positions[0] = sf::Vector2f(1700.0f, 200.0f);
+	positions[0] = sf::Vector2f(1700.0f, 200.0f);
+	positions[0] = sf::Vector2f(1700.0f, 200.0f);
+	positions[0] = sf::Vector2f(1700.0f, 200.0f);
+
 	ResetAnim();
 }
 

@@ -828,18 +828,6 @@ void GameScene::ResetDescText()
 
 void GameScene::SaveGame()
 {
-	//if (FILE* file = fopen("res/Saves/Save.txt", "r"))
-	//{
-	//	fclose(file);
-	//	if (std::remove("res/Saves/Save.txt") != 0)
-	//	{
-	//	std::cout << "Couldnt delete save\n";
-	//	}
-	//	else
-	//	{
-	//		std::cout << "deletedsave save\n";
-	//	}
-	//}
 	std::ofstream savefile("SaveStats.txt");
 	if (savefile.is_open())
 	{
