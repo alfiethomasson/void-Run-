@@ -10,6 +10,7 @@ private:
 	std::map<std::string, Item> commonItems;
 	std::map<std::string, Item> rareItems;
 	std::map<std::string, SpecialItem> specialItems;
+	std::map <std::string, std::shared_ptr<SpecialAbility>> abilitys;
 public:
 
 	void PopulateDB();
@@ -23,6 +24,8 @@ public:
 	std::shared_ptr<SpecialItem> getSpecialItem(std::string& name);
 
 	std::shared_ptr<Item> getItem(std::string& name);
+
+	std::shared_ptr<SpecialAbility> getAbility(std::string& name);
 
 	//template <class T>
 	//std::shared_ptr<T> createClass()

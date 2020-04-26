@@ -47,7 +47,7 @@ void CombatUI::Update(double dt, sf::Vector2f cursPos)
 		}
 		if (healBox.contains(cursPos))
 		{
-			gameScene.UpdateDesctext("HEAL\nAmount = " + std::to_string(30), sf::Vector2f(healBox.getPosition().x,
+			gameScene.UpdateDesctext("HEAL\nAmount = " + std::to_string(player->getDexterity()), sf::Vector2f(healBox.getPosition().x,
 				healBox.getPosition().y - 75.0f));
 		}
 		if (rechargeBox.contains(cursPos))
@@ -110,13 +110,13 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 	runSprite.setPosition(sf::Vector2f(1100.0f, 800.0f));
 	runBox = runSprite.getGlobalBounds();
 
-	special1Sprite.setPosition(sf::Vector2f(800.0f, 900.0f));
+	special1Sprite.setPosition(sf::Vector2f(800.0f, 925.0f));
 
-	special2Sprite.setPosition(sf::Vector2f(900.0f, 900.0f));
+	special2Sprite.setPosition(sf::Vector2f(900.0f, 950.0f));
 
-	special3Sprite.setPosition(sf::Vector2f(1000.0f, 900.0f));
+	special3Sprite.setPosition(sf::Vector2f(1000.0f, 950.0f));
 
-	special4Sprite.setPosition(sf::Vector2f(1100.0f, 900.0f));
+	special4Sprite.setPosition(sf::Vector2f(1100.0f, 950.0f));
 
 	attackControl.setFont(Engine::tm.getFont());
 	healControl.setFont(Engine::tm.getFont());
@@ -242,7 +242,7 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 	}
 	else if (special2Sprite.getTexture() == NULL)
 	{
-		sp->setKey(special1Key);
+		sp->setKey(special2Key);
 		sp2 = sp;
 		special2Sprite.setTexture(Engine::tm.getTex(texName));
 		special2Sprite.setScale(0.3f, 0.3f);
@@ -250,11 +250,13 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 		specialControl2.setString(Engine::keyToString(special2Key));
 		specialControl2.setPosition(special2Sprite.getPosition().x + (special2Sprite.getGlobalBounds().width / 2)
 			- (specialControl2.getGlobalBounds().width / 2), 1000.0f);
+		specialCost2.setPosition(special2Sprite.getPosition().x + special2Sprite.getGlobalBounds().width - costOffset -
+			(specialCost2.getGlobalBounds().width), special2Sprite.getPosition().y + costOffset - (specialCost2.getGlobalBounds().height / 2));
 		special2Box = special2Sprite.getGlobalBounds();
 	}
 	else if (special3Sprite.getTexture() == NULL)
 	{
-		sp->setKey(special1Key);
+		sp->setKey(special3Key);
 		sp3 = sp;
 		special3Sprite.setTexture(Engine::tm.getTex(texName));
 		special3Sprite.setScale(0.3f, 0.3f);
@@ -262,11 +264,13 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 		specialControl3.setString(Engine::keyToString(special3Key));
 		specialControl3.setPosition(special3Sprite.getPosition().x + (special3Sprite.getGlobalBounds().width / 2)
 			- (specialControl3.getGlobalBounds().width / 2), 1000.0f);
+		specialCost3.setPosition(special3Sprite.getPosition().x + special3Sprite.getGlobalBounds().width - costOffset -
+			(specialCost3.getGlobalBounds().width), special3Sprite.getPosition().y + costOffset - (specialCost3.getGlobalBounds().height / 2));
 		special3Box = special3Sprite.getGlobalBounds();
 	}
 	else if (special4Sprite.getTexture() == NULL)
 	{
-		sp->setKey(special1Key);
+		sp->setKey(special4Key);
 		sp4 = sp;
 		special4Sprite.setTexture(Engine::tm.getTex(texName));
 		special4Sprite.setScale(0.3f, 0.3f);
@@ -274,6 +278,8 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 		specialControl4.setString(Engine::keyToString(special4Key));
 		specialControl4.setPosition(special4Sprite.getPosition().x + (special4Sprite.getGlobalBounds().width / 2)
 			- (specialControl4.getGlobalBounds().width / 2), 1000.0f);
+		specialCost4.setPosition(special4Sprite.getPosition().x + special4Sprite.getGlobalBounds().width - costOffset -
+			(specialCost4.getGlobalBounds().width), special4Sprite.getPosition().y + costOffset - (specialCost4.getGlobalBounds().height / 2));
 		special4Box = special4Sprite.getGlobalBounds();
 	}
 }
@@ -334,6 +340,9 @@ void GameUI::Update(double dt)
 	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	sf::Vector2f cursPos = sf::Vector2f(tempPos);
 
+	cursPos.x /= Engine::xMultiply;
+	cursPos.y /= Engine::yMultiply;
+
 	if (GameOverButtonBox.contains(cursPos))
 	{
 		GameOverButton.setColor(Green);
@@ -353,6 +362,10 @@ bool GameUI::updateStatOptions()
 	statUp();
 	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	sf::Vector2f cursPos = sf::Vector2f(tempPos);
+
+	cursPos.x /= Engine::xMultiply;
+	cursPos.y /= Engine::yMultiply;
+
 	if (inStatUp)
 	{
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))

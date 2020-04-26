@@ -9,6 +9,24 @@ void SpriteComponent::load()
 {
 	animCounter = 0;
 	animRowCounter = 0;
+	positionsRight[0] = sf::Vector2f(1700.0f, 200.0f);
+	positionsRight[1] = sf::Vector2f(1750.0f, 200.0f);
+	positionsRight[2] = sf::Vector2f(1800.0f, 200.0f);
+	positionsRight[3] = sf::Vector2f(1700.0f, 250.0f);
+	positionsRight[4] = sf::Vector2f(1750.0f, 250.0f);
+	positionsRight[5] = sf::Vector2f(1800.0f, 250.0f);
+	positionsRight[6] = sf::Vector2f(1700.0f, 300.0f);
+	positionsRight[7] = sf::Vector2f(1750.0f, 300.0f);
+
+	positionsLeft[0] = sf::Vector2f(150.0f, 200.0f);
+	positionsLeft[1] = sf::Vector2f(200.0f, 200.0f);
+	positionsLeft[2] = sf::Vector2f(250.0f, 200.0f);
+	positionsLeft[3] = sf::Vector2f(150.0f, 250.0f);
+	positionsLeft[4] = sf::Vector2f(200.0f, 250.0f);
+	positionsLeft[5] = sf::Vector2f(250.0f, 250.0f);
+	positionsLeft[6] = sf::Vector2f(150.0f, 300.0f);
+	positionsLeft[7] = sf::Vector2f(200.0f, 300.0f);
+
 	ResetAnim();
 }
 
@@ -229,11 +247,25 @@ void SpriteComponent::AddIcon(std::string texName, std::string desc, bool leftri
 	tempIcon.sprite.setScale(0.15f, 0.15f);
 	if (leftright)
 	{
-		tempIcon.sprite.setPosition(1700.0f, 200.0f);
+		if (icons.size() == 0)
+		{
+			tempIcon.sprite.setPosition(positionsRight[0]);
+		}
+		else
+		{
+			tempIcon.sprite.setPosition(positionsRight[icons.size()]);
+		}
 	}
 	else
 	{
-		tempIcon.sprite.setPosition(300.f, 350.0f);
+		if (icons.size() == 0)
+		{
+			tempIcon.sprite.setPosition(positionsLeft[0]);
+		}
+		else
+		{
+			tempIcon.sprite.setPosition(positionsLeft[icons.size()]);
+		}
 	}
 	tempIcon.box = tempIcon.sprite.getGlobalBounds();
 	tempIcon.description = desc;
@@ -243,4 +275,9 @@ void SpriteComponent::AddIcon(std::string texName, std::string desc, bool leftri
 void SpriteComponent::RemoveIcon(int position)
 {
 	icons.erase(icons.begin() + position);
+}
+
+void SpriteComponent::RemoveAllIcons()
+{
+	icons.clear();
 }

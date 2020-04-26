@@ -26,6 +26,8 @@ void BasePlayerComponent::render()
 	Renderer::queue(&StrengthText);
 	Renderer::queue(&HPText);
 	Renderer::queue(&DexterityText);
+	Renderer::queue(&EXPText);
+	Renderer::queue(&LevelText);
 	for (auto& b : hpbars)
 	{
 		Renderer::queue(&b);
@@ -56,7 +58,7 @@ void BasePlayerComponent::update(double dt) {
 				}
 				if (Keyboard::isKeyPressed(healKey) && CheckAP(healCost))
 				{
-					heal(30);
+					heal(_dexterity, true);
 				}
 				if (Keyboard::isKeyPressed(rechargeKey) && CheckAP(rechargeCost))
 				{
@@ -75,7 +77,7 @@ void BasePlayerComponent::update(double dt) {
 					}
 					if (combatUI.getHealBox().contains(cursPos) && CheckAP(healCost))
 					{
-						heal(30);
+						heal(_dexterity, true);
 					}
 					if (combatUI.getRechargeBox().contains(cursPos) && CheckAP(rechargeCost))
 					{
@@ -203,17 +205,27 @@ void BasePlayerComponent::load()
 	HPText.setFont(Engine::tm.getFont());
 	HPText.setCharacterSize(30);
 	HPText.setFillColor(sf::Color(220, 20, 60, 255));
-	HPText.setPosition(sf::Vector2f(300.0f, 850.0f));
+	HPText.setPosition(sf::Vector2f(300.0f, 800.0f));
 
 	StrengthText.setFont(Engine::tm.getFont());
 	StrengthText.setCharacterSize(30);
 	StrengthText.setFillColor(sf::Color(0, 0, 205, 255));
-	StrengthText.setPosition(sf::Vector2f(300.0f, 900.0f));
+	StrengthText.setPosition(sf::Vector2f(300.0f, 850.0f));
 
 	DexterityText.setFont(Engine::tm.getFont());
 	DexterityText.setCharacterSize(30);
 	DexterityText.setFillColor(sf::Color(0, 255, 127, 255));
-	DexterityText.setPosition(sf::Vector2f(300.0f, 950.0f));
+	DexterityText.setPosition(sf::Vector2f(300.0f, 900.0f));
+
+	EXPText.setFont(Engine::tm.getFont());
+	EXPText.setCharacterSize(30);
+	EXPText.setFillColor(sf::Color(204, 204, 0, 255));
+	EXPText.setPosition(sf::Vector2f(300.0f, 950.0f));
+
+	LevelText.setFont(Engine::tm.getFont());
+	LevelText.setCharacterSize(30);
+	LevelText.setFillColor(sf::Color(255, 255, 0, 255));
+	LevelText.setPosition(sf::Vector2f(300.0f, 1000.0f));
 
 	UpdateStats();
 }
@@ -223,6 +235,7 @@ void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)
 	currentEnemy = e;
 	runChance = calcRunChance();
 	abilityManager->resetAbility();
+	spriteManager->RemoveAllIcons();
 }
 
 bool BasePlayerComponent::checkEnemyStatus(){
@@ -243,7 +256,7 @@ void BasePlayerComponent::expGet() {
 }
 
 bool BasePlayerComponent::checkLevelUp () {
-	if (_experience >= 5 && level < 5) {
+	if (_experience >= 30 && level < 5) {
 		_experience -= 30;
 		level++;
 		return true;
@@ -283,9 +296,13 @@ bool BasePlayerComponent::calculateHit(float dex)
 	}
 }
 
-void BasePlayerComponent::heal(float healBy)
+void BasePlayerComponent::heal(float healBy, bool endturn)
 {
-	SpendAP(healCost);
+	if (endturn)
+	{
+		SpendAP(healCost);
+		gameUI.playSound("Heal", 30);
+	}
 	cout << "Player Heals!";
 	int tempHealth = currentHealth + healBy;
 	gameUI.playSound("Heal", 30);
@@ -305,7 +322,10 @@ void BasePlayerComponent::heal(float healBy)
 	int minusvalue = currentHealth - (150 * hpbars.size());
 	int barvalue = 150 - (abs(minusvalue));
 	hpbars.back().setSize(sf::Vector2f(barvalue * 1.5, 20.0f));
-	EndTurn();
+	if (endturn)
+	{
+		EndTurn();
+	}
 }
 
 void BasePlayerComponent::recharge(int amount)
@@ -444,6 +464,8 @@ void BasePlayerComponent::UpdateStats()
 	HPText.setString("HP: " + std::to_string((int)currentHealth) + " / " + std::to_string((int)_maxHealth));
 	StrengthText.setString("Strength:  " + std::to_string((int)_strength));
 	DexterityText.setString("Dexterity:  " + std::to_string((int)_dexterity));
+	EXPText.setString("XP: " + std::to_string((int)_experience) + " / " + std::to_string(30));
+	LevelText.setString("Level: " + std::to_string(level));
 }
 
 void BasePlayerComponent::setExperience(int experience)

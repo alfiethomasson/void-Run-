@@ -95,6 +95,7 @@ void UncannySpeed::doEffect()
 {
 			player->SpendAP(APCost);
 			player->addStats(0, 0, 50);
+			player->getSpriteComponent()->AddIcon(texName, "Improved Dexterity", false);
 			gameScene.UpdateTextBox("UNCANNY SPEED ACTIVATED");
 			player->EndTurn();
 }
@@ -137,6 +138,7 @@ void PrimalInstincts::doEffect()
 {
 			player->SpendAP(APCost);
 			player->addStats(20, 50, 20);
+			player->getSpriteComponent()->AddIcon(texName, "All stats improved", false);
 			gameScene.UpdateTextBox("PRIMAL INSTICTS ACTIVATED");
 			amount += 1;
 			player->EndTurn();
@@ -286,7 +288,7 @@ void NanoBots::turnStart()
 {
 	if (used)
 	{
-		player->heal(10);
+		player->heal(10, false);
 	}
 }
 
