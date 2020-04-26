@@ -119,7 +119,7 @@ void CombatRoom::Load() {
 	} //Random number from 0-2. 0 is Excruciate, 1 is Charged Shot, 2 is Suicide Shot.
 	else if (enemyType == 10)
 	{
-		enemy = enemy1->addComponent<BossEnemy>(500, 30, 30, 69, 0);
+		enemy = enemy1->addComponent<BossEnemy>(500, 30, 30, 0, 0);
 		auto sm = enemy1->addComponent<AlienSprite2>();
 		sm->load();
 	}
