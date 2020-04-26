@@ -26,8 +26,6 @@ void LevelUpRoom::Load() {
 	statIncrease1.setTexture(statUPTex);
 	statIncrease2.setTexture(statUPTex);
 	statIncrease3.setTexture(statUPTex);
-	ability1.setTexture(statUPTex);
-	ability2.setTexture(statUPTex);
 	statIncrease1.setScale(0.3f, 0.3f);
 	statIncrease2.setScale(0.3f, 0.3f);
 	statIncrease3.setScale(0.3f, 0.3f);
@@ -36,13 +34,16 @@ void LevelUpRoom::Load() {
 	statIncrease1.setRotation(90);
 	statIncrease2.setRotation(90);
 	statIncrease3.setRotation(90);
-	ability1.setScale(0.5f, 0.5f);
-	ability2.setScale(0.5f, 0.5f);
 	statIncrease1.setPosition(500.0f, 250.0f);
 	statIncrease2.setPosition(700.0f, 250.0f);
 	statIncrease3.setPosition(900.0f, 250.0f);
 	ability1.setPosition(500.0f, 100.0f);
 	ability2.setPosition(900.0f, 100.0f);
+
+	if (p->level == 2)
+	{
+		ability1.setTexture(Engine::tm.getTex)
+	}
 
 	statIncrease1Box = statIncrease1.getGlobalBounds();
 	statIncrease2Box = statIncrease2.getGlobalBounds();

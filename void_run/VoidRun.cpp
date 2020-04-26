@@ -763,6 +763,9 @@ void GameScene::LoadTextures()
 	Engine::tm.loadTexture("Excruciate", "Icons/Excruciate.png");
 	Engine::tm.loadTexture("Bullseye", "Icons/Bullseye.png");
 	Engine::tm.loadTexture("OverloadWeapon", "Icons/OverloadWeapon.png");
+	Engine::tm.loadTexture("PrimalInstincts	", "Icons/PrimalInstincts.png");
+	Engine::tm.loadTexture("UncannySpeed	", "Icons/UncannySpeed.png");
+	Engine::tm.loadTexture("DeadlyFumes	", "Icons/DeadlyFumes.png");
 	Engine::tm.loadTexture("PainShare", "Icons/PainShare.png");
 	Engine::tm.loadTexture("Regeneration", "Icons/Regeneration.png");
 	Engine::tm.loadTexture("SuicideCharge", "Icons/SuicideCharge.png");

@@ -89,6 +89,7 @@ public:
 	int getCurrentHealth();
 	int getExperience();
 	int getRunChance();
+	std::shared_ptr<BaseEnemyComponent> getEnemy();
 
 	void setMaxAP(int maxAP);
 	void setStrength(int strength);

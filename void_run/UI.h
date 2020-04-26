@@ -32,6 +32,10 @@ protected:
 	sf::FloatRect healBox;
 	sf::FloatRect rechargeBox;
 	sf::FloatRect runBox;
+	sf::FloatRect special1Box;
+	sf::FloatRect special2Box;
+	sf::FloatRect special3Box;
+	sf::FloatRect special4Box;
 	sf::Text attackControl;
 	sf::Text healControl;
 	sf::Text rechargeControl;
@@ -52,6 +56,11 @@ protected:
 	const int costOffset = 5;
 
 	std::shared_ptr<BasePlayerComponent> player;
+
+	std::shared_ptr<SpecialAbility> sp1;
+	std::shared_ptr<SpecialAbility> sp2;
+	std::shared_ptr<SpecialAbility> sp3;
+	std::shared_ptr<SpecialAbility> sp4;
 
 	TextureManager* texManager;
 public:

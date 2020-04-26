@@ -55,4 +55,6 @@ public:
 	void setMaxHealth(int maxHealth);
 	void setDexterity(int dexterity);
 	void setCurrentHealth(int health);
+
+	void addStats(int strength, int maxhealth, int dexterity);
 };

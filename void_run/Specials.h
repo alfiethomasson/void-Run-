@@ -2,12 +2,9 @@
 #include "SpecialAbility.h"
 
 class LaserBurst : public SpecialAbility {
-protected:
-
 public:
-	//explicit LaserBurst(Entity* p);
-	//LaserBurst() = delete;
-
+	LaserBurst();
+	~LaserBurst() = default;
 	void update(double dt);
 	void load();
 	void doEffect() override;
@@ -17,9 +14,38 @@ public:
 class OverloadWeapon : public SpecialAbility
 {
 public:
-	//explicit OverloadWeapon(Entity* p);
-	//OverloadWeapon() = delete;
+	void update(double dt);
+	void load();
+	void doEffect() override;
+};
 
+class UncannySpeed : public SpecialAbility
+{
+public:
+	void update(double dt);
+	void load();
+	void doEffect() override;
+};
+
+class PrimalInstincts : public SpecialAbility
+{
+public:
+	void update(double dt);
+	void load();
+	void doEffect() override;
+};
+
+class DeadlyFumes : public SpecialAbility
+{
+public:
+	void update(double dt);
+	void load();
+	void doEffect() override;
+};
+
+class MagmaGrenade : public SpecialAbility
+{
+public:
 	void update(double dt);
 	void load();
 	void doEffect() override;

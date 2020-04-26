@@ -200,3 +200,11 @@ void BaseEnemyComponent::setDexterity(int dexterity)
 {
 	_dexterity = dexterity;
 }
+
+void BaseEnemyComponent::addStats(int strength, int maxhealth, int dexterity)
+{
+	_strength += strength;
+	_maxHealth += maxhealth;
+	currentHealth += maxhealth;
+	_dexterity += dexterity;
+}

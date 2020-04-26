@@ -350,6 +350,11 @@ void BasePlayerComponent::EndTurn()
 	isFinishedTurn = true;
 }
 
+std::shared_ptr<BaseEnemyComponent> BasePlayerComponent::getEnemy()
+{
+	return currentEnemy;
+}
+
 int BasePlayerComponent::getRunChance()
 {
 	return runChance;
