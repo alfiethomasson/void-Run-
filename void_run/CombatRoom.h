@@ -22,6 +22,8 @@ protected:
 
 	CombatUI& combatUI;
 	std::shared_ptr<BaseEnemyComponent> enemy;
+
+	bool bossFightStarted;
 public:
 	CombatRoom(std::shared_ptr<Entity> p, CombatUI *combUI);
 	~CombatRoom() override = default;

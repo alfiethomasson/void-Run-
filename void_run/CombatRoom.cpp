@@ -11,7 +11,6 @@
 #include "VoidRun.h"
 
 bool playerTurn;
-bool bossFightStarted = false;
 
 sf::Time turn_delay;
 sf::Clock turn_clock;
@@ -87,6 +86,8 @@ void CombatRoom::Load() {
 	std::cout << "Entered a Combat Room!\n";
 	Room::Load();
 
+	bossFightStarted = false;
+
 	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
 	//auto s = enemy1->addComponent<ShapeComponent>();
@@ -117,7 +118,7 @@ void CombatRoom::Load() {
 	} //Random number from 0-2. 0 is Excruciate, 1 is Charged Shot, 2 is Suicide Shot.
 	else if (enemyType == 10)
 	{
-		bossFightStarted == true;
+		bossFightStarted = true;
 		enemy = enemy1->addComponent<BossEnemy>(500, 30, 30, 0, 0);
 		auto sm = enemy1->addComponent<BossSprite>();
 		sm->load();
