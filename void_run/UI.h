@@ -203,7 +203,7 @@ public:
 	~SettingUI() = default;
 	void Update(const double& dt, sf::Vector2f cursPos);
 	void Render();
-	void Load();
+	void Load(sf::Font &font);
 
 	void CheckKeyPress(sf::Text& changeText, sf::FloatRect& box, sf::Keyboard::Key&);
 	void UpdateSettings();

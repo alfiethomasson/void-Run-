@@ -411,7 +411,9 @@ void Scene::UnLoad() {
 //	button.top = button.top * yMultiply;
 //}
 
-void Scene::LoadAsync() { _loaded_future = std::async(&Scene::Load, this); }
+void Scene::LoadAsync() { _loaded_future = std::async(&Scene::Load, this);
+Engine::tm.loadFont("venusrising.ttf");
+}
 
 sf::Vector2u Engine::getWindowSize() { return _window->getSize(); }
 

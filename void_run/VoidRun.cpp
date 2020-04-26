@@ -189,8 +189,7 @@ void MenuScene::Render() {
 void MenuScene::Load() {
 
 	//Loads font
-	Engine::tm.loadFont("venusrising.ttf");
-	font = Engine::tm.getFont();
+	font.loadFromFile("res/Fonts/venusrising.ttf");
 
 	Engine::tm.loadSound("ButtonPress", "Sounds/FX/ButtonPress.wav");
 	sound.setBuffer(Engine::tm.getSound("ButtonPress"));
@@ -295,7 +294,7 @@ void MenuScene::Load() {
 	special3Key = Keyboard::E;
 	special4Key = Keyboard::R;
 
-	Settings.Load();
+	Settings.Load(font);
 }
 
 void MenuScene::setSettings(bool tf)
@@ -504,7 +503,7 @@ void GameScene::Load() {
 	gameMusic.setVolume(50.0f);
 	gameMusic.setLoop(true);
 
-	Settings.Load();
+	Settings.Load(Engine::tm.getFont());
 
 	//Calls ChangeRoom to start the game with a random room
 	ChangeRoom();
@@ -554,10 +553,10 @@ void GameScene::Update(const double& dt) {
 		//Adds random special item to inventory
 		if (Keyboard::isKeyPressed(Keyboard::I) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
-		/*	auto tempItem = itemDB.randomSpecialItem();
+			auto tempItem = itemDB.randomSpecialItem();
 			UpdateTextBox(tempItem->description);
-			inv->add(tempItem, true);*/
-			/*player->addStats(100, 300, 100);*/
+			inv->add(tempItem, true);
+			player->addStats(100, 300, 100);
 			scene_clock.restart();
 			//std::cout << "\nshould play attack\n";
 			std::cout << "MouseX: " << Mouse::getPosition().x << " MouseY: " << Mouse::getPosition().y << "\n";

@@ -199,6 +199,8 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 		specialControl1.setString(Engine::keyToString(special1Key));
 		specialControl1.setPosition(special1Sprite.getPosition().x + (special1Sprite.getGlobalBounds().width / 2)
 			- (specialControl1.getGlobalBounds().width / 2), 1000.0f);
+		specialCost1.setPosition(special1Sprite.getPosition().x + special1Sprite.getGlobalBounds().width - costOffset -
+		(specialCost1.getGlobalBounds().width), special1Sprite.getPosition().y + costOffset - (specialCost1.getGlobalBounds().height / 2));
 	}
 	else if (special2Sprite.getTexture() == NULL)
 	{
@@ -778,46 +780,46 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 
 }
 
-void SettingUI::Load()
+void SettingUI::Load(sf::Font &font)
 {
 	sound.setBuffer(Engine::tm.getSound("ButtonPress"));
 
-	ResChange.setFont(Engine::tm.getFont());
-	ResText.setFont(Engine::tm.getFont());
-	ResButton.setFont(Engine::tm.getFont());
-	MasterText.setFont(Engine::tm.getFont());
-	MusicText.setFont(Engine::tm.getFont());
-	FXText.setFont(Engine::tm.getFont());
-	//MasterTextVolume.setFont(Engine::tm.getFont());
-	//MusicTextVolume.setFont(Engine::tm.getFont());
-	//FXTextVolume.setFont(Engine::tm.getFont());
-	MasterLeft.setFont(Engine::tm.getFont());
-	MasterRight.setFont(Engine::tm.getFont());
-	MusicLeft.setFont(Engine::tm.getFont());
-	MusicRight.setFont(Engine::tm.getFont());
-	FXLeft.setFont(Engine::tm.getFont());
-	FXRight.setFont(Engine::tm.getFont());
-	BackButton.setFont(Engine::tm.getFont());
-	AttackText.setFont(Engine::tm.getFont());
-	HealText.setFont(Engine::tm.getFont());
-	RechargeText.setFont(Engine::tm.getFont());
-	RunText.setFont(Engine::tm.getFont());
-	Special1Text.setFont(Engine::tm.getFont());
-	Special2Text.setFont(Engine::tm.getFont());
-	Special3Text.setFont(Engine::tm.getFont());
-	Special4Text.setFont(Engine::tm.getFont());
-	PauseText.setFont(Engine::tm.getFont());
-	AttackKeyText.setFont(Engine::tm.getFont());
-	HealKeyText.setFont(Engine::tm.getFont());
-	RechargeKeyText.setFont(Engine::tm.getFont());
-	RunKeyText.setFont(Engine::tm.getFont());
-	Special1KeyText.setFont(Engine::tm.getFont());
-	Special2KeyText.setFont(Engine::tm.getFont());
-	Special3KeyText.setFont(Engine::tm.getFont());
-	Special4KeyText.setFont(Engine::tm.getFont());
-	PauseKeyText.setFont(Engine::tm.getFont());
-	ResetControls.setFont(Engine::tm.getFont());
-	HowToText.setFont(Engine::tm.getFont());
+	ResChange.setFont(font);
+	ResText.setFont(font);
+	ResButton.setFont(font);
+	MasterText.setFont(font);
+	MusicText.setFont(font);
+	FXText.setFont(font);
+	//MasterTextVolume.setFont(font);
+	//MusicTextVolume.setFont(font);
+	//FXTextVolume.setFont(font);
+	MasterLeft.setFont(font);
+	MasterRight.setFont(font);
+	MusicLeft.setFont(font);
+	MusicRight.setFont(font);
+	FXLeft.setFont(font);
+	FXRight.setFont(font);
+	BackButton.setFont(font);
+	AttackText.setFont(font);
+	HealText.setFont(font);
+	RechargeText.setFont(font);
+	RunText.setFont(font);
+	Special1Text.setFont(font);
+	Special2Text.setFont(font);
+	Special3Text.setFont(font);
+	Special4Text.setFont(font);
+	PauseText.setFont(font);
+	AttackKeyText.setFont(font);
+	HealKeyText.setFont(font);
+	RechargeKeyText.setFont(font);
+	RunKeyText.setFont(font);
+	Special1KeyText.setFont(font);
+	Special2KeyText.setFont(font);
+	Special3KeyText.setFont(font);
+	Special4KeyText.setFont(font);
+	PauseKeyText.setFont(font);
+	ResetControls.setFont(font);
+	HowToText.setFont(font);
 
 	BackButton.setString("BACK - BACKSPACE");
 	BackButton.setCharacterSize(40);
