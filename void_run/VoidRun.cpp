@@ -457,6 +457,13 @@ void GameScene::Load() {
 			}
 		}
 
+		for (auto& a : abilities)
+		{
+			auto i = itemDB.getAbility(a);
+			i->updatePlayer(player);
+			player->addAbility(itemDB.getAbility(a));
+		}
+
 		ents.list.push_back(pl);
 	}
 	else
@@ -514,9 +521,6 @@ void GameScene::Load() {
 	//Calls ChangeRoom to start the game with a random room
 	ChangeRoom();
 	
-	//UNCOMMENT TO SEE LOADING IN ACTION
-	//std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-	//setLoaded(true);
 }
 
 void GameScene::setLoadFromSave(bool tf)

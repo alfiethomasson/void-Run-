@@ -44,6 +44,8 @@ private:
 	sf::Text StrengthText;
 	sf::Text HPText;
 	sf::Text DexterityText;
+	sf::Text EXPText;
+	sf::Text LevelText;
 
 public: 
 	bool isTurn;
@@ -74,7 +76,7 @@ public:
 	void StartTurn();
 
 	void attack(float damage, float dex);
-	void heal(float healBy);
+	void heal(float healBy, bool endturn);
 	void recharge(int amount);
 	void run();
 	void expGet();

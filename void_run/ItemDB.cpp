@@ -4,6 +4,32 @@
 //Function that adds items to a common, and rare vector
 void ItemDB::PopulateDB()
 {
+	auto lb = std::make_shared<LaserBurst>();
+	lb->load();
+	abilitys["LaserBurst"] = lb;
+	auto ow = std::make_shared<OverloadWeapon>();
+	ow->load();
+	abilitys["OverloadWeapon"] = ow;
+	auto us = std::make_shared<UncannySpeed>();
+	us->load();
+	abilitys["UncannySpeed"] = us;
+	auto pi = std::make_shared<PrimalInstincts>();
+	pi->load();
+	abilitys["PrimalInstincts"] = pi;
+	auto df = std::make_shared<DeadlyFumes>();
+	df->load();
+	abilitys["DeadlyFumes"] = df;
+	auto mg = std::make_shared<MagmaGrenade>();
+	mg->load();
+	abilitys["MagmaGrenade"] = mg;
+	auto nb = std::make_shared<NanoBots>();
+	nb->load();
+	abilitys["NanoBots"] = nb;
+	auto hg = std::make_shared<HoloGamble>();
+	hg->load();
+	abilitys["HoloGamble"] = hg;
+
+
 	//Common Items
 	commonItems["BlasterUpgrade"] = Item(5, 5, 0, "BlasterUpgrade", "Blaster Upgrade", "Pointy");
 	commonItems["ExtraPadding"] = Item(0, 10, 0, "ExtraPadding", "Extra Padding", "ExtraPadding");
@@ -14,8 +40,6 @@ void ItemDB::PopulateDB()
 	rareItems["WristGuard"] = Item(0, 30, 0, "WristGuard", "Wrist Guard", "WristGuard");
 	rareItems["Mask"] = Item(0, 0, 15, "Mask", "Mask", "FaceMask");
 
-	auto lb = std::make_shared<LaserBurst>();
-	lb->load();
 	specialItems["*TargetingDevice"] =
 		SpecialItem(5, 50, 5, "*TargetingDevice", "Targeting Device", "SpaceWatch", lb);
 }
@@ -119,5 +143,17 @@ std::shared_ptr<Item> ItemDB::getItem(std::string& name)
 	else
 	{
 		std::cout << "Couldn't find item: " << name << "\n";
+	}
+}
+
+std::shared_ptr<SpecialAbility> ItemDB::getAbility(std::string& name)
+{
+	if (abilitys.count(name) > 0)
+	{
+		return abilitys[name];
+	}
+	else
+	{
+		std::cout << "Couldn't find ability " << name << "\n";
 	}
 }

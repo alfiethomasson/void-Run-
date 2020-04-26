@@ -169,7 +169,7 @@ void BossEnemy::update(double dt)
 			}
 		}
 	}
-	
+	BaseEnemyComponent::update(dt);
 }
 
 void BossEnemy::load()

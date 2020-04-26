@@ -110,13 +110,13 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 	runSprite.setPosition(sf::Vector2f(1100.0f, 800.0f));
 	runBox = runSprite.getGlobalBounds();
 
-	special1Sprite.setPosition(sf::Vector2f(800.0f, 900.0f));
+	special1Sprite.setPosition(sf::Vector2f(800.0f, 925.0f));
 
-	special2Sprite.setPosition(sf::Vector2f(900.0f, 900.0f));
+	special2Sprite.setPosition(sf::Vector2f(900.0f, 950.0f));
 
-	special3Sprite.setPosition(sf::Vector2f(1000.0f, 900.0f));
+	special3Sprite.setPosition(sf::Vector2f(1000.0f, 950.0f));
 
-	special4Sprite.setPosition(sf::Vector2f(1100.0f, 900.0f));
+	special4Sprite.setPosition(sf::Vector2f(1100.0f, 950.0f));
 
 	attackControl.setFont(Engine::tm.getFont());
 	healControl.setFont(Engine::tm.getFont());
