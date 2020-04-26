@@ -112,11 +112,11 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 
 	special1Sprite.setPosition(sf::Vector2f(800.0f, 925.0f));
 
-	special2Sprite.setPosition(sf::Vector2f(900.0f, 950.0f));
+	special2Sprite.setPosition(sf::Vector2f(900.0f, 925.0f));
 
-	special3Sprite.setPosition(sf::Vector2f(1000.0f, 950.0f));
+	special3Sprite.setPosition(sf::Vector2f(1000.0f, 925.0f));
 
-	special4Sprite.setPosition(sf::Vector2f(1100.0f, 950.0f));
+	special4Sprite.setPosition(sf::Vector2f(1100.0f, 925.0f));
 
 	attackControl.setFont(Engine::tm.getFont());
 	healControl.setFont(Engine::tm.getFont());
@@ -298,6 +298,22 @@ void CombatUI::UpdateControls()
 	healControl.setString(Engine::keyToString(healKey));
 	rechargeControl.setString(Engine::keyToString(rechargeKey));
 	runControl.setString(Engine::keyToString(runKey));
+	if (special1Sprite.getTexture() != NULL)
+	{
+		specialControl1.setString(Engine::keyToString(special1Key));
+	}
+	if (special2Sprite.getTexture() != NULL)
+	{
+		specialControl2.setString(Engine::keyToString(special2Key));
+	}
+	if (special3Sprite.getTexture() != NULL)
+	{
+		specialControl3.setString(Engine::keyToString(special3Key));
+	}
+	if (special4Sprite.getTexture() != NULL)
+	{
+		specialControl4.setString(Engine::keyToString(special4Key));
+	}
 
 	attackControl.setPosition(attackSprite.getPosition().x + (attackSprite.getGlobalBounds().width / 2)
 		- (attackControl.getGlobalBounds().width / 2), 875.0f);
