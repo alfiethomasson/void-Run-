@@ -16,6 +16,7 @@
 std::shared_ptr<BaseEnemyComponent> enemy;
 
 bool playerTurn;
+bool bossFightStarted = false;
 
 sf::Time turn_delay;
 sf::Clock turn_clock;
@@ -63,6 +64,10 @@ void CombatRoom::Update(const double& dt, sf::Vector2f cursPos) {
 				enemy->isFinishedTurn = false;
 			}
 		}
+	}
+	else if (bossFightStarted = true) //If the boss fight has been started, and the enemy is dead........
+	{
+		//Holy shit they won the game!
 	}
 	else
 	{
@@ -119,6 +124,7 @@ void CombatRoom::Load() {
 	} //Random number from 0-2. 0 is Excruciate, 1 is Charged Shot, 2 is Suicide Shot.
 	else if (enemyType == 10)
 	{
+		bossFightStarted == true;
 		enemy = enemy1->addComponent<BossEnemy>(500, 30, 30, 0, 0);
 		auto sm = enemy1->addComponent<AlienSprite2>();
 		sm->load();

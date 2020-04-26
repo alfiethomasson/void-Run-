@@ -188,3 +188,12 @@ void BossEnemy::update(double dt)
 		}
 	}
 }
+
+void BossEnemy::load()
+{
+	auto sm = _parent->GetCompatibleComponent<SpriteComponent>();
+	spriteManager = sm[0];
+
+	currentEnemy->setRunChance(0); //No escape. This is it. Battle to the death.
+
+}
