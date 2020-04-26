@@ -43,10 +43,9 @@ void Loading_render() {
 	octagon.setRotation(loadingspinner);
 	octagon.setPosition(Vcast<float>(sf::Vector2f(Engine::getWindowSize().x / Engine::xMultiply, Engine::getWindowSize().y / Engine::yMultiply) * .5f));
 	octagon.setFillColor(Color(255, 255, 255, min(255.f, 40.f * loadingTime)));
-	static Text t("Loading", Engine::tm.getFont());
+	static Text t("                               Loading\n\nTroy McCool, humanity's last hope,\n   enters Space Station Omega to\n           begin the final battle...", Engine::tm.getFont());
 	t.setFillColor(Color(255, 255, 255, min(255.f, 40.f * loadingTime)));
-	t.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - Engine::xMultiply -(t.getGlobalBounds().width / 2), Engine::getWindowSize().y / 3.5 / Engine::xMultiply)) ;
-	Renderer::queue(&t);
+	t.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f / Engine::xMultiply - (t.getGlobalBounds().width / 2), (Engine::getWindowSize().y / 3.5 / Engine::yMultiply)-70)); 	Renderer::queue(&t);
 	Renderer::queue(&octagon);
 }
 

@@ -95,7 +95,7 @@ bool BaseEnemyComponent::attackEnemy(float str, float dex)
 		return true;
 	}
 	else {
-		gameScene.UpdateTextBox("The stupid dumb idiot enemy missed!");
+		gameScene.UpdateTextBox("The enemy misses!");
 		return false;
 	}
 }

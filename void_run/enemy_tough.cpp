@@ -22,7 +22,7 @@ void ToughEnemy::update(double dt)
 			if (turnCounter == 1) //Turn one, it will start a suicide charge
 			{
 				std::cout << "The enemy uses its unique ability: Suicide Charge! \n";
-				gameScene.UpdateTextBox("The enemy looks at you before engaging in a suicidal charge!");
+				gameScene.UpdateTextBox("The enemy charges suicidally!");
 				currentHealth -= 100;
 				_strength = _strength * 2;
 				_dexterity = _dexterity * 2;

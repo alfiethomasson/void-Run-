@@ -22,7 +22,7 @@ void BossEnemy::update(double dt)
 		currentEnemy->addStats(0, 0, -1);
 		attackEnemy(5, 10000);
 		slimedCounter++;
-		gameScene.UpdateTextBox("The fluid coating you saps your strength.");
+		gameScene.UpdateTextBox("You are hurt by the slime!");
 	}
 	if (slimedCounter >= 4)
 	{
@@ -71,7 +71,7 @@ void BossEnemy::update(double dt)
 			else if ((currentEnemy->getCurrentHealth() >= currentHealth) || enemyAI == 2) //Flat 20% chance, or guaranteed if the player has more HP than the alien
 			{
 				std::cout << "The enemy attacks twice with a relentless determination! \n";
-				gameScene.UpdateTextBox("The Alien Lord attacks twice with relentless determination.");
+				gameScene.UpdateTextBox("The Alien Lord attacks twice!");
 				attackEnemy(_strength * 1.5, _dexterity - 25);
 				attackEnemy(_strength * 1.5, _dexterity - 25);
 				EndTurn();
@@ -99,14 +99,14 @@ void BossEnemy::update(double dt)
 				|| ((currentHealth >= (_maxHealth * 0.2)) && ((enemyAI == 0 || enemyAI == 1 || enemyAI == 3))))
 			{
 				std::cout << "The enemy grows stronger, regaining lost health! \n";
-				gameScene.UpdateTextBox("The Alien Lord absorbs power from the air around it!");
+				gameScene.UpdateTextBox("The Alien Lord heals!");
 				currentHealth += (_maxHealth * 0.1);
 				EndTurn();
 			}
 			else if ((_dexterity > currentEnemy->getDexterity()) || (_strength > currentEnemy->getStrength())) //If the PC has better stats, it buffs itself
 			{
 				std::cout << "The enemy is gaining more power to match your skill!";
-				gameScene.UpdateTextBox("The Alien Lord is evolving to match your skill!");
+				gameScene.UpdateTextBox("The Alien Lord gains power!");
 				_strength += 4;
 				_dexterity += 4;
 			}
@@ -123,7 +123,7 @@ void BossEnemy::update(double dt)
 			else //Otherwise, it slurps your AP
 			{
 				std::cout << "The enemy saps your will to fight! \n";
-				gameScene.UpdateTextBox("The Alien Lord drains your will to fight!");
+				gameScene.UpdateTextBox("The Alien Lord drains your AP!");
 				currentEnemy->SpendAP(3);
 				EndTurn();
 			}
@@ -134,7 +134,7 @@ void BossEnemy::update(double dt)
 			if ((turnCounter % 3 == 1) || enemyAI == 5) //Every 3 turns, starting from turn 1 (1, 4, 7, 10 etc), or a 1/6 chance, it passes its turn
 			{
 				std::cout << "The enemy sneers at you! \n";
-				gameScene.UpdateTextBox("The Alien Lord sneers passively at you.");
+				gameScene.UpdateTextBox("The Alien Lord laughs at you.");
 				EndTurn();
 			}
 			else if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2 || (_dexterity < currentEnemy->getDexterity() && enemyAI == 4)) //3/6 chance of attack. 4/6 if the player has higher dexterity
@@ -142,13 +142,13 @@ void BossEnemy::update(double dt)
 				if (attackEnemy(0, _dexterity + 1))
 				{
 					std::cout << "The enemy produces a viscous fluid, flinging it over you!";
-					gameScene.UpdateTextBox("The Alien Lord spits a viscious fluid, showering you!");
+					gameScene.UpdateTextBox("The Alien Lord spits goo on you!");
 					slimed = true;
 				}
 				else
 				{
 					std::cout << "The enemy throws slime at you, but you sidestep it!";
-					gameScene.UpdateTextBox("The Alien Lord attacks you with goo, but you sidestep it.");
+					gameScene.UpdateTextBox("The Alien Lord fails to spit goo on you.");
 				}
 				EndTurn();
 			}
@@ -172,14 +172,14 @@ void BossEnemy::update(double dt)
 			if (turnCounter % 4 == 0) //Turns in the 4 times table provoke a massive buff to stats
 			{
 				std::cout << "The enemy is harnessing a massive amount of energy!";
-				gameScene.UpdateTextBox("The Alien Lord is absorbing massive amounts of energy!");
+				gameScene.UpdateTextBox("The Alien Lord gathers energy!");
 				_strength += 8;
 				_dexterity += 8;
 			}
 			else //Otherwise, BIG ATTACKS FOREVER BABYYYYY
 			{
 				std::cout << "The enemy attacks twice with a relentless determination! \n";
-				gameScene.UpdateTextBox("The Alien Lord swings wildly out of desperation!");
+				gameScene.UpdateTextBox("The Alien Lord attacks desperately!");
 				attackEnemy(_strength * 1.5, _dexterity - 20);
 				attackEnemy(_strength * 1.5, _dexterity - 20);
 				EndTurn();

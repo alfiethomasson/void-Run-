@@ -262,7 +262,7 @@ void BasePlayerComponent::attack(float str, float dex)
 		currentEnemy->TakeDamage(str);
 		gameUI.playSound("Attack", 30);
 		spriteManager->playAttack();
-		gameScene.UpdateTextBox("You valiantly shoot your opponent!");
+		gameScene.UpdateTextBox("You shoot the enemy!");
 	}
 	else {
 		gameScene.UpdateTextBox("You missed!");
@@ -289,7 +289,7 @@ void BasePlayerComponent::heal(float healBy)
 	cout << "Player Heals!";
 	int tempHealth = currentHealth + healBy;
 	gameUI.playSound("Heal", 30);
-	gameScene.UpdateTextBox("You take a moment to recuperate.");
+	gameScene.UpdateTextBox("You heal.");
 	if (tempHealth > _maxHealth)
 	{
 		currentHealth = _maxHealth;
@@ -313,7 +313,7 @@ void BasePlayerComponent::recharge(int amount)
 	cout << "Player Recharges!";
 	gameUI.playSound("Recharge", 30);
 	SpendAP(rechargeCost);
-	gameScene.UpdateTextBox("You take a moment to recharge your equipment.");
+	gameScene.UpdateTextBox("You recharge your equipment.");
 	gainAP(amount);
 	EndTurn();
 }
@@ -328,12 +328,12 @@ void BasePlayerComponent::run()
 		currentEnemy->setfordeletion();
 		gameUI.playSound("Run", 30);
 		spriteManager->playRun();
-		gameScene.UpdateTextBox("You heroically flee the fight!");
+		gameScene.UpdateTextBox("You flee!");
 	}
 	else
 	{
 		cout << "Player runs! FAILURE\n";
-		gameScene.UpdateTextBox("You try to flee, but fail.");
+		gameScene.UpdateTextBox("You fail to flee.");
 	}
 	EndTurn();
 }
