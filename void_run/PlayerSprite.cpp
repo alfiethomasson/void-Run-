@@ -53,7 +53,7 @@ void PlayerSprite::playAttack()
 void PlayerSprite::playHit()
 {
 	SpriteComponent::playHit();
-	sprite.setPosition(340.0f, 200.0f);
+	sprite.setPosition(412.0f, 205.0f);
 	sprite.setScale(-0.6f, 0.6f);
 
 }
@@ -61,7 +61,7 @@ void PlayerSprite::playHit()
 void PlayerSprite::playDie()
 {
 	SpriteComponent::playDie();
-	sprite.setPosition(360.0f, 100.0f);
+	sprite.setPosition(412.0f, 230.0f);
 	sprite.setScale(-0.6f, 0.6f);
 }
 

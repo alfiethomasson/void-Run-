@@ -377,11 +377,11 @@ void GameScene::Load() {
 			{
 				if (linenumber == 0)
 				{
-					HPMax = x;
+					currentHP = x;
 				}
 				else if (linenumber == 1)
 				{
-					currentHP = x;
+					HPMax = x;
 				}
 				else if (linenumber == 2)
 				{
@@ -555,10 +555,11 @@ void GameScene::Update(const double& dt) {
 		//Adds random special item to inventory
 		if (Keyboard::isKeyPressed(Keyboard::I) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
-			auto tempItem = itemDB.randomSpecialItem();
-			UpdateTextBox(tempItem->description);
-			inv->add(tempItem, true);
-			player->addStats(100, 300, 100);
+			//auto tempItem = itemDB.randomSpecialItem();
+			//UpdateTextBox(tempItem->description);
+			//inv->add(tempItem, true);
+			//player->addStats(100, 300, 100);
+			playerSprite->playDie();
 			scene_clock.restart();
 			//std::cout << "\nshould play attack\n";
 			std::cout << "MouseX: " << Mouse::getPosition().x << " MouseY: " << Mouse::getPosition().y << "\n";
@@ -663,16 +664,16 @@ void GameScene::ChangeRoom() {
 	}
 	//srand to ensure the random number is actually random
 	srand(time(0));
-	int roomType = rand() % 2;
+	int roomType = rand() % 8;
 	//TODO: Make it so that if the player's EXP is enough to level up, then the room automatically sets to 2, otherwise it is set to 0 or 1 aat random.
 	if (player->checkLevelUp()) {
-		roomType = 2;
+		roomType = 10;
 	}
 	if (player->level >= 5) {
 		roomType = 0; //Once hitting level 5, the player will always go into a fight next.
 	}
 
-	if (roomType == 0) //Combat Room
+	if (roomType < 7) //Combat Room
 	{
 		UpdateTextBox("Entered Combat Room");
 		//Makes new combat Room
@@ -690,7 +691,7 @@ void GameScene::ChangeRoom() {
 		//Set's current room to be the newly created room
 		currentRoom = newRoom;
 	}
-	else if (roomType == 1) //Treasure Room
+	else if (roomType == 7) //Treasure Room
 	{
 		std::shared_ptr<TreasureRoom> newRoom = make_shared<TreasureRoom>(pl, itemDB);
 		newRoom->Load();
@@ -698,7 +699,7 @@ void GameScene::ChangeRoom() {
 		currentRoom = newRoom;
 		UpdateTextBox("Entered Treasure Room");
 	}
-	else if (roomType == 2)
+	else if (roomType == 10)
 	{
 		std::shared_ptr<LevelUpRoom> newRoom = make_shared<LevelUpRoom>(pl);
 		newRoom->Load();

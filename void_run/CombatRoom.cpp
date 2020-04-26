@@ -91,26 +91,25 @@ void CombatRoom::Load() {
 	auto enemy1 = make_shared<Entity>();
 	//auto s = enemy1->addComponent<ShapeComponent>();
 	srand(time(0));
-	int enemyType = rand() % 3; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
-	//enemyType = 1;
+	int enemyType = rand() % 10; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
 	if(p->level >= 5)
 	{
 		enemyType = 10;
 	}
 
-	if (enemyType == 0)
+	if (enemyType < 6)
 	{
 		enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5, 5, (rand() % 3)); //Random number from 0-2. 0 is Debuff, 1 is Enrage, 2 is Double-Slice.
 		auto sm = enemy1->addComponent<AlienSprite1>();
 		sm->load();
 	}
-	else if (enemyType == 1)
+	else if (enemyType >= 6 && enemyType < 9)
 	{
 		enemy = enemy1->addComponent<MediumEnemy>(180, 15, 15, 15, (rand() % 4));
 		auto sm = enemy1->addComponent<AlienSprite3>();
 		sm->load();
 	} //Random number from 0-3. 0 is Pain Share, 1 is Regeneration, 2 is Orbital Attack, 3 is Curse.
-	else if (enemyType == 2)//Random number from 0-2. 0 is Excruciate, 1 is Charged Shot, 2 is Suicide Charge.
+	else if (enemyType == 9)//Random number from 0-2. 0 is Excruciate, 1 is Charged Shot, 2 is Suicide Charge.
 	{
 		enemy = enemy1->addComponent<ToughEnemy>(250, 20, 20, 20, (rand() % 3));
 		auto sm = enemy1->addComponent<AlienSprite2>();

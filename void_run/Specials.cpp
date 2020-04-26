@@ -16,17 +16,11 @@ void LaserBurst::load()
 
 void LaserBurst::doEffect()
 {
-	if (sf::Keyboard::isKeyPressed(key))
-	{
-		if (player->CheckAP(APCost))
-		{
 			player->SpendAP(APCost);
 			std::cout << "LASER BURST!\n";
 			gameScene.UpdateTextBox("LASER BURST!");
 			player->attack(player->getStrength() * 2, 0);
 			player->EndTurn();
-		}
-	}
 }
 
 void LaserBurst::checkKey()
