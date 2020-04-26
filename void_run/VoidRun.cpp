@@ -306,6 +306,7 @@ void MenuScene::setSettings(bool tf)
 void GameScene::setPause(bool tf)
 {
 	Settings.UpdateSettings();
+	combatUI.UpdateControls();
 	isPaused = tf;
 	if (tf)
 	{

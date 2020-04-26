@@ -224,6 +224,7 @@ public:
 	void Load(sf::Font &font, bool p);
 
 	void CheckKeyPress(sf::Text& changeText, sf::FloatRect& box, sf::Keyboard::Key&);
+	void ChangeIcon(int position);
 	void UpdateSettings();
 	void ResetKeys();
 };

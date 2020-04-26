@@ -9,14 +9,14 @@ void SpriteComponent::load()
 {
 	animCounter = 0;
 	animRowCounter = 0;
-	positionsRight[0] = sf::Vector2f(1700.0f, 200.0f);
-	positionsRight[1] = sf::Vector2f(1750.0f, 200.0f);
-	positionsRight[2] = sf::Vector2f(1800.0f, 200.0f);
-	positionsRight[3] = sf::Vector2f(1700.0f, 250.0f);
-	positionsRight[4] = sf::Vector2f(1750.0f, 250.0f);
-	positionsRight[5] = sf::Vector2f(1800.0f, 250.0f);
-	positionsRight[6] = sf::Vector2f(1700.0f, 300.0f);
-	positionsRight[7] = sf::Vector2f(1750.0f, 300.0f);
+	positionsRight[0] = sf::Vector2f(1600.0f, 200.0f);
+	positionsRight[1] = sf::Vector2f(1650.0f, 200.0f);
+	positionsRight[2] = sf::Vector2f(1700.0f, 200.0f);
+	positionsRight[3] = sf::Vector2f(1600.0f, 250.0f);
+	positionsRight[4] = sf::Vector2f(1650.0f, 250.0f);
+	positionsRight[5] = sf::Vector2f(1700.0f, 250.0f);
+	positionsRight[6] = sf::Vector2f(1600.0f, 300.0f);
+	positionsRight[7] = sf::Vector2f(1650.0f, 300.0f);
 
 	positionsLeft[0] = sf::Vector2f(150.0f, 200.0f);
 	positionsLeft[1] = sf::Vector2f(200.0f, 200.0f);
@@ -280,4 +280,10 @@ void SpriteComponent::RemoveIcon(int position)
 void SpriteComponent::RemoveAllIcons()
 {
 	icons.clear();
+}
+
+void SpriteComponent::ChangeIcon(int position, std::string& texname, std::string& desc)
+{
+	icons.at(position).sprite.setTexture(Engine::tm.getTex(texname));
+	icons.at(position).description = desc;
 }
