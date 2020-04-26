@@ -65,9 +65,9 @@ void CombatRoom::Update(const double& dt, sf::Vector2f cursPos) {
 			}
 		}
 	}
-	else if (bossFightStarted = true) //If the boss fight has been started, and the enemy is dead........
+	else if (bossFightStarted == true) //If the boss fight has been started, and the enemy is not alive........
 	{
-		//Holy shit they won the game!
+		Engine::ChangeScene(&VictoryScene()); //...they win the game!
 	}
 	else
 	{

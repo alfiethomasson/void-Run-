@@ -853,3 +853,55 @@ void GameScene::SaveGame()
 	}
 
 }
+
+void VictoryScene::Render()
+{
+	//Queues text to render in system renderer
+	Renderer::queue(&storyMessage);
+	Renderer::queue(&thankYou);
+	Renderer::queue(&credits);
+	Renderer::queue(&menuButton);
+
+	Scene::Render();
+}
+
+void VictoryScene::Load()
+{
+	font = Engine::tm.getFont();
+
+	storyMessage.setFont(font);
+	storyMessage.setCharacterSize(15);
+	storyMessage.setString("And with the defeat of the Alien Lord, Spaceship Omega had been saved once and for all.\nTroy McCool was able to return to Earth, heralded as the greatest hero of his decade.");
+	thankYou.setFont(font);
+	thankYou.setCharacterSize(20);
+	thankYou.setString("Thank you for playing Void Run()");
+	credits.setFont(font);
+	credits.setCharacterSize(10);
+	credits.setString("Made by Alfie & Ciaran");
+	menuButton.setFont(font);
+	menuButton.setCharacterSize(10);
+	menuButton.setString("Main Menu");
+	menuButtonBox = menuButton.getGlobalBounds(); //Creates the button boundaries
+
+}
+
+void VictoryScene::Update(const double& dt)
+{
+	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
+	Vector2f cursPos = sf::Vector2f(tempPos);
+	cursPos.x /= Engine::xMultiply;
+	cursPos.y /= Engine::yMultiply;
+	scene_delay = scene_clock.getElapsedTime();
+
+	if (menuButtonBox.contains(cursPos))
+	{
+		menuButton.setFillColor(green);
+	}
+	if (Mouse::isButtonPressed(sf::Mouse::Left) && scene_delay.asSeconds() >= sceneChangeDelay)
+	{
+		if (menuButtonBox.contains(cursPos))
+		{
+			Engine::ChangeScene(&menuScene);
+		}
+	}
+}
