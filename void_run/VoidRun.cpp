@@ -785,6 +785,9 @@ void GameScene::LoadTextures()
 	Engine::tm.loadTexture("Alien3Attack", "Sprites/SpriteSheets/Alien3Attack.png");
 	Engine::tm.loadTexture("Alien3Hit", "Sprites/SpriteSheets/Alien3Hit.png");
 	Engine::tm.loadTexture("Alien3Die", "Sprites/SpriteSheets/Alien3Die.png");
+	Engine::tm.loadTexture("BossAttack", "Sprites/SpriteSheets/BossAttack.png");
+	Engine::tm.loadTexture("BossHit", "Sprites/SpriteSheets/BossHit.png");
+	Engine::tm.loadTexture("BossDie", "Sprites/SpriteSheets/BossDie.png");
 	Engine::tm.loadSound("Heal", "Sounds/FX/Heal.wav");
 	Engine::tm.loadSound("Attack", "Sounds/FX/PlayerAttack.wav");
 	Engine::tm.loadSound("Run", "Sounds/FX/Run.wav");

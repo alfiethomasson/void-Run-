@@ -92,6 +92,7 @@ void CombatRoom::Load() {
 	//auto s = enemy1->addComponent<ShapeComponent>();
 	srand(time(0));
 	int enemyType = rand() % 10; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
+	enemyType = 0;
 	if(p->level >= 5)
 	{
 		enemyType = 10;
@@ -118,7 +119,7 @@ void CombatRoom::Load() {
 	else if (enemyType == 10)
 	{
 		enemy = enemy1->addComponent<BossEnemy>(500, 30, 30, 69, 0);
-		auto sm = enemy1->addComponent<AlienSprite2>();
+		auto sm = enemy1->addComponent<BossSprite>();
 		sm->load();
 	}
 	enemy->load();

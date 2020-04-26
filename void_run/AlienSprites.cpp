@@ -226,3 +226,74 @@ void AlienSprite3::ResetAnim()
 	sprite.setPosition(defaultPos);
 	sprite.setScale(0.7f, 0.7f);
 }
+
+BossSprite::BossSprite(Entity* p)
+	: SpriteComponent{ p } {}
+
+void BossSprite::load()
+{
+	defaultPos = sf::Vector2f(1100.0f, 50.0f);
+
+	attackSize = sf::Vector2f(1117, 1040);
+	hitSize = sf::Vector2f(696, 707);
+	dieSize = sf::Vector2f(1141, 729);
+
+	attackSpriteNum = 32;
+	hitSpriteNum = 19;
+	dieSpriteNum = 20;
+
+	dieDelay = 0.5f;
+
+	attackSheet = Engine::tm.getTex("BossAttack");
+	hitSheet = Engine::tm.getTex("BossHit");
+	dieSheet = Engine::tm.getTex("BossDie");
+
+	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
+	sprite = sf::Sprite(attackSheet, sheetRect);
+
+	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
+	sprite.setPosition(defaultPos);
+
+	SpriteComponent::load();
+}
+
+void BossSprite::render()
+{
+	SpriteComponent::render();
+}
+
+void BossSprite::update(double dt)
+{
+	SpriteComponent::update(dt);
+}
+
+void BossSprite::playAttack()
+{
+	SpriteComponent::playAttack();
+	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
+	sprite = sf::Sprite(attackSheet, sheetRect);
+	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
+	sprite.setPosition(1200.0f, -270.0f);
+}
+
+void BossSprite::playHit()
+{
+	SpriteComponent::playHit();
+	hitDelay = 0.5f;
+	sprite.setPosition(1448.0f, 50.0f);
+
+}
+
+void BossSprite::playDie()
+{
+	SpriteComponent::playDie();
+	sprite.setPosition(1228.0f, 42.0f);
+}
+
+void BossSprite::ResetAnim()
+{
+	SpriteComponent::ResetAnim();
+	sheetRect = sf::IntRect(0, 0, hitSize.x, hitSize.y);
+	sprite = sf::Sprite(hitSheet, sheetRect);
+	sprite.setPosition(defaultPos);
+}
