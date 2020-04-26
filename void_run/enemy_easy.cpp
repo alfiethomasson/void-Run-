@@ -137,8 +137,7 @@ void EasyEnemy::load()
 	{
 		spriteManager->AddIcon("DoubleSlice", "DOUBLE SLICE\nMakes two attacks in one turn", true);
 	}
-	BaseEnemyComponent::load();
-	
+	BaseEnemyComponent::load();	
 }
 
 void EasyEnemy::render()

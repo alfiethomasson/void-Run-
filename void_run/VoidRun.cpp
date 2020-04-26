@@ -779,6 +779,10 @@ void GameScene::LoadTextures()
 	Engine::tm.loadTexture("PainShare", "Icons/PainShare.png");
 	Engine::tm.loadTexture("Regeneration", "Icons/Regeneration.png");
 	Engine::tm.loadTexture("SuicideCharge", "Icons/SuicideCharge.png");
+	Engine::tm.loadTexture("Aggressive", "Icons/Aggressive.png");
+	Engine::tm.loadTexture("Defensive", "Icons/Defensive.png");
+	Engine::tm.loadTexture("Passive", "Icons/Passive.png");
+	Engine::tm.loadTexture("Desperate", "Icons/Desperate.png");
 	Engine::tm.loadTexture("PlayerAttack", "Sprites/SpriteSheets/PlayerAttack.png");
 	Engine::tm.loadTexture("PlayerHit", "Sprites/SpriteSheets/PlayerHit.png");
 	Engine::tm.loadTexture("PlayerDie", "Sprites/SpriteSheets/PlayerDie.png");
