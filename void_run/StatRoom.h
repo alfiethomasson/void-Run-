@@ -21,7 +21,7 @@ public:
 	StatRoom(std::shared_ptr<Entity> p);
 	~StatRoom() override = default;
 
-	void Update(const double& dt) override;
+	void Update(const double& dt, sf::Vector2f cursPos) override;
 	void Render() override;
 	void Load() override;
 	void UnLoad();

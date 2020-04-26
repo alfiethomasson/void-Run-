@@ -15,6 +15,7 @@ protected:
 	float _maxHealth;
 	float currentHealth;
 	bool inAttack;
+	int turnCounter;
 
 	sf::Clock animClock;
 
@@ -41,7 +42,7 @@ public:
 	bool calculateHit(float dex);
 	void makeHPBar();
 
-	void attackEnemy(float str, float dex);
+	bool attackEnemy(float str, float dex);
 	void heal(float healamount);
 	void EndTurn();
 
@@ -49,9 +50,12 @@ public:
 	int getMaxHealth();
 	int getDexterity();
 	int getCurrentHealth();
+	std::shared_ptr<SpriteComponent> getSprite();
 
 	void setStrength(int strength);
 	void setMaxHealth(int maxHealth);
 	void setDexterity(int dexterity);
 	void setCurrentHealth(int health);
+
+	void addStats(int strength, int maxhealth, int dexterity);
 };

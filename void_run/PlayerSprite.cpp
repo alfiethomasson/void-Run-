@@ -6,27 +6,30 @@ PlayerSprite::PlayerSprite(Entity* p)
 
 void PlayerSprite::load()
 {
-	defaultPos = sf::Vector2f(600.0f, 120.0f);
+	defaultPos = sf::Vector2f(700.0f, 250.0f);
 
-	attackSize = sf::Vector2f(460, 411);
-	hitSize = sf::Vector2f(310, 447);
-	dieSize = sf::Vector2f(320, 516);
+	attackSize = sf::Vector2f(919, 821);
+	hitSize = sf::Vector2f(620, 893);
+	dieSize = sf::Vector2f(639, 1031);
+	runSize = sf::Vector2f(864, 764);
 
 	attackSpriteNum = 16;
 	hitSpriteNum = 7;
 	dieSpriteNum = 20;
+	runSpriteNum = 23;
 
 	hitDelay = 0.5f;
-	attackSheet = gameScene.tm.getTex("PlayerAttack");
-	hitSheet = gameScene.tm.getTex("PlayerHit");
-	dieSheet = gameScene.tm.getTex("PlayerDie");
+	attackSheet = Engine::tm.getTex("PlayerAttack");
+	hitSheet = Engine::tm.getTex("PlayerHit");
+	dieSheet = Engine::tm.getTex("PlayerDie");
+	runSheet = Engine::tm.getTex("PlayerRun");
 
 	sheetRect = sf::IntRect(0, 0, 460, 411);
 	sprite = sf::Sprite(attackSheet, sheetRect);
 
 	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
 	sprite.setPosition(defaultPos);
-	sprite.setScale(-1.0f, 1.0f);
+	sprite.setScale(-0.6f, 0.6f);
 
 	SpriteComponent::load();
 }
@@ -50,20 +53,28 @@ void PlayerSprite::playAttack()
 void PlayerSprite::playHit()
 {
 	SpriteComponent::playHit();
-	sprite.setPosition(360.0f, 80.0f);
-	sprite.setScale(-1.0f, 1.0f);
+	sprite.setPosition(412.0f, 205.0f);
+	sprite.setScale(-0.6f, 0.6f);
 
 }
 
 void PlayerSprite::playDie()
 {
 	SpriteComponent::playDie();
-	sprite.setPosition(360.0f, 100.0f);
-	sprite.setScale(-1.0f, 1.0f);
+	sprite.setPosition(412.0f, 230.0f);
+	sprite.setScale(-0.6f, 0.6f);
+}
+
+void PlayerSprite::playRun()
+{
+	SpriteComponent::playRun();
+	sprite.setPosition(360.0f, 300.0f);
+	sprite.setScale(0.6f, 0.6f);
+
 }
 
 void PlayerSprite::ResetAnim()
 {
 	SpriteComponent::ResetAnim();
-	sprite.setScale(-1.0f, 1.0f);
+	sprite.setScale(-0.6f, 0.6f);
 }

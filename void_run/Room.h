@@ -12,11 +12,12 @@ public:
 	Room(std::shared_ptr<Entity> p) : player(p) {};
 	virtual ~Room() = default;
 
-	virtual void Update(const double& dt);
+	virtual void Update(const double& dt, sf::Vector2f cursPos);
 	virtual void Render() {};
 	virtual void Load();
 	std::vector<std::shared_ptr<Entity>> GetEnts();
 	
 	bool isActive();
+	void setInactive();
 	void StatUp();
 };

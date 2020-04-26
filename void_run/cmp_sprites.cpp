@@ -3,7 +3,7 @@
 #include "Game.h"
 
 SpriteComponent::SpriteComponent(Entity* p) 
-	: inAttack{ false }, inHit{ false }, inDie{ false }, Component(p) {}
+	: inAttack{ false }, inHit{ false }, inDie{ false }, inRun{ false }, Component(p) {}
 
 void SpriteComponent::load()
 {
@@ -25,6 +25,8 @@ void SpriteComponent::update(double dt)
 {
 	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	Vector2f cursPos = sf::Vector2f(tempPos);
+	cursPos.x /= Engine::xMultiply;
+	cursPos.y /= Engine::yMultiply;
 
 	for (auto b : icons)
 	{
@@ -98,6 +100,38 @@ void SpriteComponent::update(double dt)
 			}
 		}
 	}
+	if (inRun)
+	{
+		if (animClock.getElapsedTime().asSeconds() > animDelay)
+		{
+			if (animCounter < runSpriteNum)
+			{
+				if (animRowCounter <= 3)
+				{
+					if (animRowCounter == 3)
+					{
+						sheetRect.top += runSize.y;
+						sheetRect.left = 0;
+						animRowCounter = 0;
+					}
+					else
+					{
+						sheetRect.left += runSize.x;
+						animRowCounter++;
+					}
+				}
+				sprite.setTextureRect(sheetRect);
+				animClock.restart();
+				animCounter++;
+			}
+			else
+			{
+				gameScene.getCurrentRoom().setInactive();
+				ResetAnim();
+			}
+		}
+		sprite.move(sf::Vector2f(-1, 0));
+	}
 	if (inDie)
 	{
 		if (hitClock.getElapsedTime().asSeconds() > dieDelay)
@@ -163,11 +197,23 @@ void SpriteComponent::playDie()
 	animDelay = 0.05f;
 }
 
+void SpriteComponent::playRun()
+{
+	inRun = true;
+	hitClock.restart();
+	sheetRect = sf::IntRect(0, 0, runSize.x, runSize.y);
+	sprite = sf::Sprite(runSheet, sheetRect);
+
+	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
+	animDelay = 0.05f;
+}
+
 void SpriteComponent::ResetAnim()
 {
 	inAttack = false;
 	inHit = false;
 	inDie = false;
+	inRun = false;
 	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
 	sprite = sf::Sprite(attackSheet, sheetRect);
 	animRowCounter = 0;
@@ -179,15 +225,15 @@ void SpriteComponent::ResetAnim()
 void SpriteComponent::AddIcon(std::string texName, std::string desc, bool leftright)
 {
 	Icon tempIcon;
-	tempIcon.sprite.setTexture(gameScene.tm.getTex(texName));
+	tempIcon.sprite.setTexture(Engine::tm.getTex(texName));
 	tempIcon.sprite.setScale(0.15f, 0.15f);
 	if (leftright)
 	{
-		tempIcon.sprite.setPosition(1150, 100.0f);
+		tempIcon.sprite.setPosition(1700.0f, 200.0f);
 	}
 	else
 	{
-		tempIcon.sprite.setPosition(800.0f, 300.0f);
+		tempIcon.sprite.setPosition(300.f, 350.0f);
 	}
 	tempIcon.box = tempIcon.sprite.getGlobalBounds();
 	tempIcon.description = desc;

@@ -28,21 +28,26 @@ void BaseEnemyComponent::load()
 		std::cout << "making bar, ceiling value = " << std::ceil(currentHealth / 150) << "\n";
 		makeHPBar();
 	}
-	healthText.setFont(gameScene.tm.getFont());
+	healthText.setFont(Engine::tm.getFont());
 	healthText.setString(std::to_string((int)currentHealth) + " / " + std::to_string((int)_maxHealth));
 	healthText.setCharacterSize(30);
-	healthText.setPosition(1120.0f, 40.0f);
+	healthText.setPosition(1600.0f, 120.0f);
 	healthText.setFillColor(sf::Color(220, 20, 60, 255));
 
+	turnCounter = 1;
 }
 
 void BaseEnemyComponent::makeHPBar()
 {
 	sf::RectangleShape healthBar;
-	healthBar.setPosition(1100.0f, 50.0f + barheight);
+	healthBar.setPosition(1550.0f, 130.0f + barheight);
 	if (hpbars.size() != 0)
 	{
 		int barvalue = currentHealth - (150 * hpbars.size());
+		if (barvalue > 150)
+		{
+			barvalue = 150;
+		}
 		barvalue = std::abs(barvalue);
 		healthBar.setSize(sf::Vector2f(-barvalue * 1.5, 20.0f));
 		healthBar.setFillColor(sf::Color(220, 20, 60, 255));
@@ -80,16 +85,18 @@ void BaseEnemyComponent::updateEnemy(std::shared_ptr<BasePlayerComponent> player
 	currentEnemy = player;
 }
 
-void BaseEnemyComponent::attackEnemy(float str, float dex)
+bool BaseEnemyComponent::attackEnemy(float str, float dex)
 {
 	if (calculateHit(dex))
 	{
 		animClock.restart();
 		spriteManager->playAttack();
 		currentEnemy->takeDamage(str);
+		return true;
 	}
 	else {
 		gameScene.UpdateTextBox("The stupid dumb idiot enemy missed!");
+		return false;
 	}
 }
 
@@ -133,6 +140,7 @@ void BaseEnemyComponent::EndTurn()
 {
 	cout << "Enemy Turn Ends!";
 	isFinishedTurn = true;
+	turnCounter++;
 }
 
 void BaseEnemyComponent::TakeDamage(float damage)
@@ -158,6 +166,11 @@ void BaseEnemyComponent::TakeDamage(float damage)
 		int barvalue = 150 - (abs(minusvalue));
 		hpbars.back().setSize(sf::Vector2f(-barvalue * 1.5, 20.0f));
 	}
+}
+
+std::shared_ptr<SpriteComponent> BaseEnemyComponent::getSprite()
+{
+	return spriteManager;
 }
 
 int BaseEnemyComponent::getStrength() {
@@ -191,4 +204,12 @@ void BaseEnemyComponent::setCurrentHealth(int health) {
 void BaseEnemyComponent::setDexterity(int dexterity)
 {
 	_dexterity = dexterity;
+}
+
+void BaseEnemyComponent::addStats(int strength, int maxhealth, int dexterity)
+{
+	_strength += strength;
+	_maxHealth += maxhealth;
+	currentHealth += maxhealth;
+	_dexterity += dexterity;
 }

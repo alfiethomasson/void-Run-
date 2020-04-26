@@ -16,6 +16,7 @@ public:
 	void playAttack() override;
 	void playHit() override;
 	void playDie() override;
+	void playRun() override;
 
 	void ResetAnim() override; 
 

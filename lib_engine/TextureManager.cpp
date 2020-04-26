@@ -27,3 +27,33 @@ sf::Font& TextureManager::getFont()
 {
 	return font;
 }
+
+void TextureManager::addButton(const std::string& name, const sf::FloatRect& button)
+{
+	buttons[name] = button;
+}
+
+sf::FloatRect TextureManager::getButton(const std::string& name)
+{
+	return buttons.at(name);
+}
+
+std::map<std::string, sf::FloatRect>& TextureManager::getButtonMap()
+{
+	return buttons;
+}
+
+void TextureManager::loadSound(const std::string& name, const std::string& filename)
+{
+	sf::SoundBuffer buf;
+	if (!buf.loadFromFile("res/" + filename))
+	{
+		std::cout << "Couldn't load " << filename << "\n";
+	}
+	sounds[name] = buf;
+}
+
+sf::SoundBuffer& TextureManager::getSound(const std::string& sound)
+{
+	return sounds[sound];
+}

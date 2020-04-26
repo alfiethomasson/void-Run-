@@ -7,9 +7,9 @@
 
 class ItemDB {
 private:
-	std::vector<Item> commonItems;
-	std::vector<Item> rareItems;
-	std::vector<SpecialItem> specialItems;
+	std::map<std::string, Item> commonItems;
+	std::map<std::string, Item> rareItems;
+	std::map<std::string, SpecialItem> specialItems;
 public:
 
 	void PopulateDB();
@@ -17,6 +17,12 @@ public:
 	std::shared_ptr<Item> randomCommonItem();
 	std::shared_ptr<Item> randomRareItem();
 	std::shared_ptr<SpecialItem> randomSpecialItem();
+
+	std::shared_ptr<Item> getCommonItem(std::string& name);
+	std::shared_ptr<Item> getRareItem(std::string& name);
+	std::shared_ptr<SpecialItem> getSpecialItem(std::string& name);
+
+	std::shared_ptr<Item> getItem(std::string& name);
 
 	//template <class T>
 	//std::shared_ptr<T> createClass()

@@ -18,6 +18,13 @@ static float loadingspinner = 0.f;
 static float loadingTime;
 static RenderWindow* _window;
 
+float Engine::xMultiply;
+float Engine::yMultiply;
+TextureManager Engine::tm;
+float Engine::oldWinX;
+float Engine::oldWinY;
+bool Engine::isFullscreen;
+
 void Loading_update(float dt, const Scene* const scn) {
 	//  cout << "Eng: Loading Screen\n";
 	if (scn->isLoaded()) {
@@ -34,11 +41,11 @@ void Loading_render() {
 	static CircleShape octagon(80, 8);
 	octagon.setOrigin(80, 80);
 	octagon.setRotation(loadingspinner);
-	octagon.setPosition(Vcast<float>(Engine::getWindowSize()) * .5f);
+	octagon.setPosition(Vcast<float>(sf::Vector2f(Engine::getWindowSize().x / Engine::xMultiply, Engine::getWindowSize().y / Engine::yMultiply) * .5f));
 	octagon.setFillColor(Color(255, 255, 255, min(255.f, 40.f * loadingTime)));
-	static Text t("Loading", *Resources::get<sf::Font>("mandalore.ttf"));
+	static Text t("Loading", Engine::tm.getFont());
 	t.setFillColor(Color(255, 255, 255, min(255.f, 40.f * loadingTime)));
-	t.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - (t.getGlobalBounds().width / 2), Engine::getWindowSize().y / 3.5)) ;
+	t.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - Engine::xMultiply -(t.getGlobalBounds().width / 2), Engine::getWindowSize().y / 3.5 / Engine::xMultiply)) ;
 	Renderer::queue(&t);
 	Renderer::queue(&octagon);
 }
@@ -84,12 +91,18 @@ void Engine::Render(RenderWindow& window) {
 
 void Engine::Start(unsigned int width, unsigned int height,
 	const std::string& gameName, Scene* scn) {
-	RenderWindow window(VideoMode(width, height), gameName);
+	RenderWindow window(VideoMode(width, height), gameName, sf::Style::Titlebar);
+	//window.setFramerateLimit(120);
 	_gameName = gameName;
 	_window = &window;
 	Renderer::initialise(window);
 	//Physics::initialise/();
 	ChangeScene(scn);
+	oldWinX = getWindowSize().x;
+	oldWinY = getWindowSize().y;
+	xMultiply = 1.0f;
+	yMultiply = 1.0f;
+	isFullscreen = false;
 	while (window.isOpen()) {
 		Event event;
 		while (window.pollEvent(event)) {
@@ -101,6 +114,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 			window.close();
 		}
 
+	//	std::cout << "XMULTIPLY = " << xMultiply << " , " << "YMULTIPLY = " << yMultiply << "\n";
 		window.clear();
 		Update();
 		Render(window);
@@ -113,6 +127,138 @@ void Engine::Start(unsigned int width, unsigned int height,
 	window.close();
 	//Physics::shutdown();
 	// Render::shutdown();
+}
+
+void Engine::ChangeResolution(int x, int y, int GAMEX, int GAMEY)
+{
+	std::cout << "Should change Res\n";
+
+	int oldX = Engine::getWindowSize().x;
+	int oldY = Engine::getWindowSize().y;
+
+	// All together now in a reusable solution.
+	const sf::Vector2u screensize(x, y);
+	const sf::Vector2u gamesize(GAMEX, GAMEY);
+	//set View as normalx`
+	Engine::GetWindow().setSize(screensize);
+	sf::FloatRect visibleArea(0.f, 0.f, gamesize.x, gamesize.y);
+	auto v = sf::View(visibleArea);
+	// figure out how to scale and maintain aspect;
+	auto viewport = CalculateViewport(screensize, gamesize);
+	//Optionally Center it
+	bool centered = true;
+	if (centered) {
+		viewport.left = (1.0 - viewport.width) * 0.5;
+		viewport.top = (1.0 - viewport.height) * 0.5;
+	}
+	//set
+	v.setViewport(viewport);
+	Engine::GetWindow().setView(v);
+	//ExitButtonBox = ExitButton.getGlobalBounds();
+	//std::cout << PlayButtonBox.getPosition().x << " , " << PlayButtonBox.getPosition().y << "\n";
+	float winX = Engine::getWindowSize().x;
+	float winY = Engine::getWindowSize().y;
+	std::cout << "view Size  X" << GetWindow().getViewport(v).width << ", " << "view size y " << GetWindow().getViewport(v).height << "\n";
+	std::cout << "win Size  X" << winX << ", " << "win size y " << winY << "\n";
+	float xView = GetWindow().getViewport(v).width;
+	float yView = GetWindow().getViewport(v).height;
+	float viewMultX = winX / xView;
+	float viewMultY = winY / yView;
+	float sizeMultX = winX / GAMEX;
+	float sizeMultY = winY / GAMEY;
+	xMultiply = winX / GAMEX;
+	yMultiply = winY / GAMEY;
+	std::cout << "XMultiply: " << xMultiply << "\n";
+	std::cout << "YMultiply: " << yMultiply << "\n";
+	oldWinX = winX;
+	oldWinY = winY;
+	//map<string, sf::FloatRect>::iterator it;
+	//////std::cout << "SIZE OF BUTTON MAP IN ENGINE " << tm.getButtonMap().size() << "\n";
+	////std::cout << "Button currently at : " << tm.getButton("attackBox").getPosition() << "\n";
+	////for (auto& p : tm.getButtonMap())
+	////{
+	////	//std::cout << "BUTTON BEFORE UPDATE: " << tm.getButton("attackBox").getSize() << "\n";
+	////	UpdateButton(p.second);
+	////	std::cout << "BUTTON AFTER UPDATE: " << tm.getButton("attackBox").getSize() << "\n";
+	////}//
+}
+
+sf::FloatRect Engine::CalculateViewport(const sf::Vector2u& screensize,
+	const sf::Vector2u& gamesize) {
+
+	const Vector2f screensf(screensize.x, screensize.y);
+	const Vector2f gamesf(gamesize.x, gamesize.y);
+	const float gameAspect = gamesf.x / gamesf.y;
+	const float screenAspect = screensf.x / screensf.y;
+	float scaledWidth;  // final size.x of game viewport in piels
+	float scaledHeight; //final size.y of game viewport in piels
+	bool scaleSide = false; // false = scale to screen.x, true = screen.y
+
+	//Work out which way to scale
+	if (gamesize.x > gamesize.y) { // game is wider than tall
+	  // Can we use full width?
+		if (screensf.y < (screensf.x / gameAspect)) {
+			//no, not high enough to fit game height
+			scaleSide = true;
+		}
+		else {
+			//Yes, use all width available
+			scaleSide = false;
+		}
+	}
+	else { // Game is Square or Taller than Wide
+   // Can we use full height?
+		if (screensf.x < (screensf.y * gameAspect)) {
+			// No, screensize not wide enough to fit game width
+			scaleSide = false;
+		}
+		else {
+			// Yes, use all height available
+			scaleSide = true;
+		}
+	}
+
+	if (scaleSide) { // use max screen height
+		scaledHeight = screensf.y;
+		scaledWidth = floor(scaledHeight * gameAspect);
+	}
+	else { //use max screen width
+		scaledWidth = screensf.x;
+		scaledHeight = floor(scaledWidth / gameAspect);
+	}
+
+	//calculate as percent of screen
+	const float widthPercent = (scaledWidth / screensf.x);
+	const float heightPercent = (scaledHeight / screensf.y);
+
+	return sf::FloatRect(0, 0, widthPercent, heightPercent);
+}
+
+void Engine::SetFullScreen(sf::RenderWindow& window, bool tf)
+{
+	if (tf)
+	{
+		isFullscreen = true;
+		window.create(VideoMode(1920, 1080), "Void Run", sf::Style::Fullscreen);
+	}
+	else
+	{
+		isFullscreen = false;
+		window.create(VideoMode(1920, 1080), "Void Run", sf::Style::Titlebar);
+	}
+}
+
+bool Engine::getFullscreen()
+{
+	return isFullscreen;
+}
+
+void Engine::UpdateButton(sf::FloatRect& button)
+{
+	button.left = button.left * Engine::xMultiply;
+	button.top = button.top * Engine::yMultiply;
+	button.width = button.width * Engine::xMultiply;
+	button.height = button.height * Engine::yMultiply;
 }
 
 std::shared_ptr<Entity> Scene::makeEntity() {
@@ -173,99 +319,101 @@ void Scene::UnLoad() {
 	setLoaded(false);
 }
 
-void Scene::ChangeResolution(int x, int y, int GAMEX, int GAMEY)
-{
-	std::cout << "Should change Res\n";
+//void Scene::ChangeResolution(int x, int y, int GAMEX, int GAMEY)
+//{
+//	std::cout << "Should change Res\n";
+//
+//	int oldX = Engine::getWindowSize().x;
+//	int oldY = Engine::getWindowSize().y;
+//
+//	// All together now in a reusable solution.
+//	const sf::Vector2u screensize(x, y);
+//	const sf::Vector2u gamesize(GAMEX, GAMEY);
+//	//set View as normalx`
+//	Engine::GetWindow().setSize(screensize);
+//	sf::FloatRect visibleArea(0.f, 0.f, gamesize.x, gamesize.y);
+//	auto v = sf::View(visibleArea);
+//	// figure out how to scale and maintain aspect;
+//	auto viewport = CalculateViewport(screensize, gamesize);
+//	//Optionally Center it
+//	bool centered = true;
+//	if (centered) {
+//		viewport.left = (1.0 - viewport.width) * 0.5;
+//		viewport.top = (1.0 - viewport.height) * 0.5;
+//	}
+//	//set
+//	v.setViewport(viewport);
+//	Engine::GetWindow().setView(v);
+//	//ExitButtonBox = ExitButton.getGlobalBounds();
+//	//std::cout << PlayButtonBox.getPosition().x << " , " << PlayButtonBox.getPosition().y << "\n";
+//	float winX = Engine::getWindowSize().x;
+//	float winY = Engine::getWindowSize().y;
+//	//xMultiply = winX / oldX;
+//	//yMultiply = winY / oldY;
+//}
+//
+//sf::FloatRect Scene::CalculateViewport(const sf::Vector2u& screensize,
+//	const sf::Vector2u& gamesize) {
+//
+//	const Vector2f screensf(screensize.x, screensize.y);
+//	const Vector2f gamesf(gamesize.x, gamesize.y);
+//	const float gameAspect = gamesf.x / gamesf.y;
+//	const float screenAspect = screensf.x / screensf.y;
+//	float scaledWidth;  // final size.x of game viewport in piels
+//	float scaledHeight; //final size.y of game viewport in piels
+//	bool scaleSide = false; // false = scale to screen.x, true = screen.y
+//
+//	//Work out which way to scale
+//	if (gamesize.x > gamesize.y) { // game is wider than tall
+//	  // Can we use full width?
+//		if (screensf.y < (screensf.x / gameAspect)) {
+//			//no, not high enough to fit game height
+//			scaleSide = true;
+//		}
+//		else {
+//			//Yes, use all width available
+//			scaleSide = false;
+//		}
+//	}
+//	else { // Game is Square or Taller than Wide
+//   // Can we use full height?
+//		if (screensf.x < (screensf.y * gameAspect)) {
+//			// No, screensize not wide enough to fit game width
+//			scaleSide = false;
+//		}
+//		else {
+//			// Yes, use all height available
+//			scaleSide = true;
+//		}
+//	}
+//
+//	if (scaleSide) { // use max screen height
+//		scaledHeight = screensf.y;
+//		scaledWidth = floor(scaledHeight * gameAspect);
+//	}
+//	else { //use max screen width
+//		scaledWidth = screensf.x;
+//		scaledHeight = floor(scaledWidth / gameAspect);
+//	}
+//
+//	//calculate as percent of screen
+//	const float widthPercent = (scaledWidth / screensf.x);
+//	const float heightPercent = (scaledHeight / screensf.y);
+//
+//	return sf::FloatRect(0, 0, widthPercent, heightPercent);
+//}
 
-	int oldX = Engine::getWindowSize().x;
-	int oldY = Engine::getWindowSize().y;
+//void Scene::UpdateButton(sf::FloatRect& button)
+//{
+//	button.width = button.width * xMultiply;
+//	button.height = button.height * yMultiply;
+//	button.left = button.left * xMultiply;
+//	button.top = button.top * yMultiply;
+//}
 
-	// All together now in a reusable solution.
-	const sf::Vector2u screensize(x, y);
-	const sf::Vector2u gamesize(GAMEX, GAMEY);
-	//set View as normalx`
-	Engine::GetWindow().setSize(screensize);
-	sf::FloatRect visibleArea(0.f, 0.f, gamesize.x, gamesize.y);
-	auto v = sf::View(visibleArea);
-	// figure out how to scale and maintain aspect;
-	auto viewport = CalculateViewport(screensize, gamesize);
-	//Optionally Center it
-	bool centered = true;
-	if (centered) {
-		viewport.left = (1.0 - viewport.width) * 0.5;
-		viewport.top = (1.0 - viewport.height) * 0.5;
-	}
-	//set
-	v.setViewport(viewport);
-	Engine::GetWindow().setView(v);
-	//ExitButtonBox = ExitButton.getGlobalBounds();
-	//std::cout << PlayButtonBox.getPosition().x << " , " << PlayButtonBox.getPosition().y << "\n";
-	float winX = Engine::getWindowSize().x;
-	float winY = Engine::getWindowSize().y;
-	xMultiply = winX / oldX;
-	yMultiply = winY / oldY;
+void Scene::LoadAsync() { _loaded_future = std::async(&Scene::Load, this);
+Engine::tm.loadFont("venusrising.ttf");
 }
-
-sf::FloatRect Scene::CalculateViewport(const sf::Vector2u& screensize,
-	const sf::Vector2u& gamesize) {
-
-	const Vector2f screensf(screensize.x, screensize.y);
-	const Vector2f gamesf(gamesize.x, gamesize.y);
-	const float gameAspect = gamesf.x / gamesf.y;
-	const float screenAspect = screensf.x / screensf.y;
-	float scaledWidth;  // final size.x of game viewport in piels
-	float scaledHeight; //final size.y of game viewport in piels
-	bool scaleSide = false; // false = scale to screen.x, true = screen.y
-
-	//Work out which way to scale
-	if (gamesize.x > gamesize.y) { // game is wider than tall
-	  // Can we use full width?
-		if (screensf.y < (screensf.x / gameAspect)) {
-			//no, not high enough to fit game height
-			scaleSide = true;
-		}
-		else {
-			//Yes, use all width available
-			scaleSide = false;
-		}
-	}
-	else { // Game is Square or Taller than Wide
-   // Can we use full height?
-		if (screensf.x < (screensf.y * gameAspect)) {
-			// No, screensize not wide enough to fit game width
-			scaleSide = false;
-		}
-		else {
-			// Yes, use all height available
-			scaleSide = true;
-		}
-	}
-
-	if (scaleSide) { // use max screen height
-		scaledHeight = screensf.y;
-		scaledWidth = floor(scaledHeight * gameAspect);
-	}
-	else { //use max screen width
-		scaledWidth = screensf.x;
-		scaledHeight = floor(scaledWidth / gameAspect);
-	}
-
-	//calculate as percent of screen
-	const float widthPercent = (scaledWidth / screensf.x);
-	const float heightPercent = (scaledHeight / screensf.y);
-
-	return sf::FloatRect(0, 0, widthPercent, heightPercent);
-}
-
-void Scene::UpdateButton(sf::FloatRect& button)
-{
-	button.width = button.width * xMultiply;
-	button.height = button.height * yMultiply;
-	button.left = button.left * xMultiply;
-	button.top = button.top * yMultiply;
-}
-
-void Scene::LoadAsync() { _loaded_future = std::async(&Scene::Load, this); }
 
 sf::Vector2u Engine::getWindowSize() { return _window->getSize(); }
 
@@ -400,43 +548,43 @@ std::string Engine::keyToString(const sf::Keyboard::Key& key) {
 		break;
 	case sf::Keyboard::Num0:
 
-		ret = "Num0";
+		ret = "0";
 		break;
 	case sf::Keyboard::Num1:
 
-		ret = "Num1";
+		ret = "1";
 		break;
 	case sf::Keyboard::Num2:
 
-		ret = "Num2";
+		ret = "2";
 		break;
 	case sf::Keyboard::Num3:
 
-		ret = "Num3";
+		ret = "3";
 		break;
 	case sf::Keyboard::Num4:
 
-		ret = "Num4";
+		ret = "4";
 		break;
 	case sf::Keyboard::Num5:
 
-		ret = "Num5";
+		ret = "5";
 		break;
 	case sf::Keyboard::Num6:
 
-		ret = "Num6";
+		ret = "6";
 		break;
 	case sf::Keyboard::Num7:
 
-		ret = "Num7";
+		ret = "7";
 		break;
 	case sf::Keyboard::Num8:
 
-		ret = "Num8";
+		ret = "8";
 		break;
 	case sf::Keyboard::Num9:
 
-		ret = "Num9";
+		ret = "9";
 		break;
 	case sf::Keyboard::Escape:
 

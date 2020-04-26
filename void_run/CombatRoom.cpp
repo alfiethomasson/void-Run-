@@ -7,11 +7,8 @@
 #include "enemy_easy.h"
 #include "enemy_medium.h"
 #include "enemy_tough.h"
-
-#define GAMEX 1280
-#define GAMEY 720
-
-std::shared_ptr<BaseEnemyComponent> enemy;
+#include "enemy_boss.h"
+#include "VoidRun.h"
 
 bool playerTurn;
 
@@ -19,13 +16,14 @@ sf::Time turn_delay;
 sf::Clock turn_clock;
 float turnDelayValue;
 
-CombatRoom::CombatRoom(std::shared_ptr <Entity> p)
-	: Room(p) {};
+CombatRoom::CombatRoom(std::shared_ptr <Entity> p, CombatUI *combUI)
+	: combatUI{ *combUI }, Room(p) {};
 
-void CombatRoom::Update(const double& dt) {
+void CombatRoom::Update(const double& dt, sf::Vector2f cursPos) {
 
 	turn_delay = turn_clock.getElapsedTime();
 	enemy->update(dt);
+	combatUI.Update(dt, cursPos);
 
 	if (enemy->getCurrentHealth() != 0)
 	{
@@ -33,8 +31,7 @@ void CombatRoom::Update(const double& dt) {
 		{
 			if (!p->isTurn && turn_delay.asSeconds() >= turnDelayValue)
 			{
-				p->isTurn = true;
-				p->gainAP(2);
+				p->StartTurn();
 			}
 			if (p->isFinishedTurn)
 			{
@@ -67,14 +64,14 @@ void CombatRoom::Update(const double& dt) {
 		{
 			active = false;
 		}
-
+		p->expGet();
 	}
 
-	Room::Update(dt);
+	Room::Update(dt, cursPos);
 }
 
 void CombatRoom::Render() {
-	gameScene.combatUI.Render();
+	combatUI.Render();
 	Renderer::queue(&experienceCounter);
 	enemy->render();
 
@@ -89,23 +86,36 @@ void CombatRoom::Load() {
 	auto enemy1 = make_shared<Entity>();
 	//auto s = enemy1->addComponent<ShapeComponent>();
 	srand(time(0));
-	int enemyType = rand() % 3; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
-	enemyType = 2;
-	if (enemyType == 0)
-	{	enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5, 5, (rand() % 3)); //Random number from 0-2. 0 is Debuff, 1 is Enrage, 2 is Double-Slice.
+	int enemyType = rand() % 10; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
+	if(p->level >= 5)
+	{
+		enemyType = 10;
+	}
+
+	if (enemyType < 6)
+	{
+		enemy = enemy1->addComponent<EasyEnemy>(50, 10, 5, 5, (rand() % 3)); //Random number from 0-2. 0 is Debuff, 1 is Enrage, 2 is Double-Slice.
 		auto sm = enemy1->addComponent<AlienSprite1>();
 		sm->load();
 	}
-	else if (enemyType == 1)
-	{	enemy = enemy1->addComponent<MediumEnemy>(180, 15, 15, 15, (rand() % 4));
+	else if (enemyType >= 6 && enemyType < 9)
+	{
+		enemy = enemy1->addComponent<MediumEnemy>(180, 15, 15, 15, (rand() % 4));
 		auto sm = enemy1->addComponent<AlienSprite3>();
 		sm->load();
 	} //Random number from 0-3. 0 is Pain Share, 1 is Regeneration, 2 is Orbital Attack, 3 is Curse.
-	else if (enemyType == 2)
-	{	enemy = enemy1->addComponent<ToughEnemy>(250, 20, 20, 20, (rand() % 3));
+	else if (enemyType == 9)//Random number from 0-2. 0 is Excruciate, 1 is Charged Shot, 2 is Suicide Charge.
+	{
+		enemy = enemy1->addComponent<ToughEnemy>(250, 20, 20, 20, (rand() % 3));
 		auto sm = enemy1->addComponent<AlienSprite2>();
 		sm->load();
 	} //Random number from 0-2. 0 is Excruciate, 1 is Charged Shot, 2 is Suicide Shot.
+	else if (enemyType == 10)
+	{
+		enemy = enemy1->addComponent<BossEnemy>(500, 30, 30, 69, 0);
+		auto sm = enemy1->addComponent<BossSprite>();
+		sm->load();
+	}
 	enemy->load();
 
 	ents.list.push_back(enemy1);
@@ -121,7 +131,7 @@ void CombatRoom::Load() {
 	enemy->isTurn = false;
 	enemy->isFinishedTurn = false;
 
-	experienceCounter.setFont(gameScene.tm.getFont());
+	experienceCounter.setFont(Engine::tm.getFont());
 	experienceCounter.setCharacterSize(100);
 	experienceCounter.setPosition(sf::Vector2f(1200.0f, 0.0f));
 	experienceCounter.setFillColor(sf::Color::Yellow);

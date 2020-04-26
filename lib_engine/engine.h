@@ -24,23 +24,16 @@ public:
 	virtual void Update(const double& dt);
 	virtual void Render();
 	virtual void LoadTextures() {};
-	void ChangeResolution(int x, int y, int GAMEX, int GAMEY);
-	sf::FloatRect CalculateViewport(const sf::Vector2u& screensize,
-		const sf::Vector2u& gamesize);
-	void UpdateButton(sf::FloatRect& button);
 	bool isLoaded() const;
 	std::shared_ptr<Entity> makeEntity();
-	float xMultiply;
-	float yMultiply;
 
 	EntityManager ents;
 	UIManager ui;
 	std::vector<sf::FloatRect> buttons;
 
-	TextureManager tm;
-
 protected:
 	void setLoaded(bool);
+	sf::Sound sound;
 private:
 	mutable bool _loaded;
 	mutable std::future<void> _loaded_future;
@@ -57,12 +50,25 @@ public:
 	static sf::Vector2u getWindowSize();
 	static void setVsync(bool b);
 	static std::string keyToString(const sf::Keyboard::Key& key);
+	static void ChangeResolution(int x, int y, int GAMEX, int GAMEY);
+	static void SetFullScreen(sf::RenderWindow& window, bool tf);
+	static sf::FloatRect CalculateViewport(const sf::Vector2u& screensize,
+		const sf::Vector2u& gamesize);
+	static void UpdateButton(sf::FloatRect& button);
+	static bool getFullscreen();
+
+	static TextureManager tm;
+	static float xMultiply;
+	static float yMultiply;
 
 private:
 	static Scene* _activeScene;
 	static std::string _gameName;
 	static void Update();
 	static void Render(sf::RenderWindow& window);
+	static float oldWinX;
+	static float oldWinY;
+	static bool isFullscreen;
 };
 
 namespace timing {

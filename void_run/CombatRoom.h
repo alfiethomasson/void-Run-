@@ -19,11 +19,14 @@ protected:
 	sf::FloatRect stat1Box;
 	sf::FloatRect stat2Box;
 	sf::FloatRect stat3Box;
+
+	CombatUI& combatUI;
+	std::shared_ptr<BaseEnemyComponent> enemy;
 public:
-	CombatRoom(std::shared_ptr<Entity> p);
+	CombatRoom(std::shared_ptr<Entity> p, CombatUI *combUI);
 	~CombatRoom() override = default;
 	//explicit CombatRoom(Entity* p);
-	void Update(const double& dt) override;
+	void Update(const double& dt, sf::Vector2f cursPos) override;
 	void Render() override;
 	void Load() override;
 	void UnLoad();
