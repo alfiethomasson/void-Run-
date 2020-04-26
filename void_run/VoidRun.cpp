@@ -669,7 +669,7 @@ void GameScene::ChangeRoom() {
 	if (player->checkLevelUp()) {
 		roomType = 10;
 	}
-	if (player->level >= 5) {
+	if (player->level > 5) {
 		roomType = 0; //Once hitting level 5, the player will always go into a fight next.
 	}
 
@@ -766,9 +766,12 @@ void GameScene::LoadTextures()
 	Engine::tm.loadTexture("Excruciate", "Icons/Excruciate.png");
 	Engine::tm.loadTexture("Bullseye", "Icons/Bullseye.png");
 	Engine::tm.loadTexture("OverloadWeapon", "Icons/OverloadWeapon.png");
-	Engine::tm.loadTexture("PrimalInstincts	", "Icons/PrimalInstincts.png");
+	Engine::tm.loadTexture("PrimalInstincts", "Icons/PrimalInstincts.png");
 	Engine::tm.loadTexture("UncannySpeed", "Icons/UncannySpeed.png");
 	Engine::tm.loadTexture("DeadlyFumes", "Icons/DeadlyFumes.png");
+	Engine::tm.loadTexture("MagmaGrenade", "Icons/MagmaGrenade.png");
+	Engine::tm.loadTexture("HoloGamble", "Icons/HoloGamble.png");
+	Engine::tm.loadTexture("NanoBots", "Icons/NanoBots.png");
 	Engine::tm.loadTexture("PainShare", "Icons/PainShare.png");
 	Engine::tm.loadTexture("Regeneration", "Icons/Regeneration.png");
 	Engine::tm.loadTexture("SuicideCharge", "Icons/SuicideCharge.png");

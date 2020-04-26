@@ -54,6 +54,7 @@ void OverloadWeapon::doEffect()
 			player->addStats(50, 0, 0);
 			gameScene.UpdateTextBox("WEAPON OVERLOADED");
 			player->EndTurn();
+			amount++;
 }
 
 void OverloadWeapon::Reset()
@@ -187,7 +188,10 @@ void DeadlyFumes::doEffect()
 
 void DeadlyFumes::turnStart()
 {
-	player->getEnemy()->TakeDamage(5);
+	if (used)
+	{
+		player->getEnemy()->TakeDamage(5);
+	}
 }
 
 void DeadlyFumes::Reset()
@@ -233,7 +237,10 @@ void MagmaGrenade::doEffect()
 
 void MagmaGrenade::turnStart()
 {
-	player->getEnemy()->TakeDamage(5);
+	if (used)
+	{
+		player->getEnemy()->TakeDamage(5);
+	}
 }
 
 void MagmaGrenade::Reset()
@@ -244,6 +251,116 @@ void MagmaGrenade::Reset()
 void MagmaGrenade::checkKey()
 {
 	if (sf::Keyboard::isKeyPressed(key) && !used)
+	{
+		if (player->CheckAP(APCost))
+		{
+			doEffect();
+		}
+	}
+}
+
+void NanoBots::update(double dt)
+{
+	SpecialAbility::update(dt);
+}
+
+void NanoBots::load()
+{
+	texName = "NanoBots";
+	description = "Release Nano bots into the\nair around you, healing you 10 every\nturn this combat";
+	name = "Nano Bots";
+	APCost = 7;
+	used = false;
+}
+
+void NanoBots::doEffect()
+{
+	player->SpendAP(APCost);
+	player->getSpriteComponent()->AddIcon(texName, "Healing every turn", false);
+	gameScene.UpdateTextBox("NANO BOTS ACTIVATED");
+	used = true;
+	player->EndTurn();
+}
+
+void NanoBots::turnStart()
+{
+	if (used)
+	{
+		player->heal(10);
+	}
+}
+
+void NanoBots::Reset()
+{
+	used = false;
+}
+
+void NanoBots::checkKey()
+{
+	if (sf::Keyboard::isKeyPressed(key) && !used)
+	{
+		if (player->CheckAP(APCost))
+		{
+			doEffect();
+		}
+	}
+}
+
+void HoloGamble::update(double dt)
+{
+	SpecialAbility::update(dt);
+}
+
+void HoloGamble::load()
+{
+	texName = "HoloGamble";
+	description = "Draw from the deck, granting\na random permanent amount of strength,\nHP, and dexterity. Mostly\ngood but can be bad";
+	name = "Holo-Gamble";
+	APCost = 10;
+}
+
+void HoloGamble::doEffect()
+{
+	player->SpendAP(APCost);
+	// construct a trivial random generator engine from a time-based seed:
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::default_random_engine generator(seed);
+
+	//Sets value for random distribution
+	std::uniform_int_distribution<int> distributionInteger(-5, 15);
+
+	int randStr = distributionInteger(generator);
+
+	unsigned seed2 = std::chrono::system_clock::now().time_since_epoch().count();
+	std::default_random_engine generator2(seed2);
+
+	int randDex = distributionInteger(generator2);
+
+	// construct a trivial random generator engine from a time-based seed:
+	unsigned seed3 = std::chrono::system_clock::now().time_since_epoch().count();
+	std::default_random_engine generator3(seed3);
+
+	//Sets value for random distribution
+	std::uniform_int_distribution<int> distributionInteger2(-10, 30);
+
+	int randHP = distributionInteger2(generator3);
+
+	std::cout << "\nHolo gamble: " << randStr << " , " << randDex << " , " << randHP << "\n";
+
+	player->addStats(randStr, randHP, randDex);
+
+	gameScene.UpdateTextBox("HOLO GAMBLE ACTIVATED");
+	player->EndTurn();
+}
+
+void HoloGamble::Reset()
+{
+	
+}
+
+void HoloGamble::checkKey()
+{
+	if (sf::Keyboard::isKeyPressed(key))
 	{
 		if (player->CheckAP(APCost))
 		{

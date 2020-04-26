@@ -18,7 +18,6 @@ public:
 	void update(double dt);
 	void load();
 	void doEffect() override;
-	void turnStart() override;
 	void checkKey() override;
 	void Reset() override;
 };
@@ -31,7 +30,6 @@ public:
 	void update(double dt);
 	void load();
 	void doEffect() override;
-	void turnStart() override;
 	void checkKey() override;
 	void Reset() override;
 };
@@ -44,7 +42,6 @@ public:
 	void update(double dt);
 	void load();
 	void doEffect() override;
-	void turnStart() override;
 	void checkKey() override;
 	void Reset() override;
 };
@@ -73,6 +70,32 @@ public:
 	void load();
 	void doEffect() override;
 	void turnStart() override;
+	void checkKey() override;
+	void Reset() override;
+};
+
+class NanoBots : public SpecialAbility
+{
+private:
+	bool used;
+	std::shared_ptr<SpriteComponent> enemySprite;
+public:
+	void update(double dt);
+	void load();
+	void doEffect() override;
+	void turnStart() override;
+	void checkKey() override;
+	void Reset() override;
+};
+
+class HoloGamble : public SpecialAbility
+{
+private:
+	std::shared_ptr<SpriteComponent> enemySprite;
+public:
+	void update(double dt);
+	void load();
+	void doEffect() override;
 	void checkKey() override;
 	void Reset() override;
 };

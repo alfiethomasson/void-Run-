@@ -93,6 +93,7 @@ public:
 	int getRunChance();
 	std::shared_ptr<BaseEnemyComponent> getEnemy();
 	std::shared_ptr<AbilityManager> getAbilityManager();
+	std::shared_ptr<SpriteComponent> getSpriteComponent();
 
 	void setMaxAP(int maxAP);
 	void setStrength(int strength);

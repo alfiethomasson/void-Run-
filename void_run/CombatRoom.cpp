@@ -10,11 +10,6 @@
 #include "enemy_boss.h"
 #include "VoidRun.h"
 
-#define GAMEX 1280
-#define GAMEY 720
-
-std::shared_ptr<BaseEnemyComponent> enemy;
-
 bool playerTurn;
 
 sf::Time turn_delay;

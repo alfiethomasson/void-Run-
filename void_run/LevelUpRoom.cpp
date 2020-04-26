@@ -48,17 +48,50 @@ void LevelUpRoom::Load() {
 		auto lb = std::make_shared<LaserBurst>();
 		lb->load();
 		sp1 = lb;
-		ability1.setTexture(Engine::tm.getTex(sp1->getTexName()));
-		ability1Text.setString(sp1->getName());
-		sp1->updatePlayer(p);
 
 		auto df = std::make_shared<DeadlyFumes>();
 		df->load();
 		sp2 = df;
-		ability2.setTexture(Engine::tm.getTex(sp2->getTexName()));
-		ability2Text.setString(sp2->getName());
-		sp2->updatePlayer(p);
 	}
+	else if (p->level == 3)
+	{
+		auto pi = std::make_shared<HoloGamble>();
+		pi->load();
+		sp1 = pi;
+
+		auto ow = std::make_shared<OverloadWeapon>();
+		ow->load();
+		sp2 = ow;
+	}
+	else if (p->level == 4)
+	{
+		auto mg = std::make_shared<PrimalInstincts>();
+		mg->load();
+		sp1 = mg;
+
+		auto us = std::make_shared<UncannySpeed>();
+		us->load();
+		sp2 = us;
+	}
+	else if (p->level == 5)
+	{
+		auto mg = std::make_shared<NanoBots>();
+		mg->load();
+		sp1 = mg;
+
+		auto us = std::make_shared<MagmaGrenade>();
+		us->load();
+		sp2 = us;
+	}
+
+	ability1.setTexture(Engine::tm.getTex(sp1->getTexName()));
+	ability1Text.setString(sp1->getName());
+	sp1->updatePlayer(p);
+
+	ability2.setTexture(Engine::tm.getTex(sp2->getTexName()));
+	ability2Text.setString(sp2->getName());
+	sp2->updatePlayer(p);
+
 	ability1.setScale(0.5f, 0.5f);
 	ability2.setScale(0.5f, 0.5f);
 	ability1.setPosition(GAMEX / 2 - 300.0f, 500.0f);

@@ -244,6 +244,8 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 	}
 	else if (special2Sprite.getTexture() == NULL)
 	{
+		sp->setKey(special1Key);
+		sp2 = sp;
 		special2Sprite.setTexture(Engine::tm.getTex(texName));
 		special2Sprite.setScale(0.3f, 0.3f);
 		specialCost2.setString(std::to_string(sp->getAPCost()));
@@ -254,6 +256,8 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 	}
 	else if (special3Sprite.getTexture() == NULL)
 	{
+		sp->setKey(special1Key);
+		sp3 = sp;
 		special3Sprite.setTexture(Engine::tm.getTex(texName));
 		special3Sprite.setScale(0.3f, 0.3f);
 		specialCost3.setString(std::to_string(sp->getAPCost()));
@@ -264,6 +268,8 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 	}
 	else if (special4Sprite.getTexture() == NULL)
 	{
+		sp->setKey(special1Key);
+		sp4 = sp;
 		special4Sprite.setTexture(Engine::tm.getTex(texName));
 		special4Sprite.setScale(0.3f, 0.3f);
 		specialCost4.setString(std::to_string(sp->getAPCost()));

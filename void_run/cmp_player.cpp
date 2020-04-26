@@ -367,6 +367,11 @@ std::shared_ptr<AbilityManager> BasePlayerComponent::getAbilityManager()
 	return abilityManager;
 }
 
+std::shared_ptr<SpriteComponent> BasePlayerComponent::getSpriteComponent()
+{
+	return spriteManager;
+}
+
 int BasePlayerComponent::getRunChance()
 {
 	return runChance;

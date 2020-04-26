@@ -21,6 +21,7 @@ protected:
 	sf::FloatRect stat3Box;
 
 	CombatUI& combatUI;
+	std::shared_ptr<BaseEnemyComponent> enemy;
 public:
 	CombatRoom(std::shared_ptr<Entity> p, CombatUI *combUI);
 	~CombatRoom() override = default;
