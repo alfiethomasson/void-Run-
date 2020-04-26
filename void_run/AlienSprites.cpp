@@ -6,7 +6,7 @@ AlienSprite1::AlienSprite1(Entity* p)
 
 void AlienSprite1::load()
 {
-	defaultPos = sf::Vector2f(1420.0f, 290.0f);
+	defaultPos = sf::Vector2f(1700.0f, 500.0f);
 
 	attackSize = sf::Vector2f(573, 700);
 	hitSize = sf::Vector2f(371, 556);
@@ -48,14 +48,14 @@ void AlienSprite1::playAttack()
 	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
 	sprite = sf::Sprite(attackSheet, sheetRect);
 	sprite.setOrigin(sf::Vector2f(sprite.getGlobalBounds().width / 2, 0.0f));
-	sprite.setPosition(1450.0f, 140.0f);
+	sprite.setPosition(1700.0f, 500.0f);
 	sprite.setScale(0.8f, 0.8f);
 }
 
 void AlienSprite1::playHit()
 {
 	SpriteComponent::playHit();
-	sprite.setPosition(1570.0f, 290.0f);
+	sprite.setPosition(1700.0f, 500.0f);
 	sprite.setScale(0.8f, 0.8f);
 
 }
@@ -63,7 +63,7 @@ void AlienSprite1::playHit()
 void AlienSprite1::playDie()
 {
 	SpriteComponent::playDie();
-	sprite.setPosition(1795.0f, 305.0f);
+	sprite.setPosition(1795.0f, 500.0f);
 	sprite.setScale(0.8f, 0.8f);
 }
 

@@ -429,7 +429,7 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	DexterityText.setFillColor(sf::Color(0, 255, 127, 255));
 
 	background.setTexture(Engine::tm.getTex("Background1"));
-	background.setScale(Engine::getWindowSize().x / background.getGlobalBounds().width, 0.7f);
+	background.setScale(GAMEX/ background.getGlobalBounds().width, 0.7f);
 
 	GameOverButton.setFont(font);
 	GameOverButton.setString("Gg idiot");
@@ -826,40 +826,24 @@ void SettingUI::Load()
 
 	ResChange.setString("1080p"); //Starts at 720p
 	ResChange.setCharacterSize(60);
-	ResChange.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f + 100.0f, 50.0f));
+	ResChange.setPosition(sf::Vector2f(GAMEX / 2.0f + 100.0f, 50.0f));
 	ResText.setString("Resolution: ");
 	ResText.setCharacterSize(60);
-	ResText.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - 500.0f, 50.0f));
+	ResText.setPosition(sf::Vector2f(GAMEX / 2.0f - 500.0f, 50.0f));
 	ResButton.setString(" > ");
 	ResButton.setCharacterSize(100);
-	ResButton.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f + 380.0f, 20.0f));
+	ResButton.setPosition(sf::Vector2f(GAMEX / 2.0f + 380.0f, 20.0f));
 	ResButtonBox = ResButton.getGlobalBounds();
 
 	MasterText.setString("Master Volume: " + std::to_string(masterVolume));
 	MasterText.setCharacterSize(40);
-	MasterText.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2 - 350.0f, 150.0f));
+	MasterText.setPosition(sf::Vector2f(GAMEX / 2 - 350.0f, 150.0f));
 	MusicText.setString("Music Volume: " + std::to_string(musicVolume));
 	MusicText.setCharacterSize(40);
-	MusicText.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2 - 350.0f, 200.0f));
+	MusicText.setPosition(sf::Vector2f(GAMEX / 2 - 350.0f, 200.0f));
 	FXText.setString("FX Volume: " + std::to_string(soundVolume));
 	FXText.setCharacterSize(40);
-	FXText.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2 - 300.0f, 250.0f));
-
-	/*MasterTextVolume.setString(std::to_string(masterVolume));
-	MasterTextVolume.setCharacterSize(40);
-	MasterTextVolume.setPosition(MasterText.getPosition().x + MasterText.getGlobalBounds().width
-	+ 50.0f, MasterText.getPosition().y);
-	MasterVolumeBox = MasterTextVolume.getGlobalBounds();
-	MusicTextVolume.setString(std::to_string(musicVolume));
-	MusicTextVolume.setCharacterSize(40);
-	MusicTextVolume.setPosition(MusicText.getPosition().x + MasterText.getGlobalBounds().width
-		+ 50.0f, MusicText.getPosition().y);
-	MusicVolumeBox = MusicTextVolume.getGlobalBounds();
-	FXTextVolume.setString(std::to_string(soundVolume));
-	FXTextVolume.setCharacterSize(40);
-	FXTextVolume.setPosition(FXText.getPosition().x + MasterText.getGlobalBounds().width
-		+ 50.0f, FXText.getPosition().y);
-	FXVolumeBox = FXTextVolume.getGlobalBounds();*/
+	FXText.setPosition(sf::Vector2f(GAMEX / 2 - 300.0f, 250.0f));
 
 	MasterLeft.setString("<");
 	MasterRight.setString(">");
@@ -894,39 +878,39 @@ void SettingUI::Load()
 
 	AttackText.setString("Attack Key: ");
 	AttackText.setCharacterSize(40);
-	AttackText.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+	AttackText.setPosition(sf::Vector2f((GAMEX / 2)
 		- AttackText.getGlobalBounds().width, 300.0f));
 	HealText.setString("Heal Key  ");
 	HealText.setCharacterSize(40);
-	HealText.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+	HealText.setPosition(sf::Vector2f((GAMEX / 2)
 		- HealText.getGlobalBounds().width, 350.0f));
 	RechargeText.setString("Recharge Key: ");
 	RechargeText.setCharacterSize(40);
-	RechargeText.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+	RechargeText.setPosition(sf::Vector2f((GAMEX / 2)
 		- RechargeText.getGlobalBounds().width, 400.0f));
 	RunText.setString("Run Key: ");
 	RunText.setCharacterSize(40);
-	RunText.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+	RunText.setPosition(sf::Vector2f((GAMEX / 2)
 		- RunText.getGlobalBounds().width, 450.0f));
 	Special1Text.setString("Special 1 Key: ");
 	Special1Text.setCharacterSize(40);
-	Special1Text.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+	Special1Text.setPosition(sf::Vector2f((GAMEX / 2)
 		- Special1Text.getGlobalBounds().width, 500.0f));
 	Special2Text.setString("Special 2 Key: ");
 	Special2Text.setCharacterSize(40);
-	Special2Text.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+	Special2Text.setPosition(sf::Vector2f((GAMEX / 2)
 		- Special2Text.getGlobalBounds().width, 550.0f));
 	Special3Text.setString("Special 3 Key: ");
 	Special3Text.setCharacterSize(40);
-	Special3Text.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+	Special3Text.setPosition(sf::Vector2f((GAMEX / 2)
 		- Special3Text.getGlobalBounds().width, 600.0f));
 	Special4Text.setString("Special 4 Key: ");
 	Special4Text.setCharacterSize(40);
-	Special4Text.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+	Special4Text.setPosition(sf::Vector2f((GAMEX / 2)
 		- Special4Text.getGlobalBounds().width, 650.0f));
 	PauseText.setString("Pause Key: ");
 	PauseText.setCharacterSize(40);
-	PauseText.setPosition(sf::Vector2f((Engine::getWindowSize().x / 2)
+	PauseText.setPosition(sf::Vector2f((GAMEX / 2)
 		- PauseText.getGlobalBounds().width, 700.0f));
 
 	AttackKeyText.setString(Engine::keyToString(attackKey));
@@ -968,7 +952,7 @@ void SettingUI::Load()
 
 	ResetControls.setString("Reset Controls  ");
 	ResetControls.setCharacterSize(50);
-	ResetControls.setPosition((Engine::getWindowSize().x / 2) - (ResetControls.getGlobalBounds().width / 2), 800.0f);
+	ResetControls.setPosition((GAMEX / 2) - (ResetControls.getGlobalBounds().width / 2), 800.0f);
 	ResetBox = ResetControls.getGlobalBounds();
 
 	HowToText.setString("To change controls hover\nmouse over key and hold down\n new key on keyboard");

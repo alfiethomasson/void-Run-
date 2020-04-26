@@ -554,9 +554,10 @@ void GameScene::Update(const double& dt) {
 		//Adds random special item to inventory
 		if (Keyboard::isKeyPressed(Keyboard::I) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
-			auto tempItem = itemDB.randomSpecialItem();
+		/*	auto tempItem = itemDB.randomSpecialItem();
 			UpdateTextBox(tempItem->description);
-			inv->add(tempItem, true);
+			inv->add(tempItem, true);*/
+			/*player->addStats(100, 300, 100);*/
 			scene_clock.restart();
 			//std::cout << "\nshould play attack\n";
 			std::cout << "MouseX: " << Mouse::getPosition().x << " MouseY: " << Mouse::getPosition().y << "\n";
