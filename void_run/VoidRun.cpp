@@ -874,3 +874,8 @@ void GameScene::SaveGame()
 	}
 
 }
+
+void GameScene::UnLoad()
+{
+	rooms.clear();
+}
