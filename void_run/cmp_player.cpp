@@ -16,9 +16,9 @@ int level;
 //Clock clock;
 
 BasePlayerComponent::BasePlayerComponent(Entity* p, float maxhealth, float currenthealth, float strength, float dex,
-	float experience, int actionPoints, CombatUI *ui, GameUI *gui)
+	float experience, int level, int actionPoints, CombatUI *ui, GameUI *gui)
 	: _maxHealth{ maxhealth }, currentHealth{ currenthealth }, _strength{ strength }, _dexterity{ dex }, 
-	_experience{ experience }, _actionPointsMax{ actionPoints }, combatUI{ *ui }, gameUI{ *gui }, Component(p) {}
+	_experience{ experience }, level{ level }, _actionPointsMax{ actionPoints }, combatUI{ *ui }, gameUI{ *gui }, Component(p) {}
 
 void BasePlayerComponent::render()
 {
@@ -173,8 +173,6 @@ void BasePlayerComponent::gainAP(int amount)
 
 void BasePlayerComponent::load()
 {
-	level = 1;
-
 	auto am = _parent->GetCompatibleComponent<AbilityManager>();
 	abilityManager = am[0];
 	auto sm = _parent->GetCompatibleComponent <SpriteComponent>();

@@ -16,7 +16,7 @@ void BossEnemy::update(double dt)
 	srand(time(0));
 	int i = rand() % 5;
 
-	if (slimed = true)
+	if (slimed == true)
 	{
 		currentEnemy->addStats(0, 0, -1);
 		attackEnemy(5, 10000);
@@ -53,9 +53,6 @@ void BossEnemy::update(double dt)
 		behaviour = 3;
 	}
 	
-
-	if (isTurn && isFinishedTurn != true)
-	{
 		int enemyAI = rand() % 4;
 		if (behaviour == 0) //Aggressive
 		{
@@ -172,7 +169,7 @@ void BossEnemy::update(double dt)
 			}
 		}
 	}
-	}
+	
 }
 
 void BossEnemy::load()

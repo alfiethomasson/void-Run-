@@ -60,7 +60,7 @@ public:
 	int _level;
 
 	explicit BasePlayerComponent(Entity* p, float maxhealth, float currenthealth, float strength, float dex,
-		float experience, int actionPoints, CombatUI *ui, GameUI *gameUI);
+		float experience, int level, int actionPoints, CombatUI *ui, GameUI *gameUI);
 	BasePlayerComponent() = delete;
 
 	void render() override;

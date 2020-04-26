@@ -91,7 +91,6 @@ void CombatRoom::Load() {
 	{
 		enemyType = 10;
 	}
-	enemyType = 10;
 
 	if (enemyType < 6)
 	{

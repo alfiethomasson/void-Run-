@@ -294,7 +294,7 @@ void MenuScene::Load() {
 	special3Key = Keyboard::E;
 	special4Key = Keyboard::R;
 
-	Settings.Load(font);
+	Settings.Load(font, false);
 }
 
 void MenuScene::setSettings(bool tf)
@@ -369,6 +369,7 @@ void GameScene::Load() {
 		float strength = 0;
 		float dex = 0;
 		float exp = 0;
+		int level = 0;
 
 		if (file.is_open())
 		{
@@ -395,8 +396,11 @@ void GameScene::Load() {
 				{
 					exp = x;
 				}
+				else if (linenumber == 5)
+				{
+					level = x;
+				}
 				linenumber++;
-				//test += x;
 			}
 		}
 
@@ -427,7 +431,7 @@ void GameScene::Load() {
 		}
 		//Creates Player and adds components
 		pl = make_shared<Entity>();
-		player = pl->addComponent<BasePlayerComponent>(HPMax, currentHP, strength, dex, exp, 10, &combatUI, &gameUI);
+		player = pl->addComponent<BasePlayerComponent>(HPMax, currentHP, strength, dex, exp, level, 10, &combatUI, &gameUI);
 		am = pl->addComponent<AbilityManager>(4, &combatUI);
 		am->Load();
 		inv = pl->addComponent<Inventory>(6, &gameUI);
@@ -460,7 +464,7 @@ void GameScene::Load() {
 
 		//Creates Player and adds components
 		pl = make_shared<Entity>();
-		player = pl->addComponent<BasePlayerComponent>(100.0f, 100.0f, 20.0f, 10.0f, 0.0f, 10, &combatUI, &gameUI);
+		player = pl->addComponent<BasePlayerComponent>(100.0f, 100.0f, 20.0f, 10.0f, 0.0f, 1, 10, &combatUI, &gameUI);
 		am = pl->addComponent<AbilityManager>(4, &combatUI);
 		am->Load();
 		inv = pl->addComponent<Inventory>(6, &gameUI);
@@ -505,7 +509,7 @@ void GameScene::Load() {
 	gameMusic.setVolume(50.0f);
 	gameMusic.setLoop(true);
 
-	Settings.Load(Engine::tm.getFont());
+	Settings.Load(Engine::tm.getFont(), true);
 
 	//Calls ChangeRoom to start the game with a random room
 	ChangeRoom();
@@ -844,6 +848,7 @@ void GameScene::SaveGame()
 		savefile << player->getStrength() << std::endl;
 		savefile << player->getDexterity() << std::endl;
 		savefile << player->getExperience() << std::endl;
+		savefile << player->level << std::endl;
 	}
 	else
 	{

@@ -185,6 +185,7 @@ private:
 	sf::Text ResetControls;
 	sf::Text BackButton;
 	sf::Text HowToText;
+	sf::Text toMenuText;
 
 	sf::FloatRect ResButtonBox;
 	sf::FloatRect MasterLeftBox;
@@ -204,6 +205,7 @@ private:
 	sf::FloatRect Special4Box;
 	sf::FloatRect PauseBox;
 	sf::FloatRect ResetBox;
+	sf::FloatRect toMenuBox;
 
 	sf::Clock delayClock;
 	float delayTime;
@@ -212,12 +214,14 @@ private:
 
 	sf::Sound sound;
 
+	bool pause;
+
 public:
 	SettingUI() = default;
 	~SettingUI() = default;
 	void Update(const double& dt, sf::Vector2f cursPos);
 	void Render();
-	void Load(sf::Font &font);
+	void Load(sf::Font &font, bool p);
 
 	void CheckKeyPress(sf::Text& changeText, sf::FloatRect& box, sf::Keyboard::Key&);
 	void UpdateSettings();

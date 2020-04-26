@@ -758,6 +758,25 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 		}
 	}
 
+	if (toMenuBox.contains(cursPos))
+	{
+		toMenuText.setColor(Green);
+		if (Mouse::isButtonPressed(Mouse::Left))
+		{
+			sound.setVolume(soundVolume* masterVolume / 100);
+			sound.play();
+			menuScene.setSettings(false);
+			gameScene.gameMusic.stop();
+			Engine::ChangeScene(&menuScene);
+			menuScene.setSettings(false);
+			gameScene.setPause(false);
+		}
+	}
+	else
+	{
+		toMenuText.setColor(White);
+	}
+
 	if(AttackBox.contains(cursPos))
 	{
 		CheckKeyPress(AttackKeyText, AttackBox, attackKey);
@@ -836,8 +855,10 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 
 }
 
-void SettingUI::Load(sf::Font &font)
+void SettingUI::Load(sf::Font &font, bool p)
 {
+	pause = p;
+
 	sound.setBuffer(Engine::tm.getSound("ButtonPress"));
 
 	ResChange.setFont(font);
@@ -1016,6 +1037,15 @@ void SettingUI::Load(sf::Font &font)
 	HowToText.setString("To change controls hover\nmouse over key and hold down\n new key on keyboard");
 	HowToText.setCharacterSize(25);
 	HowToText.setPosition(1200.0f, 400.0f);
+
+	if (pause)
+	{
+		toMenuText.setFont(Engine::tm.getFont());
+		toMenuText.setString("To Main Menu\n(Remember to save!)");
+		toMenuText.setCharacterSize(30);
+		toMenuText.setPosition(50.0f, 50.0f);
+		toMenuBox = toMenuText.getGlobalBounds();
+	}
 }
 
 void SettingUI::Render()
@@ -1053,6 +1083,10 @@ void SettingUI::Render()
 	Renderer::queue(&ResetControls);
 	Renderer::queue(&BackButton);
 	Renderer::queue(&HowToText);
+	if (pause)
+	{
+		Renderer::queue(&toMenuText);
+	}
 }
 
 void SettingUI::ResetKeys()

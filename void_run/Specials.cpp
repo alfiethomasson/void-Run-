@@ -201,7 +201,7 @@ void DeadlyFumes::Reset()
 
 void DeadlyFumes::checkKey()
 {
-	if (sf::Keyboard::isKeyPressed(key) && !used)
+	if (sf::Keyboard::isKeyPressed(key) && used == false)
 	{
 		if (player->CheckAP(APCost))
 		{
