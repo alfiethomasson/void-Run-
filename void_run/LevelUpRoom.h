@@ -29,6 +29,16 @@ protected:
 	sf::FloatRect statIncrease1Box;
 	sf::FloatRect statIncrease2Box;
 	sf::FloatRect statIncrease3Box;
+
+	std::shared_ptr<SpecialAbility> sp1;
+	std::shared_ptr<SpecialAbility> sp2;
+
+	sf::Clock delayClock;
+	int delayTime;
+	const int delayAmount;
+
+	sf::Sound sound;
+
 public:
 
 	LevelUpRoom(std::shared_ptr<Entity> p);

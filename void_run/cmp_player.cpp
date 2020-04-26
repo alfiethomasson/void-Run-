@@ -87,11 +87,18 @@ void BasePlayerComponent::update(double dt) {
 					}
 				}
 
-				abilityManager->combatCheck();
+				abilityManager->combatCheck(cursPos);
 				//	gameScene.combatUI.turnUpdate();
 			}
 		}
 	}
+}
+
+void BasePlayerComponent::StartTurn()
+{
+	isTurn = true;
+	gainAP(1);
+	abilityManager->StartTurnCheck();
 }
 
 void BasePlayerComponent::makeHPBar()
@@ -216,8 +223,8 @@ void BasePlayerComponent::load()
 void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)
 {
 	currentEnemy = e;
-//runChance = calcRunChance();
-	runChance = 100;
+	runChance = calcRunChance();
+	abilityManager->resetAbility();
 }
 
 bool BasePlayerComponent::checkEnemyStatus(){
@@ -238,7 +245,7 @@ void BasePlayerComponent::expGet() {
 }
 
 bool BasePlayerComponent::checkLevelUp () {
-	if (_experience >= 30 && level < 5) {
+	if (_experience >= 5 && level < 5) {
 		_experience -= 30;
 		level++;
 		return true;
@@ -355,6 +362,11 @@ std::shared_ptr<BaseEnemyComponent> BasePlayerComponent::getEnemy()
 	return currentEnemy;
 }
 
+std::shared_ptr<AbilityManager> BasePlayerComponent::getAbilityManager()
+{
+	return abilityManager;
+}
+
 int BasePlayerComponent::getRunChance()
 {
 	return runChance;
@@ -395,6 +407,12 @@ void BasePlayerComponent::setCurrentHealth(int health) {
 void BasePlayerComponent::setDexterity(int dexterity)
 {
 	_dexterity = dexterity;
+}
+
+void BasePlayerComponent::addAbility(std::shared_ptr<SpecialAbility> sp)
+{
+	abilityManager->addAbility(sp);
+	combatUI.addSpecial(sp->getTexName(), sp);
 }
 
 void BasePlayerComponent::addStats(int strength, int health, int dex)

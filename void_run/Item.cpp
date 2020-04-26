@@ -49,7 +49,7 @@ void SpecialItem::Equip(Entity newUser, bool addStat)
 		if (m->addAbility(special))
 		{
 			special->updatePlayer(player);
-			gameScene.combatUI.addSpecial(special->texName, special);
+			gameScene.combatUI.addSpecial(special->getTexName(), special);
 		}
 	}
 }

@@ -25,6 +25,11 @@ std::string SpecialAbility::getTexName()
 	return texName;
 }
 
+std::string SpecialAbility::getName()
+{
+	return name;
+}
+
 void SpecialAbility::setKey(sf::Keyboard::Key newKey)
 {
 	key = newKey;

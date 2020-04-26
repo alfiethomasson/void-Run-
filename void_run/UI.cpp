@@ -192,6 +192,26 @@ sf::FloatRect& CombatUI::getRunBox()
 	return runBox;
 }
 
+sf::FloatRect& CombatUI::getSp1Box()
+{
+	return special1Box;
+}
+
+sf::FloatRect& CombatUI::getSp2Box()
+{
+	return special2Box;
+}
+
+sf::FloatRect& CombatUI::getSp3Box()
+{
+	return special3Box;
+}
+
+sf::FloatRect& CombatUI::getSp4Box()
+{
+	return special4Box;
+}
+
 bool CombatUI::CheckBoxes(sf::Vector2f curspos)
 {
 	if (attackSprite.getTextureRect().contains((sf::Vector2i)curspos) 
@@ -210,6 +230,7 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 {
 	if (special1Sprite.getTexture() == NULL)
 	{
+		sp->setKey(special1Key);
 		sp1 = sp;
 		special1Sprite.setTexture(Engine::tm.getTex(texName));
 		special1Sprite.setScale(0.3f, 0.3f);

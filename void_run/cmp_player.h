@@ -71,6 +71,8 @@ public:
 	bool checkEnemyStatus();
 	bool checkLevelUp();
 
+	void StartTurn();
+
 	void attack(float damage, float dex);
 	void heal(float healBy);
 	void recharge(int amount);
@@ -90,6 +92,7 @@ public:
 	int getExperience();
 	int getRunChance();
 	std::shared_ptr<BaseEnemyComponent> getEnemy();
+	std::shared_ptr<AbilityManager> getAbilityManager();
 
 	void setMaxAP(int maxAP);
 	void setStrength(int strength);
@@ -100,6 +103,7 @@ public:
 	void setRunChance(int run);
 
 	void addStats(int strength, int health, int dex);
+	void addAbility(std::shared_ptr <SpecialAbility> sp);
 	void UpdateStats();
 
 	void makeHPBar();

@@ -50,6 +50,7 @@ public:
 	int getMaxHealth();
 	int getDexterity();
 	int getCurrentHealth();
+	std::shared_ptr<SpriteComponent> getSprite();
 
 	void setStrength(int strength);
 	void setMaxHealth(int maxHealth);

@@ -428,7 +428,8 @@ void GameScene::Load() {
 		//Creates Player and adds components
 		pl = make_shared<Entity>();
 		player = pl->addComponent<BasePlayerComponent>(HPMax, currentHP, strength, dex, exp, 10, &combatUI, &gameUI);
-		am = pl->addComponent<AbilityManager>(3);
+		am = pl->addComponent<AbilityManager>(4, &combatUI);
+		am->Load();
 		inv = pl->addComponent<Inventory>(6, &gameUI);
 		inv->Load();
 		playerSprite = pl->addComponent<PlayerSprite>();
@@ -460,7 +461,8 @@ void GameScene::Load() {
 		//Creates Player and adds components
 		pl = make_shared<Entity>();
 		player = pl->addComponent<BasePlayerComponent>(100.0f, 100.0f, 20.0f, 10.0f, 0.0f, 10, &combatUI, &gameUI);
-		am = pl->addComponent<AbilityManager>(3);
+		am = pl->addComponent<AbilityManager>(4, &combatUI);
+		am->Load();
 		inv = pl->addComponent<Inventory>(6, &gameUI);
 		inv->Load();
 		playerSprite = pl->addComponent<PlayerSprite>();
@@ -764,8 +766,8 @@ void GameScene::LoadTextures()
 	Engine::tm.loadTexture("Bullseye", "Icons/Bullseye.png");
 	Engine::tm.loadTexture("OverloadWeapon", "Icons/OverloadWeapon.png");
 	Engine::tm.loadTexture("PrimalInstincts	", "Icons/PrimalInstincts.png");
-	Engine::tm.loadTexture("UncannySpeed	", "Icons/UncannySpeed.png");
-	Engine::tm.loadTexture("DeadlyFumes	", "Icons/DeadlyFumes.png");
+	Engine::tm.loadTexture("UncannySpeed", "Icons/UncannySpeed.png");
+	Engine::tm.loadTexture("DeadlyFumes", "Icons/DeadlyFumes.png");
 	Engine::tm.loadTexture("PainShare", "Icons/PainShare.png");
 	Engine::tm.loadTexture("Regeneration", "Icons/Regeneration.png");
 	Engine::tm.loadTexture("SuicideCharge", "Icons/SuicideCharge.png");
@@ -791,6 +793,10 @@ void GameScene::LoadTextures()
 	Engine::tm.loadSound("ChestOpening", "Sounds/FX/ChestOpening.wav");
 	Engine::tm.loadSound("ButtonPress", "Sounds/FX/ButtonPress.wav");
 	Engine::tm.loadSound("PlayerHit", "Sounds/FX/PlayerHit.wav");
+	Engine::tm.loadSound("PlayerDie", "Sounds/FX/PlayerDie.wav");
+	Engine::tm.loadSound("MediumAttack", "Sounds/FX/MediumAttack.wav");
+	Engine::tm.loadSound("HeavyAttack", "Sounds/FX/HeavyAttack.wav");
+	Engine::tm.loadSound("PowerUp", "Sounds/FX/PowerUp.wav");
 }
 
 void GameScene::UpdateDesctext(std::string desc, sf::Vector2f pos)
@@ -847,7 +853,7 @@ void GameScene::SaveGame()
 		iafile << "END" << std::endl;
 		for (auto a : am->getSpecials())
 		{
-			iafile << a->texName << std::endl;
+			iafile << a->getTexName() << std::endl;
 		}
 	}
 	else

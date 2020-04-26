@@ -71,6 +71,11 @@ public:
 	sf::FloatRect& getHealBox();
 	sf::FloatRect& getRechargeBox();
 	sf::FloatRect& getRunBox();
+	sf::FloatRect& getSp1Box();
+	sf::FloatRect& getSp2Box();
+	sf::FloatRect& getSp3Box();
+	sf::FloatRect& getSp4Box();
+
 	bool CheckBoxes(sf::Vector2f curspos);
 	void Render();
 	void Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm);

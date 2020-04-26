@@ -36,8 +36,7 @@ void CombatRoom::Update(const double& dt, sf::Vector2f cursPos) {
 		{
 			if (!p->isTurn && turn_delay.asSeconds() >= turnDelayValue)
 			{
-				p->isTurn = true;
-				p->gainAP(2);
+				p->StartTurn();
 			}
 			if (p->isFinishedTurn)
 			{
@@ -93,7 +92,7 @@ void CombatRoom::Load() {
 	//auto s = enemy1->addComponent<ShapeComponent>();
 	srand(time(0));
 	int enemyType = rand() % 3; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
-	enemyType = 1;
+	//enemyType = 1;
 	if(p->level >= 5)
 	{
 		enemyType = 10;

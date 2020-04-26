@@ -168,6 +168,11 @@ void BaseEnemyComponent::TakeDamage(float damage)
 	}
 }
 
+std::shared_ptr<SpriteComponent> BaseEnemyComponent::getSprite()
+{
+	return spriteManager;
+}
+
 int BaseEnemyComponent::getStrength() {
 	return _strength;
 }
