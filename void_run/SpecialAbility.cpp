@@ -14,3 +14,28 @@ int SpecialAbility::getAPCost()
 {
 	return APCost;
 }
+
+std::string SpecialAbility::getDescription()
+{
+	return description;
+}
+
+std::string SpecialAbility::getTexName()
+{
+	return texName;
+}
+
+std::string SpecialAbility::getName()
+{
+	return name;
+}
+
+void SpecialAbility::setKey(sf::Keyboard::Key newKey)
+{
+	key = newKey;
+}
+
+void SpecialAbility::setAPCost(int newCost)
+{
+	APCost = newCost;
+}

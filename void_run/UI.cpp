@@ -39,7 +39,7 @@ void CombatUI::Update(double dt, sf::Vector2f cursPos)
 {
 	if (CheckBoxes(cursPos))
 	{
-		if (getAttackBox().contains(cursPos))
+		if (attackBox.contains(cursPos))
 		{
 			//std::cout << "HEY";
 			gameScene.UpdateDesctext("ATTACK ENEMY\nDamage = " + std::to_string(player->getStrength()), sf::Vector2f(attackBox.getPosition().x,
@@ -60,6 +60,22 @@ void CombatUI::Update(double dt, sf::Vector2f cursPos)
 		{
 			gameScene.UpdateDesctext("RUN FROM ENEMY\nChance = " + std::to_string(player->getRunChance()), sf::Vector2f(runBox.getPosition().x,
 				runBox.getPosition().y - 75.0f));
+		}
+		if (special1Sprite.getTexture() != NULL && special1Box.contains(cursPos))
+		{
+			gameScene.UpdateDesctext(sp1->getDescription(), sf::Vector2f(special1Sprite.getPosition().x, special1Sprite.getPosition().y - 75.0f));
+		}
+		if (special2Sprite.getTexture() != NULL && special2Box.contains(cursPos))
+		{
+			gameScene.UpdateDesctext(sp2->getDescription(), sf::Vector2f(special2Sprite.getPosition().x, special2Sprite.getPosition().y - 75.0f));
+		}
+		if (special3Sprite.getTexture() != NULL && special3Box.contains(cursPos))
+		{
+			gameScene.UpdateDesctext(sp3->getDescription(), sf::Vector2f(special3Sprite.getPosition().x, special3Sprite.getPosition().y - 75.0f));
+		}
+		if (special4Sprite.getTexture() != NULL && special4Box.contains(cursPos))
+		{
+			gameScene.UpdateDesctext(sp4->getDescription(), sf::Vector2f(special4Sprite.getPosition().x, special4Sprite.getPosition().y - 75.0f));
 		}
 	}
 	else
@@ -156,8 +172,6 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 
 sf::FloatRect& CombatUI::getAttackBox()
 {
-	//std::cout << "attack sprite is at: " << attackSprite.getPosition() << "\n";
-	//return attackSprite.getTextureRect();
 	return attackBox;
 }
 
@@ -176,10 +190,31 @@ sf::FloatRect& CombatUI::getRunBox()
 	return runBox;
 }
 
+sf::FloatRect& CombatUI::getSp1Box()
+{
+	return special1Box;
+}
+
+sf::FloatRect& CombatUI::getSp2Box()
+{
+	return special2Box;
+}
+
+sf::FloatRect& CombatUI::getSp3Box()
+{
+	return special3Box;
+}
+
+sf::FloatRect& CombatUI::getSp4Box()
+{
+	return special4Box;
+}
+
 bool CombatUI::CheckBoxes(sf::Vector2f curspos)
 {
-	if (attackSprite.getTextureRect().contains((sf::Vector2i)curspos) || specialBox.contains(curspos) || healBox.contains(curspos)
-		|| rechargeBox.contains(curspos) || runBox.contains(curspos))
+	if (attackBox.contains(curspos) || healBox.contains(curspos)
+		|| rechargeBox.contains(curspos) || runBox.contains(curspos) || special1Box.contains(curspos)
+		|| special2Box.contains(curspos) || special3Box.contains(curspos) || special4Box.contains(curspos))
 	{
 		return true;
 	}
@@ -193,41 +228,53 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 {
 	if (special1Sprite.getTexture() == NULL)
 	{
+		sp->setKey(special1Key);
+		sp1 = sp;
 		special1Sprite.setTexture(Engine::tm.getTex(texName));
 		special1Sprite.setScale(0.3f, 0.3f);
-		specialCost1.setString(std::to_string(sp->getAPCost()));
+		specialCost1.setString(std::to_string(sp1->getAPCost()));
 		specialControl1.setString(Engine::keyToString(special1Key));
 		specialControl1.setPosition(special1Sprite.getPosition().x + (special1Sprite.getGlobalBounds().width / 2)
 			- (specialControl1.getGlobalBounds().width / 2), 1000.0f);
 		specialCost1.setPosition(special1Sprite.getPosition().x + special1Sprite.getGlobalBounds().width - costOffset -
 		(specialCost1.getGlobalBounds().width), special1Sprite.getPosition().y + costOffset - (specialCost1.getGlobalBounds().height / 2));
+		special1Box = special1Sprite.getGlobalBounds();
 	}
 	else if (special2Sprite.getTexture() == NULL)
 	{
+		sp->setKey(special1Key);
+		sp2 = sp;
 		special2Sprite.setTexture(Engine::tm.getTex(texName));
 		special2Sprite.setScale(0.3f, 0.3f);
 		specialCost2.setString(std::to_string(sp->getAPCost()));
 		specialControl2.setString(Engine::keyToString(special2Key));
 		specialControl2.setPosition(special2Sprite.getPosition().x + (special2Sprite.getGlobalBounds().width / 2)
 			- (specialControl2.getGlobalBounds().width / 2), 1000.0f);
+		special2Box = special2Sprite.getGlobalBounds();
 	}
 	else if (special3Sprite.getTexture() == NULL)
 	{
+		sp->setKey(special1Key);
+		sp3 = sp;
 		special3Sprite.setTexture(Engine::tm.getTex(texName));
 		special3Sprite.setScale(0.3f, 0.3f);
 		specialCost3.setString(std::to_string(sp->getAPCost()));
 		specialControl3.setString(Engine::keyToString(special3Key));
 		specialControl3.setPosition(special3Sprite.getPosition().x + (special3Sprite.getGlobalBounds().width / 2)
 			- (specialControl3.getGlobalBounds().width / 2), 1000.0f);
+		special3Box = special3Sprite.getGlobalBounds();
 	}
 	else if (special4Sprite.getTexture() == NULL)
 	{
+		sp->setKey(special1Key);
+		sp4 = sp;
 		special4Sprite.setTexture(Engine::tm.getTex(texName));
 		special4Sprite.setScale(0.3f, 0.3f);
 		specialCost4.setString(std::to_string(sp->getAPCost()));
 		specialControl4.setString(Engine::keyToString(special4Key));
 		specialControl4.setPosition(special4Sprite.getPosition().x + (special4Sprite.getGlobalBounds().width / 2)
 			- (specialControl4.getGlobalBounds().width / 2), 1000.0f);
+		special4Box = special4Sprite.getGlobalBounds();
 	}
 }
 
@@ -247,21 +294,21 @@ void CombatUI::UpdateControls()
 	runControl.setString(Engine::keyToString(runKey));
 
 	attackControl.setPosition(attackSprite.getPosition().x + (attackSprite.getGlobalBounds().width / 2)
-		- (attackControl.getGlobalBounds().width / 2), 900.0f);
+		- (attackControl.getGlobalBounds().width / 2), 875.0f);
 	healControl.setPosition(healSprite.getPosition().x + (healSprite.getGlobalBounds().width / 2)
-		- (healControl.getGlobalBounds().width / 2), 900.0f);
+		- (healControl.getGlobalBounds().width / 2), 875.0f);
 	rechargeControl.setPosition(rechargeSprite.getPosition().x + (rechargeSprite.getGlobalBounds().width / 2)
-		- (rechargeControl.getGlobalBounds().width / 2), 900.0f);
+		- (rechargeControl.getGlobalBounds().width / 2), 875.0f);
 	runControl.setPosition(runSprite.getPosition().x + (runSprite.getGlobalBounds().width / 2)
-		- (runControl.getGlobalBounds().width / 2), 900.0f);
+		- (runControl.getGlobalBounds().width / 2), 875.0f);
 	specialControl1.setPosition(special1Sprite.getPosition().x + (special1Sprite.getGlobalBounds().width / 2)
-		- (specialControl1.getGlobalBounds().width / 2), 1000.0f);
+		- (specialControl1.getGlobalBounds().width / 2), 975.0f);
 	specialControl2.setPosition(special2Sprite.getPosition().x + (special2Sprite.getGlobalBounds().width / 2)
-		- (specialControl2.getGlobalBounds().width / 2), 1000.0f);
+		- (specialControl2.getGlobalBounds().width / 2), 975.0f);
 	specialControl3.setPosition(special3Sprite.getPosition().x + (special3Sprite.getGlobalBounds().width / 2)
-		- (specialControl3.getGlobalBounds().width / 2), 1000.0f);
+		- (specialControl3.getGlobalBounds().width / 2), 975.0f);
 	specialControl4.setPosition(special4Sprite.getPosition().x + (special4Sprite.getGlobalBounds().width / 2)
-		- (specialControl3.getGlobalBounds().width / 2), 1000.0f);
+		- (specialControl3.getGlobalBounds().width / 2), 975.0f);
 }
 
 void CombatUI::UpdateCosts()
@@ -690,16 +737,44 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 		sound.setVolume(soundVolume* masterVolume / 100);
 		sound.play();
 		delayClock.restart();
-		if (Engine::getWindowSize().y != 1080)
+		if (Engine::getWindowSize().y == 1080)
+		{
+			if (!Engine::getFullscreen())
+			{
+				ResChange.setString("FS");
+				Engine::SetFullScreen(Engine::GetWindow(), true);
+			}
+			else
+			{
+				ResChange.setString("720p");
+				Engine::SetFullScreen(Engine::GetWindow(), false);
+				Engine::ChangeResolution(1280, 720, GAMEX, GAMEY);
+			}
+		}
+		else
 		{
 			ResChange.setString("1080p");
 			Engine::ChangeResolution(1920, 1080, GAMEX, GAMEY);
 		}
-		else
+	}
+
+	if (toMenuBox.contains(cursPos))
+	{
+		toMenuText.setColor(Green);
+		if (Mouse::isButtonPressed(Mouse::Left))
 		{
-			ResChange.setString("720p");
-			Engine::ChangeResolution(1280, 720, GAMEX, GAMEY);
+			sound.setVolume(soundVolume* masterVolume / 100);
+			sound.play();
+			menuScene.setSettings(false);
+			gameScene.gameMusic.stop();
+			Engine::ChangeScene(&menuScene);
+			menuScene.setSettings(false);
+			gameScene.setPause(false);
 		}
+	}
+	else
+	{
+		toMenuText.setColor(White);
 	}
 
 	if(AttackBox.contains(cursPos))
@@ -780,8 +855,10 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 
 }
 
-void SettingUI::Load(sf::Font &font)
+void SettingUI::Load(sf::Font &font, bool p)
 {
+	pause = p;
+
 	sound.setBuffer(Engine::tm.getSound("ButtonPress"));
 
 	ResChange.setFont(font);
@@ -960,6 +1037,15 @@ void SettingUI::Load(sf::Font &font)
 	HowToText.setString("To change controls hover\nmouse over key and hold down\n new key on keyboard");
 	HowToText.setCharacterSize(25);
 	HowToText.setPosition(1200.0f, 400.0f);
+
+	if (pause)
+	{
+		toMenuText.setFont(Engine::tm.getFont());
+		toMenuText.setString("To Main Menu\n(Remember to save!)");
+		toMenuText.setCharacterSize(30);
+		toMenuText.setPosition(50.0f, 50.0f);
+		toMenuBox = toMenuText.getGlobalBounds();
+	}
 }
 
 void SettingUI::Render()
@@ -997,19 +1083,32 @@ void SettingUI::Render()
 	Renderer::queue(&ResetControls);
 	Renderer::queue(&BackButton);
 	Renderer::queue(&HowToText);
+	if (pause)
+	{
+		Renderer::queue(&toMenuText);
+	}
 }
 
 void SettingUI::ResetKeys()
 {
 	AttackKeyText.setString("1");
+	attackKey = Keyboard::Num1;
 	HealKeyText.setString("2");
+	healKey = Keyboard::Num2;
 	RechargeKeyText.setString("3");
+	rechargeKey = Keyboard::Num3;
 	RunKeyText.setString("4");
+	runKey = Keyboard::Num4;
 	Special1KeyText.setString("Q");
+	special1Key = Keyboard::Num1;
 	Special2KeyText.setString("W");
+	special2Key = Keyboard::Num2;
 	Special3KeyText.setString("E");
+	special3Key = Keyboard::Num3;
 	Special4KeyText.setString("R");
+	special4Key = Keyboard::Num4;
 	PauseKeyText.setString("Tab");
+	pauseKey = Keyboard::Tab;
 
 	AttackBox = AttackKeyText.getGlobalBounds();
 	HealBox = AttackKeyText.getGlobalBounds();

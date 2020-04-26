@@ -1,26 +1,101 @@
 #pragma once
 #include "SpecialAbility.h"
+#include "cmp_sprites.h"
 
 class LaserBurst : public SpecialAbility {
-protected:
-
 public:
-	//explicit LaserBurst(Entity* p);
-	//LaserBurst() = delete;
-
 	void update(double dt);
 	void load();
 	void doEffect() override;
-
+	void checkKey() override;
 };
 
 class OverloadWeapon : public SpecialAbility
 {
+private:
+	int amount;
 public:
-	//explicit OverloadWeapon(Entity* p);
-	//OverloadWeapon() = delete;
-
 	void update(double dt);
 	void load();
 	void doEffect() override;
+	void checkKey() override;
+	void Reset() override;
+};
+
+class UncannySpeed : public SpecialAbility
+{
+private:
+	int amount;
+public:
+	void update(double dt);
+	void load();
+	void doEffect() override;
+	void checkKey() override;
+	void Reset() override;
+};
+
+class PrimalInstincts : public SpecialAbility
+{
+private:
+	int amount;
+public:
+	void update(double dt);
+	void load();
+	void doEffect() override;
+	void checkKey() override;
+	void Reset() override;
+};
+
+class DeadlyFumes : public SpecialAbility
+{
+private:
+	bool used;
+	std::shared_ptr<SpriteComponent> enemySprite;
+public:
+	void update(double dt);
+	void load();
+	void doEffect() override;
+	void turnStart() override;
+	void checkKey() override;
+	void Reset() override;
+};
+
+class MagmaGrenade : public SpecialAbility
+{
+private:
+	bool used;
+	std::shared_ptr<SpriteComponent> enemySprite;
+public:
+	void update(double dt);
+	void load();
+	void doEffect() override;
+	void turnStart() override;
+	void checkKey() override;
+	void Reset() override;
+};
+
+class NanoBots : public SpecialAbility
+{
+private:
+	bool used;
+	std::shared_ptr<SpriteComponent> enemySprite;
+public:
+	void update(double dt);
+	void load();
+	void doEffect() override;
+	void turnStart() override;
+	void checkKey() override;
+	void Reset() override;
+};
+
+class HoloGamble : public SpecialAbility
+{
+private:
+	std::shared_ptr<SpriteComponent> enemySprite;
+public:
+	void update(double dt);
+	void load();
+	void doEffect() override;
+	void checkKey() override;
+	void Reset() override;
 };

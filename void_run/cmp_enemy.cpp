@@ -168,6 +168,11 @@ void BaseEnemyComponent::TakeDamage(float damage)
 	}
 }
 
+std::shared_ptr<SpriteComponent> BaseEnemyComponent::getSprite()
+{
+	return spriteManager;
+}
+
 int BaseEnemyComponent::getStrength() {
 	return _strength;
 }
@@ -199,4 +204,12 @@ void BaseEnemyComponent::setCurrentHealth(int health) {
 void BaseEnemyComponent::setDexterity(int dexterity)
 {
 	_dexterity = dexterity;
+}
+
+void BaseEnemyComponent::addStats(int strength, int maxhealth, int dexterity)
+{
+	_strength += strength;
+	_maxHealth += maxhealth;
+	currentHealth += maxhealth;
+	_dexterity += dexterity;
 }

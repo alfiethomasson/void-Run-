@@ -32,6 +32,10 @@ protected:
 	sf::FloatRect healBox;
 	sf::FloatRect rechargeBox;
 	sf::FloatRect runBox;
+	sf::FloatRect special1Box;
+	sf::FloatRect special2Box;
+	sf::FloatRect special3Box;
+	sf::FloatRect special4Box;
 	sf::Text attackControl;
 	sf::Text healControl;
 	sf::Text rechargeControl;
@@ -53,6 +57,11 @@ protected:
 
 	std::shared_ptr<BasePlayerComponent> player;
 
+	std::shared_ptr<SpecialAbility> sp1;
+	std::shared_ptr<SpecialAbility> sp2;
+	std::shared_ptr<SpecialAbility> sp3;
+	std::shared_ptr<SpecialAbility> sp4;
+
 	TextureManager* texManager;
 public:
 
@@ -62,6 +71,11 @@ public:
 	sf::FloatRect& getHealBox();
 	sf::FloatRect& getRechargeBox();
 	sf::FloatRect& getRunBox();
+	sf::FloatRect& getSp1Box();
+	sf::FloatRect& getSp2Box();
+	sf::FloatRect& getSp3Box();
+	sf::FloatRect& getSp4Box();
+
 	bool CheckBoxes(sf::Vector2f curspos);
 	void Render();
 	void Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm);
@@ -171,6 +185,7 @@ private:
 	sf::Text ResetControls;
 	sf::Text BackButton;
 	sf::Text HowToText;
+	sf::Text toMenuText;
 
 	sf::FloatRect ResButtonBox;
 	sf::FloatRect MasterLeftBox;
@@ -190,6 +205,7 @@ private:
 	sf::FloatRect Special4Box;
 	sf::FloatRect PauseBox;
 	sf::FloatRect ResetBox;
+	sf::FloatRect toMenuBox;
 
 	sf::Clock delayClock;
 	float delayTime;
@@ -198,12 +214,14 @@ private:
 
 	sf::Sound sound;
 
+	bool pause;
+
 public:
 	SettingUI() = default;
 	~SettingUI() = default;
 	void Update(const double& dt, sf::Vector2f cursPos);
 	void Render();
-	void Load(sf::Font &font);
+	void Load(sf::Font &font, bool p);
 
 	void CheckKeyPress(sf::Text& changeText, sf::FloatRect& box, sf::Keyboard::Key&);
 	void UpdateSettings();

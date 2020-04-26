@@ -12,12 +12,14 @@ int slimedCounter;
 
 void BossEnemy::update(double dt)
 {
+	if (isTurn && isFinishedTurn != true)
+	{
 	srand(time(0));
 	int i = rand() % 5;
 
 	if (slimed == true)
 	{
-		currentEnemy->setDexterity(-1);
+		currentEnemy->addStats(0, 0, -1);
 		attackEnemy(5, 10000);
 		slimedCounter++;
 		gameScene.UpdateTextBox("The fluid coating you saps your strength.");
@@ -53,13 +55,10 @@ void BossEnemy::update(double dt)
 		behaviour = 3;
 	}
 	
-
-	if (isTurn && isFinishedTurn != true)
-	{
 		int enemyAI = rand() % 4;
 		if (behaviour == 0) //Aggressive
 		{
-			if ((currentHealth <= _maxHealth*0.8 && enemyAI == 0) || ((currentHealth < _maxHealth*0.4) && enemyAI == 1)) //20% chance below 80%HP, 40% below 40% HP.
+			if ((currentHealth <= _maxHealth * 0.8 && enemyAI == 0) || ((currentHealth < _maxHealth * 0.4) && enemyAI == 1)) //20% chance below 80%HP, 40% below 40% HP.
 			{
 				std::cout << "The enemy drains your life! \n";
 				gameScene.UpdateTextBox("The Alien Lord absorbs your health!");
@@ -95,9 +94,9 @@ void BossEnemy::update(double dt)
 		else if (behaviour == 1) //Defensive
 		{
 			if (((currentHealth >= (_maxHealth * 0.8)) && enemyAI == 0) //For every 20% of missing HP, the monster is 20% more likely to heal
-			|| ((currentHealth >= (_maxHealth * 0.6)) && ((enemyAI == 0 || enemyAI == 1)))
-			|| ((currentHealth >= (_maxHealth * 0.4)) && ((enemyAI == 0 || enemyAI == 1 || enemyAI == 2)))
-			|| ((currentHealth >= (_maxHealth * 0.2)) && ((enemyAI == 0 || enemyAI == 1 || enemyAI == 3))))
+				|| ((currentHealth >= (_maxHealth * 0.6)) && ((enemyAI == 0 || enemyAI == 1)))
+				|| ((currentHealth >= (_maxHealth * 0.4)) && ((enemyAI == 0 || enemyAI == 1 || enemyAI == 2)))
+				|| ((currentHealth >= (_maxHealth * 0.2)) && ((enemyAI == 0 || enemyAI == 1 || enemyAI == 3))))
 			{
 				std::cout << "The enemy grows stronger, regaining lost health! \n";
 				gameScene.UpdateTextBox("The Alien Lord absorbs power from the air around it!");
@@ -177,7 +176,7 @@ void BossEnemy::update(double dt)
 				_strength += 8;
 				_dexterity += 8;
 			}
-		else //Otherwise, BIG ATTACKS FOREVER BABYYYYY
+			else //Otherwise, BIG ATTACKS FOREVER BABYYYYY
 			{
 				std::cout << "The enemy attacks twice with a relentless determination! \n";
 				gameScene.UpdateTextBox("The Alien Lord swings wildly out of desperation!");
@@ -194,8 +193,21 @@ void BossEnemy::load()
 	auto sm = _parent->GetCompatibleComponent<SpriteComponent>();
 	spriteManager = sm[0];
 
-	BaseEnemyComponent::load();
 	//currentEnemy->setRunChance(1); //No escape. This is it. Battle to the death.
+	if (specialMove == 0)
+	{
+		spriteManager->AddIcon("Excruciate", "EXCRUCIATE\nDrastically lowers chance of escape", true);
+	}
+	if (specialMove == 1)
+	{
+		spriteManager->AddIcon("ChargedAttack", "CHARGED ATTACK\nCharges for one turn to\nunleash a powerful attack", true);
+	}
+	if (specialMove == 2)
+	{
+		spriteManager->AddIcon("SuicideCharge", "SUICIDE CHARGE\nGives itself a big strength\nboost but takes more damage", true);
+	}
+	BaseEnemyComponent::load();
+
 }
 
 void BossEnemy::render()

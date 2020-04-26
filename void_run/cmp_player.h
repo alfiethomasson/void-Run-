@@ -60,7 +60,7 @@ public:
 	int _level;
 
 	explicit BasePlayerComponent(Entity* p, float maxhealth, float currenthealth, float strength, float dex,
-		float experience, int actionPoints, CombatUI *ui, GameUI *gameUI);
+		float experience, int level, int actionPoints, CombatUI *ui, GameUI *gameUI);
 	BasePlayerComponent() = delete;
 
 	void render() override;
@@ -70,6 +70,8 @@ public:
 	void updateEnemy(std::shared_ptr<BaseEnemyComponent> e);
 	bool checkEnemyStatus();
 	bool checkLevelUp();
+
+	void StartTurn();
 
 	void attack(float damage, float dex);
 	void heal(float healBy);
@@ -89,6 +91,9 @@ public:
 	int getCurrentHealth();
 	int getExperience();
 	int getRunChance();
+	std::shared_ptr<BaseEnemyComponent> getEnemy();
+	std::shared_ptr<AbilityManager> getAbilityManager();
+	std::shared_ptr<SpriteComponent> getSpriteComponent();
 
 	void setMaxAP(int maxAP);
 	void setStrength(int strength);
@@ -99,6 +104,7 @@ public:
 	void setRunChance(int run);
 
 	void addStats(int strength, int health, int dex);
+	void addAbility(std::shared_ptr <SpecialAbility> sp);
 	void UpdateStats();
 
 	void makeHPBar();

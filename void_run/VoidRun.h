@@ -111,14 +111,13 @@ private:
 
 	bool loadFromSave;
 
-	sf::Music gameMusic;
-
 	SettingUI Settings;
 
 public:
 	sf::Text screenText;
 	CombatUI combatUI;
 	GameUI gameUI;
+	sf::Music gameMusic;
 
 	sf::Text descText;
 	sf::RectangleShape descRect;

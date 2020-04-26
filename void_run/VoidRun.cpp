@@ -294,7 +294,7 @@ void MenuScene::Load() {
 	special3Key = Keyboard::E;
 	special4Key = Keyboard::R;
 
-	Settings.Load(font);
+	Settings.Load(font, false);
 }
 
 void MenuScene::setSettings(bool tf)
@@ -369,6 +369,7 @@ void GameScene::Load() {
 		float strength = 0;
 		float dex = 0;
 		float exp = 0;
+		int level = 0;
 
 		if (file.is_open())
 		{
@@ -377,11 +378,11 @@ void GameScene::Load() {
 			{
 				if (linenumber == 0)
 				{
-					HPMax = x;
+					currentHP = x;
 				}
 				else if (linenumber == 1)
 				{
-					currentHP = x;
+					HPMax = x;
 				}
 				else if (linenumber == 2)
 				{
@@ -395,8 +396,11 @@ void GameScene::Load() {
 				{
 					exp = x;
 				}
+				else if (linenumber == 5)
+				{
+					level = x;
+				}
 				linenumber++;
-				//test += x;
 			}
 		}
 
@@ -427,8 +431,9 @@ void GameScene::Load() {
 		}
 		//Creates Player and adds components
 		pl = make_shared<Entity>();
-		player = pl->addComponent<BasePlayerComponent>(HPMax, currentHP, strength, dex, exp, 10, &combatUI, &gameUI);
-		am = pl->addComponent<AbilityManager>(3);
+		player = pl->addComponent<BasePlayerComponent>(HPMax, currentHP, strength, dex, exp, level, 10, &combatUI, &gameUI);
+		am = pl->addComponent<AbilityManager>(4, &combatUI);
+		am->Load();
 		inv = pl->addComponent<Inventory>(6, &gameUI);
 		inv->Load();
 		playerSprite = pl->addComponent<PlayerSprite>();
@@ -459,8 +464,9 @@ void GameScene::Load() {
 
 		//Creates Player and adds components
 		pl = make_shared<Entity>();
-		player = pl->addComponent<BasePlayerComponent>(100.0f, 100.0f, 20.0f, 10.0f, 0.0f, 10, &combatUI, &gameUI);
-		am = pl->addComponent<AbilityManager>(3);
+		player = pl->addComponent<BasePlayerComponent>(100.0f, 100.0f, 20.0f, 10.0f, 0.0f, 1, 10, &combatUI, &gameUI);
+		am = pl->addComponent<AbilityManager>(4, &combatUI);
+		am->Load();
 		inv = pl->addComponent<Inventory>(6, &gameUI);
 		inv->Load();
 		playerSprite = pl->addComponent<PlayerSprite>();
@@ -503,7 +509,7 @@ void GameScene::Load() {
 	gameMusic.setVolume(50.0f);
 	gameMusic.setLoop(true);
 
-	Settings.Load(Engine::tm.getFont());
+	Settings.Load(Engine::tm.getFont(), true);
 
 	//Calls ChangeRoom to start the game with a random room
 	ChangeRoom();
@@ -553,10 +559,11 @@ void GameScene::Update(const double& dt) {
 		//Adds random special item to inventory
 		if (Keyboard::isKeyPressed(Keyboard::I) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
-			auto tempItem = itemDB.randomSpecialItem();
-			UpdateTextBox(tempItem->description);
-			inv->add(tempItem, true);
-			player->addStats(100, 300, 100);
+			//auto tempItem = itemDB.randomSpecialItem();
+			//UpdateTextBox(tempItem->description);
+			//inv->add(tempItem, true);
+			//player->addStats(100, 300, 100);
+			playerSprite->playDie();
 			scene_clock.restart();
 			//std::cout << "\nshould play attack\n";
 			std::cout << "MouseX: " << Mouse::getPosition().x << " MouseY: " << Mouse::getPosition().y << "\n";
@@ -661,16 +668,16 @@ void GameScene::ChangeRoom() {
 	}
 	//srand to ensure the random number is actually random
 	srand(time(0));
-	int roomType = rand() % 2;
+	int roomType = rand() % 8;
 	//TODO: Make it so that if the player's EXP is enough to level up, then the room automatically sets to 2, otherwise it is set to 0 or 1 aat random.
 	if (player->checkLevelUp()) {
-		roomType = 2;
+		roomType = 10;
 	}
-	if (player->level >= 5) {
+	if (player->level > 5) {
 		roomType = 0; //Once hitting level 5, the player will always go into a fight next.
 	}
 
-	if (roomType == 0) //Combat Room
+	if (roomType < 7) //Combat Room
 	{
 		UpdateTextBox("Entered Combat Room");
 		//Makes new combat Room
@@ -688,7 +695,7 @@ void GameScene::ChangeRoom() {
 		//Set's current room to be the newly created room
 		currentRoom = newRoom;
 	}
-	else if (roomType == 1) //Treasure Room
+	else if (roomType == 7) //Treasure Room
 	{
 		std::shared_ptr<TreasureRoom> newRoom = make_shared<TreasureRoom>(pl, itemDB);
 		newRoom->Load();
@@ -696,7 +703,7 @@ void GameScene::ChangeRoom() {
 		currentRoom = newRoom;
 		UpdateTextBox("Entered Treasure Room");
 	}
-	else if (roomType == 2)
+	else if (roomType == 10)
 	{
 		std::shared_ptr<LevelUpRoom> newRoom = make_shared<LevelUpRoom>(pl);
 		newRoom->Load();
@@ -763,6 +770,12 @@ void GameScene::LoadTextures()
 	Engine::tm.loadTexture("Excruciate", "Icons/Excruciate.png");
 	Engine::tm.loadTexture("Bullseye", "Icons/Bullseye.png");
 	Engine::tm.loadTexture("OverloadWeapon", "Icons/OverloadWeapon.png");
+	Engine::tm.loadTexture("PrimalInstincts", "Icons/PrimalInstincts.png");
+	Engine::tm.loadTexture("UncannySpeed", "Icons/UncannySpeed.png");
+	Engine::tm.loadTexture("DeadlyFumes", "Icons/DeadlyFumes.png");
+	Engine::tm.loadTexture("MagmaGrenade", "Icons/MagmaGrenade.png");
+	Engine::tm.loadTexture("HoloGamble", "Icons/HoloGamble.png");
+	Engine::tm.loadTexture("NanoBots", "Icons/NanoBots.png");
 	Engine::tm.loadTexture("PainShare", "Icons/PainShare.png");
 	Engine::tm.loadTexture("Regeneration", "Icons/Regeneration.png");
 	Engine::tm.loadTexture("SuicideCharge", "Icons/SuicideCharge.png");
@@ -779,6 +792,9 @@ void GameScene::LoadTextures()
 	Engine::tm.loadTexture("Alien3Attack", "Sprites/SpriteSheets/Alien3Attack.png");
 	Engine::tm.loadTexture("Alien3Hit", "Sprites/SpriteSheets/Alien3Hit.png");
 	Engine::tm.loadTexture("Alien3Die", "Sprites/SpriteSheets/Alien3Die.png");
+	Engine::tm.loadTexture("BossAttack", "Sprites/SpriteSheets/BossAttack.png");
+	Engine::tm.loadTexture("BossHit", "Sprites/SpriteSheets/BossHit.png");
+	Engine::tm.loadTexture("BossDie", "Sprites/SpriteSheets/BossDie.png");
 	Engine::tm.loadSound("Heal", "Sounds/FX/Heal.wav");
 	Engine::tm.loadSound("Attack", "Sounds/FX/PlayerAttack.wav");
 	Engine::tm.loadSound("Run", "Sounds/FX/Run.wav");
@@ -788,6 +804,10 @@ void GameScene::LoadTextures()
 	Engine::tm.loadSound("ChestOpening", "Sounds/FX/ChestOpening.wav");
 	Engine::tm.loadSound("ButtonPress", "Sounds/FX/ButtonPress.wav");
 	Engine::tm.loadSound("PlayerHit", "Sounds/FX/PlayerHit.wav");
+	Engine::tm.loadSound("PlayerDie", "Sounds/FX/PlayerDie.wav");
+	Engine::tm.loadSound("MediumAttack", "Sounds/FX/MediumAttack.wav");
+	Engine::tm.loadSound("HeavyAttack", "Sounds/FX/HeavyAttack.wav");
+	Engine::tm.loadSound("PowerUp", "Sounds/FX/PowerUp.wav");
 }
 
 void GameScene::UpdateDesctext(std::string desc, sf::Vector2f pos)
@@ -828,6 +848,7 @@ void GameScene::SaveGame()
 		savefile << player->getStrength() << std::endl;
 		savefile << player->getDexterity() << std::endl;
 		savefile << player->getExperience() << std::endl;
+		savefile << player->level << std::endl;
 	}
 	else
 	{
@@ -844,7 +865,7 @@ void GameScene::SaveGame()
 		iafile << "END" << std::endl;
 		for (auto a : am->getSpecials())
 		{
-			iafile << a->texName << std::endl;
+			iafile << a->getTexName() << std::endl;
 		}
 	}
 	else
