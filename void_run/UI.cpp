@@ -39,7 +39,7 @@ void CombatUI::Update(double dt, sf::Vector2f cursPos)
 {
 	if (CheckBoxes(cursPos))
 	{
-		if (getAttackBox().contains(cursPos))
+		if (attackBox.contains(cursPos))
 		{
 			//std::cout << "HEY";
 			gameScene.UpdateDesctext("ATTACK ENEMY\nDamage = " + std::to_string(player->getStrength()), sf::Vector2f(attackBox.getPosition().x,
@@ -172,8 +172,6 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 
 sf::FloatRect& CombatUI::getAttackBox()
 {
-	//std::cout << "attack sprite is at: " << attackSprite.getPosition() << "\n";
-	//return attackSprite.getTextureRect();
 	return attackBox;
 }
 
@@ -214,7 +212,7 @@ sf::FloatRect& CombatUI::getSp4Box()
 
 bool CombatUI::CheckBoxes(sf::Vector2f curspos)
 {
-	if (attackSprite.getTextureRect().contains((sf::Vector2i)curspos) 
+	if (attackBox.contains(curspos) || healBox.contains(curspos)
 		|| rechargeBox.contains(curspos) || runBox.contains(curspos) || special1Box.contains(curspos)
 		|| special2Box.contains(curspos) || special3Box.contains(curspos) || special4Box.contains(curspos))
 	{

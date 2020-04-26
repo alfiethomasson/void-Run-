@@ -11,12 +11,14 @@ int slimedCounter;
 
 void BossEnemy::update(double dt)
 {
+	if (isTurn && isFinishedTurn != true)
+	{
 	srand(time(0));
 	int i = rand() % 5;
 
 	if (slimed = true)
 	{
-		currentEnemy->_dexterity -= 1;
+		currentEnemy->addStats(0, 0, -1);
 		attackEnemy(5, 10000);
 		slimedCounter++;
 	}
@@ -57,7 +59,7 @@ void BossEnemy::update(double dt)
 		int enemyAI = rand() % 4;
 		if (behaviour == 0) //Aggressive
 		{
-			if ((currentHealth <= _maxHealth*0.8 && enemyAI == 0) || ((currentHealth < _maxHealth*0.4) && enemyAI == 1)) //20% chance below 80%HP, 40% below 40% HP.
+			if ((currentHealth <= _maxHealth * 0.8 && enemyAI == 0) || ((currentHealth < _maxHealth * 0.4) && enemyAI == 1)) //20% chance below 80%HP, 40% below 40% HP.
 			{
 				std::cout << "The enemy drains your life! \n";
 				if (attackEnemy(_strength, _dexterity))
@@ -66,7 +68,7 @@ void BossEnemy::update(double dt)
 				}
 				EndTurn();
 			}
-			else if ((currentEnemy->getCurrentHealth >= currentHealth) || enemyAI == 2) //Flat 20% chance, or guaranteed if the player has more HP than the alien
+			else if ((currentEnemy->getCurrentHealth() >= currentHealth) || enemyAI == 2) //Flat 20% chance, or guaranteed if the player has more HP than the alien
 			{
 				std::cout << "The enemy attacks twice with a relentless determination! \n";
 				attackEnemy(_strength * 1.5, _dexterity - 25);
@@ -89,9 +91,9 @@ void BossEnemy::update(double dt)
 		else if (behaviour == 1) //Defensive
 		{
 			if (((currentHealth >= (_maxHealth * 0.8)) && enemyAI == 0) //For every 20% of missing HP, the monster is 20% more likely to heal
-			|| ((currentHealth >= (_maxHealth * 0.6)) && ((enemyAI == 0 || enemyAI == 1)))
-			|| ((currentHealth >= (_maxHealth * 0.4)) && ((enemyAI == 0 || enemyAI == 1 || enemyAI == 2)))
-			|| ((currentHealth >= (_maxHealth * 0.2)) && ((enemyAI == 0 || enemyAI == 1 || enemyAI == 3))))
+				|| ((currentHealth >= (_maxHealth * 0.6)) && ((enemyAI == 0 || enemyAI == 1)))
+				|| ((currentHealth >= (_maxHealth * 0.4)) && ((enemyAI == 0 || enemyAI == 1 || enemyAI == 2)))
+				|| ((currentHealth >= (_maxHealth * 0.2)) && ((enemyAI == 0 || enemyAI == 1 || enemyAI == 3))))
 			{
 				std::cout << "The enemy grows stronger, regaining lost health! \n";
 				currentHealth += (_maxHealth * 0.1);
@@ -103,7 +105,7 @@ void BossEnemy::update(double dt)
 				_strength += 4;
 				_dexterity += 4;
 			}
-			else if ((currentHealth < currentEnemy->getCurrentHealth) || (enemyAI == 0 || enemyAI == 1 || enemyAI == 2)) //If the PC has more HP, it'll Life Drain. Otherwise, a 60% chance.
+			else if ((currentHealth < currentEnemy->getCurrentHealth()) || (enemyAI == 0 || enemyAI == 1 || enemyAI == 2)) //If the PC has more HP, it'll Life Drain. Otherwise, a 60% chance.
 			{
 				std::cout << "The enemy makes a drains your life! \n";
 				if (attackEnemy(_strength, _dexterity))
@@ -161,7 +163,7 @@ void BossEnemy::update(double dt)
 				_strength += 8;
 				_dexterity += 8;
 			}
-		else //Otherwise, BIG ATTACKS FOREVER BABYYYYY
+			else //Otherwise, BIG ATTACKS FOREVER BABYYYYY
 			{
 				std::cout << "The enemy attacks twice with a relentless determination! \n";
 				attackEnemy(_strength * 1.5, _dexterity - 20);
@@ -170,4 +172,31 @@ void BossEnemy::update(double dt)
 			}
 		}
 	}
+	}
+}
+
+void BossEnemy::load()
+{
+	auto sm = _parent->GetCompatibleComponent<SpriteComponent>();
+	spriteManager = sm[0];
+
+	if (specialMove == 0)
+	{
+		spriteManager->AddIcon("Excruciate", "EXCRUCIATE\nDrastically lowers chance of escape", true);
+	}
+	if (specialMove == 1)
+	{
+		spriteManager->AddIcon("ChargedAttack", "CHARGED ATTACK\nCharges for one turn to\nunleash a powerful attack", true);
+	}
+	if (specialMove == 2)
+	{
+		spriteManager->AddIcon("SuicideCharge", "SUICIDE CHARGE\nGives itself a big strength\nboost but takes more damage", true);
+	}
+	BaseEnemyComponent::load();
+
+}
+
+void BossEnemy::render()
+{
+	BaseEnemyComponent::render();
 }
