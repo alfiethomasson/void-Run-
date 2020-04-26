@@ -56,7 +56,7 @@ void BasePlayerComponent::update(double dt) {
 				}
 				if (Keyboard::isKeyPressed(healKey) && CheckAP(healCost))
 				{
-					heal(30);
+					heal(_dexterity);
 				}
 				if (Keyboard::isKeyPressed(rechargeKey) && CheckAP(rechargeCost))
 				{
@@ -75,7 +75,7 @@ void BasePlayerComponent::update(double dt) {
 					}
 					if (combatUI.getHealBox().contains(cursPos) && CheckAP(healCost))
 					{
-						heal(30);
+						heal(_dexterity);
 					}
 					if (combatUI.getRechargeBox().contains(cursPos) && CheckAP(rechargeCost))
 					{

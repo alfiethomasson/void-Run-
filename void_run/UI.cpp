@@ -47,7 +47,7 @@ void CombatUI::Update(double dt, sf::Vector2f cursPos)
 		}
 		if (healBox.contains(cursPos))
 		{
-			gameScene.UpdateDesctext("HEAL\nAmount = " + std::to_string(30), sf::Vector2f(healBox.getPosition().x,
+			gameScene.UpdateDesctext("HEAL\nAmount = " + std::to_string(player->getDexterity()), sf::Vector2f(healBox.getPosition().x,
 				healBox.getPosition().y - 75.0f));
 		}
 		if (rechargeBox.contains(cursPos))
