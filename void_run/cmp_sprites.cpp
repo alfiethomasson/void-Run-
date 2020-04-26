@@ -281,3 +281,9 @@ void SpriteComponent::RemoveAllIcons()
 {
 	icons.clear();
 }
+
+void SpriteComponent::ChangeIcon(int position, std::string& texname, std::string& desc)
+{
+	icons.at(position).sprite.setTexture(Engine::tm.getTex(texname));
+	icons.at(position).description = desc;
+}
