@@ -557,6 +557,7 @@ void GameScene::Update(const double& dt) {
 		}
 		//calls the current rooms update function
 		gameUI.Update(dt, cursPos);
+		inv->update(dt);
 
 		//Adds random common item
 		if (Keyboard::isKeyPressed(Keyboard::U) && scene_delay.asSeconds() >= sceneChangeDelay)
