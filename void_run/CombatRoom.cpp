@@ -92,7 +92,8 @@ void CombatRoom::Load() {
 	auto enemy1 = make_shared<Entity>();
 	//auto s = enemy1->addComponent<ShapeComponent>();
 	srand(time(0));
-	int enemyType = rand() % 10; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
+	int enemyType = rand() % 10; //Random number from 0-9. 0-5 is easy, 6-8 is medium, 9 is tough.
+	enemyType = 9;
 	if(p->level >= 5)
 	{
 		enemyType = 10;

@@ -29,6 +29,11 @@ void BossEnemy::update(double dt)
 		slimed = false;
 		slimedCounter = 0;
 	}
+	if (turnCounter == 1)
+	{
+		gameScene.UpdateTextBox("THE ALIEN LORD ROARS!!!");
+		currentEnemy->setRunChance(0);
+	}
 
 	if (_maxHealth * 0.7) //Whilst above 70% of HP, the enemy is most likely to be passive
 	{
@@ -199,7 +204,6 @@ void BossEnemy::load()
 	spriteManager = sm[0];
 
 	spriteManager->AddIcon("Passive", "PASSIVE\The Alien Lord is indifferent towards you!", true);
-	//currentEnemy->setRunChance(1); //No escape. This is it. Battle to the death.
 	BaseEnemyComponent::load();
 
 }
