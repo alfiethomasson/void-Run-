@@ -19,7 +19,7 @@ void LaserBurst::doEffect()
 			player->SpendAP(APCost);
 			std::cout << "LASER BURST!\n";
 			gameScene.UpdateTextBox("LASER BURST!");
-			player->attack(player->getStrength() * 2, 0);
+			player->attack(player->getStrength() * 2, 0, "LaserBurst");
 			player->EndTurn();
 }
 
@@ -53,6 +53,10 @@ void OverloadWeapon::doEffect()
 			player->SpendAP(APCost);
 			player->addStats(50, 0, 0);
 			gameScene.UpdateTextBox("WEAPON OVERLOADED");
+			sf::Sound sound;
+			sound.setVolume(soundVolume * masterVolume / 100);
+			sound.setBuffer(Engine::tm.getSound("OverloadWeapon"));
+			sound.play();
 			player->EndTurn();
 			amount++;
 }
@@ -97,6 +101,10 @@ void UncannySpeed::doEffect()
 			player->addStats(0, 0, 50);
 			player->getSpriteComponent()->AddIcon(texName, "Improved Dexterity", false);
 			gameScene.UpdateTextBox("UNCANNY SPEED ACTIVATED");
+			sf::Sound sound;
+			sound.setVolume(soundVolume * masterVolume / 100);
+			sound.setBuffer(Engine::tm.getSound("UncannySpeed"));
+			sound.play();
 			player->EndTurn();
 }
 
@@ -140,6 +148,10 @@ void PrimalInstincts::doEffect()
 			player->addStats(20, 50, 20);
 			player->getSpriteComponent()->AddIcon(texName, "All stats improved", false);
 			gameScene.UpdateTextBox("PRIMAL INSTICTS ACTIVATED");
+			sf::Sound sound;
+			sound.setVolume(soundVolume * masterVolume / 100);
+			sound.setBuffer(Engine::tm.getSound("PrimalInstincts"));
+			sound.play();
 			amount += 1;
 			player->EndTurn();
 }
@@ -184,6 +196,10 @@ void DeadlyFumes::doEffect()
 			enemySprite = player->getEnemy()->getSprite();
 			enemySprite->AddIcon(texName, "Lowered Dex and\n damage over time", true);
 			gameScene.UpdateTextBox("DEADLY FUMES ACTIVATED");
+			sf::Sound sound;
+			sound.setVolume(soundVolume * masterVolume / 100);
+			sound.setBuffer(Engine::tm.getSound("DeadlyFumes"));
+			sound.play();
 			used = true;
 			player->EndTurn();
 }
@@ -232,6 +248,10 @@ void MagmaGrenade::doEffect()
 			player->getEnemy()->TakeDamage(player->getStrength());
 			enemySprite = player->getEnemy()->getSprite();
 			enemySprite->AddIcon(texName, "High Damage over Time", true);
+			sf::Sound sound;
+			sound.setVolume(soundVolume * masterVolume / 100);
+			sound.setBuffer(Engine::tm.getSound("MagmaGrenade"));
+			sound.play();
 			gameScene.UpdateTextBox("MAGMA GRENADE ACTIVATED");
 			used = true;
 			player->EndTurn();
@@ -279,6 +299,10 @@ void NanoBots::doEffect()
 {
 	player->SpendAP(APCost);
 	player->getSpriteComponent()->AddIcon(texName, "Healing every turn", false);
+	sf::Sound sound;
+	sound.setVolume(soundVolume * masterVolume / 100);
+	sound.setBuffer(Engine::tm.getSound("NanoBots"));
+	sound.play();
 	gameScene.UpdateTextBox("NANO BOTS ACTIVATED");
 	used = true;
 	player->EndTurn();
@@ -348,6 +372,11 @@ void HoloGamble::doEffect()
 	int randHP = distributionInteger2(generator3);
 
 	std::cout << "\nHolo gamble: " << randStr << " , " << randDex << " , " << randHP << "\n";
+
+	sf::Sound sound;
+	sound.setVolume(soundVolume * masterVolume / 100);
+	sound.setBuffer(Engine::tm.getSound("HoloGamble"));
+	sound.play();
 
 	player->addStats(randStr, randHP, randDex);
 

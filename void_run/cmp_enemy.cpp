@@ -85,10 +85,16 @@ void BaseEnemyComponent::updateEnemy(std::shared_ptr<BasePlayerComponent> player
 	currentEnemy = player;
 }
 
-bool BaseEnemyComponent::attackEnemy(float str, float dex)
+bool BaseEnemyComponent::attackEnemy(float str, float dex, std::string soundName)
 {
 	if (calculateHit(dex))
 	{
+		if (soundName != "")
+		{
+			sound.setVolume(soundVolume * masterVolume / 100);
+			sound.setBuffer(Engine::tm.getSound(soundName));
+			sound.play();
+		}
 		animClock.restart();
 		spriteManager->playAttack();
 		currentEnemy->takeDamage(str);

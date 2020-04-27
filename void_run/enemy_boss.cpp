@@ -20,7 +20,7 @@ void BossEnemy::update(double dt)
 	if (slimed == true)
 	{
 		currentEnemy->addStats(0, 0, -1);
-		attackEnemy(5, 10000);
+		attackEnemy(5, 10000, "HeavyAttack");
 		slimedCounter++;
 		gameScene.UpdateTextBox("You are hurt by the slime!");
 	}
@@ -63,7 +63,7 @@ void BossEnemy::update(double dt)
 			{
 				std::cout << "The enemy drains your life! \n";
 				gameScene.UpdateTextBox("The Alien Lord absorbs your health!");
-				if (attackEnemy(_strength, _dexterity))
+				if (attackEnemy(_strength, _dexterity, "HeavyAttack"))
 				{
 					currentHealth += _strength;
 				}
@@ -73,22 +73,22 @@ void BossEnemy::update(double dt)
 			{
 				std::cout << "The enemy attacks twice with a relentless determination! \n";
 				gameScene.UpdateTextBox("The Alien Lord attacks twice!");
-				attackEnemy(_strength * 1.5, _dexterity - 25);
-				attackEnemy(_strength * 1.5, _dexterity - 25);
+				attackEnemy(_strength * 1.5, _dexterity - 25, "HeavyAttack");
+				attackEnemy(_strength * 1.5, _dexterity - 25, "HeavyAttack");
 				EndTurn();
 			}
 			else if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2) //If neither others happen, 60% chance for this shit
 			{
 				std::cout << "The enemy makes a strong attack! \n";
 				gameScene.UpdateTextBox("The Alien Lord makes a powerful attack!");
-				attackEnemy(_strength * 2, _dexterity);
+				attackEnemy(_strength * 2, _dexterity, "HeavyAttack");
 				EndTurn();
 			}
 			else //If nothing else, medium attack time
 			{
 				std::cout << "The enemy makes a medium attack! \n";
 				gameScene.UpdateTextBox("The Alien Lord attacks you!");
-				attackEnemy(_strength + 5, _dexterity);
+				attackEnemy(_strength + 5, _dexterity, "HeavyAttack");
 				EndTurn();
 			}
 		}
@@ -116,7 +116,7 @@ void BossEnemy::update(double dt)
 			{
 				std::cout << "The enemy makes a drains your life! \n";
 				gameScene.UpdateTextBox("The Alien Lord absorbs your health!");
-				if (attackEnemy(_strength, _dexterity))
+				if (attackEnemy(_strength, _dexterity, "HeavyAttack"))
 				{
 					currentHealth += _strength;
 				}
@@ -142,7 +142,7 @@ void BossEnemy::update(double dt)
 			}
 			else if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2 || (_dexterity < currentEnemy->getDexterity() && enemyAI == 4)) //3/6 chance of attack. 4/6 if the player has higher dexterity
 			{
-				if (attackEnemy(0, _dexterity + 1))
+				if (attackEnemy(0, _dexterity + 1, "HeavyAttack"))
 				{
 					std::cout << "The enemy produces a viscous fluid, flinging it over you!";
 					gameScene.UpdateTextBox("The Alien Lord spits goo on you!");
@@ -166,7 +166,7 @@ void BossEnemy::update(double dt)
 			{
 				std::cout << "The enemy makes a medium attack! \n";
 				gameScene.UpdateTextBox("The Alien Lords attacks you.");
-				attackEnemy(_strength + 5, _dexterity);
+				attackEnemy(_strength + 5, _dexterity, "HeavyAttack");
 				EndTurn();
 			}
 		}
@@ -184,8 +184,8 @@ void BossEnemy::update(double dt)
 			{
 				std::cout << "The enemy attacks twice with a relentless determination! \n";
 				gameScene.UpdateTextBox("The Alien Lord attacks desperately!");
-				attackEnemy(_strength * 1.5, _dexterity - 20);
-				attackEnemy(_strength * 1.5, _dexterity - 20);
+				attackEnemy(_strength * 1.5, _dexterity - 20, "HeavyAttack");
+				attackEnemy(_strength * 1.5, _dexterity - 20, "HeavyAttack");
 				EndTurn();
 			}
 		}

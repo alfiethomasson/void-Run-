@@ -54,7 +54,7 @@ void BasePlayerComponent::update(double dt) {
 			{
 				if (Keyboard::isKeyPressed(attackKey) && CheckAP(baseAttackCost))
 				{
-					attack(_strength, _dexterity);
+					attack(_strength, _dexterity, "Attack");
 				}
 				if (Keyboard::isKeyPressed(healKey) && CheckAP(healCost))
 				{
@@ -73,7 +73,7 @@ void BasePlayerComponent::update(double dt) {
 				{
 					if (combatUI.getAttackBox().contains(cursPos) && CheckAP(baseAttackCost))
 					{
-						attack(_strength, _dexterity);
+						attack(_strength, _dexterity, "Attack");
 					}
 					if (combatUI.getHealBox().contains(cursPos) && CheckAP(healCost))
 					{
@@ -266,14 +266,14 @@ bool BasePlayerComponent::checkLevelUp () {
 	}
 }
 
-void BasePlayerComponent::attack(float str, float dex)
+void BasePlayerComponent::attack(float str, float dex, std::string soundName)
 {
 	SpendAP(baseAttackCost);
 	cout << "Player Attacks!";
 	if (calculateHit(dex))
 	{
 		currentEnemy->TakeDamage(str);
-		gameUI.playSound("Attack", 30);
+		gameUI.playSound("Attack", 100);
 		spriteManager->playAttack();
 		gameScene.UpdateTextBox("You shoot the enemy!");
 	}

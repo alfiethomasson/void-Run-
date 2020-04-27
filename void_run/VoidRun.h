@@ -154,6 +154,12 @@ private:
 	sf::Font font;
 	sf::FloatRect menuButtonBox;
 
+	sf::Music victoryMusic;
+	bool sceneEnd;
+
+	sf::Clock delayClock;
+	int delayTime;
+	int delayAmount;
 
 public:
 	VictoryScene() = default;

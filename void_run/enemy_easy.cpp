@@ -46,16 +46,16 @@ void EasyEnemy::update(double dt)
 		{
 			std::cout << "The enemy uses its unique attack: Double Slice! \n";
 			gameScene.UpdateTextBox("The enemy attacks twice with reckless abandon!");
-			attackEnemy(_strength, _dexterity - 10); //Double slice simply has the enemy make two individual attacks
-			attackEnemy(_strength, _dexterity - 10); //These attacks both have a -10 to hit
+			attackEnemy(_strength, _dexterity - 10, "WeakAttack"); //Double slice simply has the enemy make two individual attacks
+			attackEnemy(_strength, _dexterity - 10, "WeakAttack"); //These attacks both have a -10 to hit
 			EndTurn();
 		}
 		else if (specialMove == 1 && turnCounter % 2 == 1 && criticalCondition == true) //If they are below 40%, they'll switch to using it every other turn (1, 3, 5, 7, 9 etc)
 		{
 			std::cout << "The enemy uses its unique attack: Double Slice! \n";
 			gameScene.UpdateTextBox("The enemy swings twice with reckless abandon!");
-			attackEnemy(_strength, _dexterity - 10);
-			attackEnemy(_strength, _dexterity - 10);
+			attackEnemy(_strength, _dexterity - 10, "WeakAttack");
+			attackEnemy(_strength, _dexterity - 10, "WeakAttack");
 			EndTurn();
 		}
 		else if (specialMove == 2 && currentHealth <= _maxHealth && hasEnraged == false) //The first time the alien goes below its max HP, it always enrages
@@ -71,7 +71,7 @@ void EasyEnemy::update(double dt)
 		{
 			std::cout << "The enemy unleashes its rage! \n";
 			gameScene.UpdateTextBox("The enemy unleashes its rage!");
-			attackEnemy(_strength*2, _dexterity - 5);
+			attackEnemy(_strength*2, _dexterity - 5, "WeakAttack");
 			enraged = false;
 			EndTurn();
 		}
@@ -82,7 +82,7 @@ void EasyEnemy::update(double dt)
 			if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2 ) {
 				std::cout << "The enemy makes a weak attack! \n";
 				gameScene.UpdateTextBox("The enemy attacks you weakly.");
-				attackEnemy(_strength, _dexterity);
+				attackEnemy(_strength, _dexterity, "WeakAttack");
 				EndTurn();
 			}
 			else if (enemyAI == 3) {
@@ -96,7 +96,7 @@ void EasyEnemy::update(double dt)
 			else if (enemyAI == 4) {
 				std::cout << "The enemy makes a medium attack! \n";
 				gameScene.UpdateTextBox("The enemy makes an attack at you!");
-				attackEnemy(_strength + 5, _dexterity);
+				attackEnemy(_strength + 5, _dexterity, "WeakAttack");
 				EndTurn();
 			}
 		}
@@ -107,13 +107,13 @@ void EasyEnemy::update(double dt)
 			if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2) {
 				std::cout << "The enemy makes a weak attack! \n";
 				gameScene.UpdateTextBox("The enemy attacks you weakly.");
-				attackEnemy(_strength, _dexterity);
+				attackEnemy(_strength, _dexterity, "WeakAttack");
 				EndTurn();
 			}
 			else if (enemyAI == 4) {
 				std::cout << "The enemy makes a medium attack! \n";
 				gameScene.UpdateTextBox("The enemy makes an attack at you!");
-				attackEnemy(_strength + 5, _dexterity);
+				attackEnemy(_strength + 5, _dexterity, "WeakAttack");
 				EndTurn();
 			}
 		}

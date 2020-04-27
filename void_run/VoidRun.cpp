@@ -817,6 +817,16 @@ void GameScene::LoadTextures()
 	Engine::tm.loadSound("MediumAttack", "Sounds/FX/MediumAttack.wav");
 	Engine::tm.loadSound("HeavyAttack", "Sounds/FX/HeavyAttack.wav");
 	Engine::tm.loadSound("PowerUp", "Sounds/FX/PowerUp.wav");
+	Engine::tm.loadSound("WeakAttack", "Sounds/FX/WeakAttack.wav");
+	Engine::tm.loadSound("UncannySpeed", "Sounds/FX/UncannySpeed.wav");
+	Engine::tm.loadSound("Save", "Sounds/FX/Save.wav");
+	Engine::tm.loadSound("Roar", "Sounds/FX/Roar.wav");
+	Engine::tm.loadSound("OverloadWeapon", "Sounds/FX/OverloadWeapon.wav");
+	Engine::tm.loadSound("NanoBots", "Sounds/FX/NanoBots.wav");
+	Engine::tm.loadSound("MagmaGrenade", "Sounds/FX/MagmaGrenade.wav");
+	Engine::tm.loadSound("HoloGamble", "Sounds/FX/HoloGamble.wav");
+	Engine::tm.loadSound("DeadlyFumes", "Sounds/FX/DeadlyFumes.wav");
+	Engine::tm.loadSound("LaserBurst", "Sounds/FX/LaserBurst.wav");
 }
 
 void GameScene::UpdateDesctext(std::string desc, sf::Vector2f pos)
@@ -886,6 +896,8 @@ void VictoryScene::Render()
 void VictoryScene::Load()
 {
 	font.loadFromFile("res/Fonts/venusrising.ttf");
+	sceneEnd = false;
+	delayAmount = 2.0f;
 
 	storyMessage.setFont(font);
 	storyMessage.setCharacterSize(20);
@@ -907,6 +919,10 @@ void VictoryScene::Load()
 
 	menuButtonBox = menuButton.getGlobalBounds(); //Creates the button boundaries
 
+	victoryMusic.openFromFile("res/Sounds/Music/VictoryMusic.wav");
+	victoryMusic.setLoop(true);
+	victoryMusic.play();
+
 }
 
 void VictoryScene::Update(const double& dt)
@@ -915,7 +931,14 @@ void VictoryScene::Update(const double& dt)
 	Vector2f cursPos = sf::Vector2f(tempPos);
 	cursPos.x /= Engine::xMultiply;
 	cursPos.y /= Engine::yMultiply;
-	scene_delay = scene_clock.getElapsedTime();
+	delayTime = scene_clock.getElapsedTime().asSeconds();
+	victoryMusic.setVolume(musicVolume * masterVolume / 100);
+
+	if (sceneEnd == true && delayTime >= delayAmount)
+	{
+		victoryMusic.stop();
+		Engine::ChangeScene(&menuScene);
+	}
 
 	if (menuButtonBox.contains(cursPos))
 	{
@@ -926,11 +949,12 @@ void VictoryScene::Update(const double& dt)
 		menuButton.setFillColor(white);
 	}
 
-	if (Mouse::isButtonPressed(sf::Mouse::Left))
+	if (Mouse::isButtonPressed(sf::Mouse::Left) && sceneEnd == false)
 	{
 		if (menuButtonBox.contains(cursPos))
 		{
-			Engine::ChangeScene(&menuScene);
+			delayClock.restart();
+			sceneEnd = true;
 		}
 	}
 }

@@ -497,7 +497,7 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	StrengthText.setString("Max HP + 10");
 	HealthText.setString("Strength +5 ");
 	DexterityText.setString("Dexterity +5 ");
-	RewardsText.setPosition((Engine::getWindowSize().x / 2) - (RewardsText.getLocalBounds().width / 2), 100.0f);
+	RewardsText.setPosition((Engine::getWindowSize().x / 2) - (RewardsText.getLocalBounds().width / 2), 250.0f);
 	StrengthText.setPosition(stat1.getPosition().x - (StrengthText.getGlobalBounds().width / 2), 400.0f);
 	HealthText.setPosition(stat2.getPosition().x - (HealthText.getLocalBounds().width / 2), 400.0f);
 	DexterityText.setPosition(stat3.getPosition().x - (DexterityText.getLocalBounds().width / 2), 400.0f);
@@ -895,9 +895,6 @@ void SettingUI::Load(sf::Font &font, bool p)
 	MasterText.setFont(font);
 	MusicText.setFont(font);
 	FXText.setFont(font);
-	//MasterTextVolume.setFont(font);
-	//MusicTextVolume.setFont(font);
-	//FXTextVolume.setFont(font);
 	MasterLeft.setFont(font);
 	MasterRight.setFont(font);
 	MusicLeft.setFont(font);

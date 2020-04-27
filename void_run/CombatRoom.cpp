@@ -60,6 +60,7 @@ void CombatRoom::Update(const double& dt, sf::Vector2f cursPos) {
 	}
 	else if (bossFightStarted == true) //If the boss fight has been started, and the enemy is not alive........
 	{
+		gameScene.gameMusic.stop();
 		Engine::ChangeScene(&victoryScene); //...they win the game!
 	}
 	else
@@ -122,6 +123,11 @@ void CombatRoom::Load() {
 		enemy = enemy1->addComponent<BossEnemy>(500, 30, 30, 0, 0);
 		auto sm = enemy1->addComponent<BossSprite>();
 		sm->load();
+		gameScene.gameMusic.stop();
+		gameScene.gameMusic.openFromFile("res/Sounds/Music/BossMusic.wav");
+		gameScene.gameMusic.setVolume(musicVolume);
+		gameScene.gameMusic.setLoop(true);
+		gameScene.gameMusic.play();
 	}
 	enemy->load();
 
