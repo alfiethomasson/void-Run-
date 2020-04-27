@@ -11,7 +11,7 @@
 #include <fstream>
 #include "LevelUpRoom.h"
 
-using namespace sf;
+using namespace sf; //Namespaces and other initialisation 
 using namespace std;
 ItemDB itemDB;
 
@@ -19,8 +19,8 @@ CombatRoom* testRoom;
 
 sf::Event event;
 
-sf::Color green(0, 255, 0, 255);
-sf::Color white(255, 255, 255, 255);
+sf::Color green(0, 255, 0, 255); //We use greeen to distinguish a highlighted button
+sf::Color white(255, 255, 255, 255); //White is the default colour for our buttons
 
 shared_ptr<Entity> pl;
 
@@ -34,7 +34,7 @@ sf::Clock pauseClock;
 sf::Time pause_delay;
 float pauseDelay = 0.5f;
 
-Keyboard::Key attackKey;
+Keyboard::Key attackKey; //Various keys for interacting in the game
 Keyboard::Key healKey;
 Keyboard::Key rechargeKey;
 Keyboard::Key runKey;
@@ -44,11 +44,11 @@ Keyboard::Key special2Key;
 Keyboard::Key special3Key;
 Keyboard::Key special4Key;
 
-int masterVolume = 100;
+int masterVolume = 100; //Volume controls in the settings
 int musicVolume = 100;
 int soundVolume = 100;
 
-void MenuScene::Update(const double& dt) {
+void MenuScene::Update(const double& dt) { //Menu Scene's Update Function
 
 	//Gets Mouse position in an int format
 	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
@@ -649,7 +649,7 @@ void GameScene::ChangeRoom() {
 	//srand to ensure the random number is actually random
 	srand(time(0));
 	int roomType = rand() % 8;
-	//TODO: Make it so that if the player's EXP is enough to level up, then the room automatically sets to 2, otherwise it is set to 0 or 1 aat random.
+
 	if (player->checkLevelUp()) {
 		roomType = 10;
 	}
@@ -857,7 +857,7 @@ void GameScene::SaveGame()
 
 }
 
-void VictoryScene::Render()
+void VictoryScene::Render() //Render the victory scene
 {
 	//Queues text to render in system renderer
 	Renderer::queue(&storyMessage);
@@ -868,13 +868,13 @@ void VictoryScene::Render()
 	Scene::Render();
 }
 
-void VictoryScene::Load()
+void VictoryScene::Load() //Main load function
 {
-	font.loadFromFile("res/Fonts/venusrising.ttf");
+	font.loadFromFile("res/Fonts/venusrising.ttf"); //Get the font
 	sceneEnd = false;
 	delayAmount = 2.0f;
 
-	storyMessage.setFont(font);
+	storyMessage.setFont(font); //Set up of the various messages on that screen
 	storyMessage.setCharacterSize(20);
 	storyMessage.setString("And with the defeat of the Alien Lord, Spaceship Omega had been saved once and for all.\nTroy McCool was able to return to Earth, heralded as the greatest hero of his decade.");
 	thankYou.setFont(font);
@@ -883,53 +883,54 @@ void VictoryScene::Load()
 	credits.setFont(font);
 	credits.setCharacterSize(10);
 	credits.setString("Made by Alfie & Ciaran");
-	menuButton.setFont(font);
+	menuButton.setFont(font); //
 	menuButton.setCharacterSize(10);
 	menuButton.setString("Main Menu");
 
-	storyMessage.setPosition(sf::Vector2f((GAMEX / 2) - (storyMessage.getGlobalBounds().width / 2), 300.0f));
+	storyMessage.setPosition(sf::Vector2f((GAMEX / 2) - (storyMessage.getGlobalBounds().width / 2), 300.0f)); //Position the messages
 	thankYou.setPosition(sf::Vector2f((GAMEX / 2) - (thankYou.getGlobalBounds().width / 2), 500.0f));
 	credits.setPosition(sf::Vector2f((GAMEX / 2) - (credits.getGlobalBounds().width / 2), 700.0f));
 	menuButton.setPosition(sf::Vector2f((GAMEX / 2) - (menuButton.getGlobalBounds().width / 2), 950.0f));
 
 	menuButtonBox = menuButton.getGlobalBounds(); //Creates the button boundaries
 
-	victoryMusic.openFromFile("res/Sounds/Music/VictoryMusic.wav");
+	victoryMusic.openFromFile("res/Sounds/Music/VictoryMusic.wav"); //Victory music
 	victoryMusic.setLoop(true);
 	victoryMusic.play();
 
 }
 
-void VictoryScene::Update(const double& dt)
+void VictoryScene::Update(const double& dt) //Update Loop
 {
-	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
+	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow()); //Get cursor position
 	Vector2f cursPos = sf::Vector2f(tempPos);
 	cursPos.x /= Engine::xMultiply;
 	cursPos.y /= Engine::yMultiply;
-	delayTime = scene_clock.getElapsedTime().asSeconds();
+
+	delayTime = scene_clock.getElapsedTime().asSeconds(); //Delay so they can't accidentally hit Main Menu as soon as they enter
 	victoryMusic.setVolume(musicVolume * masterVolume / 100);
 
-	if (sceneEnd == true && delayTime >= delayAmount)
+	if (sceneEnd == true && delayTime >= delayAmount) //If they leave the scene
 	{
-		victoryMusic.stop();
-		Engine::ChangeScene(&menuScene);
+		victoryMusic.stop(); //Stop the music
+		Engine::ChangeScene(&menuScene); //Back to the main menu
 	}
 
-	if (menuButtonBox.contains(cursPos))
+	if (menuButtonBox.contains(cursPos)) //If they mouse over the button, turn it green
 	{
 		menuButton.setFillColor(green);
 	}
 	else
 	{
-		menuButton.setFillColor(white);
+		menuButton.setFillColor(white); //Otherwise it's write
 	}
 
-	if (Mouse::isButtonPressed(sf::Mouse::Left) && sceneEnd == false)
+	if (Mouse::isButtonPressed(sf::Mouse::Left) && sceneEnd == false) //If they're clicking
 	{
-		if (menuButtonBox.contains(cursPos))
+		if (menuButtonBox.contains(cursPos)) //And on the menu button
 		{
 			delayClock.restart();
-			sceneEnd = true;
+			sceneEnd = true; //Then the scene is over.
 		}
 	}
 }
