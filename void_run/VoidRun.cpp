@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "engine.h"
 #include "CombatRoom.h"
-#include "StatRoom.h"
 #include "ItemDB.h"
 #include "UI.h"
 #include "System_Renderer.h"
@@ -443,7 +442,7 @@ void GameScene::Load() {
 		player->load();
 
 		//Calls load function of the UIs
-		combatUI.Load(player, &Engine::tm);
+		combatUI.Load(player);
 		gameUI.Load(10, player);
 
 		for (auto &s : items)
@@ -484,7 +483,7 @@ void GameScene::Load() {
 		player->load();
 
 		//Calls load function of the UIs
-		combatUI.Load(player, &Engine::tm);
+		combatUI.Load(player);
 		gameUI.Load(10, player);
 	}
 
@@ -503,8 +502,6 @@ void GameScene::Load() {
 	alphaUpdate = 255;
 	sceneChangeDelay = 0.5f;
 	isPaused = false;
-
-	std::shared_ptr<StatRoom> statRoom = std::make_shared<StatRoom>(pl);
 
 	//Loads music
 	if (!gameMusic.openFromFile("res/Sounds/Music/GameMusic.wav"))
@@ -560,28 +557,6 @@ void GameScene::Update(const double& dt) {
 		}
 		//calls the current rooms update function
 		gameUI.Update(dt, cursPos);
-
-		//Adds random special item to inventory
-		if (Keyboard::isKeyPressed(Keyboard::I) && scene_delay.asSeconds() >= sceneChangeDelay)
-		{
-			//auto tempItem = itemDB.randomSpecialItem();
-			//UpdateTextBox(tempItem->description);
-			//inv->add(tempItem, true);
-			//player->addStats(100, 300, 100);
-			playerSprite->playDie();
-			scene_clock.restart();
-			//std::cout << "\nshould play attack\n";
-			std::cout << "MouseX: " << Mouse::getPosition().x << " MouseY: " << Mouse::getPosition().y << "\n";
-			std::cout << "Adjusted MouseX: " << cursPos.x << " Adjusted MouseY: " << cursPos.y << "\n";
-
-		}
-
-		//Removes an item from the inventory
-		if (Keyboard::isKeyPressed(Keyboard::R) && inv->getItems().size() != 0 && scene_delay.asSeconds() >= sceneChangeDelay)
-		{
-			inv->remove(0);
-			scene_clock.restart();
-		}
 
 		//Adds random common item
 		if (Keyboard::isKeyPressed(Keyboard::U) && scene_delay.asSeconds() >= sceneChangeDelay)
