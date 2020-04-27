@@ -14,7 +14,7 @@ bool hasEnraged;
 void EasyEnemy::update(double dt)
 {
 	BaseEnemyComponent::update(dt);
-	if (currentHealth <= 20)
+	if (currentHealth <= 20) //If it has low health, the weak enemy is considered critical condition
 	{
 		criticalCondition = true;
 	}
@@ -25,7 +25,7 @@ void EasyEnemy::update(double dt)
 
 	srand(time(0));
 
-	if (isTurn && isFinishedTurn != true)
+	if (isTurn && isFinishedTurn != true) //Only attacks on its turn
 	{
 		if (specialMove == 0 && (currentEnemy->getDexterity() < _dexterity) && turnCounter == 1) { //If the enemy's special attack is Swift Foot and they have better dexterity, they use it on the first round of combat
 			std::cout << "The enemy uses its unique ability: Swift Foot! \n";
@@ -122,7 +122,7 @@ void EasyEnemy::update(double dt)
 
 void EasyEnemy::load()
 {
-	auto sm = _parent->GetCompatibleComponent<SpriteComponent>();
+	auto sm = _parent->GetCompatibleComponent<SpriteComponent>(); //Sprite setup for unique ability identifier
 	spriteManager = sm[0];
 
 	if (specialMove == 0)
