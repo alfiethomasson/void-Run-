@@ -69,8 +69,6 @@ public:
 	void Update(const double& dt) override;
 	void Render() override;
 	void Load() override;
-	void ChangeControls();
-	void UpdateButtons();
 	void setSettings(bool tf);
 };
 
@@ -128,7 +126,6 @@ public:
 	void Update(const double& dt) override;
 	void Render() override;
 	void Load() override;
-	void Pause();
 	void ChangeRoom();
 	bool playerTurn;
 	void UpdateTextBox(sf::String newText);

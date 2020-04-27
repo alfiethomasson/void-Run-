@@ -471,7 +471,7 @@ void GameUI::Render()
 	}
 
 	//if player is dead, render game over stuff
-	if (player->getParent().isAlive() == false)
+	if (player->getCurrentHealth() == 0)
 	{
 		Renderer::queue(&GameOverButton);
 		Renderer::queue(&backToMenu);
@@ -872,13 +872,12 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 		toMenuText.setColor(Green);
 		if (Mouse::isButtonPressed(Mouse::Left))
 		{
+			gameScene.gameMusic.stop();
 			sound.setVolume(soundVolume* masterVolume / 100);
 			sound.play();
 			menuScene.setSettings(false);
-			gameScene.gameMusic.stop();
-			Engine::ChangeScene(&menuScene);
-			menuScene.setSettings(false);
 			gameScene.setPause(false);
+			Engine::ChangeScene(&menuScene);
 		}
 	}
 	else

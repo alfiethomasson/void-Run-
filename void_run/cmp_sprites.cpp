@@ -157,7 +157,7 @@ void SpriteComponent::update(double dt)
 				ResetAnim();
 			}
 		}
-		sprite.move(sf::Vector2f(-1, 0));
+		sprite.move(sf::Vector2f(dt*100, 0));
 	}
 	if (inDie) // same as attack
 	{
