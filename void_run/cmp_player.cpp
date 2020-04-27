@@ -256,27 +256,16 @@ bool BasePlayerComponent::checkLevelUp () { //Level up function
 	}
 }
 
-<<<<<<< Updated upstream
-void BasePlayerComponent::attack(float str, float dex, std::string soundName)
-=======
-void BasePlayerComponent::attack(float str, float dex) //Attack function!
->>>>>>> Stashed changes
+void BasePlayerComponent::attack(float str, float dex, std::string soundName) // Attack Function!
 {
 	SpendAP(baseAttackCost); //Attack costs AP
 	cout << "Player Attacks!";
 	if (calculateHit(dex)) //If they hit
 	{
-<<<<<<< Updated upstream
-		currentEnemy->TakeDamage(str);
-		gameUI.playSound("Attack", 100);
-		spriteManager->playAttack();
-		gameScene.UpdateTextBox("You shoot the enemy!");
-=======
 		currentEnemy->TakeDamage(str); //Damage enemy
-		gameUI.playSound("Attack", 30); //Play the sound
+		gameUI.playSound("Attack", 100); //Play the sound
 		spriteManager->playAttack(); //Play the animation
 		gameScene.UpdateTextBox("You shoot the enemy!"); //Show a pop up
->>>>>>> Stashed changes
 	}
 	else {
 		gameScene.UpdateTextBox("You missed!"); //If they don't hit, tell them

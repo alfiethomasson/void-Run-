@@ -30,42 +30,24 @@ void ToughEnemy::update(double dt)
 			}
 			else if (turnCounter % 3 == 2 || turnCounter % 3 == 0) //It will then begin a pattern of Normal, Normal, Strong attack, repeating forever
 			{
-<<<<<<< Updated upstream
-				std::cout << "The enemy makes a medium attack! \n";
-				gameScene.UpdateTextBox("The enemy makes an attack at you.");
-				attackEnemy(_strength + 5, _dexterity, "HeavyAttack");
-=======
 				std::cout << "The enemy makes a medium attack! \n"; //Medium attack
 				gameScene.UpdateTextBox("The enemy makes an\nattack at you.");
-				attackEnemy(_strength + 5, _dexterity);
->>>>>>> Stashed changes
+				attackEnemy(_strength + 5, _dexterity, "MediumAttack");
 				EndTurn();
 			}
 			else
 			{
-<<<<<<< Updated upstream
-				std::cout << "The enemy makes a strong attack! \n";
-				gameScene.UpdateTextBox("The enemy makes a powerful attack!");
-				attackEnemy(_strength * 2, _dexterity, "HeavyAttack");
-=======
 				std::cout << "The enemy makes a strong attack! \n"; //Strong attack
 				gameScene.UpdateTextBox("The enemy makes a\npowerful attack!");
-				attackEnemy(_strength * 2, _dexterity);
->>>>>>> Stashed changes
+				attackEnemy(_strength * 2, _dexterity, "HeavyAttack");
 				EndTurn();
 			}
 		}
 		else if (charging == true) //If it previously charged a powerful attack (Only available to Charging enemies), its next action is always to unleash it
 		{
-<<<<<<< Updated upstream
-			std::cout << "The enemy unleashes a powerful charged attack! \n";
-			gameScene.UpdateTextBox("The enemy unleashes its charged energy!");
-			attackEnemy(_strength + 10, _dexterity + 30, "HeavyAttack");
-=======
 			std::cout << "The enemy unleashes a powerful charged attack! \n"; //Launches charged attack
 			gameScene.UpdateTextBox("The enemy unleashes\nits charged energy!");
-			attackEnemy(_strength + 10, _dexterity + 30);
->>>>>>> Stashed changes
+			attackEnemy(_strength + 10, _dexterity + 30, "HeavyAttack");
 			charging = false;
 			EndTurn();
 		}
@@ -88,27 +70,15 @@ void ToughEnemy::update(double dt)
 			int enemyAI = rand() % 5; //Random number from 0-4. 0-2 is medium attack, 3-4 is a heavy attack.
 
 			if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2) {
-<<<<<<< Updated upstream
-				std::cout << "The enemy makes a medium attack! \n";
-				gameScene.UpdateTextBox("The enemy makes an attack at you.");
-				attackEnemy(_strength + 5, _dexterity, "HeavyAttack");
-				EndTurn();
-			}
-			else if (enemyAI == 4) {
-				std::cout << "The enemy makes a strong attack! \n";
-				gameScene.UpdateTextBox("The enemy makes a powerful attack!");
-				attackEnemy(_strength * 2, _dexterity, "HeavyAttack");
-=======
 				std::cout << "The enemy makes a medium attack! \n"; //Medium Attack
 				gameScene.UpdateTextBox("The enemy makes an\nattack at you.");
-				attackEnemy(_strength + 5, _dexterity);
+				attackEnemy(_strength + 5, _dexterity, "MediumAttack");
 				EndTurn();
 			}
 			else if (enemyAI == 4) {
 				std::cout << "The enemy makes a strong attack! \n"; //Strong Attack
 				gameScene.UpdateTextBox("The enemy makes\na powerful attack!");
-				attackEnemy(_strength * 2, _dexterity);
->>>>>>> Stashed changes
+				attackEnemy(_strength * 2, _dexterity, "HeavyAttack");
 				EndTurn();
 			}
 		}

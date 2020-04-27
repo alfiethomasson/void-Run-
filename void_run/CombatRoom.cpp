@@ -89,14 +89,9 @@ void CombatRoom::Load() {
 	//Creates Enemy and adds components
 	auto enemy1 = make_shared<Entity>();
 	srand(time(0));
-<<<<<<< Updated upstream
-	int enemyType = rand() % 10; //Random number from 0-2. 0 is easy, 1 is medium, 2 is tough.
-	if(p->level >= 5)
-=======
 	int enemyType = rand() % 10; //Random number from 0-9. 0-5 is easy, 6-8 is medium, 9 is tough.
 
 	if(p->level >= 5) //If the player is Level 5, then enemyType becomes 10: Spawning the boss.
->>>>>>> Stashed changes
 	{
 		enemyType = 10;
 	}
@@ -153,5 +148,3 @@ void CombatRoom::Load() {
 
 	turnDelayValue = 2.0f;
 }
-
-//CombatRoom::CombatRoom(Entity* p) : Room() { player = p; };

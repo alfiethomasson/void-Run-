@@ -85,11 +85,7 @@ void BaseEnemyComponent::updateEnemy(std::shared_ptr<BasePlayerComponent> player
 	currentEnemy = player;
 }
 
-<<<<<<< Updated upstream
-bool BaseEnemyComponent::attackEnemy(float str, float dex, std::string soundName)
-=======
-bool BaseEnemyComponent::attackEnemy(float str, float dex) //Attack function
->>>>>>> Stashed changes
+bool BaseEnemyComponent::attackEnemy(float str, float dex, std::string soundName) // attack function
 {
 	if (calculateHit(dex)) //Run a hit calculation
 	{

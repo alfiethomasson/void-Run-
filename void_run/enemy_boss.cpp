@@ -30,15 +30,12 @@ void BossEnemy::update(double dt)
 		slimed = false;
 		slimedCounter = 0;
 	}
-<<<<<<< Updated upstream
-=======
 	if (turnCounter == 1) //After their first turn, the player cannot escape.
 	{
 		gameScene.UpdateTextBox("THE ALIEN LORD ROARS!!!");
+		gameScene.gameUI.playSound("Roar", 100);
 		currentEnemy->setRunChance(0);
 	}
->>>>>>> Stashed changes
-
 	if (_maxHealth * 0.7) //Whilst above 70% of HP, the enemy is most likely to be passive
 	{
 		i = rand() % 5;
@@ -192,15 +189,10 @@ void BossEnemy::update(double dt)
 			else //Otherwise, it just makes constant deadly attacks
 			{
 				std::cout << "The enemy attacks twice with a relentless determination! \n";
-<<<<<<< Updated upstream
 				gameScene.UpdateTextBox("The Alien Lord attacks desperately!");
 				attackEnemy(_strength * 1.5, _dexterity - 20, "HeavyAttack");
 				attackEnemy(_strength * 1.5, _dexterity - 20, "HeavyAttack");
-=======
-				gameScene.UpdateTextBox("The Alien Lord\nattacks desperately!");
-				attackEnemy(_strength * 1.5, _dexterity - 20);
-				attackEnemy(_strength * 1.5, _dexterity - 20);
->>>>>>> Stashed changes
+
 				EndTurn();
 			}
 		}
@@ -213,12 +205,8 @@ void BossEnemy::load()
 	auto sm = _parent->GetCompatibleComponent<SpriteComponent>(); //Play component
 	spriteManager = sm[0];
 
-<<<<<<< Updated upstream
-	spriteManager->AddIcon("Passive", "PASSIVE\The Alien Lord is indifferent towards you!", true);
-	//currentEnemy->setRunChance(1); //No escape. This is it. Battle to the death.
-=======
 	spriteManager->AddIcon("Passive", "PASSIVE\The Alien Lord is indifferent towards you!", true); //Alien Lord starts Indifferent
->>>>>>> Stashed changes
+
 	BaseEnemyComponent::load();
 
 }

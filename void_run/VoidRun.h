@@ -94,7 +94,6 @@ private:
 	sf::Texture SaveIcon;
 	sf::Sprite SaveSprite;
 
-	std::vector<std::shared_ptr<Room>> rooms;
 	std::shared_ptr<Room> currentRoom;
 
 	sf::Sprite textBox;
@@ -113,6 +112,8 @@ private:
 
 	SettingUI Settings;
 
+	ItemDB itemDB;
+
 public:
 	sf::Text screenText;
 	CombatUI combatUI;
@@ -130,7 +131,6 @@ public:
 	void Pause();
 	void ChangeRoom();
 	bool playerTurn;
-	void UpdateButtons();
 	void UpdateTextBox(sf::String newText);
 	void LoadTextures() override;
 	void UpdateDesctext(std::string, sf::Vector2f pos);
