@@ -81,75 +81,80 @@ std::shared_ptr<Item> ItemDB::randomRareItem()
 	//Rolls random number
 	int randValue = distributionInteger(generator);
 
+	//Iterates through map to get the item at the random values point
 	std::map<std::string, Item>::iterator it = rareItems.begin();
 	std::advance(it, randValue);
+	//makes item a shared pointer
 	std::shared_ptr<Item> randItem = std::make_shared<Item>(it->second);
 	return randItem;
 }
 
 std::shared_ptr<SpecialItem> ItemDB::randomSpecialItem()
 {
-	// construct a trivial random generator engine from a time-based seed:
+	// make new seed for random number generator from time, faster than time(0)
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	//makes new generator with seed
 	std::default_random_engine generator(seed);
 
-	//Sets value for random distribution
+	//Sets value for minimum and maximum random number
 	std::uniform_int_distribution<int> distributionInteger(0, specialItems.size() - 1);
-	//gets random value from 0 to vector size
+
+	//Rolls random number
 	int randValue = distributionInteger(generator);
-	//what item is
-	//std::cout << "Random Item is: " << specialItems[randValue].description << "\n";
-	//makes a shared pointer
-	//std::shared_ptr<SpecialItem> randItem = std::make_shared<SpecialItem>(specialItems[randValue]);
+
+	//Iterates through map to get the item at the random values point
 	std::map<std::string, SpecialItem>::iterator it = specialItems.begin();
 	std::advance(it, randValue);
+	//makes item a shared pointer
 	std::shared_ptr<SpecialItem> randItem = std::make_shared<SpecialItem>(it->second);
 	return randItem;
 }
 
+//gets common item from common map
 std::shared_ptr<Item> ItemDB::getCommonItem(std::string& name)
 {
 	std::shared_ptr<Item> item = std::make_shared<Item>(commonItems[name]);
 	return item;
 }
 
+//Gets rare item from rare map
 std::shared_ptr<Item> ItemDB::getRareItem(std::string& name)
 {
 	std::shared_ptr<Item> item = std::make_shared<Item>(rareItems[name]);
 	return item;
 }
 
+//gets special item from special items map
 std::shared_ptr<SpecialItem> ItemDB::getSpecialItem(std::string& name)
 {
 	std::shared_ptr<SpecialItem> item = std::make_shared<SpecialItem>(specialItems[name]);
 	return item;
 }
 
+//Loops through all item maps to see if item is there and returns it
 std::shared_ptr<Item> ItemDB::getItem(std::string& name)
 {
+	//check common items
 	if (commonItems.count(name) > 0)
 	{
 		std::shared_ptr<Item> item = std::make_shared<Item>(commonItems[name]);
 		return item;
 	}
-	else if (rareItems.count(name) > 0)
+	else if (rareItems.count(name) > 0) // check rare items
 	{
 		std::shared_ptr<Item> item = std::make_shared<Item>(rareItems[name]);
 		return item;
 	}
-	//else if (specialItems.count(name) > 0)
-	//{
-	//	std::shared_ptr<SpecialItem> item = std::make_shared<SpecialItem>(rareItems[name]);
-	//	return item;
-	//}
 	else
 	{
 		std::cout << "Couldn't find item: " << name << "\n";
 	}
 }
 
+//Loops through all abilites in map and returns ability if it is there, used for loading abilites from save
 std::shared_ptr<SpecialAbility> ItemDB::getAbility(std::string& name)
 {
+	//checks if ability is there
 	if (abilitys.count(name) > 0)
 	{
 		return abilitys[name];
