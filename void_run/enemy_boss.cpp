@@ -58,7 +58,7 @@ void BossEnemy::update(double dt)
 		int enemyAI = rand() % 4;
 		if (behaviour == 0) //Aggressive
 		{
-			spriteManager->AddIcon("Aggressive", "AGGRESSIVE\The Alien Lord is mad at you!", true);
+			spriteManager->ChangeIcon(0, "Aggressive", "AGGRESSIVE\The Alien Lord is mad at you!");
 			if ((currentHealth <= _maxHealth * 0.8 && enemyAI == 0) || ((currentHealth < _maxHealth * 0.4) && enemyAI == 1)) //20% chance below 80%HP, 40% below 40% HP.
 			{
 				std::cout << "The enemy drains your life! \n";
@@ -94,7 +94,7 @@ void BossEnemy::update(double dt)
 		}
 		else if (behaviour == 1) //Defensive
 		{
-			spriteManager->AddIcon("Defensive", "DEFENSIVE\The Alien Lord is conserving resources!", true);
+			spriteManager->ChangeIcon(0, "Defensive", "DEFENSIVE\The Alien Lord is conserving resources!");
 			if (((currentHealth >= (_maxHealth * 0.8)) && enemyAI == 0) //For every 20% of missing HP, the monster is 20% more likely to heal
 				|| ((currentHealth >= (_maxHealth * 0.6)) && ((enemyAI == 0 || enemyAI == 1)))
 				|| ((currentHealth >= (_maxHealth * 0.4)) && ((enemyAI == 0 || enemyAI == 1 || enemyAI == 2)))
@@ -132,7 +132,7 @@ void BossEnemy::update(double dt)
 		}
 		else if (behaviour == 2) //Passive
 		{
-			spriteManager->AddIcon("Passive", "PASSIVE\The Alien Lord is indifferent towards you!", true);
+			spriteManager->ChangeIcon(0, "Passive", "PASSIVE\The Alien Lord is indifferent towards you!");
 			int enemyAI = rand() % 6;
 			if ((turnCounter % 3 == 1) || enemyAI == 5) //Every 3 turns, starting from turn 1 (1, 4, 7, 10 etc), or a 1/6 chance, it passes its turn
 			{
@@ -172,7 +172,7 @@ void BossEnemy::update(double dt)
 		}
 		else if (behaviour == 3) //Desperate
 		{
-			spriteManager->AddIcon("Desperate", "DESPERATE\The Alien Lord is desperate to kill you! Finish it now!", true);
+			spriteManager->ChangeIcon(0, "Desperate", "DESPERATE\The Alien Lord is desperate to kill you! Finish it now!");
 			if (turnCounter % 4 == 0) //Turns in the 4 times table provoke a massive buff to stats
 			{
 				std::cout << "The enemy is harnessing a massive amount of energy!";
@@ -198,19 +198,8 @@ void BossEnemy::load()
 	auto sm = _parent->GetCompatibleComponent<SpriteComponent>();
 	spriteManager = sm[0];
 
+	spriteManager->AddIcon("Passive", "PASSIVE\The Alien Lord is indifferent towards you!", true);
 	//currentEnemy->setRunChance(1); //No escape. This is it. Battle to the death.
-	if (specialMove == 0)
-	{
-		spriteManager->AddIcon("Excruciate", "EXCRUCIATE\nDrastically lowers chance of escape", true);
-	}
-	if (specialMove == 1)
-	{
-		spriteManager->AddIcon("ChargedAttack", "CHARGED ATTACK\nCharges for one turn to\nunleash a powerful attack", true);
-	}
-	if (specialMove == 2)
-	{
-		spriteManager->AddIcon("SuicideCharge", "SUICIDE CHARGE\nGives itself a big strength\nboost but takes more damage", true);
-	}
 	BaseEnemyComponent::load();
 
 }
