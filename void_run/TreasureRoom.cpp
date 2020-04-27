@@ -1,7 +1,6 @@
 #include "TreasureRoom.h"
 #include "Game.h"
 #include "system_renderer.h"
-#include "cmp_entityinfo.h"
 #include "cmp_player.h"
 #include "cmp_sprite.h"
 

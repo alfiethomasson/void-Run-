@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "engine.h"
 #include "CombatRoom.h"
-#include "StatRoom.h"
 #include "ItemDB.h"
 #include "UI.h"
 #include "System_Renderer.h"
@@ -443,7 +442,7 @@ void GameScene::Load() {
 		player->load();
 
 		//Calls load function of the UIs
-		combatUI.Load(player, &Engine::tm);
+		combatUI.Load(player);
 		gameUI.Load(10, player);
 
 		for (auto &s : items)
@@ -484,7 +483,7 @@ void GameScene::Load() {
 		player->load();
 
 		//Calls load function of the UIs
-		combatUI.Load(player, &Engine::tm);
+		combatUI.Load(player);
 		gameUI.Load(10, player);
 	}
 
@@ -503,8 +502,6 @@ void GameScene::Load() {
 	alphaUpdate = 255;
 	sceneChangeDelay = 0.5f;
 	isPaused = false;
-
-	std::shared_ptr<StatRoom> statRoom = std::make_shared<StatRoom>(pl);
 
 	//Loads music
 	if (!gameMusic.openFromFile("res/Sounds/Music/GameMusic.wav"))

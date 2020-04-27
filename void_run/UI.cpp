@@ -548,19 +548,19 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	//Sets the background!
 	background.setTexture(Engine::tm.getTex("Background1"));
 	//Move the background up so combat UI has space to be seen
-	background.setScale(GAMEX/ background.getGlobalBounds().width, 0.7f);
+	background.setScale(GAMEX / background.getGlobalBounds().width, 0.7f);
 
 	//Game Over text and back to menu 
 	GameOverButton.setFont(font);
 	GameOverButton.setString("GAME OVER");
 	GameOverButton.setCharacterSize(60);
-	GameOverButton.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - (GameOverButton.getGlobalBounds().width / 2),
-		Engine::getWindowSize().y / 2.0f - (GameOverButton.getGlobalBounds().height / 2) + 100.0f));
+	GameOverButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (GameOverButton.getGlobalBounds().width / 2),
+		GAMEY / 2.0f - (GameOverButton.getGlobalBounds().height / 2) + 100.0f));
 	GameOverButtonBox = GameOverButton.getGlobalBounds();
 	backToMenu.setFont(font);
 	backToMenu.setString("Back To Menu");
 	backToMenu.setCharacterSize(60);
-	backToMenu.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - (backToMenu.getGlobalBounds().width / 2),
+	backToMenu.setPosition(sf::Vector2f(GAMEX / 2.0f - (backToMenu.getGlobalBounds().width / 2),
 		300.0f));
 	backToMenuBox = backToMenu.getGlobalBounds();
 
