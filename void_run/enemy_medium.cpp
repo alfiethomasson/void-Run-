@@ -21,7 +21,7 @@ void MediumEnemy::update(double dt)
 	{
 		if (cursed == true)
 		{
-			attackEnemy(5, 10000); //If the alien has used a curse, the player takes 5 damage at the start of each of the alien turns
+			attackEnemy(5, 10000, ""); //If the alien has used a curse, the player takes 5 damage at the start of each of the alien turns
 			gameScene.UpdateTextBox("You're hurt by your curse.");
 		}
 
@@ -46,14 +46,14 @@ void MediumEnemy::update(double dt)
 			gameScene.UpdateTextBox("The enemy share its pain with you!");
 			int painShared = (currentHealth * 0.2);
 			currentHealth -= painShared;
-			attackEnemy(painShared, 10000); //Deals damage equal to pain shared. Always has 10,000 to hit.
+			attackEnemy(painShared, 10000, "MediumAttack"); //Deals damage equal to pain shared. Always has 10,000 to hit.
 			EndTurn();
 		}
 		else if (specialMove == 2 && consecutiveMisses >= 2)
 		{
 			std::cout << "The enemy uses its unique attack: Orbital Strike! \n";
 			gameScene.UpdateTextBox("The enemy scores a bullseye!");
-			attackEnemy(_strength, 100000); //Attack, always hit
+			attackEnemy(_strength, 100000, "MediumAttack"); //Attack, always hit
 			EndTurn();
 		}
 		else if (specialMove == 2)
@@ -62,7 +62,7 @@ void MediumEnemy::update(double dt)
 			if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2) {
 				std::cout << "The enemy makes a weak attack! \n";
 				gameScene.UpdateTextBox("The enemy attacks you weakly.");
-				if (!attackEnemy(_strength, _dexterity))
+				if (!attackEnemy(_strength, _dexterity, "MediumAttack"))
 				{
 					consecutiveMisses++;
 				}
@@ -75,7 +75,7 @@ void MediumEnemy::update(double dt)
 			else if (enemyAI == 3 || enemyAI == 4) {
 				std::cout << "The enemy makes a medium attack! \n";
 				gameScene.UpdateTextBox("The enemy makes an attack.");
-				if (!attackEnemy(_strength + 5, _dexterity))
+				if (!attackEnemy(_strength + 5, _dexterity, "MediumAttack"))
 				{
 					consecutiveMisses++;
 				}
@@ -88,7 +88,7 @@ void MediumEnemy::update(double dt)
 			else if (enemyAI == 5) {
 				std::cout << "The enemy uses its unique attack: Orbital Strike! \n";
 				gameScene.UpdateTextBox("The enemy scores a bullseye.");
-				attackEnemy(_strength, 100000); //Attack, always hit
+				attackEnemy(_strength, 100000, "MediumAttack"); //Attack, always hit
 				EndTurn();
 			}
 		}
@@ -100,14 +100,14 @@ void MediumEnemy::update(double dt)
 			{
 				std::cout << "The enemy makes a weak attack! \n";
 				gameScene.UpdateTextBox("The enemy attacks you weakly.");
-				attackEnemy(_strength, _dexterity);
+				attackEnemy(_strength, _dexterity, "MediumAttack");
 				EndTurn();
 			}
 			else if (enemyAI == 1)
 			{
 				std::cout << "The enemy makes a medium attack! \n";
 				gameScene.UpdateTextBox("The enemy makes an attack at you.");
-				attackEnemy(_strength + 5, _dexterity);
+				attackEnemy(_strength + 5, _dexterity, "MediumAttack");
 				EndTurn();
 			}
 		}

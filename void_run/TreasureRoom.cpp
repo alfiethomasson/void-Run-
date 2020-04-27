@@ -83,8 +83,8 @@ void TreasureRoom::Load() {
 	chestSprite.setScale(-0.3, 0.3f);
 
 	iconSprite.setTexture(Engine::tm.getTex("QuestionMark"));
-	iconSprite.setPosition(GAMEX / 2 - iconSprite.getGlobalBounds().width / 2, 800.0f);
 	iconSprite.setScale(0.6f, 0.6f);
+	iconSprite.setPosition(GAMEX / 2 - iconSprite.getGlobalBounds().width / 2, 800.0f);
 	iconBox = iconSprite.getGlobalBounds();
 
 	PressText.setFont(Engine::tm.getFont());

@@ -1,9 +1,10 @@
 #include "ItemDB.h"
 #include <iterator>
 
-//Function that adds items to a common, and rare vector
+//Populates the database, adding all special abilities and items to respective maps to access in future
 void ItemDB::PopulateDB()
 {
+	//Get all abilities and add to map
 	auto lb = std::make_shared<LaserBurst>();
 	lb->load();
 	abilitys["LaserBurst"] = lb;
@@ -40,6 +41,7 @@ void ItemDB::PopulateDB()
 	rareItems["WristGuard"] = Item(0, 30, 0, "WristGuard", "Wrist Guard", "WristGuard");
 	rareItems["Mask"] = Item(0, 0, 15, "Mask", "Mask", "FaceMask");
 
+	//Special Items
 	specialItems["*TargetingDevice"] =
 		SpecialItem(5, 50, 5, "*TargetingDevice", "Targeting Device", "SpaceWatch", lb);
 }
@@ -47,37 +49,37 @@ void ItemDB::PopulateDB()
 //Gets a random common item from list
 std::shared_ptr<Item> ItemDB::randomCommonItem()
 {
-	// construct a trivial random generator engine from a time-based seed:
+	// make new seed for random number generator from time, faster than time(0)
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	//makes new generator with seed
 	std::default_random_engine generator(seed);
 
-	//Sets value for random distribution
+	//Sets value for minimum and maximum random number
 	std::uniform_int_distribution<int> distributionInteger(0, commonItems.size() - 1); 
 
+	//Rolls random number
 	int randValue = distributionInteger(generator);
-	//std::cout << "Random Item is: " << commonItems[randValue].description << "\n";
-	//std::shared_ptr<Item> randItem = std::make_shared<Item>(commonItems[randValue]);
 
+	//Iterates through map to get the item at the random values point
 	std::map<std::string, Item>::iterator it = commonItems.begin();
 	std::advance(it, randValue);
+	//makes item a shared pointer
 	std::shared_ptr<Item> randItem = std::make_shared<Item>(it->second);
 	return randItem;
 }
 //Gets a random item from list
 std::shared_ptr<Item> ItemDB::randomRareItem()
 {
-	// construct a trivial random generator engine from a time-based seed:
+	// make new seed for random number generator from time, faster than time(0)
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	//makes new generator with seed
 	std::default_random_engine generator(seed);
 
-	//Sets value for random distribution
+	//Sets value for minimum and maximum random number
 	std::uniform_int_distribution<int> distributionInteger(0, rareItems.size() - 1);
-	//gets random value from 0 to vector size
+
+	//Rolls random number
 	int randValue = distributionInteger(generator);
-	//what item is
-	//std::cout << "Random Item is: " << rareItems[randValue].description << "\n";
-	//makes a shared pointer
-//	std::shared_ptr<Item> randItem = std::make_shared<Item>(rareItems[randValue]);
 
 	std::map<std::string, Item>::iterator it = rareItems.begin();
 	std::advance(it, randValue);

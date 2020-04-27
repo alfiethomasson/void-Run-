@@ -2,6 +2,7 @@
 #include "ecm.h"
 #include "cmp_player.h"
 #include "AlienSprites.h"
+#include <SFML/Audio.hpp>
 
 class BasePlayerComponent;
 
@@ -24,6 +25,9 @@ protected:
 	std::vector<sf::RectangleShape> hpbars;
 	int barheight;
 	sf::Text healthText;
+
+	sf::Sound sound;
+
 public:
 	bool isTurn;
 	bool isFinishedTurn;
@@ -42,7 +46,7 @@ public:
 	bool calculateHit(float dex);
 	void makeHPBar();
 
-	bool attackEnemy(float str, float dex);
+	bool attackEnemy(float str, float dex, std::string soundName);
 	void heal(float healamount);
 	void EndTurn();
 

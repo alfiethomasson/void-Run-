@@ -75,7 +75,7 @@ public:
 
 	void StartTurn();
 
-	void attack(float damage, float dex);
+	void attack(float damage, float dex, std::string soundName);
 	void heal(float healBy, bool endturn);
 	void recharge(int amount);
 	void run();

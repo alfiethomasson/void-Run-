@@ -32,14 +32,14 @@ void ToughEnemy::update(double dt)
 			{
 				std::cout << "The enemy makes a medium attack! \n";
 				gameScene.UpdateTextBox("The enemy makes an attack at you.");
-				attackEnemy(_strength + 5, _dexterity);
+				attackEnemy(_strength + 5, _dexterity, "HeavyAttack");
 				EndTurn();
 			}
 			else
 			{
 				std::cout << "The enemy makes a strong attack! \n";
 				gameScene.UpdateTextBox("The enemy makes a powerful attack!");
-				attackEnemy(_strength * 2, _dexterity);
+				attackEnemy(_strength * 2, _dexterity, "HeavyAttack");
 				EndTurn();
 			}
 		}
@@ -47,7 +47,7 @@ void ToughEnemy::update(double dt)
 		{
 			std::cout << "The enemy unleashes a powerful charged attack! \n";
 			gameScene.UpdateTextBox("The enemy unleashes its charged energy!");
-			attackEnemy(_strength + 10, _dexterity + 30);
+			attackEnemy(_strength + 10, _dexterity + 30, "HeavyAttack");
 			charging = false;
 			EndTurn();
 		}
@@ -72,13 +72,13 @@ void ToughEnemy::update(double dt)
 			if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2) {
 				std::cout << "The enemy makes a medium attack! \n";
 				gameScene.UpdateTextBox("The enemy makes an attack at you.");
-				attackEnemy(_strength + 5, _dexterity);
+				attackEnemy(_strength + 5, _dexterity, "HeavyAttack");
 				EndTurn();
 			}
 			else if (enemyAI == 4) {
 				std::cout << "The enemy makes a strong attack! \n";
 				gameScene.UpdateTextBox("The enemy makes a powerful attack!");
-				attackEnemy(_strength * 2, _dexterity);
+				attackEnemy(_strength * 2, _dexterity, "HeavyAttack");
 				EndTurn();
 			}
 		}
@@ -100,7 +100,7 @@ void ToughEnemy::load()
 	}
 	if (specialMove == 2)
 	{
-		spriteManager->AddIcon("SuicideCharge", "SUICIDE CHARGE\nGives itself a big strength\nboost but takes more damage", true);
+		spriteManager->AddIcon("SuicideCharge", "SUICIDE CHARGE\nGives itself a big strength\nboost but taking a large\namount of damage", true);
 	}
 	BaseEnemyComponent::load();
 
