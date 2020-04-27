@@ -559,7 +559,7 @@ void GameScene::Update(const double& dt) {
 			ChangeRoom();
 		}
 		//calls the current rooms update function
-		gameUI.Update(dt);
+		gameUI.Update(dt, cursPos);
 
 		//Adds random special item to inventory
 		if (Keyboard::isKeyPressed(Keyboard::I) && scene_delay.asSeconds() >= sceneChangeDelay)

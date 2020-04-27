@@ -78,7 +78,7 @@ public:
 
 	bool CheckBoxes(sf::Vector2f curspos);
 	void Render();
-	void Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm);
+	void Load(std::shared_ptr<BasePlayerComponent> p);
 	
 	void UpdateControls();
 	void UpdateCosts();
@@ -110,7 +110,9 @@ protected:
 	sf::Text HealthText;
 	sf::Text DexterityText;
 	sf::Text GameOverButton;
+	sf::Text backToMenu;
 	sf::FloatRect GameOverButtonBox;
+	sf::FloatRect backToMenuBox;
 	sf::FloatRect stat1Box;
 	sf::FloatRect stat2Box;
 	sf::FloatRect stat3Box;
@@ -131,7 +133,7 @@ public:
 	~GameUI() = default;
 
 	sf::Text descText;
-	void Update(double dt);
+	void Update(double dt, sf::Vector2f cursPos);
 	void Render();
 	void Load(int maxAP, std::shared_ptr<BasePlayerComponent> p);
 
