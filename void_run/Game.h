@@ -12,6 +12,7 @@ constexpr uint16_t gameHeight = 1080;
 
 extern MenuScene menuScene;
 extern GameScene gameScene;
+extern VictoryScene victoryScene;
 extern std::shared_ptr<BasePlayerComponent> player;
 extern bool isPaused;
 

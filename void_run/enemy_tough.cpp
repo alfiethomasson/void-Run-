@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "enemy_tough.h"
+#include "Game.h"
 
 ToughEnemy::ToughEnemy(Entity* p, int health, int strength, int dex, float expReward, int specialMove)
 	: BaseEnemyComponent{ p, health, strength, dex, expReward, specialMove} {}
@@ -12,7 +13,7 @@ void ToughEnemy::update(double dt)
 
 	BaseEnemyComponent::update(dt);
 
-	if (isTurn && isFinishedTurn != true)
+	if (isTurn && isFinishedTurn != true) //Only acts during its turn
 	{
 		srand(time(0));
 
@@ -21,40 +22,46 @@ void ToughEnemy::update(double dt)
 			if (turnCounter == 1) //Turn one, it will start a suicide charge
 			{
 				std::cout << "The enemy uses its unique ability: Suicide Charge! \n";
+				gameScene.UpdateTextBox("The enemy charges suicidally!"); //Loses 100HP, doubles STR and DEX
 				currentHealth -= 100;
 				_strength = _strength * 2;
 				_dexterity = _dexterity * 2;
 				EndTurn();
 			}
-			else if (turnCounter % 3 == 2 || turnCounter % 3 == 0) //It will then begin a matter of Normal, Normal, Strong attack, repeating forever
+			else if (turnCounter % 3 == 2 || turnCounter % 3 == 0) //It will then begin a pattern of Normal, Normal, Strong attack, repeating forever
 			{
-				std::cout << "The enemy makes a medium attack! \n";
-				attackEnemy(_strength + 5, _dexterity);
+				std::cout << "The enemy makes a medium attack! \n"; //Medium attack
+				gameScene.UpdateTextBox("The enemy makes an\nattack at you.");
+				attackEnemy(_strength + 5, _dexterity, "MediumAttack");
 				EndTurn();
 			}
 			else
 			{
-				std::cout << "The enemy makes a strong attack! \n";
-				attackEnemy(_strength * 2, _dexterity);
+				std::cout << "The enemy makes a strong attack! \n"; //Strong attack
+				gameScene.UpdateTextBox("The enemy makes a\npowerful attack!");
+				attackEnemy(_strength * 2, _dexterity, "HeavyAttack");
 				EndTurn();
 			}
 		}
-		else if (charging == true)
+		else if (charging == true) //If it previously charged a powerful attack (Only available to Charging enemies), its next action is always to unleash it
 		{
-			std::cout << "The enemy unleashes a powerful charged attack! \n";
-			attackEnemy(_strength + 10, _dexterity + 30);
+			std::cout << "The enemy unleashes a powerful charged attack! \n"; //Launches charged attack
+			gameScene.UpdateTextBox("The enemy unleashes\nits charged energy!");
+			attackEnemy(_strength + 10, _dexterity + 30, "HeavyAttack");
 			charging = false;
 			EndTurn();
 		}
-		else if (specialMove == 0 && turnCounter == 1)
+		else if (specialMove == 0 && turnCounter == 1) //Always uses Excruciate on turn 1 if it has it
 		{
-			std::cout << "The enemy uses its unique attack: Excruciate! \n";
+			std::cout << "The enemy uses its unique attack: Excruciate! \n"; //Sets escape chance to 5%
+			gameScene.UpdateTextBox("The enemy roars: You're\ntoo scared to run!");
 			currentEnemy->setRunChance(5);
 			EndTurn();
 		}
-		else if (specialMove == 1 && turnCounter != 1 && (currentEnemy->getStrength() < currentHealth))
+		else if (specialMove == 1 && turnCounter != 1 && (currentEnemy->getStrength() < currentHealth)) //Never uses a Charge Shot on turn 1: It also won't do it if it has lower health than the player's strength (At risk of dying)
 		{
-			std::cout << "The enemy uses is charging a powerful charged shot!";
+			std::cout << "The enemy uses is charging a powerful charged shot!"; //Starts charging a powerful short to release next turn
+			gameScene.UpdateTextBox("The enemy starts charging\na powerful assault...");
 			charging = true;
 			EndTurn();
 		}
@@ -63,63 +70,24 @@ void ToughEnemy::update(double dt)
 			int enemyAI = rand() % 5; //Random number from 0-4. 0-2 is medium attack, 3-4 is a heavy attack.
 
 			if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2) {
-				std::cout << "The enemy makes a medium attack! \n";
-				attackEnemy(_strength + 5, _dexterity);
+				std::cout << "The enemy makes a medium attack! \n"; //Medium Attack
+				gameScene.UpdateTextBox("The enemy makes an\nattack at you.");
+				attackEnemy(_strength + 5, _dexterity, "MediumAttack");
 				EndTurn();
 			}
 			else if (enemyAI == 4) {
-				std::cout << "The enemy makes a strong attack! \n";
-				attackEnemy(_strength * 2, _dexterity);
+				std::cout << "The enemy makes a strong attack! \n"; //Strong Attack
+				gameScene.UpdateTextBox("The enemy makes\na powerful attack!");
+				attackEnemy(_strength * 2, _dexterity, "HeavyAttack");
 				EndTurn();
 			}
 		}
-
-		/*int enemyAI = rand() % 6; //Random number from 0-5. 1-2 is medium attack, 3-4 is unique ability, 5 is a heavy attack.
-		if (charging == true) {
-			enemyAI = 6; //6 means that it's unleasing a charged shot.
-		}
-
-
-		if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2) {
-			std::cout << "The enemy makes a medium attack! \n";
-			attackEnemy(_strength+5, _dexterity);
-			EndTurn();
-		}
-		else if (enemyAI == 3 || enemyAI == 4) {
-			if (specialMove == 0) {
-				std::cout << "The enemy uses its unique attack: Excruciate! \n";
-				//This move will lower the player's chance of escape when implemented properly
-				EndTurn();
-			}
-			else if (specialMove == 1) {
-				std::cout << "The enemy uses its unique attack: Charged Shot! \n";
-				charging = true;
-				EndTurn();
-			}
-			else if (specialMove == 2) {
-				std::cout << "The enemy uses its unique attack: Suicide Charge! \n";
-				_strength = _strength * 1.6;
-				_dexterity = _dexterity * 1.6;
-				EndTurn();
-			}
-		}
-		else if (enemyAI == 5) {
-			std::cout << "The enemy makes a strong attack! \n";
-			attackEnemy(_strength*2, _dexterity);
-			EndTurn();
-		}
-		else if (enemyAI == 6) { //This is a charged shot
-			std::cout << "The enemy unleashes a powerful charged attack! \n";
-			attackEnemy(_strength + 10, _dexterity + 30);
-			charging = false;
-			EndTurn();
-		}*/
 	}
 }
 
 void ToughEnemy::load()
 {
-	auto sm = _parent->GetCompatibleComponent<SpriteComponent>();
+	auto sm = _parent->GetCompatibleComponent<SpriteComponent>(); //Sets sprite icons for the alien's unique abilities
 	spriteManager = sm[0];
 
 	if (specialMove == 0)
@@ -132,7 +100,7 @@ void ToughEnemy::load()
 	}
 	if (specialMove == 2)
 	{
-		spriteManager->AddIcon("SuicideCharge", "SUICIDE CHARGE\nGives itself a big strength\nboost but takes more damage", true);
+		spriteManager->AddIcon("SuicideCharge", "SUICIDE CHARGE\nGives itself a big strength\nboost but taking a large\namount of damage", true);
 	}
 	BaseEnemyComponent::load();
 
@@ -140,5 +108,5 @@ void ToughEnemy::load()
 
 void ToughEnemy::render()
 {
-	BaseEnemyComponent::render();
+	BaseEnemyComponent::render(); //Renders enemy
 }

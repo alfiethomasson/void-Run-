@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "enemy_easy.h"
+#include "game.h"
 
 EasyEnemy::EasyEnemy(Entity* p, int health, int strength, int dex, float expReward, int specialMove)
 	: BaseEnemyComponent{ p, health, strength, dex, expReward, specialMove } {}
@@ -13,7 +14,7 @@ bool hasEnraged;
 void EasyEnemy::update(double dt)
 {
 	BaseEnemyComponent::update(dt);
-	if (currentHealth <= 20)
+	if (currentHealth <= 20) //If it has low health, the weak enemy is considered critical condition
 	{
 		criticalCondition = true;
 	}
@@ -24,10 +25,11 @@ void EasyEnemy::update(double dt)
 
 	srand(time(0));
 
-	if (isTurn && isFinishedTurn != true)
+	if (isTurn && isFinishedTurn != true) //Only attacks on its turn
 	{
 		if (specialMove == 0 && (currentEnemy->getDexterity() < _dexterity) && turnCounter == 1) { //If the enemy's special attack is Swift Foot and they have better dexterity, they use it on the first round of combat
 			std::cout << "The enemy uses its unique ability: Swift Foot! \n";
+			gameScene.UpdateTextBox("The enemy starts dodging, appearing to become faster.");
 			_dexterity += 5; //The monster gains +5 to dexterity
 			usedSwiftFoot = true;
 			EndTurn();
@@ -35,6 +37,7 @@ void EasyEnemy::update(double dt)
 		else if (specialMove == 0 && usedSwiftFoot == false) //Whenever the enemy misses an attack (Or on the second round of combat, if it didn't use it turn one), it will follow up by using Swift Foot, as it tries to have a greater accuracy before attacking again
 		{
 			std::cout << "The enemy uses its unique ability: Swift Foot! \n";
+			gameScene.UpdateTextBox("The enemy starts dodging, appearing to become faster.");
 			_dexterity += 5; //The monster gains +5 to dexterity
 			usedSwiftFoot = true;
 			EndTurn();
@@ -42,20 +45,23 @@ void EasyEnemy::update(double dt)
 		else if (specialMove == 1 && turnCounter % 3 == 1 && criticalCondition == false) //Every third turn (1, 4, 7, 10, etc) the alien will use Double Slice unless it is critical
 		{
 			std::cout << "The enemy uses its unique attack: Double Slice! \n";
-			attackEnemy(_strength, _dexterity - 10); //Double slice simply has the enemy make two individual attacks
-			attackEnemy(_strength, _dexterity - 10); //These attacks both have a -10 to hit
+			gameScene.UpdateTextBox("The enemy attacks twice with reckless abandon!");
+			attackEnemy(_strength, _dexterity - 10, "WeakAttack"); //Double slice simply has the enemy make two individual attacks
+			attackEnemy(_strength, _dexterity - 10, "WeakAttack"); //These attacks both have a -10 to hit
 			EndTurn();
 		}
 		else if (specialMove == 1 && turnCounter % 2 == 1 && criticalCondition == true) //If they are below 40%, they'll switch to using it every other turn (1, 3, 5, 7, 9 etc)
 		{
 			std::cout << "The enemy uses its unique attack: Double Slice! \n";
-			attackEnemy(_strength, _dexterity - 10);
-			attackEnemy(_strength, _dexterity - 10);
+			gameScene.UpdateTextBox("The enemy swings twice with reckless abandon!");
+			attackEnemy(_strength, _dexterity - 10, "WeakAttack");
+			attackEnemy(_strength, _dexterity - 10, "WeakAttack");
 			EndTurn();
 		}
 		else if (specialMove == 2 && currentHealth <= _maxHealth && hasEnraged == false) //The first time the alien goes below its max HP, it always enrages
 		{
 			std::cout << "The enemy uses its unique attack: Enrage! \n";
+			gameScene.UpdateTextBox("The enemy thrashes in a fit of rage!");
 			enraged = true;
 			hasEnraged = true;
 			currentHealth += 10;
@@ -64,7 +70,8 @@ void EasyEnemy::update(double dt)
 		else if (enraged == true) //Any time the enemy is angy, it unleashes a powerful attack
 		{
 			std::cout << "The enemy unleashes its rage! \n";
-			attackEnemy(_strength*2, _dexterity - 5);
+			gameScene.UpdateTextBox("The enemy unleashes its rage!");
+			attackEnemy(_strength*2, _dexterity - 5, "WeakAttack");
 			enraged = false;
 			EndTurn();
 		}
@@ -74,11 +81,13 @@ void EasyEnemy::update(double dt)
 
 			if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2 ) {
 				std::cout << "The enemy makes a weak attack! \n";
-				attackEnemy(_strength, _dexterity);
+				gameScene.UpdateTextBox("The enemy attacks you weakly.");
+				attackEnemy(_strength, _dexterity, "WeakAttack");
 				EndTurn();
 			}
 			else if (enemyAI == 3) {
 				std::cout << "The enemy uses its unique attack: Enrage! \n";
+				gameScene.UpdateTextBox("The enemy thrashes in a fit of rage!");
 				enraged = true;
 				hasEnraged = true;
 				currentHealth += 10;
@@ -86,7 +95,8 @@ void EasyEnemy::update(double dt)
 			}
 			else if (enemyAI == 4) {
 				std::cout << "The enemy makes a medium attack! \n";
-				attackEnemy(_strength + 5, _dexterity);
+				gameScene.UpdateTextBox("The enemy makes an attack at you!");
+				attackEnemy(_strength + 5, _dexterity, "WeakAttack");
 				EndTurn();
 			}
 		}
@@ -96,12 +106,14 @@ void EasyEnemy::update(double dt)
 
 			if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2) {
 				std::cout << "The enemy makes a weak attack! \n";
-				attackEnemy(_strength, _dexterity);
+				gameScene.UpdateTextBox("The enemy attacks you weakly.");
+				attackEnemy(_strength, _dexterity, "WeakAttack");
 				EndTurn();
 			}
 			else if (enemyAI == 4) {
 				std::cout << "The enemy makes a medium attack! \n";
-				attackEnemy(_strength + 5, _dexterity);
+				gameScene.UpdateTextBox("The enemy makes an attack at you!");
+				attackEnemy(_strength + 5, _dexterity, "WeakAttack");
 				EndTurn();
 			}
 		}
@@ -110,7 +122,7 @@ void EasyEnemy::update(double dt)
 
 void EasyEnemy::load()
 {
-	auto sm = _parent->GetCompatibleComponent<SpriteComponent>();
+	auto sm = _parent->GetCompatibleComponent<SpriteComponent>(); //Sprite setup for unique ability identifier
 	spriteManager = sm[0];
 
 	if (specialMove == 0)
@@ -125,8 +137,7 @@ void EasyEnemy::load()
 	{
 		spriteManager->AddIcon("DoubleSlice", "DOUBLE SLICE\nMakes two attacks in one turn", true);
 	}
-	BaseEnemyComponent::load();
-	
+	BaseEnemyComponent::load();	
 }
 
 void EasyEnemy::render()

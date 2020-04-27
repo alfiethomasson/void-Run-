@@ -48,6 +48,9 @@ protected:
 	int animRowCounter;
 
 	std::vector<Icon> icons;
+	sf::Vector2f positionsRight[8];
+	sf::Vector2f positionsLeft[8];
+
 public:
 	SpriteComponent() = delete;
 	explicit SpriteComponent(Entity* p);
@@ -63,5 +66,7 @@ public:
 	virtual void ResetAnim();
 
 	void AddIcon(std::string texName, std::string desc, bool leftright);
+	void ChangeIcon(int position, std::string texname, std::string desc);
 	void RemoveIcon(int position);
+	void RemoveAllIcons();
 };

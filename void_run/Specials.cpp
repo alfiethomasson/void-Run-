@@ -6,7 +6,8 @@ void LaserBurst::update(double dt)
 	SpecialAbility::update(dt);
 }
 
-void LaserBurst::load()
+//
+void LaserBurst::load() //Sets default values!
 {
 	texName = "LaserBurst";
 	description = "A burst of energy that hits\nthe enemy for 2 x strength";
@@ -16,13 +17,16 @@ void LaserBurst::load()
 
 void LaserBurst::doEffect()
 {
-			player->SpendAP(APCost);
-			std::cout << "LASER BURST!\n";
-			gameScene.UpdateTextBox("LASER BURST!");
-			player->attack(player->getStrength() * 2, 0);
-			player->EndTurn();
+	//Spends AP 
+	player->SpendAP(APCost);
+	//Updates text box to show Laser Burst has been used
+	gameScene.UpdateTextBox("LASER BURST!");
+	//Uses Laser Burst, like a normal attack but double damage
+	player->attack(player->getStrength() * 2, 0, "LaserBurst");
+	player->EndTurn();
 }
 
+//Checks if key assigned to laserburst is pressed, and does effect if so
 void LaserBurst::checkKey()
 {
 	if (sf::Keyboard::isKeyPressed(key))
@@ -36,10 +40,10 @@ void LaserBurst::checkKey()
 
 void OverloadWeapon::update(double dt)
 {
-	SpecialAbility::update(dt);
+	SpecialAbility::update(dt); // base update
 }
 
-void OverloadWeapon::load()
+void OverloadWeapon::load() //Sets default values!
 {
 	texName = "OverloadWeapon";
 	description = "Overload your weapons energy cells\n to give you +50 strength for \nthis combat";
@@ -50,13 +54,18 @@ void OverloadWeapon::load()
 
 void OverloadWeapon::doEffect()
 {
-			player->SpendAP(APCost);
-			player->addStats(50, 0, 0);
-			gameScene.UpdateTextBox("WEAPON OVERLOADED");
-			player->EndTurn();
-			amount++;
+	//Spends AP
+	player->SpendAP(APCost);
+	//Gives player bonus stats as per effect
+	player->addStats(50, 0, 0);
+	gameScene.UpdateTextBox("WEAPON OVERLOADED");
+	//plays sound of eff
+	gameScene.gameUI.playSound("OverloadWeapon", 100);
+	player->EndTurn();
+	amount++;
 }
 
+//Removes stats given to player by effect
 void OverloadWeapon::Reset()
 {
 	for (int i = 0; i < amount; i++)
@@ -82,7 +91,7 @@ void UncannySpeed::update(double dt)
 	SpecialAbility::update(dt);
 }
 
-void UncannySpeed::load()
+void UncannySpeed::load() //Sets default values!
 {
 	texName = "UncannySpeed";
 	description = "Activate your suits matrix function\nimproving your dexterity by 50 this combat";
@@ -93,12 +102,16 @@ void UncannySpeed::load()
 
 void UncannySpeed::doEffect()
 {
-			player->SpendAP(APCost);
-			player->addStats(0, 0, 50);
-			gameScene.UpdateTextBox("UNCANNY SPEED ACTIVATED");
-			player->EndTurn();
+	//Adds dex to uncanny 
+	player->SpendAP(APCost);
+	player->addStats(0, 0, 50);
+	player->getSpriteComponent()->AddIcon(texName, "Improved Dexterity", false);
+	gameScene.UpdateTextBox("UNCANNY SPEED ACTIVATED");
+	gameScene.gameUI.playSound("UncannySpeed", 100);
+	player->EndTurn();
 }
 
+//Removes stats given to player by effect
 void UncannySpeed::Reset()
 {
 	for (int i = 0; i < amount; i++)
@@ -124,7 +137,7 @@ void PrimalInstincts::update(double dt)
 	SpecialAbility::update(dt);
 }
 
-void PrimalInstincts::load()
+void PrimalInstincts::load() //Sets default values!
 {
 	texName = "PrimalInstincts";
 	description = "Temporarily tap into your primal\ninstincts, increasing all your stats\n for this combat";
@@ -135,13 +148,17 @@ void PrimalInstincts::load()
 
 void PrimalInstincts::doEffect()
 {
-			player->SpendAP(APCost);
-			player->addStats(20, 50, 20);
-			gameScene.UpdateTextBox("PRIMAL INSTICTS ACTIVATED");
-			amount += 1;
-			player->EndTurn();
+	//Spend AP, add Stats, play sound etc
+	player->SpendAP(APCost);
+	player->addStats(20, 50, 20);
+	player->getSpriteComponent()->AddIcon(texName, "All stats improved", false);
+	gameScene.UpdateTextBox("PRIMAL INSTICTS ACTIVATED");
+	gameScene.gameUI.playSound("PrimalInstincts", 100);
+	amount += 1;
+	player->EndTurn();
 }
 
+//Removes player stats given by effect
 void PrimalInstincts::Reset()
 {
 	for (int i = 0; i < amount; i++)
@@ -167,7 +184,7 @@ void DeadlyFumes::update(double dt)
 	SpecialAbility::update(dt);
 }
 
-void DeadlyFumes::load()
+void DeadlyFumes::load() //Sets default values!
 {
 	texName = "DeadlyFumes";
 	description = "Spray the enemy with fumes\n that deal small damage over time\n and lowers their dexterity by 15";
@@ -177,23 +194,26 @@ void DeadlyFumes::load()
 
 void DeadlyFumes::doEffect()
 {
-			player->SpendAP(APCost);
-			player->getEnemy()->addStats(0, 0, -20);
-			enemySprite = player->getEnemy()->getSprite();
-			enemySprite->AddIcon(texName, "Lowered Dex and\n damage over time", true);
-			gameScene.UpdateTextBox("DEADLY FUMES ACTIVATED");
-			used = true;
-			player->EndTurn();
+	player->SpendAP(APCost);
+	player->getEnemy()->addStats(0, 0, -20);
+	enemySprite = player->getEnemy()->getSprite();
+	enemySprite->AddIcon(texName, "Lowered Dex and\n damage over time", true);
+	gameScene.UpdateTextBox("DEADLY FUMES ACTIVATED");
+	gameScene.gameUI.playSound("DeadlyFumes", 100);
+	used = true;
+	player->EndTurn();
 }
 
 void DeadlyFumes::turnStart()
 {
+	//If deadly fumes is active, deal small damage at beginning of player turn
 	if (used)
 	{
 		player->getEnemy()->TakeDamage(5);
 	}
 }
 
+//resets deadly fumes
 void DeadlyFumes::Reset()
 {
 	used = false;
@@ -215,7 +235,7 @@ void MagmaGrenade::update(double dt)
 	SpecialAbility::update(dt);
 }
 
-void MagmaGrenade::load()
+void MagmaGrenade::load() //Sets default values!
 {
 	texName = "MagmaGrenade";
 	description = "Launch a powerful grenade, dealing\nmedium damage and inflicting high\ndamage over time";
@@ -226,17 +246,19 @@ void MagmaGrenade::load()
 
 void MagmaGrenade::doEffect()
 {
-			player->SpendAP(APCost);
-			player->getEnemy()->TakeDamage(player->getStrength());
-			enemySprite = player->getEnemy()->getSprite();
-			enemySprite->AddIcon(texName, "High Damage over Time", true);
-			gameScene.UpdateTextBox("MAGMA GRENADE ACTIVATED");
-			used = true;
-			player->EndTurn();
+	player->SpendAP(APCost);
+	player->getEnemy()->TakeDamage(50.0f);
+	enemySprite = player->getEnemy()->getSprite();
+	enemySprite->AddIcon(texName, "High Damage over Time", true);
+	gameScene.gameUI.playSound("MagmaGrenade", 100);
+	gameScene.UpdateTextBox("MAGMA GRENADE ACTIVATED");
+	used = true;
+	player->EndTurn();
 }
 
 void MagmaGrenade::turnStart()
 {
+	//same as deadly fumes
 	if (used)
 	{
 		player->getEnemy()->TakeDamage(5);
@@ -264,7 +286,7 @@ void NanoBots::update(double dt)
 	SpecialAbility::update(dt);
 }
 
-void NanoBots::load()
+void NanoBots::load() //Sets default values!
 {
 	texName = "NanoBots";
 	description = "Release Nano bots into the\nair around you, healing you 10 every\nturn this combat";
@@ -277,6 +299,7 @@ void NanoBots::doEffect()
 {
 	player->SpendAP(APCost);
 	player->getSpriteComponent()->AddIcon(texName, "Healing every turn", false);
+	gameScene.gameUI.playSound("NanoBots", 100);
 	gameScene.UpdateTextBox("NANO BOTS ACTIVATED");
 	used = true;
 	player->EndTurn();
@@ -284,9 +307,10 @@ void NanoBots::doEffect()
 
 void NanoBots::turnStart()
 {
+	//heal player if used
 	if (used)
 	{
-		player->heal(10);
+		player->heal(10, false);
 	}
 }
 
@@ -311,7 +335,7 @@ void HoloGamble::update(double dt)
 	SpecialAbility::update(dt);
 }
 
-void HoloGamble::load()
+void HoloGamble::load() //Sets default values!
 {
 	texName = "HoloGamble";
 	description = "Draw from the deck, granting\na random permanent amount of strength,\nHP, and dexterity. Mostly\ngood but can be bad";
@@ -322,6 +346,9 @@ void HoloGamble::load()
 void HoloGamble::doEffect()
 {
 	player->SpendAP(APCost);
+
+	//Gets 3 random values, and gives player random stats depending on what they are
+
 	// construct a trivial random generator engine from a time-based seed:
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
@@ -345,7 +372,7 @@ void HoloGamble::doEffect()
 
 	int randHP = distributionInteger2(generator3);
 
-	std::cout << "\nHolo gamble: " << randStr << " , " << randDex << " , " << randHP << "\n";
+	gameScene.gameUI.playSound("HoloGamble", 100);
 
 	player->addStats(randStr, randHP, randDex);
 

@@ -9,6 +9,7 @@ sf::Color White(255, 255, 255, 255);
 
 void CombatUI::Render()
 {
+	//Renders all objects in combat UI
  	Renderer::queue(&attackSprite);
 	Renderer::queue(&healSprite);
 	Renderer::queue(&rechargeSprite);
@@ -37,17 +38,19 @@ void CombatUI::Render()
 
 void CombatUI::Update(double dt, sf::Vector2f cursPos)
 {
+	//Checks all UI boxes to see if cursor is in them
 	if (CheckBoxes(cursPos))
 	{
+		//Same for each box, if cursor is
+		//in box it calls UpdateDescText and shows the tooltip for the respective ability
 		if (attackBox.contains(cursPos))
 		{
-			//std::cout << "HEY";
 			gameScene.UpdateDesctext("ATTACK ENEMY\nDamage = " + std::to_string(player->getStrength()), sf::Vector2f(attackBox.getPosition().x,
 				attackBox.getPosition().y - 75.0f));
 		}
 		if (healBox.contains(cursPos))
 		{
-			gameScene.UpdateDesctext("HEAL\nAmount = " + std::to_string(30), sf::Vector2f(healBox.getPosition().x,
+			gameScene.UpdateDesctext("HEAL\nAmount = " + std::to_string(player->getDexterity()), sf::Vector2f(healBox.getPosition().x,
 				healBox.getPosition().y - 75.0f));
 		}
 		if (rechargeBox.contains(cursPos))
@@ -61,6 +64,7 @@ void CombatUI::Update(double dt, sf::Vector2f cursPos)
 			gameScene.UpdateDesctext("RUN FROM ENEMY\nChance = " + std::to_string(player->getRunChance()), sf::Vector2f(runBox.getPosition().x,
 				runBox.getPosition().y - 75.0f));
 		}
+		//Checks all special boxes to see if they are active first, and then if they contain the cursor
 		if (special1Sprite.getTexture() != NULL && special1Box.contains(cursPos))
 		{
 			gameScene.UpdateDesctext(sp1->getDescription(), sf::Vector2f(special1Sprite.getPosition().x, special1Sprite.getPosition().y - 75.0f));
@@ -80,44 +84,46 @@ void CombatUI::Update(double dt, sf::Vector2f cursPos)
 	}
 	else
 	{
+		//Hides the tooltip
 		gameScene.ResetDescText();
 	}
 }
 
-void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
+void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p)
 {
+	//Assigns player
 	player = p;
-	texManager = tm;
 
+	//Assigns the textures and postions for the base abilities and future special abilities
 	attackSprite.setTexture(Engine::tm.getTex("Attack"));
 	attackSprite.setScale(0.3f, 0.3f);
-	attackSprite.setPosition(sf::Vector2f(800.0f, 800.0f));
+	attackSprite.setPosition(sf::Vector2f(790.0f, 800.0f));
 	attackBox = attackSprite.getGlobalBounds();
-	texManager->addButton("attackBox", attackBox);
 
 	healSprite.setTexture(Engine::tm.getTex("Heal"));
 	healSprite.setScale(0.3f, 0.3f);
-	healSprite.setPosition(sf::Vector2f(900.0f, 800.0f));
+	healSprite.setPosition(sf::Vector2f(890.0f, 800.0f));
 	healBox = healSprite.getGlobalBounds();
 
 	rechargeSprite.setTexture(Engine::tm.getTex("Recharge"));
 	rechargeSprite.setScale(0.3f, 0.3f);
-	rechargeSprite.setPosition(sf::Vector2f(1000.0f, 800.0f));
+	rechargeSprite.setPosition(sf::Vector2f(990.0f, 800.0f));
 	rechargeBox = rechargeSprite.getGlobalBounds();
 
 	runSprite.setTexture(Engine::tm.getTex("Run"));
 	runSprite.setScale(0.3f, 0.3f);
-	runSprite.setPosition(sf::Vector2f(1100.0f, 800.0f));
+	runSprite.setPosition(sf::Vector2f(1090.0f, 800.0f));
 	runBox = runSprite.getGlobalBounds();
 
-	special1Sprite.setPosition(sf::Vector2f(800.0f, 900.0f));
+	special1Sprite.setPosition(sf::Vector2f(790.0f, 925.0f));
 
-	special2Sprite.setPosition(sf::Vector2f(900.0f, 900.0f));
+	special2Sprite.setPosition(sf::Vector2f(890.0f, 925.0f));
 
-	special3Sprite.setPosition(sf::Vector2f(1000.0f, 900.0f));
+	special3Sprite.setPosition(sf::Vector2f(990.0f, 925.0f));
 
-	special4Sprite.setPosition(sf::Vector2f(1100.0f, 900.0f));
+	special4Sprite.setPosition(sf::Vector2f(1090.0f, 925.0f));
 
+	//Sets fonts for all control text in UI
 	attackControl.setFont(Engine::tm.getFont());
 	healControl.setFont(Engine::tm.getFont());
 	rechargeControl.setFont(Engine::tm.getFont());
@@ -127,6 +133,7 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 	specialControl3.setFont(Engine::tm.getFont());
 	specialControl4.setFont(Engine::tm.getFont());
 	
+	//Sets character size for all text in UI
 	attackControl.setCharacterSize(30);
 	healControl.setCharacterSize(30);
 	rechargeControl.setCharacterSize(30);
@@ -136,8 +143,10 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 	specialControl3.setCharacterSize(30);
 	specialControl4.setCharacterSize(30);
 
+	//updates controls with correct keys
 	UpdateControls();
 
+	//Sets fonts for all cost text in UI
 	attackCost.setFont(Engine::tm.getFont());
 	healCost.setFont(Engine::tm.getFont());
 	rechargeCost.setFont(Engine::tm.getFont());
@@ -147,6 +156,7 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 	specialCost3.setFont(Engine::tm.getFont());
 	specialCost4.setFont(Engine::tm.getFont());
 
+	//Sets character size for all cost text in UI
 	attackCost.setCharacterSize(25);
 	healCost.setCharacterSize(25);
 	rechargeCost.setCharacterSize(25);
@@ -156,6 +166,7 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 	specialCost3.setCharacterSize(25);
 	specialCost4.setCharacterSize(25);
 
+	//Sets costs to be the same color as action points
 	attackCost.setColor(sf::Color(30, 216, 255, 255));
 	healCost.setColor(sf::Color(30, 216, 255, 255));
 	rechargeCost.setColor(sf::Color(30, 216, 255, 255));
@@ -165,9 +176,8 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 	specialCost3.setColor(sf::Color(30, 216, 255, 255));
 	specialCost4.setColor(sf::Color(30, 216, 255, 255));
 
-
+	//Updates all the cost text to have correct text and positions
 	UpdateCosts();
-	std::cout << "UI SIZE = " << texManager->getButtonMap().size();
 }
 
 sf::FloatRect& CombatUI::getAttackBox()
@@ -210,8 +220,10 @@ sf::FloatRect& CombatUI::getSp4Box()
 	return special4Box;
 }
 
+//Checks all buttons to see if cursor is contained in them
 bool CombatUI::CheckBoxes(sf::Vector2f curspos)
 {
+	//if any boxes contain mouse, return true.  else false
 	if (attackBox.contains(curspos) || healBox.contains(curspos)
 		|| rechargeBox.contains(curspos) || runBox.contains(curspos) || special1Box.contains(curspos)
 		|| special2Box.contains(curspos) || special3Box.contains(curspos) || special4Box.contains(curspos))
@@ -224,12 +236,16 @@ bool CombatUI::CheckBoxes(sf::Vector2f curspos)
 	}
 }
 
+//Adds new special ability to combatUI
 void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> sp)
 {
+	//Looks for inactive special slot, and if inactive sets up special slot
 	if (special1Sprite.getTexture() == NULL)
 	{
+		//sets correct key for special
 		sp->setKey(special1Key);
 		sp1 = sp;
+		//Assign specials texture, scale, how much they cost, and positions
 		special1Sprite.setTexture(Engine::tm.getTex(texName));
 		special1Sprite.setScale(0.3f, 0.3f);
 		specialCost1.setString(std::to_string(sp1->getAPCost()));
@@ -242,7 +258,7 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 	}
 	else if (special2Sprite.getTexture() == NULL)
 	{
-		sp->setKey(special1Key);
+		sp->setKey(special2Key);
 		sp2 = sp;
 		special2Sprite.setTexture(Engine::tm.getTex(texName));
 		special2Sprite.setScale(0.3f, 0.3f);
@@ -250,11 +266,13 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 		specialControl2.setString(Engine::keyToString(special2Key));
 		specialControl2.setPosition(special2Sprite.getPosition().x + (special2Sprite.getGlobalBounds().width / 2)
 			- (specialControl2.getGlobalBounds().width / 2), 1000.0f);
+		specialCost2.setPosition(special2Sprite.getPosition().x + special2Sprite.getGlobalBounds().width - costOffset -
+			(specialCost2.getGlobalBounds().width), special2Sprite.getPosition().y + costOffset - (specialCost2.getGlobalBounds().height / 2));
 		special2Box = special2Sprite.getGlobalBounds();
 	}
 	else if (special3Sprite.getTexture() == NULL)
 	{
-		sp->setKey(special1Key);
+		sp->setKey(special3Key);
 		sp3 = sp;
 		special3Sprite.setTexture(Engine::tm.getTex(texName));
 		special3Sprite.setScale(0.3f, 0.3f);
@@ -262,11 +280,13 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 		specialControl3.setString(Engine::keyToString(special3Key));
 		specialControl3.setPosition(special3Sprite.getPosition().x + (special3Sprite.getGlobalBounds().width / 2)
 			- (specialControl3.getGlobalBounds().width / 2), 1000.0f);
+		specialCost3.setPosition(special3Sprite.getPosition().x + special3Sprite.getGlobalBounds().width - costOffset -
+			(specialCost3.getGlobalBounds().width), special3Sprite.getPosition().y + costOffset - (specialCost3.getGlobalBounds().height / 2));
 		special3Box = special3Sprite.getGlobalBounds();
 	}
 	else if (special4Sprite.getTexture() == NULL)
 	{
-		sp->setKey(special1Key);
+		sp->setKey(special4Key);
 		sp4 = sp;
 		special4Sprite.setTexture(Engine::tm.getTex(texName));
 		special4Sprite.setScale(0.3f, 0.3f);
@@ -274,10 +294,13 @@ void CombatUI::addSpecial(std::string texName, std::shared_ptr<SpecialAbility> s
 		specialControl4.setString(Engine::keyToString(special4Key));
 		specialControl4.setPosition(special4Sprite.getPosition().x + (special4Sprite.getGlobalBounds().width / 2)
 			- (specialControl4.getGlobalBounds().width / 2), 1000.0f);
+		specialCost4.setPosition(special4Sprite.getPosition().x + special4Sprite.getGlobalBounds().width - costOffset -
+			(specialCost4.getGlobalBounds().width), special4Sprite.getPosition().y + costOffset - (specialCost4.getGlobalBounds().height / 2));
 		special4Box = special4Sprite.getGlobalBounds();
 	}
 }
 
+//Resets all specials!
 void CombatUI::resetSpecial()
 {
 	special1Sprite = sf::Sprite();
@@ -286,12 +309,29 @@ void CombatUI::resetSpecial()
 	special4Sprite = sf::Sprite();
 }
 
+//Updates all controls to be up to date in case player has changed controls
 void CombatUI::UpdateControls()
 {
 	attackControl.setString(Engine::keyToString(attackKey));
 	healControl.setString(Engine::keyToString(healKey));
 	rechargeControl.setString(Engine::keyToString(rechargeKey));
 	runControl.setString(Engine::keyToString(runKey));
+	if (special1Sprite.getTexture() != NULL)
+	{
+		specialControl1.setString(Engine::keyToString(special1Key));
+	}
+	if (special2Sprite.getTexture() != NULL)
+	{
+		specialControl2.setString(Engine::keyToString(special2Key));
+	}
+	if (special3Sprite.getTexture() != NULL)
+	{
+		specialControl3.setString(Engine::keyToString(special3Key));
+	}
+	if (special4Sprite.getTexture() != NULL)
+	{
+		specialControl4.setString(Engine::keyToString(special4Key));
+	}
 
 	attackControl.setPosition(attackSprite.getPosition().x + (attackSprite.getGlobalBounds().width / 2)
 		- (attackControl.getGlobalBounds().width / 2), 875.0f);
@@ -311,6 +351,7 @@ void CombatUI::UpdateControls()
 		- (specialControl3.getGlobalBounds().width / 2), 975.0f);
 }
 
+//Updates all costs in UI in case of updated cost
 void CombatUI::UpdateCosts()
 {
 	std::cout << " player attackcost " << std::to_string(player->baseAttackCost);
@@ -329,46 +370,61 @@ void CombatUI::UpdateCosts()
 		runCost.getGlobalBounds().width, runSprite.getPosition().y + costOffset - (runCost.getGlobalBounds().height / 2));
 }
 
-void GameUI::Update(double dt)
+void GameUI::Update(double dt, sf::Vector2f cursPos)
 {
-	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
-	sf::Vector2f cursPos = sf::Vector2f(tempPos);
-
-	if (GameOverButtonBox.contains(cursPos))
+	//If Back To Menu button contains Cursor and player is dead
+	if (backToMenuBox.contains(cursPos) && player->getCurrentHealth() == 0)
 	{
-		GameOverButton.setColor(Green);
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		//Set text green
+		backToMenu.setColor(Green);
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) // if mouse is pressed
 		{
+			//Change to menu
+			gameScene.gameMusic.stop();
 			Engine::ChangeScene(&menuScene);
 		}
 	}
 	else
 	{
-		GameOverButton.setColor(White);
+		backToMenu.setColor(White);
 	}
 }
 
+//When enemy is killed this is looped
 bool GameUI::updateStatOptions()
 {
+	//Sets stat up text
 	statUp();
+	//Gets curser position
 	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	sf::Vector2f cursPos = sf::Vector2f(tempPos);
+
+	//Updates cursor position to reflect window size
+	cursPos.x /= Engine::xMultiply;
+	cursPos.y /= Engine::yMultiply;
+
+	//If in stat up
 	if (inStatUp)
 	{
+		//If mouse button is pressed
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
+			//if stat boxes contain mouse
 			if (stat1Box.contains(cursPos))
 			{
-				player->addStats(5, 0, 0);
+				//Add specific stat to player
+				player->addStats(strengthUp, 0, 0);
+				//play sound
 				sound.setBuffer(Engine::tm.getSound("StatUp"));
 				sound.setVolume(50 * soundVolume / 100 * masterVolume / 100);
 				sound.play();
+				//set values to false to break out of function
 				inStatUp = false;
 				return false;
 			}
 			if (stat2Box.contains(cursPos))
 			{
-				player->addStats(0, 10, 0);
+				player->addStats(0, hpUp, 0);
 				sound.setBuffer(Engine::tm.getSound("StatUp"));
 				sound.setVolume(50 * soundVolume / 100 * masterVolume / 100);
 				sound.play();
@@ -377,7 +433,7 @@ bool GameUI::updateStatOptions()
 			}
 			if (stat3Box.contains(cursPos))
 			{
-				player->addStats(0, 0, 5);
+				player->addStats(0, 0, dexUp);
 				sound.setBuffer(Engine::tm.getSound("StatUp"));
 				sound.setVolume(50 * soundVolume/100 * masterVolume/100);
 				sound.play();
@@ -391,14 +447,18 @@ bool GameUI::updateStatOptions()
 
 void GameUI::Render()
 {
+	//Render background of game
 	Renderer::queue(&background);
 
+	//Render all action points
 	for (auto& e : cells)
 	{
 		Renderer::queue(&e);
 	}
 
+	//Render player icon
 	Renderer::queue(&playerIcon);
+	//if in stat up after killing enemy
 	if (inStatUp)
 	{
 		Renderer::queue(&stat1);
@@ -410,14 +470,18 @@ void GameUI::Render()
 		Renderer::queue(&StrengthText);
 	}
 
-	if (player->getCurrentHealth() == 0)
+	//if player is dead, render game over stuff
+	if (player->getParent().isAlive() == false)
 	{
 		Renderer::queue(&GameOverButton);
+		Renderer::queue(&backToMenu);
 	}
 }
 
+//Load important stuff for the GameUI
 void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 {
+	//Set default values
 	player = p;
 	inStatUp = false;
 	MaxAP = maxAP;
@@ -425,7 +489,10 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	cells.clear();
 	height = 0;
 
+	//Gain full AP
 	gainAP(MaxAP);
+
+	//Sets values for text and sprites, textures, fonts, strings etc
 	descText.setFont(Engine::tm.getFont());
 	descText.setCharacterSize(30);
 	descText.setString("");
@@ -446,16 +513,17 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	stat1.setPosition((Engine::getWindowSize().x / 2) - 275.0f, 500.0f);
 	stat2.setPosition(Engine::getWindowSize().x / 2 , 500.0f);
 	stat3.setPosition((Engine::getWindowSize().x / 2) + 275.0f, 500.0f);
-	std::cout << "WINDOW 1 POS" << Engine::getWindowSize().x << "\n";
 
 	stat1Box = stat1.getGlobalBounds();
 	stat2Box = stat2.getGlobalBounds();
 	stat3Box = stat3.getGlobalBounds();
 
+	//Sets values for statup after enemies are killed
 	strengthUp = 5;
 	hpUp = 10;
 	dexUp = 5;
 
+	//More initializing text and sprites
 	RewardsText.setFont(Engine::tm.getFont());
 	StrengthText.setFont(Engine::tm.getFont());
 	HealthText.setFont(Engine::tm.getFont());
@@ -469,7 +537,7 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	StrengthText.setString("Max HP + 10");
 	HealthText.setString("Strength +5 ");
 	DexterityText.setString("Dexterity +5 ");
-	RewardsText.setPosition((Engine::getWindowSize().x / 2) - (RewardsText.getLocalBounds().width / 2), 100.0f);
+	RewardsText.setPosition((Engine::getWindowSize().x / 2) - (RewardsText.getLocalBounds().width / 2), 250.0f);
 	StrengthText.setPosition(stat1.getPosition().x - (StrengthText.getGlobalBounds().width / 2), 400.0f);
 	HealthText.setPosition(stat2.getPosition().x - (HealthText.getLocalBounds().width / 2), 400.0f);
 	DexterityText.setPosition(stat3.getPosition().x - (DexterityText.getLocalBounds().width / 2), 400.0f);
@@ -477,28 +545,42 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	StrengthText.setFillColor(sf::Color(0, 0, 205, 255));
 	DexterityText.setFillColor(sf::Color(0, 255, 127, 255));
 
+	//Sets the background!
 	background.setTexture(Engine::tm.getTex("Background1"));
-	background.setScale(GAMEX/ background.getGlobalBounds().width, 0.7f);
+	//Move the background up so combat UI has space to be seen
+	background.setScale(GAMEX / background.getGlobalBounds().width, 0.7f);
 
-	GameOverButton.setFont(font);
-	GameOverButton.setString("Gg idiot");
+	//Game Over text and back to menu 
+	GameOverButton.setFont(Engine::tm.getFont());
+	GameOverButton.setString("GAME OVER");
 	GameOverButton.setCharacterSize(60);
-	GameOverButton.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - (GameOverButton.getGlobalBounds().width / 2),
-		Engine::getWindowSize().y / 2.0f - (GameOverButton.getGlobalBounds().height / 2) + 100.0f));
+	GameOverButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (GameOverButton.getGlobalBounds().width / 2),
+		300.0f));
 	GameOverButtonBox = GameOverButton.getGlobalBounds();
+	backToMenu.setFont(Engine::tm.getFont());
+	backToMenu.setString("Back To Menu");
+	backToMenu.setCharacterSize(60);
+	backToMenu.setPosition(sf::Vector2f(GAMEX / 2.0f - (backToMenu.getGlobalBounds().width / 2),
+		400.0f));
+	backToMenuBox = backToMenu.getGlobalBounds();
+
 }
 
+//Creates new action point cell
 sf::Sprite GameUI::getNewCell()
 {
 	sf::Sprite cell;
 	cell.setTexture(Engine::tm.getTex("Charge"));
-	cell.setScale(0.05f, 0.15f);
+	cell.setScale(0.10f, 0.2f);
+	//Adds to height so future cells are placed correctly
 	height += 20;
-	cell.setPosition(sf::Vector2f(800.0f + height, 750.0f));
+	cell.setPosition(sf::Vector2f(870.0f + height, 700.0f));
+	//rotates as tex is 90 degrees off
 	cell.setRotation(90);
 	return cell;
 }
 
+//Sets values for stat up
 void GameUI::statUp()
 {
 	inStatUp = true;
@@ -507,8 +589,10 @@ void GameUI::statUp()
 	DexterityText.setString("Dexterity\n  + " + std::to_string(dexUp));
 }
 
+//Spend AP and update on action points 
 void GameUI::useAP(int amount)
 {
+	//get temp value of current AP minus amount, and sets to 0 if less than 0
 	int temp = APAmount - amount;
 	if (temp < 0)
 	{
@@ -518,8 +602,10 @@ void GameUI::useAP(int amount)
 	{
 		APAmount = temp;
 	}
+	//If currentAmount is not 0
 	if (APAmount != 0)
 	{
+		//deletes cell for each that has been spent
 		for (int i = 0; i < amount; i++)
 		{
 			cells.pop_back();
@@ -528,6 +614,7 @@ void GameUI::useAP(int amount)
 	}
 	else
 	{
+		//if apamount is 0, clears cells
 		while (!cells.empty())
 		{
 			cells.pop_back();
@@ -536,12 +623,14 @@ void GameUI::useAP(int amount)
 	}
 }
 
+//Gain AP on UI
 void GameUI::gainAP(int amount)
 {
-	std::cout << "GAMEUI GAINING AP: " << amount << "\n";
+	//Gets temp value to ensure you dont add above limit
 	int temp = APAmount + amount;
 	if (temp > MaxAP)
 	{
+		//Creates only enough cells to fill AP bar
 		for (int i = 0; i < MaxAP - APAmount; i++)
 		{
 			cells.push_back(getNewCell());
@@ -550,6 +639,7 @@ void GameUI::gainAP(int amount)
 	}
 	else
 	{
+		//Creates new cells for amount gained
 		APAmount = temp;
 		for (int i = 0; i < amount; i++)
 		{
@@ -558,21 +648,25 @@ void GameUI::gainAP(int amount)
 	}
 }
 
+//returns current AP amount of gameUI
 int GameUI::getAPAmount()
 {
 	return cells.size();
 }
 
+//Updates the text of the tooltip description text that many other functions call to show what abilities do etc
 void GameUI::UpdateDesc(std::string string)
 {
 	descText.setString(string);
 }
 
+//Updates the position of the tooltip description text that many other functions call to show what abilities do etc
 void GameUI::UpdateDescPos(sf::Vector2f pos)
 {
 	descText.setPosition(pos);
 }
 
+//Plays sound from UI
 void GameUI::playSound(const std::string& name, int volume)
 {
 	sound.setBuffer(Engine::tm.getSound(name));
@@ -580,34 +674,41 @@ void GameUI::playSound(const std::string& name, int volume)
 	sound.play();
 }
 
+//Big Update in settings to check if any buttons are pressed
 void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 {
+	//get current time for delays
 	delayTime = delayClock.getElapsedTime().asSeconds();
 
+	//If Res box contains cursor
 	if (ResButtonBox.contains(cursPos))
 	{
 		ResButton.setColor(Green);
-		if (Mouse::isButtonPressed(Mouse::Left) && delayTime >= delayAmount)
+		if (Mouse::isButtonPressed(Mouse::Left) && delayTime >= delayAmount) // if mouse is pressed
 		{
+			//play UI sound
 			sound.setVolume(soundVolume * masterVolume / 100);
 			sound.play();
 			delayClock.restart();
-			if (Engine::getWindowSize().y == 1080)
+			//Changes resolution to next on list, 720p, 1080p, fullscreen
+			if (Engine::getWindowSize().y == 1080) // if window is 1080p
 			{
+				//if window isnt fullscreen, go fullscreen
 				if (!Engine::getFullscreen())
 				{
 					ResChange.setString("FS");
 					Engine::SetFullScreen(Engine::GetWindow(), true);
 				}
-				else
+				else // go 720p
 				{
 					ResChange.setString("720p");
 					Engine::SetFullScreen(Engine::GetWindow(), false);
 					Engine::ChangeResolution(1280, 720, GAMEX, GAMEY);
 				}
 			}
-			else
-			{
+			else // go 1080p from 720p
+			{ 
+				ResChange.setString("1080p");
 				Engine::ChangeResolution(1920, 1080, GAMEX, GAMEY);
 			}
 		}
@@ -617,6 +718,7 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 		ResButton.setColor(White);
 	}
 
+	//Checks if master volume left box is clicked, and reduces master volume if so
 	if (MasterLeftBox.contains(cursPos))
 	{
 		MasterLeft.setFillColor(Green);
@@ -636,6 +738,7 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 	{
 		MasterLeft.setFillColor(White);
 	}
+	//Checks if master volume right box is clicked, and Increases master volume if so
 	if (MasterRightBox.contains(cursPos))
 	{
 		MasterRight.setFillColor(Green);
@@ -655,6 +758,7 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 	{
 		MasterRight.setFillColor(White);
 	}
+	//Checks if music volume left box is clicked, and reduces music volume if so
 	if (MusicLeftBox.contains(cursPos))
 	{
 		MusicLeft.setFillColor(Green);
@@ -674,6 +778,7 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 	{
 		MusicLeft.setFillColor(White);
 	}
+	//Checks if music volume right box is clicked, and increases music volume if so
 	if (MusicRightBox.contains(cursPos))
 	{
 		MusicRight.setFillColor(Green);
@@ -693,6 +798,7 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 	{
 		MusicRight.setFillColor(White);
 	}
+	//Checks if soundFX volume left box is clicked, and reduces FX volume if so
 	if (FXLeftBox.contains(cursPos))
 	{
 		FXLeft.setFillColor(Green);
@@ -712,6 +818,7 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 	{
 		FXLeft.setFillColor(White);
 	}
+	//Checks if FX volume right box is clicked, and increases FX volume if so
 	if (FXRightBox.contains(cursPos))
 	{
 		FXRight.setFillColor(Green);
@@ -732,6 +839,7 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 		FXRight.setFillColor(White);
 	}
 
+	//Checks if right key on keyboard is pressed, and changes screen resolution like before if so
 	if (Keyboard::isKeyPressed(Keyboard::Right) && delayTime >= delayAmount)
 	{
 		sound.setVolume(soundVolume* masterVolume / 100);
@@ -758,6 +866,7 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 		}
 	}
 
+	//If back to menu box is clicked, change scene to main menu
 	if (toMenuBox.contains(cursPos))
 	{
 		toMenuText.setColor(Green);
@@ -777,6 +886,8 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 		toMenuText.setColor(White);
 	}
 
+	//Checks each Key in the change controls section, and if any include mouse and have a key pressed on them change that key 
+	//to pressed key
 	if(AttackBox.contains(cursPos))
 	{
 		CheckKeyPress(AttackKeyText, AttackBox, attackKey);
@@ -814,6 +925,7 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 		CheckKeyPress(PauseKeyText, PauseBox, pauseKey);
 	}
 	
+	//If reset controls clicked, reset controls to default values
 	if (ResetBox.contains(cursPos))
 	{
 		ResetControls.setColor(Green);
@@ -829,6 +941,7 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 		ResetControls.setColor(White);
 	}
 
+	//If back button clicked return to previous screen (main menu, game scene)
 	if (BackBox.contains(cursPos))
 	{
 		BackButton.setColor(Green);
@@ -845,6 +958,7 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 		BackButton.setColor(White);
 	}
 
+	//If backspace is called go back to previous scene
 	if (Keyboard::isKeyPressed(Keyboard::BackSpace))
 	{
 		sound.setVolume(soundVolume* masterVolume / 100);
@@ -855,21 +969,21 @@ void SettingUI::Update(const double& dt, sf::Vector2f cursPos)
 
 }
 
+//Loads stuff for setting UI
 void SettingUI::Load(sf::Font &font, bool p)
 {
 	pause = p;
 
+	//Loads sound for menu button presses
 	sound.setBuffer(Engine::tm.getSound("ButtonPress"));
 
+	//Sets font for all text
 	ResChange.setFont(font);
 	ResText.setFont(font);
 	ResButton.setFont(font);
 	MasterText.setFont(font);
 	MusicText.setFont(font);
 	FXText.setFont(font);
-	//MasterTextVolume.setFont(font);
-	//MusicTextVolume.setFont(font);
-	//FXTextVolume.setFont(font);
 	MasterLeft.setFont(font);
 	MasterRight.setFont(font);
 	MusicLeft.setFont(font);
@@ -898,6 +1012,7 @@ void SettingUI::Load(sf::Font &font, bool p)
 	ResetControls.setFont(font);
 	HowToText.setFont(font);
 
+	//Sets string and position etc for all text
 	BackButton.setString("BACK - BACKSPACE");
 	BackButton.setCharacterSize(40);
 	BackButton.setPosition(sf::Vector2f(1300.0f, 975.0f));
@@ -950,10 +1065,6 @@ void SettingUI::Load(sf::Font &font, bool p)
 	FXRight.setPosition(FXText.getPosition().x + FXText.getGlobalBounds().width + 100.0f, FXText.getPosition().y);
 	FXLeftBox = FXLeft.getGlobalBounds();
 	FXRightBox = FXRight.getGlobalBounds();
-
-	//FXText.setString("FX Volume: ");
-	//FXText.setCharacterSize(40);
-	//FXText.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2 - 300.0f, 200.0f));
 
 	AttackText.setString("Attack Key: ");
 	AttackText.setCharacterSize(40);
@@ -1034,14 +1145,16 @@ void SettingUI::Load(sf::Font &font, bool p)
 	ResetControls.setPosition((GAMEX / 2) - (ResetControls.getGlobalBounds().width / 2), 800.0f);
 	ResetBox = ResetControls.getGlobalBounds();
 
+	//Updates how to text to explain how to change controls
 	HowToText.setString("To change controls hover\nmouse over key and hold down\n new key on keyboard");
 	HowToText.setCharacterSize(25);
 	HowToText.setPosition(1200.0f, 400.0f);
 
+	//If this is pause screen not settings, allows you to return to main menu from game scene
 	if (pause)
 	{
 		toMenuText.setFont(Engine::tm.getFont());
-		toMenuText.setString("To Main Menu\n(Remember to save!)");
+		toMenuText.setString("To Main Menu\n(Remember to\nsave!)");
 		toMenuText.setCharacterSize(30);
 		toMenuText.setPosition(50.0f, 50.0f);
 		toMenuBox = toMenuText.getGlobalBounds();
@@ -1050,6 +1163,7 @@ void SettingUI::Load(sf::Font &font, bool p)
 
 void SettingUI::Render()
 {
+	//Renders all buttons
 	Renderer::queue(&ResButton);
 	Renderer::queue(&ResChange);
 	Renderer::queue(&ResText);
@@ -1083,12 +1197,13 @@ void SettingUI::Render()
 	Renderer::queue(&ResetControls);
 	Renderer::queue(&BackButton);
 	Renderer::queue(&HowToText);
-	if (pause)
+	if (pause) // if pause not settings
 	{
 		Renderer::queue(&toMenuText);
 	}
 }
 
+//Resets all controls back to default
 void SettingUI::ResetKeys()
 {
 	AttackKeyText.setString("1");
@@ -1121,6 +1236,8 @@ void SettingUI::ResetKeys()
 	PauseBox = PauseKeyText.getGlobalBounds();
 }
 
+//Checks if key is pressed and if so assigns that key to the key passed through
+//A bit buggy, event handler is very slow and sometimes doesn't work
 void SettingUI::CheckKeyPress(sf::Text& changeText, sf::FloatRect& box, sf::Keyboard::Key& key)
 {
 	sf::Event Event;
@@ -1137,6 +1254,7 @@ void SettingUI::CheckKeyPress(sf::Text& changeText, sf::FloatRect& box, sf::Keyb
 	}
 }
 
+//Updates Settings if things have been changed
 void SettingUI::UpdateSettings()
 {
 	if (!Engine::getFullscreen())

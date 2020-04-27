@@ -13,20 +13,20 @@ std::vector<std::shared_ptr<BasePlayerComponent>> playerInfo;
 
 int level;
 
-//Clock clock;
-
 BasePlayerComponent::BasePlayerComponent(Entity* p, float maxhealth, float currenthealth, float strength, float dex,
 	float experience, int level, int actionPoints, CombatUI *ui, GameUI *gui)
 	: _maxHealth{ maxhealth }, currentHealth{ currenthealth }, _strength{ strength }, _dexterity{ dex }, 
 	_experience{ experience }, level{ level }, _actionPointsMax{ actionPoints }, combatUI{ *ui }, gameUI{ *gui }, Component(p) {}
 
-void BasePlayerComponent::render()
+void BasePlayerComponent::render() //Renderer function
 {
-	Renderer::queue(&healthText);
+	Renderer::queue(&healthText); //Queue all their stats to be displayed
 	Renderer::queue(&StrengthText);
 	Renderer::queue(&HPText);
 	Renderer::queue(&DexterityText);
-	for (auto& b : hpbars)
+	Renderer::queue(&EXPText);
+	Renderer::queue(&LevelText);
+	for (auto& b : hpbars) //Loop in case they have lots of health, to display multiple health bars
 	{
 		Renderer::queue(&b);
 	}
@@ -34,48 +34,46 @@ void BasePlayerComponent::render()
 
 void BasePlayerComponent::update(double dt) {
 
-	healthSize = currentHealth;
-	//healthBar.setSize(sf::Vector2f(healthSize * 1.5, 20.0f));
+	healthSize = currentHealth; //Health bars based on current health
 	healthText.setString(std::to_string((int)currentHealth) + " / " + std::to_string((int)_maxHealth));
 
-	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
+	sf::Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow()); //Get the mouse's position
 	sf::Vector2f cursPos = sf::Vector2f(tempPos);
-
 	cursPos.x /= Engine::xMultiply;
 	cursPos.y /= Engine::yMultiply;
 
-	if (isTurn && !isPaused)
+	if (isTurn && !isPaused) //If it's the player's turn...
 	{
-		if (checkEnemyStatus() && getCurrentHealth() != 0)
+		if (checkEnemyStatus() && getCurrentHealth() != 0) //...and both people are alive...
 		{
-			if (isFinishedTurn != true)
+			if (isFinishedTurn != true) //...and they haven't finished their turn...
 			{
-				if (Keyboard::isKeyPressed(attackKey) && CheckAP(baseAttackCost))
+				if (Keyboard::isKeyPressed(attackKey) && CheckAP(baseAttackCost)) //They can attack!
 				{
-					attack(_strength, _dexterity);
+					attack(_strength, _dexterity, "Attack");
 				}
-				if (Keyboard::isKeyPressed(healKey) && CheckAP(healCost))
+				if (Keyboard::isKeyPressed(healKey) && CheckAP(healCost)) //They can heal!
 				{
-					heal(30);
+					heal(_dexterity, true);
 				}
-				if (Keyboard::isKeyPressed(rechargeKey) && CheckAP(rechargeCost))
+				if (Keyboard::isKeyPressed(rechargeKey) && CheckAP(rechargeCost)) //They can charge AP!
 				{
 					recharge(6);
 				}
-				if (Keyboard::isKeyPressed(runKey) && CheckAP(runCost))
+				if (Keyboard::isKeyPressed(runKey) && CheckAP(runCost)) //They can try to run!
 				{
 					run();
 				}
 
-				if (Mouse::isButtonPressed(Mouse::Left))
+				if (Mouse::isButtonPressed(Mouse::Left)) //They can do the same as above, but by clicking the buttons
 				{
 					if (combatUI.getAttackBox().contains(cursPos) && CheckAP(baseAttackCost))
 					{
-						attack(_strength, _dexterity);
+						attack(_strength, _dexterity, "Attack");
 					}
 					if (combatUI.getHealBox().contains(cursPos) && CheckAP(healCost))
 					{
-						heal(30);
+						heal(_dexterity, true);
 					}
 					if (combatUI.getRechargeBox().contains(cursPos) && CheckAP(rechargeCost))
 					{
@@ -88,26 +86,25 @@ void BasePlayerComponent::update(double dt) {
 				}
 
 				abilityManager->combatCheck(cursPos);
-				//	gameScene.combatUI.turnUpdate();
 			}
 		}
 	}
 }
 
-void BasePlayerComponent::StartTurn()
+void BasePlayerComponent::StartTurn() //Start their turn
 {
-	isTurn = true;
-	gainAP(1);
+	isTurn = true; //Note their turn
+	gainAP(1); //Gain 1AP per turn
 	abilityManager->StartTurnCheck();
 }
 
-void BasePlayerComponent::makeHPBar()
+void BasePlayerComponent::makeHPBar() //HP Bar creation
 {
-	sf::RectangleShape healthBar;
+	sf::RectangleShape healthBar; //Initialise the healthbar
 	healthBar.setPosition(300.0f, 130.0f + barheight);
-	if (hpbars.size() != 0)
+	if (hpbars.size() != 0) //If they have a lot of health..
 	{
-		int barvalue = currentHealth - (150 * hpbars.size());
+		int barvalue = currentHealth - (150 * hpbars.size()); //..split it into multiple bars of 150
 		if (barvalue > 150)
 		{
 			barvalue = 150;
@@ -117,7 +114,7 @@ void BasePlayerComponent::makeHPBar()
 		healthBar.setFillColor(sf::Color(220, 20, 60, 255));
 		hpbars.push_back(healthBar);
 	}
-	else
+	else //Bars of 150HP, layered on top of each other
 	{
 		if (currentHealth > 150)
 		{
@@ -132,35 +129,34 @@ void BasePlayerComponent::makeHPBar()
 			hpbars.push_back(healthBar);
 		}
 	}
-	barheight += -30.0f;
+	barheight += -30.0f; //Each both is 30 higher than the last
 }
 
-bool BasePlayerComponent::CheckAP(int ap)
+bool BasePlayerComponent::CheckAP(int ap) //Function to get AP, to test if they can use an ability
 {
 	if (actionPoints >= ap)
 	{
 		return true;
 	}
-	else
+	else //If their action points don't beat the number input, they can't afford the ability in question
 	{
 		return false;
 	}
 }
 
-void BasePlayerComponent::SpendAP(int ap)
+void BasePlayerComponent::SpendAP(int ap) //Function to use AP
 {
 	actionPoints -= ap;
 	gameUI.useAP(ap);
 }
 
-void BasePlayerComponent::gainAP(int amount)
+void BasePlayerComponent::gainAP(int amount) //Function to regain AP
 {
 	std::cout << "Currenet AP AMOUNT " << actionPoints << "\n";
 	std::cout << "Should gain AP Amount: " << amount << "\n";
 	int temp = actionPoints + amount;
-	if (temp > _actionPointsMax)
+	if (temp > _actionPointsMax) //Don't go above their max AP
 	{
-	//	actionPoints = _actionPointsMax;
 		gameUI.gainAP(_actionPointsMax - actionPoints);
 		actionPoints = _actionPointsMax;
 	}
@@ -173,59 +169,66 @@ void BasePlayerComponent::gainAP(int amount)
 
 void BasePlayerComponent::load()
 {
-	auto am = _parent->GetCompatibleComponent<AbilityManager>();
+	auto am = _parent->GetCompatibleComponent<AbilityManager>(); //Ability Manager
 	abilityManager = am[0];
-	auto sm = _parent->GetCompatibleComponent <SpriteComponent>();
+	auto sm = _parent->GetCompatibleComponent <SpriteComponent>(); //Sprite Component for player
 	spriteManager = sm[0];
-	actionPoints = _actionPointsMax;
+	actionPoints = _actionPointsMax; //Initialise costs of different attacks
 	baseAttackCost = 1;
-	mediumAttackCost = 3;
-	heavyAttackCost = 5;
 	healCost = 3;
 	rechargeCost = 0;
 	runCost = 5;
 
 	barheight = 0;
 	std::cout << "making bar, ceiling value = " << std::ceil(currentHealth / 150) << "\n"; 
-	while (std::ceil(currentHealth / 150) > hpbars.size())
+	while (std::ceil(currentHealth / 150) > hpbars.size()) //Multiple bars if HP is high
 	{
-	/*	std::cout << "current hp / 150 " << std::to_string(currentHealth / 150) << "\n";
-		std::cout << "making bar, ceiling value = " << std::ceil(currentHealth / 150) << "\n";*/
-		makeHPBar();
+		makeHPBar(); //Create the health bar
 	}
 
-	healthText.setFont(Engine::tm.getFont());
+	healthText.setFont(Engine::tm.getFont()); //Create, position, and colour the text to display player's Health above them
 	healthText.setCharacterSize(25);
 	healthText.setString(std::to_string((int)currentHealth) + " / " + std::to_string((int)_maxHealth));
 	healthText.setPosition(70.0f, 120.0f);
 	healthText.setFillColor(sf::Color(220, 20, 60, 255));
 
-	HPText.setFont(Engine::tm.getFont());
+	HPText.setFont(Engine::tm.getFont()); //Create, position, and colour the text to display the player's Health in the bottom left
 	HPText.setCharacterSize(30);
 	HPText.setFillColor(sf::Color(220, 20, 60, 255));
-	HPText.setPosition(sf::Vector2f(300.0f, 850.0f));
+	HPText.setPosition(sf::Vector2f(300.0f, 800.0f));
 
-	StrengthText.setFont(Engine::tm.getFont());
+	StrengthText.setFont(Engine::tm.getFont()); //Create, position, and colour the text to display the player's Strength stat
 	StrengthText.setCharacterSize(30);
 	StrengthText.setFillColor(sf::Color(0, 0, 205, 255));
-	StrengthText.setPosition(sf::Vector2f(300.0f, 900.0f));
+	StrengthText.setPosition(sf::Vector2f(300.0f, 850.0f));
 
-	DexterityText.setFont(Engine::tm.getFont());
+	DexterityText.setFont(Engine::tm.getFont()); //Create, position, and colour the text to display the player's Dexterity stat
 	DexterityText.setCharacterSize(30);
 	DexterityText.setFillColor(sf::Color(0, 255, 127, 255));
-	DexterityText.setPosition(sf::Vector2f(300.0f, 950.0f));
+	DexterityText.setPosition(sf::Vector2f(300.0f, 900.0f));
 
-	UpdateStats();
+	EXPText.setFont(Engine::tm.getFont()); //Create, position, and colour the text to display the player's Exp
+	EXPText.setCharacterSize(30);
+	EXPText.setFillColor(sf::Color(204, 204, 0, 255));
+	EXPText.setPosition(sf::Vector2f(300.0f, 950.0f));
+
+	LevelText.setFont(Engine::tm.getFont()); //Create, position, and colour the text to display the player's level
+	LevelText.setCharacterSize(30);
+	LevelText.setFillColor(sf::Color(255, 255, 0, 255));
+	LevelText.setPosition(sf::Vector2f(300.0f, 1000.0f));
+
+	UpdateStats(); //Update their stats at the end
 }
 
-void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e)
+void BasePlayerComponent::updateEnemy(std::shared_ptr<BaseEnemyComponent> e) //Get the new enemy when they enter a combat room
 {
 	currentEnemy = e;
 	runChance = calcRunChance();
 	abilityManager->resetAbility();
+	spriteManager->RemoveAllIcons();
 }
 
-bool BasePlayerComponent::checkEnemyStatus(){
+bool BasePlayerComponent::checkEnemyStatus(){ //Check if the enemy is about to be deleted
 	if (currentEnemy->getParent().is_forDeletion()) {
 		return false;
 	}
@@ -234,16 +237,16 @@ bool BasePlayerComponent::checkEnemyStatus(){
 	}
 }
 
-void BasePlayerComponent::expGet() {
+void BasePlayerComponent::expGet() { //Add experience to the player, based on the enemy's exp worth
 	if (expGained == false) {
-		cout << "The enemy has become die.";
-		_experience += currentEnemy->expReward;
-		expGained = true;
+		cout << "The enemy has died.";
+		_experience += currentEnemy->expReward; //Add exp to the player
+		expGained = true; //Note it's been added so it doesn't happen multiple times
 	}
 }
 
-bool BasePlayerComponent::checkLevelUp () {
-	if (_experience >= 5 && level < 5) {
+bool BasePlayerComponent::checkLevelUp () { //Level up function
+	if (_experience >= 30 && level < 5) { //Levels up on 30exp, cannot level up past 5
 		_experience -= 30;
 		level++;
 		return true;
@@ -253,91 +256,103 @@ bool BasePlayerComponent::checkLevelUp () {
 	}
 }
 
-void BasePlayerComponent::attack(float str, float dex)
+void BasePlayerComponent::attack(float str, float dex, std::string soundName) // Attack Function!
 {
-	SpendAP(baseAttackCost);
+	SpendAP(baseAttackCost); //Attack costs AP
 	cout << "Player Attacks!";
-	if (calculateHit(dex))
+	if (calculateHit(dex)) //If they hit
 	{
-		currentEnemy->TakeDamage(str);
-		gameUI.playSound("Attack", 30);
-		spriteManager->playAttack();
+		currentEnemy->TakeDamage(str); //Damage enemy
+		gameUI.playSound("Attack", 100); //Play the sound
+		spriteManager->playAttack(); //Play the animation
+		gameScene.UpdateTextBox("You shoot the enemy!"); //Show a pop up
 	}
 	else {
-		gameScene.UpdateTextBox("You missed!");
+		gameScene.UpdateTextBox("You missed!"); //If they don't hit, tell them
 	}
-	EndTurn();
+	EndTurn(); //End Turn function
 }
 
 bool BasePlayerComponent::calculateHit(float dex)
 {
-	int chanceToHit = (80 + (dex - (currentEnemy->getDexterity()))); //Calculates if the player can hit
-	int willTheyHitOhNo = rand() % 100;
-	if (willTheyHitOhNo <= chanceToHit)
+	int chanceToHit = (80 + (dex - (currentEnemy->getDexterity()))); //The chance they hit, 80 + their Dex - Enemy Dex
+	int willTheyHitOhNo = rand() % 100; //Random number from 0-99
+	if (willTheyHitOhNo <= chanceToHit) //If the random number beats the % to hit, they're good
 	{
 		return true;
 	}
-	else {
+	else { //Otherwise, it misses
 		return false;
 	}
 }
 
-void BasePlayerComponent::heal(float healBy)
+void BasePlayerComponent::heal(float healBy, bool endturn) //Heal function
 {
-	SpendAP(healCost);
+	if (endturn)
+	{
+		SpendAP(healCost); //Healing costs AP
+		gameUI.playSound("Heal", 30); //Play sound
+	}
 	cout << "Player Heals!";
-	int tempHealth = currentHealth + healBy;
+	int tempHealth = currentHealth + healBy; //Increase their health
 	gameUI.playSound("Heal", 30);
-	if (tempHealth > _maxHealth)
+	gameScene.UpdateTextBox("You heal.");
+	if (tempHealth > _maxHealth) //If they would overheal, set it to their max HP
 	{
 		currentHealth = _maxHealth;
 	}
 	else
 	{
-		currentHealth += healBy;
+		currentHealth += healBy; //Otherwise, just heal normally
 	}
-	if (std::ceil(currentHealth / 150) > hpbars.size())
+	if (std::ceil(currentHealth / 150) > hpbars.size()) //Recreate health bar
 	{
 		makeHPBar();
 	}
-	int minusvalue = currentHealth - (150 * hpbars.size());
+	int minusvalue = currentHealth - (150 * hpbars.size()); //If there's been a change of a factor of 150, remake the bars too
 	int barvalue = 150 - (abs(minusvalue));
 	hpbars.back().setSize(sf::Vector2f(barvalue * 1.5, 20.0f));
-	EndTurn();
+	if (endturn)
+	{
+		EndTurn();
+	}
 }
 
-void BasePlayerComponent::recharge(int amount)
+void BasePlayerComponent::recharge(int amount) //Recharge AP
 {
 	cout << "Player Recharges!";
-	gameUI.playSound("Recharge", 30);
-	SpendAP(rechargeCost);
-	gainAP(amount);
+	gameUI.playSound("Recharge", 30); //Play sound
+	SpendAP(rechargeCost); //Recharge costs AP for consistency
+	gameScene.UpdateTextBox("You recharge your equipment.");
+	gainAP(amount); //Give the player AP equal to the number taken in
 	EndTurn();
 }
 
-void BasePlayerComponent::run()
+void BasePlayerComponent::run() //Run from combat
 {
-	SpendAP(runCost);
+	SpendAP(runCost); //Running costs AP
 	srand(time(0));
-	int random = rand() % 100;
+	int random = rand() % 100; //% chance to run
 	if (random < runChance)
 	{
-		currentEnemy->setfordeletion();
+		currentEnemy->setfordeletion(); //If they roll below the random chance, the enemy is gone...
 		gameUI.playSound("Run", 30);
-		spriteManager->playRun();
+		spriteManager->playRun(); //...And they escape
+		gameScene.UpdateTextBox("You flee!");
 	}
 	else
 	{
-		cout << "Player runs! FAILURE\n";
+		cout << "Player runs! FAILURE\n"; //Otherwise, they fail to escape
+		gameScene.UpdateTextBox("You fail to flee.");
 	}
-	EndTurn();
+	EndTurn(); //Either way their turn ends
 }
 
-int BasePlayerComponent::calcRunChance()
+int BasePlayerComponent::calcRunChance() //Run chance calculation
 {
 	srand(time(0));
-	int random = rand() % 100;
-	random = random + _dexterity - currentEnemy->getDexterity();
+	int random = rand() % 100; //Random number from 0-99
+	random = random + _dexterity - currentEnemy->getDexterity(); //Calculate dexterities in
 	if (random < 0)
 	{
 		random = 0;
@@ -349,80 +364,80 @@ int BasePlayerComponent::calcRunChance()
 	return random;
 }
 
-void BasePlayerComponent::EndTurn()
+void BasePlayerComponent::EndTurn() //End turn function
 {
 	cout << "Player Turn Ends!";
-	isFinishedTurn = true;
+	isFinishedTurn = true; //The turn is over!
 }
 
-std::shared_ptr<BaseEnemyComponent> BasePlayerComponent::getEnemy()
+std::shared_ptr<BaseEnemyComponent> BasePlayerComponent::getEnemy() //Getter for enemy
 {
 	return currentEnemy;
 }
 
-std::shared_ptr<AbilityManager> BasePlayerComponent::getAbilityManager()
+std::shared_ptr<AbilityManager> BasePlayerComponent::getAbilityManager() //Getter for abilityManager
 {
 	return abilityManager;
 }
 
-std::shared_ptr<SpriteComponent> BasePlayerComponent::getSpriteComponent()
+std::shared_ptr<SpriteComponent> BasePlayerComponent::getSpriteComponent() //Getter for spriteComponent
 {
 	return spriteManager;
 }
 
-int BasePlayerComponent::getRunChance()
+int BasePlayerComponent::getRunChance() //Getter for run chance
 {
 	return runChance;
 }
 
-int BasePlayerComponent::getStrength() {
+int BasePlayerComponent::getStrength() { //Getter for strength
 	return _strength;
 }
 
-int BasePlayerComponent::getMaxHealth() {
+int BasePlayerComponent::getMaxHealth() { //Getter for max HP
 	return _maxHealth;
 }
 
-int BasePlayerComponent::getCurrentHealth() {
+int BasePlayerComponent::getCurrentHealth() { //Getter for current HP
 	return currentHealth;
 }
 
-int BasePlayerComponent::getDexterity() {
+int BasePlayerComponent::getDexterity() { //Getter for dexterity
 	return _dexterity;
 }
 
-int BasePlayerComponent::getExperience() {
+int BasePlayerComponent::getExperience() { //Getter for exp
 	return _experience;
 }
 
-void BasePlayerComponent::setStrength(int strength) {
+void BasePlayerComponent::setStrength(int strength) { //Setter for strength
 	_strength = strength;
 }
 
-void BasePlayerComponent::setMaxHealth(int maxHealth) {
+void BasePlayerComponent::setMaxHealth(int maxHealth) { //Setter for max HP
 	_maxHealth = maxHealth;
 }
 
-void BasePlayerComponent::setCurrentHealth(int health) {
+void BasePlayerComponent::setCurrentHealth(int health) { //Setter for current HP
 	currentHealth = health;
 }
 
-void BasePlayerComponent::setDexterity(int dexterity)
+void BasePlayerComponent::setDexterity(int dexterity) //Setter for dexterity
 {
 	_dexterity = dexterity;
 }
 
-void BasePlayerComponent::addAbility(std::shared_ptr<SpecialAbility> sp)
+void BasePlayerComponent::addAbility(std::shared_ptr<SpecialAbility> sp) //Add an ability
 {
-	abilityManager->addAbility(sp);
-	combatUI.addSpecial(sp->getTexName(), sp);
+	abilityManager->addAbility(sp); //Add the ability from the abilityManager
+	combatUI.addSpecial(sp->getTexName(), sp); //Add it to the UI
 }
 
-void BasePlayerComponent::addStats(int strength, int health, int dex)
+void BasePlayerComponent::addStats(int strength, int health, int dex) //Stat improvement function
 {
-	_strength += strength;
-	_maxHealth += health;
-	if (currentHealth + health >= _maxHealth)
+	_strength += strength; //Strength increases by first number taken in
+	_maxHealth += health; //Health increases by second number taken in
+	if (currentHealth + health >= _maxHealth) //Increase both normal HP and max HP
 	{
 		currentHealth = _maxHealth;
 	}
@@ -430,49 +445,51 @@ void BasePlayerComponent::addStats(int strength, int health, int dex)
 	{
 		currentHealth += health;
 	}
-	_dexterity += dex;
-	UpdateStats();
+	_dexterity += dex; //Dexterity increases by third number taken in
+	UpdateStats(); //Update the stats appearances
 }
 
-void BasePlayerComponent::UpdateStats()
+void BasePlayerComponent::UpdateStats() //Stat update
 {
-	HPText.setString("HP: " + std::to_string((int)currentHealth) + " / " + std::to_string((int)_maxHealth));
+	HPText.setString("HP: " + std::to_string((int)currentHealth) + " / " + std::to_string((int)_maxHealth)); //Update all of the visible stat indicators
 	StrengthText.setString("Strength:  " + std::to_string((int)_strength));
 	DexterityText.setString("Dexterity:  " + std::to_string((int)_dexterity));
+	EXPText.setString("XP: " + std::to_string((int)_experience) + " / " + std::to_string(30));
+	LevelText.setString("Level: " + std::to_string(level));
 }
 
-void BasePlayerComponent::setExperience(int experience)
+void BasePlayerComponent::setExperience(int experience) //Setter for exp
 {
 	_experience = experience;
 }
 
-void BasePlayerComponent::takeDamage(float dmgRecieved)
+void BasePlayerComponent::takeDamage(float dmgRecieved) //Player takes damage
 {
-	currentHealth -= dmgRecieved;
-	gameUI.playSound("PlayerHit", 60);
-	if (currentHealth <= 0)
+	currentHealth -= dmgRecieved; //Lower current  HP
+	gameUI.playSound("PlayerHit", 60); //Play sound
+	if (currentHealth <= 0) //If their HP goes to 0 or lower
 	{
-		currentHealth = 0;
-		hpbars.clear();
-		_parent->setAlive(false);
-		gameScene.UpdateTextBox("You fucking idiot, you're dead.");
-		spriteManager->playDie();
+		currentHealth = 0; //Set HP to 0
+		hpbars.clear(); //Wipe their HP
+		_parent->setAlive(false); //Set them to dead
+		gameScene.UpdateTextBox("GAME OVER."); //Display a game over
+		spriteManager->playDie(); //Death animation
 	}
-	else
+	else 
 	{
-		spriteManager->playHit();
-		if (std::ceil(currentHealth / 150) < hpbars.size())
+		spriteManager->playHit(); //If they don't die, show a hurt animation
+		if (std::ceil(currentHealth / 150) < hpbars.size()) //Then recreate their HP
 		{
 			hpbars.pop_back();
 			barheight += 30.0f;
 		}
-		int minusvalue = currentHealth - (150 * hpbars.size());
+		int minusvalue = currentHealth - (150 * hpbars.size()); //Remake the healthbars
 		int barvalue = 150 - (abs(minusvalue));
 		hpbars.back().setSize(sf::Vector2f(barvalue * 1.5, 20.0f));
 	}
 }
 
-void BasePlayerComponent::setRunChance(int run)
+void BasePlayerComponent::setRunChance(int run) //Setter for runChance
 {
 	runChance = run;
 }

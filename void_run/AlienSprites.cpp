@@ -4,25 +4,32 @@
 AlienSprite1::AlienSprite1(Entity* p)
 	: SpriteComponent{ p } {}
 
+//Set default position and variables
 void AlienSprite1::load()
 {
+	//start position and default positoin
 	defaultPos = sf::Vector2f(1400.0f, 300.0f);
 
+	//sizes of each sliced sprite in spritesheet
 	attackSize = sf::Vector2f(573, 700);
 	hitSize = sf::Vector2f(371, 556);
 	dieSize = sf::Vector2f(851, 577);
 
+	//number of sprites in attack, hit and die spritesheets
 	attackSpriteNum = 9;
 	hitSpriteNum = 10;
 	dieSpriteNum = 17;
 
+	//delay time for animation
 	dieDelay = 0.5f;
 	hitDelay = 0.5f;
 
+	//Assigns sheets for each animation
 	attackSheet = Engine::tm.getTex("Alien1Attack");
 	hitSheet = Engine::tm.getTex("Alien1Hit");
 	dieSheet = Engine::tm.getTex("Alien1Die");
 
+	//Sets default to be attack position 1
 	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
 	sprite = sf::Sprite(attackSheet, sheetRect);
 
@@ -42,8 +49,10 @@ void AlienSprite1::update(double dt)
 	SpriteComponent::update(dt);
 }
 
+//Sets sprite to specific position and sheet to play attack animation
 void AlienSprite1::playAttack()
 {
+	//calls base play attack
 	SpriteComponent::playAttack();
 	sheetRect = sf::IntRect(0, 0, attackSize.x, attackSize.y);
 	sprite = sf::Sprite(attackSheet, sheetRect);
@@ -52,6 +61,7 @@ void AlienSprite1::playAttack()
 	sprite.setScale(0.8f, 0.8f);
 }
 
+//Sets position and calls base playhit
 void AlienSprite1::playHit()
 {
 	SpriteComponent::playHit();
@@ -60,6 +70,7 @@ void AlienSprite1::playHit()
 
 }
 
+//Sets position and calls base playdie
 void AlienSprite1::playDie()
 {
 	SpriteComponent::playDie();
@@ -67,6 +78,7 @@ void AlienSprite1::playDie()
 	sprite.setScale(0.8f, 0.8f);
 }
 
+//Resets sprite to default position and calls base resetanim
 void AlienSprite1::ResetAnim()
 {
 	SpriteComponent::ResetAnim();
@@ -76,7 +88,7 @@ void AlienSprite1::ResetAnim()
 	sprite.setScale(0.8f, 0.8f);
 }
 
-AlienSprite2::AlienSprite2(Entity* p)
+AlienSprite2::AlienSprite2(Entity* p) // same as alien1
 	: SpriteComponent{ p } {}
 
 void AlienSprite2::load()
@@ -151,7 +163,7 @@ void AlienSprite2::ResetAnim()
 	sprite.setScale(0.8f, 0.8f);
 }
 
-AlienSprite3::AlienSprite3(Entity* p)
+AlienSprite3::AlienSprite3(Entity* p) // same as alien 1
 	: SpriteComponent{ p } {}
 
 void AlienSprite3::load()
@@ -227,7 +239,7 @@ void AlienSprite3::ResetAnim()
 	sprite.setScale(0.7f, 0.7f);
 }
 
-BossSprite::BossSprite(Entity* p)
+BossSprite::BossSprite(Entity* p) //same as alien 1
 	: SpriteComponent{ p } {}
 
 void BossSprite::load()

@@ -10,10 +10,13 @@ void AbilityManager::update(double dt)
 
 void AbilityManager::Load()
 {
+	//Updates player component
 	auto p = _parent->GetCompatibleComponent<BasePlayerComponent>();
 	player = p[0];
 }
 
+//Called when its the players turn, checks if any special item bounding boxes are 
+//pressed and does that specials effect if so
 void AbilityManager::combatCheck(sf::Vector2f cursPos)
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -48,12 +51,14 @@ void AbilityManager::combatCheck(sf::Vector2f cursPos)
 		}
 	}
 
+	//Loops through all specials and if their key is pressed (special 1 key, Q default) then do effect
 	for (auto a : specials)
 	{
    		a->checkKey();
 	}
 }
 
+//Resets all special abilities to default
 void AbilityManager::resetAbility()
 {
 	for (auto a : specials)
@@ -62,6 +67,7 @@ void AbilityManager::resetAbility()
 	}
 }
 
+//Does all special effects at the start of player turn
 void AbilityManager::StartTurnCheck()
 {
 	for (auto a : specials)
@@ -70,9 +76,10 @@ void AbilityManager::StartTurnCheck()
 	}
 }
 
+//Adds ability to ability manager
 bool AbilityManager::addAbility(std::shared_ptr<SpecialAbility> ability)
 {
-	if (specials.size() < maxSpecials)
+	if (specials.size() < maxSpecials) // if the size of specials vector is less than max specials allowed
 	{
 		
 		specials.push_back(ability);
@@ -85,11 +92,13 @@ bool AbilityManager::addAbility(std::shared_ptr<SpecialAbility> ability)
 	}
 }
 
+//Removes ability at certain position
 void AbilityManager::removeAbility(int position)
 {
 	specials.erase(specials.begin() + position);
 }
 
+//Returns all specials
 std::vector<std::shared_ptr<SpecialAbility>> AbilityManager::getSpecials()
 {
 	return specials;

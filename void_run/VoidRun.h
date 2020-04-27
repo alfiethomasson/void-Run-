@@ -94,7 +94,6 @@ private:
 	sf::Texture SaveIcon;
 	sf::Sprite SaveSprite;
 
-	std::vector<std::shared_ptr<Room>> rooms;
 	std::shared_ptr<Room> currentRoom;
 
 	sf::Sprite textBox;
@@ -112,6 +111,8 @@ private:
 	bool loadFromSave;
 
 	SettingUI Settings;
+
+	ItemDB itemDB;
 
 public:
 	sf::Text screenText;
@@ -131,7 +132,6 @@ public:
 	void Pause();
 	void ChangeRoom();
 	bool playerTurn;
-	void UpdateButtons();
 	void UpdateTextBox(sf::String newText);
 	void LoadTextures() override;
 	void UpdateDesctext(std::string, sf::Vector2f pos);
@@ -143,4 +143,29 @@ public:
 	void SaveGame();
 
 	Room& getCurrentRoom();
+};
+
+class VictoryScene : public Scene {
+private:
+	sf::Text storyMessage;
+	sf::Text thankYou;
+	sf::Text credits;
+	sf::Text menuButton;
+
+	sf::Font font;
+	sf::FloatRect menuButtonBox;
+
+	sf::Music victoryMusic;
+	bool sceneEnd;
+
+	sf::Clock delayClock;
+	int delayTime;
+	int delayAmount;
+
+public:
+	VictoryScene() = default;
+	~VictoryScene() override = default;
+	void Update(const double& dt) override;
+	void Render() override;
+	void Load() override;
 };
