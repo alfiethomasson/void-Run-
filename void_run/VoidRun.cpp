@@ -784,6 +784,10 @@ void GameScene::LoadTextures()
 	Engine::tm.loadTexture("PainShare", "Icons/PainShare.png");
 	Engine::tm.loadTexture("Regeneration", "Icons/Regeneration.png");
 	Engine::tm.loadTexture("SuicideCharge", "Icons/SuicideCharge.png");
+	Engine::tm.loadTexture("Aggressive", "Icons/Aggressive.png");
+	Engine::tm.loadTexture("Defensive", "Icons/Defensive.png");
+	Engine::tm.loadTexture("Passive", "Icons/Passive.png");
+	Engine::tm.loadTexture("Desperate", "Icons/Desperate.png");
 	Engine::tm.loadTexture("PlayerAttack", "Sprites/SpriteSheets/PlayerAttack.png");
 	Engine::tm.loadTexture("PlayerHit", "Sprites/SpriteSheets/PlayerHit.png");
 	Engine::tm.loadTexture("PlayerDie", "Sprites/SpriteSheets/PlayerDie.png");
@@ -866,4 +870,67 @@ void GameScene::SaveGame()
 		std::cout << "Couldn't open item and ability file to save\n";
 	}
 
+}
+
+void VictoryScene::Render()
+{
+	//Queues text to render in system renderer
+	Renderer::queue(&storyMessage);
+	Renderer::queue(&thankYou);
+	Renderer::queue(&credits);
+	Renderer::queue(&menuButton);
+
+	Scene::Render();
+}
+
+void VictoryScene::Load()
+{
+	font.loadFromFile("res/Fonts/venusrising.ttf");
+
+	storyMessage.setFont(font);
+	storyMessage.setCharacterSize(20);
+	storyMessage.setString("And with the defeat of the Alien Lord, Spaceship Omega had been saved once and for all.\nTroy McCool was able to return to Earth, heralded as the greatest hero of his decade.");
+	thankYou.setFont(font);
+	thankYou.setCharacterSize(20);
+	thankYou.setString("Thank you for playing Void Run()");
+	credits.setFont(font);
+	credits.setCharacterSize(10);
+	credits.setString("Made by Alfie & Ciaran");
+	menuButton.setFont(font);
+	menuButton.setCharacterSize(10);
+	menuButton.setString("Main Menu");
+
+	storyMessage.setPosition(sf::Vector2f((GAMEX / 2) - (storyMessage.getGlobalBounds().width / 2), 300.0f));
+	thankYou.setPosition(sf::Vector2f((GAMEX / 2) - (thankYou.getGlobalBounds().width / 2), 500.0f));
+	credits.setPosition(sf::Vector2f((GAMEX / 2) - (credits.getGlobalBounds().width / 2), 700.0f));
+	menuButton.setPosition(sf::Vector2f((GAMEX / 2) - (menuButton.getGlobalBounds().width / 2), 950.0f));
+
+	menuButtonBox = menuButton.getGlobalBounds(); //Creates the button boundaries
+
+}
+
+void VictoryScene::Update(const double& dt)
+{
+	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
+	Vector2f cursPos = sf::Vector2f(tempPos);
+	cursPos.x /= Engine::xMultiply;
+	cursPos.y /= Engine::yMultiply;
+	scene_delay = scene_clock.getElapsedTime();
+
+	if (menuButtonBox.contains(cursPos))
+	{
+		menuButton.setFillColor(green);
+	}
+	else
+	{
+		menuButton.setFillColor(white);
+	}
+
+	if (Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		if (menuButtonBox.contains(cursPos))
+		{
+			Engine::ChangeScene(&menuScene);
+		}
+	}
 }

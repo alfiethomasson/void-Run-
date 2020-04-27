@@ -66,7 +66,7 @@ public:
 	virtual void ResetAnim();
 
 	void AddIcon(std::string texName, std::string desc, bool leftright);
-	void ChangeIcon(int position, std::string& texname, std::string& desc);
+	void ChangeIcon(int position, std::string texname, std::string desc);
 	void RemoveIcon(int position);
 	void RemoveAllIcons();
 };

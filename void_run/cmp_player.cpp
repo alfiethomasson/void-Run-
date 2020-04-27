@@ -275,6 +275,7 @@ void BasePlayerComponent::attack(float str, float dex)
 		currentEnemy->TakeDamage(str);
 		gameUI.playSound("Attack", 30);
 		spriteManager->playAttack();
+		gameScene.UpdateTextBox("You shoot the enemy!");
 	}
 	else {
 		gameScene.UpdateTextBox("You missed!");
@@ -304,6 +305,8 @@ void BasePlayerComponent::heal(float healBy, bool endturn)
 	}
 	cout << "Player Heals!";
 	int tempHealth = currentHealth + healBy;
+	gameUI.playSound("Heal", 30);
+	gameScene.UpdateTextBox("You heal.");
 	if (tempHealth > _maxHealth)
 	{
 		currentHealth = _maxHealth;
@@ -330,6 +333,7 @@ void BasePlayerComponent::recharge(int amount)
 	cout << "Player Recharges!";
 	gameUI.playSound("Recharge", 30);
 	SpendAP(rechargeCost);
+	gameScene.UpdateTextBox("You recharge your equipment.");
 	gainAP(amount);
 	EndTurn();
 }
@@ -344,10 +348,12 @@ void BasePlayerComponent::run()
 		currentEnemy->setfordeletion();
 		gameUI.playSound("Run", 30);
 		spriteManager->playRun();
+		gameScene.UpdateTextBox("You flee!");
 	}
 	else
 	{
 		cout << "Player runs! FAILURE\n";
+		gameScene.UpdateTextBox("You fail to flee.");
 	}
 	EndTurn();
 }
@@ -476,7 +482,7 @@ void BasePlayerComponent::takeDamage(float dmgRecieved)
 		currentHealth = 0;
 		hpbars.clear();
 		_parent->setAlive(false);
-		gameScene.UpdateTextBox("You fucking idiot, you're dead.");
+		gameScene.UpdateTextBox("GAME OVER.");
 		spriteManager->playDie();
 	}
 	else

@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "enemy_medium.h"
+#include "Game.h"
 
 MediumEnemy::MediumEnemy(Entity* p, int health, int strength, int dex, float expReward, int specialMove)
 	: BaseEnemyComponent{ p, health, strength, dex, expReward, specialMove } {}
@@ -21,11 +22,13 @@ void MediumEnemy::update(double dt)
 		if (cursed == true)
 		{
 			attackEnemy(5, 10000); //If the alien has used a curse, the player takes 5 damage at the start of each of the alien turns
+			gameScene.UpdateTextBox("You're hurt by your curse.");
 		}
 
 		if (specialMove == 1 && currentHealth <= 40 && hasRegenerated == false) //If it has Regeneration, and it's at or below 40% it will use this. One time only.
 		{
 			std::cout << "The enemy uses its unique ability: Regeneration! \n";
+			gameScene.UpdateTextBox("The enemy regenerates!");
 			currentHealth += ((_maxHealth - currentHealth) / 2);
 			hasRegenerated = true;
 			EndTurn();
@@ -33,12 +36,14 @@ void MediumEnemy::update(double dt)
 		else if (specialMove == 3 && turnCounter % 5 == 1) //If it has Curse, it uses it every fifth turn (1, 6, 11, 16, etc)
 		{
 			std::cout << "The enemy uses its unique attack: Curse! \n";
+			gameScene.UpdateTextBox("The enemy curses you!");
 			cursed = true;
 			EndTurn();
 		}
 		else if ((specialMove == 0) && (((currentHealth * 0.4) >= (currentEnemy->getCurrentHealth() * 0.3)) && ((currentHealth * 0.4) <= (currentEnemy->getCurrentHealth() * 0.45))))
 		{
 			std::cout << "The enemy uses its unique attack: Pain Share! \n";
+			gameScene.UpdateTextBox("The enemy share its pain with you!");
 			int painShared = (currentHealth * 0.2);
 			currentHealth -= painShared;
 			attackEnemy(painShared, 10000); //Deals damage equal to pain shared. Always has 10,000 to hit.
@@ -47,6 +52,7 @@ void MediumEnemy::update(double dt)
 		else if (specialMove == 2 && consecutiveMisses >= 2)
 		{
 			std::cout << "The enemy uses its unique attack: Orbital Strike! \n";
+			gameScene.UpdateTextBox("The enemy scores a bullseye!");
 			attackEnemy(_strength, 100000); //Attack, always hit
 			EndTurn();
 		}
@@ -55,6 +61,7 @@ void MediumEnemy::update(double dt)
 			int enemyAI = rand() % 6; //Random number from 0-5. 0-2 is light attack, 3-4 is medium attack, 5 is orbital strike.
 			if (enemyAI == 0 || enemyAI == 1 || enemyAI == 2) {
 				std::cout << "The enemy makes a weak attack! \n";
+				gameScene.UpdateTextBox("The enemy attacks you weakly.");
 				if (!attackEnemy(_strength, _dexterity))
 				{
 					consecutiveMisses++;
@@ -67,6 +74,7 @@ void MediumEnemy::update(double dt)
 			}
 			else if (enemyAI == 3 || enemyAI == 4) {
 				std::cout << "The enemy makes a medium attack! \n";
+				gameScene.UpdateTextBox("The enemy makes an attack.");
 				if (!attackEnemy(_strength + 5, _dexterity))
 				{
 					consecutiveMisses++;
@@ -79,6 +87,7 @@ void MediumEnemy::update(double dt)
 			}
 			else if (enemyAI == 5) {
 				std::cout << "The enemy uses its unique attack: Orbital Strike! \n";
+				gameScene.UpdateTextBox("The enemy scores a bullseye.");
 				attackEnemy(_strength, 100000); //Attack, always hit
 				EndTurn();
 			}
@@ -90,12 +99,14 @@ void MediumEnemy::update(double dt)
 			if (enemyAI == 0)
 			{
 				std::cout << "The enemy makes a weak attack! \n";
+				gameScene.UpdateTextBox("The enemy attacks you weakly.");
 				attackEnemy(_strength, _dexterity);
 				EndTurn();
 			}
 			else if (enemyAI == 1)
 			{
 				std::cout << "The enemy makes a medium attack! \n";
+				gameScene.UpdateTextBox("The enemy makes an attack at you.");
 				attackEnemy(_strength + 5, _dexterity);
 				EndTurn();
 			}
@@ -114,7 +125,7 @@ void MediumEnemy::load()
 	}
 	if (specialMove == 1)
 	{
-		spriteManager->AddIcon("Regeneration", "REGENERATION\nPassively heals every turn", true);
+		spriteManager->AddIcon("Regeneration", "REGENERATION\nHeals once per battle", true);
 	}
 	if (specialMove == 2)
 	{

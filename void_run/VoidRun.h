@@ -143,3 +143,22 @@ public:
 
 	Room& getCurrentRoom();
 };
+
+class VictoryScene : public Scene {
+private:
+	sf::Text storyMessage;
+	sf::Text thankYou;
+	sf::Text credits;
+	sf::Text menuButton;
+
+	sf::Font font;
+	sf::FloatRect menuButtonBox;
+
+
+public:
+	VictoryScene() = default;
+	~VictoryScene() override = default;
+	void Update(const double& dt) override;
+	void Render() override;
+	void Load() override;
+};
