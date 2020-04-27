@@ -482,7 +482,7 @@ void GameScene::Load() {
 		//Creates Player and adds components
 		pl = make_shared<Entity>();
 		//default values
-		player = pl->addComponent<BasePlayerComponent>(100.0f, 5.0f, 20.0f, 10.0f, 0.0f, 1, 10, &combatUI, &gameUI);
+		player = pl->addComponent<BasePlayerComponent>(100.0f, 100.0f, 20.0f, 10.0f, 0.0f, 1, 10, &combatUI, &gameUI);
 		am = pl->addComponent<AbilityManager>(4, &combatUI);
 		am->Load();
 		inv = pl->addComponent<Inventory>(6, &gameUI);
