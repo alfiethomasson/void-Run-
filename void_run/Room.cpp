@@ -5,36 +5,36 @@
 using namespace sf;
 using namespace std;
 
-void Room::Update(const double& dt, sf::Vector2f cursPos) {
+void Room::Update(const double& dt, sf::Vector2f cursPos) { //Empty update loop for future use
 
 }
 
-void Room::Load()
+void Room::Load() //Load function
 {
-	active = true;
+	active = true; //Make room active
 	std::cout << "Entered a Treasure Room!\n";
-	auto a = player->GetCompatibleComponent<BasePlayerComponent>();
+	auto a = player->GetCompatibleComponent<BasePlayerComponent>(); //Get the player
 	p = a[0];
 
-	p->isTurn = false;
+	p->isTurn = false; //Not the player's turn
 }
 
-std::vector<std::shared_ptr<Entity>> Room::GetEnts()
+std::vector<std::shared_ptr<Entity>> Room::GetEnts() //Get Ents list
 {
 	return ents.list;
 }
 
-void Room::StatUp()
+void Room::StatUp() //Stat up room for future use
 {
 
 }
 
-bool Room::isActive()
+bool Room::isActive() //Getter for the room's activity
 {
 	return active;
 }
 
-void Room::setInactive()
+void Room::setInactive() //Setter for the room's activity
 {
 	active = false;
 }

@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "engine.h"
 #include "CombatRoom.h"
-#include "StatRoom.h"
 #include "ItemDB.h"
 #include "UI.h"
 #include "System_Renderer.h"
@@ -12,16 +11,11 @@
 #include <fstream>
 #include "LevelUpRoom.h"
 
-using namespace sf;
+using namespace sf; //Namespaces and other initialisation 
 using namespace std;
-ItemDB itemDB;
 
-CombatRoom* testRoom;
-
-sf::Event event;
-
-sf::Color green(0, 255, 0, 255);
-sf::Color white(255, 255, 255, 255);
+sf::Color green(0, 255, 0, 255); //We use greeen to distinguish a highlighted button
+sf::Color white(255, 255, 255, 255); //White is the default colour for our buttons
 
 shared_ptr<Entity> pl;
 
@@ -31,11 +25,13 @@ sf::Time scene_delay;
 sf::Clock scene_clock;
 float sceneChangeDelay;
 
+//some delay stuff
 sf::Clock pauseClock;
 sf::Time pause_delay;
 float pauseDelay = 0.5f;
 
-Keyboard::Key attackKey;
+//Extern values defined in game.h
+Keyboard::Key attackKey; //Various keys for interacting in the game
 Keyboard::Key healKey;
 Keyboard::Key rechargeKey;
 Keyboard::Key runKey;
@@ -45,47 +41,51 @@ Keyboard::Key special2Key;
 Keyboard::Key special3Key;
 Keyboard::Key special4Key;
 
-int masterVolume = 100;
+int masterVolume = 100; //Volume controls in the settings
 int musicVolume = 100;
 int soundVolume = 100;
 
-void MenuScene::Update(const double& dt) {
+void MenuScene::Update(const double& dt) { //Menu Scene's Update Function
 
 	//Gets Mouse position in an int format
 	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	Vector2f cursPos = sf::Vector2f(tempPos);
+	//Updates mouse position by window size
 	cursPos.x /= Engine::xMultiply;
 	cursPos.y /= Engine::yMultiply;
 
+	//Sets music volume to settings volumes
 	titleMusic.setVolume(musicVolume * masterVolume/100);
+	sound.setVolume(soundVolume * masterVolume / 100);
 
 	scene_delay = scene_clock.getElapsedTime();
 
-	if (!inOptions)
+	if (!inOptions) // If on main screen, NOT in option
 	{
+		//Checks if any buttons are pressed
 		if (Mouse::isButtonPressed(sf::Mouse::Left) && scene_delay.asSeconds() >= sceneChangeDelay)
 		{
-			if (NewGameButtonBox.contains(cursPos))
+			if (NewGameButtonBox.contains(cursPos)) // Start New game
 			{
 				sound.play();
 				titleMusic.stop();
-				Engine::ChangeScene(&gameScene);
-				gameScene.setLoadFromSave(false);
+				Engine::ChangeScene(&gameScene); // Change to gameScene
+				gameScene.setLoadFromSave(false); // sets game to not load from save, start new game
 			}
 			else if (LoadGameButtonBox.contains(cursPos) && LoadGameButton.getColor().a == 255)
-			{
+			{ // load game
 				sound.play();
 				titleMusic.stop();
-				Engine::ChangeScene(&gameScene);
-				gameScene.setLoadFromSave(true);
+				Engine::ChangeScene(&gameScene);  // move to gamescene
+				gameScene.setLoadFromSave(true); // set gamescene to load from save not start new
 			}
-			else if (OptionsButtonBox.contains(cursPos))
+			else if (OptionsButtonBox.contains(cursPos)) // move to options
 			{
 				sound.play();
 				inOptions = true;
 				scene_clock.restart();
 			}
-			else if (ExitButtonBox.contains(cursPos))
+			else if (ExitButtonBox.contains(cursPos)) // Quit game
 			{
 				sound.play();
 				Engine::GetWindow().close();
@@ -93,27 +93,27 @@ void MenuScene::Update(const double& dt) {
 		}
 
 
-		if (Keyboard::isKeyPressed(Keyboard::Num1))
+		if (Keyboard::isKeyPressed(Keyboard::Num1)) // start new game
 		{
 			sound.play();
 			titleMusic.stop();
 			Engine::ChangeScene(&gameScene);
 			gameScene.setLoadFromSave(false);
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Num2) && LoadGameButton.getColor().a == 255)
+		if (Keyboard::isKeyPressed(Keyboard::Num2) && LoadGameButton.getColor().a == 255) //if load game is possible. loadgame
 		{
 			sound.play();
 			titleMusic.stop();
 			Engine::ChangeScene(&gameScene);
 			gameScene.setLoadFromSave(true);
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Num3) && scene_delay.asSeconds() >= sceneChangeDelay)
+		if (Keyboard::isKeyPressed(Keyboard::Num3) && scene_delay.asSeconds() >= sceneChangeDelay) // move to option
 		{
 			sound.play();
 			inOptions = true;
 			scene_clock.restart();
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Escape))
+		if (Keyboard::isKeyPressed(Keyboard::Escape)) // quits game
 		{
 			sound.play();
 			titleMusic.stop();
@@ -130,7 +130,7 @@ void MenuScene::Update(const double& dt) {
 			NewGameButton.setFillColor(white);
 		}
 
-		if (LoadGameButton.getColor().a == 255)
+		if (LoadGameButton.getColor().a == 255) // if loadgame is available
 		{
 			if (LoadGameButtonBox.contains(cursPos))
 			{
@@ -160,9 +160,9 @@ void MenuScene::Update(const double& dt) {
 			OptionsButton.setFillColor(white);
 		}
 	}
-	else
+	else // in options
 	{
-		Settings.Update(dt, cursPos);
+		Settings.Update(dt, cursPos); // update settings screen
 }
 	Scene::Update(dt);
 	
@@ -171,7 +171,7 @@ void MenuScene::Update(const double& dt) {
 //Renders Text
 void MenuScene::Render() {
 	//Queues text to render in system renderer
-	if (!inOptions)
+	if (!inOptions) // not in options
 	{
 		Renderer::queue(&GameName);
 		Renderer::queue(&NewGameButton);
@@ -179,20 +179,20 @@ void MenuScene::Render() {
 		Renderer::queue(&ExitButton);
 		Renderer::queue(&OptionsButton);
 	}
-	else
+	else // in options
 	{
 		Settings.Render();
 	}
-	Scene::Render();
+	Scene::Render(); // call base render
 }
 
 void MenuScene::Load() {
 
 	//Loads font
-	font.loadFromFile("res/Fonts/venusrising.ttf");
+	font.loadFromFile("res/Fonts/venusrising.ttf"); // load font
 
-	Engine::tm.loadSound("ButtonPress", "Sounds/FX/ButtonPress.wav");
-	sound.setBuffer(Engine::tm.getSound("ButtonPress"));
+	Engine::tm.loadSound("ButtonPress", "Sounds/FX/ButtonPress.wav"); // load sound into texturemanager
+	sound.setBuffer(Engine::tm.getSound("ButtonPress")); // load UI button press sound into sound
 	sound.setVolume(soundVolume);
 
 	//Loads music
@@ -203,10 +203,10 @@ void MenuScene::Load() {
 
 	//Starts music
 	titleMusic.play();
-	titleMusic.setVolume(50.0f);
+	titleMusic.setVolume(musicVolume * masterVolume / 100);
 	titleMusic.setLoop(true);
 
-	//Assigns Font to Text
+	//Assigns Font to Texts
 	GameName.setFont(font);
 	NewGameButton.setFont(font);
 	LoadGameButton.setFont(font);
@@ -269,17 +269,7 @@ void MenuScene::Load() {
 	BackButton.setPosition(sf::Vector2f(GAMEX / 2.0f - 300.0f, GAMEY / 2.0f - (BackButton.getGlobalBounds().height / 2) + 50.0f));
 	BackButtonBox = BackButton.getGlobalBounds();
 
-	if (FILE* file = fopen("SaveStats.txt", "r"))
-	{
-		fclose(file);
-		std::cout << "\nFOUND SAVE FILE\n";
-	}
-	else
-	{
-		LoadGameButton.setColor(sf::Color(255, 255, 255, 100));
-		std::cout << "\NO SAVE FILE :((((((\n";
-	}
-
+	//Sets default values
 	inOptions = false;
 
 	sceneChangeDelay = 1.0f;
@@ -294,21 +284,24 @@ void MenuScene::Load() {
 	special3Key = Keyboard::E;
 	special4Key = Keyboard::R;
 
+	//loads settings screen
 	Settings.Load(font, false);
 }
 
+//Update setting screen
 void MenuScene::setSettings(bool tf)
 {
 	Settings.UpdateSettings();
 	inOptions = tf;
 }
 
+//Update controls and setting screen
 void GameScene::setPause(bool tf)
 {
 	Settings.UpdateSettings();
 	combatUI.UpdateControls();
 	isPaused = tf;
-	if (tf)
+	if (tf) // play or pause game music depending on going in or out of pause
 	{
 		gameMusic.pause();
 	}
@@ -320,6 +313,7 @@ void GameScene::setPause(bool tf)
 
 void GameScene::Load() {
 
+	//Calls load textures, loading the majority of textures and sounds used by the game
 	LoadTextures();
 
 	//Loads the settings icon stuff
@@ -335,36 +329,40 @@ void GameScene::Load() {
 	SaveSprite.setColor(sf::Color(105, 105, 105, 255));
 	SaveBox = SaveSprite.getGlobalBounds();
 
+	//gets font
 	font = Engine::tm.getFont();
 
+	//sets default values for desctext, the tooltip showing what stuff is
 	descText.setFont(font);
 	descText.setCharacterSize(15);
 	descText.setString("");
-
-
+	 
+	//loads fonts
 	PauseText.setFont(font);
 	ResText.setFont(font);
 	ResChange.setFont(font);
 	ResButton.setFont(font);
 	BackButton.setFont(font);
 
+	//calls populateDB on the item database, loading items and special abilities
 	itemDB.PopulateDB();
 ;
-	if (loadFromSave)
+	if (loadFromSave) // if loading from save
 	{
+		//default values for save file
 		std::string line;
-		std::ifstream file;
+		std::ifstream file; // ifstream is read only file
 
-		file.open("SaveStats.txt");
-		int test = 0;
+		file.open("SaveStats.txt"); // Opens save file for stats
 		int linenumber = 0 ;
-		std::string string;
 		float x;
 
 		if (!file)
 		{
 			std::cout << "couldnt load file\n";
 		}
+
+		//default values (will be changed)
 		float HPMax = 0;
 		float currentHP = 0;
 		float strength = 0;
@@ -372,11 +370,13 @@ void GameScene::Load() {
 		float exp = 0;
 		int level = 0;
 
+		//If file is succesfully opened
 		if (file.is_open())
 		{
-			std::cout << "In save file :) \n";
+			//While there is new numbers in file
 			while (file >> x)
 			{
+				//depending on line number, sets variables to what is on save file
 				if (linenumber == 0)
 				{
 					currentHP = x;
@@ -401,29 +401,32 @@ void GameScene::Load() {
 				{
 					level = x;
 				}
+				//incremenets line number
 				linenumber++;
 			}
 		}
 
+		//Opens new ifstream (readonly) for items and abilities that are saved
 		std::ifstream itemfile("SaveItems.txt");
+		//empty vectors to store stuff in 
 		std::vector<std::string> items;
 		std::vector<std::string> abilities;;
-		bool inItem = true;
-		if (itemfile.is_open())
+		bool inItem = true; // items are first in txt
+		if (itemfile.is_open()) // if file is opened succesfully
 		{
-			while (std::getline(itemfile, line))
+			while (std::getline(itemfile, line)) // while there is new lines
 			{
-				if (line == "END")
+				if (line == "END") // Checks if the line is the "End" string, difference between items and abilities
 				{
 					inItem = false;
 				}
 				else
 				{
-					if (inItem)
+					if (inItem) // before END is reached
 					{
 						items.push_back(line);
 					}
-					else
+					else // after END is reached
 					{
 						abilities.push_back(line);
 					}
@@ -432,6 +435,7 @@ void GameScene::Load() {
 		}
 		//Creates Player and adds components
 		pl = make_shared<Entity>();
+		//Creates base player component using our saved values
 		player = pl->addComponent<BasePlayerComponent>(HPMax, currentHP, strength, dex, exp, level, 10, &combatUI, &gameUI);
 		am = pl->addComponent<AbilityManager>(4, &combatUI);
 		am->Load();
@@ -443,36 +447,42 @@ void GameScene::Load() {
 		player->load();
 
 		//Calls load function of the UIs
-		combatUI.Load(player, &Engine::tm);
+		combatUI.Load(player);
 		gameUI.Load(10, player);
 
+		//For all strings in items 
 		for (auto &s : items)
 		{
-			if (s.at(0) == '*')
+			if (s.at(0) == '*') // if item is a special item
 			{
-				inv->add(itemDB.getSpecialItem(s), false);
+				inv->add(itemDB.getSpecialItem(s), false); // get item from item DB special items and add to inventory
 			}
 			else
 			{
-				inv->add(itemDB.getItem(s), false);
+				inv->add(itemDB.getItem(s), false); // get item from item DB normal items and add to inventory
 			}
 		}
 
+		//For all strings in abilities
 		for (auto& a : abilities)
 		{
+			//Gets ability from itemDB
 			auto i = itemDB.getAbility(a);
+			//Sets player on new ability
 			i->updatePlayer(player);
+			//Adds ability to player
 			player->addAbility(itemDB.getAbility(a));
 		}
-
+		//Adds player to ents to be rendered and updated
 		ents.list.push_back(pl);
 	}
-	else
+	else // NOT loaded from save
 	{
 
 		//Creates Player and adds components
 		pl = make_shared<Entity>();
-		player = pl->addComponent<BasePlayerComponent>(100.0f, 100.0f, 20.0f, 10.0f, 0.0f, 1, 10, &combatUI, &gameUI);
+		//default values
+		player = pl->addComponent<BasePlayerComponent>(100.0f, 5.0f, 20.0f, 10.0f, 0.0f, 1, 10, &combatUI, &gameUI);
 		am = pl->addComponent<AbilityManager>(4, &combatUI);
 		am->Load();
 		inv = pl->addComponent<Inventory>(6, &gameUI);
@@ -484,10 +494,11 @@ void GameScene::Load() {
 		player->load();
 
 		//Calls load function of the UIs
-		combatUI.Load(player, &Engine::tm);
+		combatUI.Load(player);
 		gameUI.Load(10, player);
 	}
 
+	//Some default text stuff
 	textBox.setTexture(Engine::tm.getTex("TextBox"));
 	textBox.setScale(sf::Vector2f(0.7f, 0.5f));
 	textBox.setPosition(sf::Vector2f((GAMEX / 2) - (textBox.getGlobalBounds().width / 2), 100.0f));
@@ -499,12 +510,10 @@ void GameScene::Load() {
 	screenText.setPosition((textBox.getPosition().x + textBox.getGlobalBounds().width / 2) - (screenText.getGlobalBounds().width / 2),
 		(textBox.getPosition().y + textBox.getGlobalBounds().height /2)- (screenText.getGlobalBounds().height));
 
-	//Some initializing stuff
+	//Initializing some values
 	alphaUpdate = 255;
 	sceneChangeDelay = 0.5f;
 	isPaused = false;
-
-	std::shared_ptr<StatRoom> statRoom = std::make_shared<StatRoom>(pl);
 
 	//Loads music
 	if (!gameMusic.openFromFile("res/Sounds/Music/GameMusic.wav"))
@@ -517,6 +526,7 @@ void GameScene::Load() {
 	gameMusic.setVolume(50.0f);
 	gameMusic.setLoop(true);
 
+	//Load pause screen ( same as settings on main menu
 	Settings.Load(Engine::tm.getFont(), true);
 
 	//Calls ChangeRoom to start the game with a random room
@@ -524,6 +534,7 @@ void GameScene::Load() {
 	
 }
 
+//Sets if scene should be loaded from save or not
 void GameScene::setLoadFromSave(bool tf)
 {
 	loadFromSave = tf;
@@ -533,11 +544,14 @@ void GameScene::Update(const double& dt) {
 	//Gets Mouse position in an int format
 	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
 	Vector2f cursPos = sf::Vector2f(tempPos);
+	//updates curs pos depending on window size
 	cursPos.x /= Engine::xMultiply;
 	cursPos.y /= Engine::yMultiply;
 
+	//sets music volume
 	gameMusic.setVolume(musicVolume * masterVolume/100);
 
+	//gets delay time 
 	scene_delay = scene_clock.getElapsedTime();
 	pause_delay = pauseClock.getElapsedTime();
 
@@ -548,49 +562,36 @@ void GameScene::Update(const double& dt) {
 		screenText.setFillColor(Color(255, 255, 255, alphaUpdate));
 	}
 
-	if (!isPaused)
+	if (!isPaused) // If game isnt paused
 	{
-		if(currentRoom->isActive())
+		if(currentRoom->isActive()) // if current room is active and functional
 		{
-			currentRoom->Update(dt, cursPos);
+			currentRoom->Update(dt, cursPos); // update it!
 		}
 		else
 		{
-			ChangeRoom();
+			ChangeRoom(); // Move to next room 
 		}
-		//calls the current rooms update function
+
+		//Update gameUI
 		gameUI.Update(dt, cursPos);
+		//update Inventory
+		inv->update(dt);
 
-		//Adds random common item
-		if (Keyboard::isKeyPressed(Keyboard::U) && scene_delay.asSeconds() >= sceneChangeDelay)
-		{
-			scene_clock.restart();
-			auto randItem = itemDB.randomCommonItem();
-			UpdateTextBox(randItem->description);
-			inv->add(randItem, true);
-		}
-
-		//Changes to a new room
-		if (Keyboard::isKeyPressed(Keyboard::Space) && scene_delay.asSeconds() >= sceneChangeDelay)
-		{
-			scene_clock.restart();
-			ChangeRoom();
-		}
-
-		if (Keyboard::isKeyPressed(pauseKey) && pause_delay.asSeconds() >= pauseDelay)
+		if (Keyboard::isKeyPressed(pauseKey) && pause_delay.asSeconds() >= pauseDelay) // If pause key is pressed
 		{
 			pauseClock.restart();
-			setPause(true);
+			setPause(true); // Pause the game
 		}
 
 		//Checks if user clicks settings button
 		if (SettingBox.contains(cursPos))
 		{
 			SettingSprite.setColor(green);
-			if (Mouse::isButtonPressed(Mouse::Left) && pause_delay.asSeconds() >= pauseDelay)
+			if (Mouse::isButtonPressed(Mouse::Left) && pause_delay.asSeconds() >= pauseDelay) // if settings is pressed
 			{
 				pauseClock.restart();
-				setPause(true);
+				setPause(true); // Pause the game!
 			}
 		}
 		else
@@ -600,22 +601,20 @@ void GameScene::Update(const double& dt) {
 		if (SaveBox.contains(cursPos))
 		{
 			SaveSprite.setColor(green);
-			if (Mouse::isButtonPressed(Mouse::Left) && pause_delay.asSeconds() >= pauseDelay)
+			if (Mouse::isButtonPressed(Mouse::Left) && pause_delay.asSeconds() >= pauseDelay) // if save is pressed
 			{
 				pauseClock.restart();
-				SaveGame();
+				SaveGame(); //save game!
 			}
 		}
 		else
 		{
 			SaveSprite.setColor(white);
 		}
-		//Update from base class
-		Scene::Update(dt);
 	}
 	else
 	{
-		Settings.Update(dt, cursPos);
+		Settings.Update(dt, cursPos); // Update pause screen
 	}
 
 	//Update from base class
@@ -624,10 +623,13 @@ void GameScene::Update(const double& dt) {
 
 //Renders Scene
 void GameScene::Render() {
-	if (!isPaused) // If game is not pause
+	if (!isPaused) // If game is not paused
 	{
+		//Renders UI
 		gameUI.Render();
+		//Renders Room
 		currentRoom->Render();
+		//Renders base scene
 		Scene::Render();
 		Renderer::queue(&screenText);
 		Renderer::queue(&SettingSprite);
@@ -637,24 +639,28 @@ void GameScene::Render() {
 	}
 	else // if paused
 	{
-		Settings.Render();
+		Settings.Render(); //Render pause menu
 	}
 }
 
 //Does all the things needed when we change rooms
 void GameScene::ChangeRoom() {
+	//Sets players exp gain to false to allow it to gain EXP again
 	player->expGained = false;
 
+	//makes sure that all ents are set for deletion except player
 	if (ents.list.size() > 1)
 	{
 		ents.list[ents.list.size() - 1]->setForDelete();
 	}
 	//srand to ensure the random number is actually random
 	srand(time(0));
+	//Random number to check room type
 	int roomType = rand() % 8;
-	//TODO: Make it so that if the player's EXP is enough to level up, then the room automatically sets to 2, otherwise it is set to 0 or 1 aat random.
+
+	//If player has got enough EXP to level up
 	if (player->checkLevelUp()) {
-		roomType = 10;
+		roomType = 10; // set room type to 10 so next room will be a level up room
 	}
 	if (player->level > 5) {
 		roomType = 0; //Once hitting level 5, the player will always go into a fight next.
@@ -667,8 +673,6 @@ void GameScene::ChangeRoom() {
 		std::shared_ptr<CombatRoom> newRoom = make_shared<CombatRoom>(pl, &combatUI);
 		//Calls load function of the new room 
 		newRoom->Load();
-		//Adds room to rooms vector
-		rooms.push_back(newRoom);
 		//Adds new entity's created by room 
 		//into current scenes entity manager so they are renderered
 		for each (auto e in newRoom->GetEnts())
@@ -680,33 +684,28 @@ void GameScene::ChangeRoom() {
 	}
 	else if (roomType == 7) //Treasure Room
 	{
+		//Make new Treasure Room
 		std::shared_ptr<TreasureRoom> newRoom = make_shared<TreasureRoom>(pl, itemDB);
 		newRoom->Load();
-		rooms.push_back(newRoom);
+		//Set to current Room
 		currentRoom = newRoom;
 		UpdateTextBox("Entered Treasure Room");
 	}
 	else if (roomType == 10)
 	{
+		//Make level Up room
 		std::shared_ptr<LevelUpRoom> newRoom = make_shared<LevelUpRoom>(pl);
 		newRoom->Load();
-		rooms.push_back(newRoom);
+		//Set to current Room
 		currentRoom = newRoom;
 		UpdateTextBox("Level Up!");
 	}
 }
 
+//Return current Room
 Room& GameScene::getCurrentRoom()
 {
 	return *currentRoom;
-}
-
-//Updates the bounding boxes of all Buttons
-void GameScene::UpdateButtons()
-{
-	Engine::UpdateButton(ResButtonBox);
-	Engine::UpdateButton(BackButtonBox);
-	Engine::UpdateButton(SettingBox);
 }
 
 //Updates the text inside the update box, to new text and resets the text to fade out
@@ -721,8 +720,7 @@ void GameScene::UpdateTextBox(sf::String newText)
 
 void GameScene::LoadTextures()
 {
-	//Engine::tm.loadFont("venusrising.ttf");
-
+	//Loads all textures and sounds we need 
 	Engine::tm.loadTexture("Settings", "Icons/Settings.png");
 	Engine::tm.loadTexture("Save", "Icons/Save.png");
 	Engine::tm.loadTexture("TextBox", "Sprites/TextBox.png");
@@ -743,7 +741,6 @@ void GameScene::LoadTextures()
 	Engine::tm.loadTexture("SpaceWatch", "Icons/SpaceWatch.png");
 	Engine::tm.loadTexture("WristGuard", "Icons/WristGuard.png");
 	Engine::tm.loadTexture("FaceMask", "Icons/FaceMask.png");
-//	Engine::tm.loadTexture("Targeting Device", "Icons/SpaceWatch.png");
 	Engine::tm.loadTexture("LaserBurst", "Icons/LaserBurst.png");
 	Engine::tm.loadTexture("ChargedAttack", "Icons/ChargedAttack.png");
 	Engine::tm.loadTexture("Curse", "Icons/Curse.png");
@@ -807,6 +804,7 @@ void GameScene::LoadTextures()
 	Engine::tm.loadSound("LaserBurst", "Sounds/FX/LaserBurst.wav");
 }
 
+//Updates the tooltip to show what something does, called by UI and player.  Show what abilities etc do
 void GameScene::UpdateDesctext(std::string desc, sf::Vector2f pos)
 {
 	descText.setString(desc);
@@ -817,17 +815,21 @@ void GameScene::UpdateDesctext(std::string desc, sf::Vector2f pos)
 	descRect.setPosition(descText.getPosition());
 }
 
+//Resets desc text to nothin
 void GameScene::ResetDescText()
 {
 	descText.setString("");
 	descRect.setFillColor(sf::Color(0.0f, 0.0f, 0.0f, 0.0f));
 }
 
+//Saves game
 void GameScene::SaveGame()
 {
+	//Opens savefile to write only
 	std::ofstream savefile("SaveStats.txt");
-	if (savefile.is_open())
+	if (savefile.is_open()) // if it opened okay
 	{
+		//Writes players stats to SaveStats on new lines
 		savefile << player->getCurrentHealth() << std::endl;
 		savefile << player->getMaxHealth() << std::endl;
 		savefile << player->getStrength() << std::endl;
@@ -840,15 +842,18 @@ void GameScene::SaveGame()
 		std::cout << "Couldn't open savefile to save\n";	
 	}
 
+	//Opens save file for items and abilities
 	std::ofstream iafile("SaveItems.txt");
-	if (iafile.is_open())
+	if (iafile.is_open()) // If opened okay
 	{
+		//Loop through items and add them to save items on new lines
 		for (auto i : inv->getItems())
 		{
 			iafile << i->name << std::endl;
 		}
-		iafile << "END" << std::endl;
-		for (auto a : am->getSpecials())
+		iafile << "END" << std::endl; // Add "END" to save items to distinguish between items and abilities
+		//Loops through special abilities and adds them to save items on new lines
+		for (auto a : am->getSpecials())  
 		{
 			iafile << a->getTexName() << std::endl;
 		}
@@ -860,7 +865,7 @@ void GameScene::SaveGame()
 
 }
 
-void VictoryScene::Render()
+void VictoryScene::Render() //Render the victory scene
 {
 	//Queues text to render in system renderer
 	Renderer::queue(&storyMessage);
@@ -871,13 +876,13 @@ void VictoryScene::Render()
 	Scene::Render();
 }
 
-void VictoryScene::Load()
+void VictoryScene::Load() //Main load function
 {
-	font.loadFromFile("res/Fonts/venusrising.ttf");
+	font.loadFromFile("res/Fonts/venusrising.ttf"); //Get the font
 	sceneEnd = false;
 	delayAmount = 2.0f;
 
-	storyMessage.setFont(font);
+	storyMessage.setFont(font); //Set up of the various messages on that screen
 	storyMessage.setCharacterSize(20);
 	storyMessage.setString("And with the defeat of the Alien Lord, Spaceship Omega had been saved once and for all.\nTroy McCool was able to return to Earth, heralded as the greatest hero of his decade.");
 	thankYou.setFont(font);
@@ -886,53 +891,54 @@ void VictoryScene::Load()
 	credits.setFont(font);
 	credits.setCharacterSize(10);
 	credits.setString("Made by Alfie & Ciaran");
-	menuButton.setFont(font);
+	menuButton.setFont(font); //
 	menuButton.setCharacterSize(10);
 	menuButton.setString("Main Menu");
 
-	storyMessage.setPosition(sf::Vector2f((GAMEX / 2) - (storyMessage.getGlobalBounds().width / 2), 300.0f));
+	storyMessage.setPosition(sf::Vector2f((GAMEX / 2) - (storyMessage.getGlobalBounds().width / 2), 300.0f)); //Position the messages
 	thankYou.setPosition(sf::Vector2f((GAMEX / 2) - (thankYou.getGlobalBounds().width / 2), 500.0f));
 	credits.setPosition(sf::Vector2f((GAMEX / 2) - (credits.getGlobalBounds().width / 2), 700.0f));
 	menuButton.setPosition(sf::Vector2f((GAMEX / 2) - (menuButton.getGlobalBounds().width / 2), 950.0f));
 
 	menuButtonBox = menuButton.getGlobalBounds(); //Creates the button boundaries
 
-	victoryMusic.openFromFile("res/Sounds/Music/VictoryMusic.wav");
+	victoryMusic.openFromFile("res/Sounds/Music/VictoryMusic.wav"); //Victory music
 	victoryMusic.setLoop(true);
 	victoryMusic.play();
 
 }
 
-void VictoryScene::Update(const double& dt)
+void VictoryScene::Update(const double& dt) //Update Loop
 {
-	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow());
+	Vector2i tempPos = sf::Mouse::getPosition(Engine::GetWindow()); //Get cursor position
 	Vector2f cursPos = sf::Vector2f(tempPos);
 	cursPos.x /= Engine::xMultiply;
 	cursPos.y /= Engine::yMultiply;
-	delayTime = scene_clock.getElapsedTime().asSeconds();
+
+	delayTime = scene_clock.getElapsedTime().asSeconds(); //Delay so they can't accidentally hit Main Menu as soon as they enter
 	victoryMusic.setVolume(musicVolume * masterVolume / 100);
 
-	if (sceneEnd == true && delayTime >= delayAmount)
+	if (sceneEnd == true && delayTime >= delayAmount) //If they leave the scene
 	{
-		victoryMusic.stop();
-		Engine::ChangeScene(&menuScene);
+		victoryMusic.stop(); //Stop the music
+		Engine::ChangeScene(&menuScene); //Back to the main menu
 	}
 
-	if (menuButtonBox.contains(cursPos))
+	if (menuButtonBox.contains(cursPos)) //If they mouse over the button, turn it green
 	{
 		menuButton.setFillColor(green);
 	}
 	else
 	{
-		menuButton.setFillColor(white);
+		menuButton.setFillColor(white); //Otherwise it's write
 	}
 
-	if (Mouse::isButtonPressed(sf::Mouse::Left) && sceneEnd == false)
+	if (Mouse::isButtonPressed(sf::Mouse::Left) && sceneEnd == false) //If they're clicking
 	{
-		if (menuButtonBox.contains(cursPos))
+		if (menuButtonBox.contains(cursPos)) //And on the menu button
 		{
 			delayClock.restart();
-			sceneEnd = true;
+			sceneEnd = true; //Then the scene is over.
 		}
 	}
 }

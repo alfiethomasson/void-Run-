@@ -386,7 +386,7 @@ void GameUI::Update(double dt, sf::Vector2f cursPos)
 	}
 	else
 	{
-		GameOverButton.setColor(White);
+		backToMenu.setColor(White);
 	}
 }
 
@@ -471,7 +471,7 @@ void GameUI::Render()
 	}
 
 	//if player is dead, render game over stuff
-	if (player->getCurrentHealth() == 0)
+	if (player->getParent().isAlive() == false)
 	{
 		Renderer::queue(&GameOverButton);
 		Renderer::queue(&backToMenu);
@@ -548,20 +548,20 @@ void GameUI::Load(int maxAP, std::shared_ptr<BasePlayerComponent> p)
 	//Sets the background!
 	background.setTexture(Engine::tm.getTex("Background1"));
 	//Move the background up so combat UI has space to be seen
-	background.setScale(GAMEX/ background.getGlobalBounds().width, 0.7f);
+	background.setScale(GAMEX / background.getGlobalBounds().width, 0.7f);
 
 	//Game Over text and back to menu 
-	GameOverButton.setFont(font);
+	GameOverButton.setFont(Engine::tm.getFont());
 	GameOverButton.setString("GAME OVER");
 	GameOverButton.setCharacterSize(60);
-	GameOverButton.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - (GameOverButton.getGlobalBounds().width / 2),
-		Engine::getWindowSize().y / 2.0f - (GameOverButton.getGlobalBounds().height / 2) + 100.0f));
+	GameOverButton.setPosition(sf::Vector2f(GAMEX / 2.0f - (GameOverButton.getGlobalBounds().width / 2),
+		300.0f));
 	GameOverButtonBox = GameOverButton.getGlobalBounds();
-	backToMenu.setFont(font);
+	backToMenu.setFont(Engine::tm.getFont());
 	backToMenu.setString("Back To Menu");
 	backToMenu.setCharacterSize(60);
-	backToMenu.setPosition(sf::Vector2f(Engine::getWindowSize().x / 2.0f - (backToMenu.getGlobalBounds().width / 2),
-		300.0f));
+	backToMenu.setPosition(sf::Vector2f(GAMEX / 2.0f - (backToMenu.getGlobalBounds().width / 2),
+		400.0f));
 	backToMenuBox = backToMenu.getGlobalBounds();
 
 }
@@ -1154,7 +1154,7 @@ void SettingUI::Load(sf::Font &font, bool p)
 	if (pause)
 	{
 		toMenuText.setFont(Engine::tm.getFont());
-		toMenuText.setString("To Main Menu\n(Remember to save!)");
+		toMenuText.setString("To Main Menu\n(Remember to\nsave!)");
 		toMenuText.setCharacterSize(30);
 		toMenuText.setPosition(50.0f, 50.0f);
 		toMenuBox = toMenuText.getGlobalBounds();
