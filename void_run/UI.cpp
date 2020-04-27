@@ -91,32 +91,31 @@ void CombatUI::Load(std::shared_ptr<BasePlayerComponent> p, TextureManager* tm)
 
 	attackSprite.setTexture(Engine::tm.getTex("Attack"));
 	attackSprite.setScale(0.3f, 0.3f);
-	attackSprite.setPosition(sf::Vector2f(800.0f, 800.0f));
+	attackSprite.setPosition(sf::Vector2f(790.0f, 800.0f));
 	attackBox = attackSprite.getGlobalBounds();
-	texManager->addButton("attackBox", attackBox);
 
 	healSprite.setTexture(Engine::tm.getTex("Heal"));
 	healSprite.setScale(0.3f, 0.3f);
-	healSprite.setPosition(sf::Vector2f(900.0f, 800.0f));
+	healSprite.setPosition(sf::Vector2f(890.0f, 800.0f));
 	healBox = healSprite.getGlobalBounds();
 
 	rechargeSprite.setTexture(Engine::tm.getTex("Recharge"));
 	rechargeSprite.setScale(0.3f, 0.3f);
-	rechargeSprite.setPosition(sf::Vector2f(1000.0f, 800.0f));
+	rechargeSprite.setPosition(sf::Vector2f(990.0f, 800.0f));
 	rechargeBox = rechargeSprite.getGlobalBounds();
 
 	runSprite.setTexture(Engine::tm.getTex("Run"));
 	runSprite.setScale(0.3f, 0.3f);
-	runSprite.setPosition(sf::Vector2f(1100.0f, 800.0f));
+	runSprite.setPosition(sf::Vector2f(1090.0f, 800.0f));
 	runBox = runSprite.getGlobalBounds();
 
-	special1Sprite.setPosition(sf::Vector2f(800.0f, 925.0f));
+	special1Sprite.setPosition(sf::Vector2f(790.0f, 925.0f));
 
-	special2Sprite.setPosition(sf::Vector2f(900.0f, 925.0f));
+	special2Sprite.setPosition(sf::Vector2f(890.0f, 925.0f));
 
-	special3Sprite.setPosition(sf::Vector2f(1000.0f, 925.0f));
+	special3Sprite.setPosition(sf::Vector2f(990.0f, 925.0f));
 
-	special4Sprite.setPosition(sf::Vector2f(1100.0f, 925.0f));
+	special4Sprite.setPosition(sf::Vector2f(1090.0f, 925.0f));
 
 	attackControl.setFont(Engine::tm.getFont());
 	healControl.setFont(Engine::tm.getFont());
@@ -521,9 +520,9 @@ sf::Sprite GameUI::getNewCell()
 {
 	sf::Sprite cell;
 	cell.setTexture(Engine::tm.getTex("Charge"));
-	cell.setScale(0.05f, 0.15f);
+	cell.setScale(0.10f, 0.2f);
 	height += 20;
-	cell.setPosition(sf::Vector2f(800.0f + height, 750.0f));
+	cell.setPosition(sf::Vector2f(870.0f + height, 700.0f));
 	cell.setRotation(90);
 	return cell;
 }

@@ -544,7 +544,7 @@ void GameScene::Update(const double& dt) {
 	//Sets the text in the box to fade out after it is updated
 	if (screenText.getFillColor().a != 0)
 	{
-		alphaUpdate -= 0.1;
+		alphaUpdate -= 100 * dt;
 		screenText.setFillColor(Color(255, 255, 255, alphaUpdate));
 	}
 
